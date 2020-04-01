@@ -3,17 +3,6 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-//public static java.util.Set<int[]> cartesianProduct(final int[][] sets) {
-//  return sets.length == 0 ? new java.util.HashSet<int[]>(java.util.Arrays.asList(new int[0]))
-//      : java.util.stream.IntStream.of(sets[0]).boxed()
-//          .flatMap(
-//              x -> cartesianProduct(java.util.Arrays.copyOfRange(sets, 1, sets.length)).stream()
-//                  .map(arr -> java.util.stream.IntStream.concat(java.util.stream.IntStream.of(x),
-//                      java.util.stream.IntStream.of(arr)).toArray()))
-//          .collect(java.util.stream.Collectors.toSet());
-//}
-
-
 public class One_Semicolon_Cartesian_Product {
 
   public static Set<int[]> cartesianProduct(int[][] sets) {
