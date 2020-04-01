@@ -3,11 +3,6 @@ import java.util.regex.Pattern;
 
 public class Binomial_Expansion {
 
-  public static void main(String[] args) {
-    String s = expand("(y+5)^15");
-    System.out.println(s);
-  }
-
   public static String expand(String expr) {
 
     String[] spliter = expr.split("\\^");
