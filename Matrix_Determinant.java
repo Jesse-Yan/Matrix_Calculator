@@ -1,14 +1,6 @@
 
 public class Matrix_Determinant {
 
-  /**
-   * @param args
-   */
-  public static void main(String[] args) {
-    
-  }
-
-
   public static int determinant(int[][] matrix) {
 
     if (matrix.length == 1)
