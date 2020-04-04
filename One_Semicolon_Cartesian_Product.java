@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class One_Semicolon_Cartesian_Product {
-
+  
   public static Set<int[]> cartesianProduct(int[][] sets) {
 
     Set<int[]> result = new TreeSet<int[]>(new Comparator<int[]>() {
