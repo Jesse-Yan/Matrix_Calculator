@@ -3,6 +3,8 @@ public class Matrix_Determinant {
 
   public static int determinant(int[][] matrix) {
 
+    // This is first Trial
+    
     if (matrix.length == 1)
       return matrix[0][0];
 
