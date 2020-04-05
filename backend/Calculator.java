@@ -1,7 +1,8 @@
+package backend;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class Cal {
+public class Calculator {
 
   public static void main(String[] args) {
     System.out.println(calculate("1- -(-(-(-4)))"));

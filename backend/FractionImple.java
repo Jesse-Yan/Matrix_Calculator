@@ -1,17 +1,20 @@
+package backend;
+
 /**
- * This class is Fraction, provides several methods to modify fraction, fraction will be transformed
- * to minimum form when first created
+ * This class is Fraction, provides several methods to modify fraction, fraction
+ * will be transformed to minimum form when first created
  * 
  * @author Jesse
  *
  */
-public class Fraction {
+public class FractionImple implements Fraction {
 
   private int numerator;
   private int denominator;
 
-  public Fraction(int numerator, int denominator) {
-    if ((numerator < 0 && denominator < 0) || (numerator > 0 && denominator < 0)) {
+  public FractionImple(int numerator, int denominator) {
+    if ((numerator < 0 && denominator < 0)
+        || (numerator > 0 && denominator < 0)) {
       numerator = -numerator;
       denominator = -denominator;
     }
@@ -23,8 +26,8 @@ public class Fraction {
   /**
    * Find the greatest common divisor
    * 
-   * @param numerator
-   * @param denominator
+   * @param  numerator
+   * @param  denominator
    * @return
    */
   private int gCD(int numerator, int denominator) {
@@ -50,29 +53,31 @@ public class Fraction {
     return denominator == 1 ? numerator + "" : numerator + "/" + denominator;
   }
 
-  public Fraction add(Fraction other) {
+  public FractionImple add(FractionImple other) {
 
-    return new Fraction(
-        this.getNumerator() * other.getDenominator() + other.getNumerator() * this.getDenominator(),
+    return new FractionImple(
+        this.getNumerator() * other.getDenominator()
+            + other.getNumerator() * this.getDenominator(),
         this.getDenominator() * other.getDenominator());
   }
 
-  public Fraction subtract(Fraction other) {
+  public FractionImple subtract(FractionImple other) {
 
-    return new Fraction(
-        this.getNumerator() * other.getDenominator() - other.getNumerator() * this.getDenominator(),
+    return new FractionImple(
+        this.getNumerator() * other.getDenominator()
+            - other.getNumerator() * this.getDenominator(),
         this.getDenominator() * other.getDenominator());
   }
 
-  public Fraction multiply(Fraction other) {
+  public FractionImple multiply(FractionImple other) {
 
-    return new Fraction(this.getNumerator() * other.getNumerator(),
+    return new FractionImple(this.getNumerator() * other.getNumerator(),
         this.getDenominator() * other.getDenominator());
   }
 
-  public Fraction divide(Fraction other) {
+  public FractionImple divide(FractionImple other) {
 
-    return new Fraction(this.getNumerator() * other.getDenominator(),
+    return new FractionImple(this.getNumerator() * other.getDenominator(),
         this.getDenominator() * other.getNumerator());
   }
 
