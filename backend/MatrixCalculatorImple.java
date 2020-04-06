@@ -1,5 +1,11 @@
 package backend;
 
-public class MatrixCalculatorImple implements Matrix{
+/**
+ * This class implements MatrixCalculator
+ * 
+ * @author Jesse
+ *
+ */
+public class MatrixCalculatorImple implements MatrixCalculator {
 
 }

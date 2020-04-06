@@ -9,9 +9,16 @@ package backend;
  */
 public class FractionImple implements Fraction {
 
+  // Store for numerator and denominator
   private int numerator;
   private int denominator;
 
+  /**
+   * Constructor of this Fraction
+   * 
+   * @param numerator
+   * @param denominator
+   */
   public FractionImple(int numerator, int denominator) {
     if ((numerator < 0 && denominator < 0)
         || (numerator > 0 && denominator < 0)) {
@@ -28,7 +35,7 @@ public class FractionImple implements Fraction {
    * 
    * @param  numerator
    * @param  denominator
-   * @return
+   * @return             the greatest Common Divisor
    */
   private int gCD(int numerator, int denominator) {
 
@@ -47,13 +54,25 @@ public class FractionImple implements Fraction {
     return gcdVal;
   }
 
+  /**
+   * Defines the String representation of this Fraction
+   * 
+   * @return String representation of the Fraction
+   */
   @Override
   public String toString() {
 
     return denominator == 1 ? numerator + "" : numerator + "/" + denominator;
   }
 
-  public FractionImple add(FractionImple other) {
+  /**
+   * Add two Fractions
+   * 
+   * @param adder
+   * @return new Fraction
+   */
+  @Override
+  public Fraction add(Fraction other) {
 
     return new FractionImple(
         this.getNumerator() * other.getDenominator()
@@ -61,7 +80,14 @@ public class FractionImple implements Fraction {
         this.getDenominator() * other.getDenominator());
   }
 
-  public FractionImple subtract(FractionImple other) {
+  /**
+   * Subtract a Fraction from another one
+   * 
+   * @param subtractor
+   * @return new Fraction
+   */
+  @Override
+  public Fraction subtract(Fraction other) {
 
     return new FractionImple(
         this.getNumerator() * other.getDenominator()
@@ -69,22 +95,48 @@ public class FractionImple implements Fraction {
         this.getDenominator() * other.getDenominator());
   }
 
-  public FractionImple multiply(FractionImple other) {
+  /**
+   * Multiply two Fractions
+   * 
+   * @param multiplier
+   * @return new Fraction
+   */
+  @Override
+  public Fraction multiply(Fraction other) {
 
     return new FractionImple(this.getNumerator() * other.getNumerator(),
         this.getDenominator() * other.getDenominator());
   }
 
-  public FractionImple divide(FractionImple other) {
+  /**
+   * Divide a Fraction from another one
+   * 
+   * @param divisor
+   * @return new Fraction
+   */
+  @Override
+  public Fraction divide(Fraction other) {
 
     return new FractionImple(this.getNumerator() * other.getDenominator(),
         this.getDenominator() * other.getNumerator());
   }
 
+  /**
+   * Return the numerator of this Fraction
+   * 
+   * @return numerator
+   */
+  @Override
   public int getNumerator() {
     return numerator;
   }
 
+  /**
+   * Return the denominator of this Fraction
+   * 
+   * @return denominator
+   */
+  @Override
   public int getDenominator() {
     return denominator;
   }

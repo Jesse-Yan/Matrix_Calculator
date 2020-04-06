@@ -1,15 +1,18 @@
 package backend;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
+/**
+ * This class computes the result of the given expression
+ * 
+ * @author Jesse
+ *
+ */
 public class Calculator {
 
-  public static void main(String[] args) {
-    System.out.println(calculate("1- -(-(-(-4)))"));
-  }
-
   public static double calculate(String expression) {
-    if(expression.matches("\\-?\\d+"))
+    if (expression.matches("\\-?\\d+"))
       return Double.valueOf(expression);
     ArrayList<String> s = new ArrayList<String>();
     char[] chs = expression.toCharArray();
@@ -21,7 +24,7 @@ public class Calculator {
 
       } else if (chs[i] == '.') {
         temp += chs[i];
-        
+
       } else if (chs[i] == ' ') {
         if (temp.length() != 0)
           s.add(temp);
@@ -32,13 +35,15 @@ public class Calculator {
           s.add(temp);
         temp = "-";
         if (chs[i + 1] == '(') {
-          if(s.get(s.size() - 1).equals("/") || s.get(s.size() - 1).equals("*")) {
+          if (s.get(s.size() - 1).equals("/")
+              || s.get(s.size() - 1).equals("*")) {
             s.add("(");
             tag = true;
           } else if (s.get(s.size() - 1).equals("-")) {
             s.set(s.size() - 1, "+");
             s.add("(");
-          } else if (s.get(s.size() - 1).equals(")") || s.get(s.size() - 1).matches("\\d+")) {
+          } else if (s.get(s.size() - 1).equals(")")
+              || s.get(s.size() - 1).matches("\\d+")) {
             s.add("-");
             s.add("(");
           } else {
@@ -50,7 +55,7 @@ public class Calculator {
           i++;
 
         } else if (chs[i + 1] - '0' >= 0 && chs[i + 1] - '0' <= 9) {
-          if(s.get(s.size() - 1).matches("\\d+")) {
+          if (s.get(s.size() - 1).matches("\\d+")) {
             s.add("+");
           } else {
             continue;
@@ -110,7 +115,8 @@ class ModifiedCal {
     theStackI = new Stack<Double>();
     for (int i = 0; i < output.size(); i++) {
       String temp = output.get(i);
-      if (!(temp.equals("+") || temp.equals("-") || temp.equals("*") || temp.equals("/"))) {
+      if (!(temp.equals("+") || temp.equals("-") || temp.equals("*")
+          || temp.equals("/"))) {
         theStackI.push(Double.parseDouble(temp));
       } else {
         num2 = theStackI.pop();
@@ -177,8 +183,7 @@ class ModifiedCal {
       if (s.equals("(")) {
         theStackP.push(s);
         break;
-      }
-      else {
+      } else {
         int j;
 
         if (s.equals("+") || s.equals("-")) {
