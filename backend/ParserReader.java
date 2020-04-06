@@ -1,10 +1,10 @@
 package backend;
 
 /**
- * This class implements Parser
+ * This class parse from a JSON file
  * @author Jesse
  *
  */
-public class ParserImple {
+public class ParserReader {
 
 }

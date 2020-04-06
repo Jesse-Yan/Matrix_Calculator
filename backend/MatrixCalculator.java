@@ -1,11 +1,11 @@
 package backend;
 
 /**
- * This class implements MatrixCalculator
+ * This class defines required methods to do calculation on Matrixs
  * 
  * @author Jesse
  *
  */
-public class MatrixCalculatorImple implements MatrixCalculator {
+public class MatrixCalculator {
 
 }

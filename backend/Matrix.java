@@ -1,12 +1,12 @@
 package backend;
 
 /**
- * This class implements Matrix
+ * This class defines required operation needed for a Matrix
  * 
  * @author Jesse
  *
  */
-public class MatrixImple implements Matrix {
+public class Matrix {
 
   public static int determinant(int[][] matrix) {
 

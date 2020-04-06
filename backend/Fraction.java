@@ -7,7 +7,7 @@ package backend;
  * @author Jesse
  *
  */
-public class FractionImple implements Fraction {
+public class Fraction {
 
   // Store for numerator and denominator
   private int numerator;
@@ -19,7 +19,7 @@ public class FractionImple implements Fraction {
    * @param numerator
    * @param denominator
    */
-  public FractionImple(int numerator, int denominator) {
+  public Fraction(int numerator, int denominator) {
     if ((numerator < 0 && denominator < 0)
         || (numerator > 0 && denominator < 0)) {
       numerator = -numerator;
@@ -71,10 +71,9 @@ public class FractionImple implements Fraction {
    * @param adder
    * @return new Fraction
    */
-  @Override
   public Fraction add(Fraction other) {
 
-    return new FractionImple(
+    return new Fraction(
         this.getNumerator() * other.getDenominator()
             + other.getNumerator() * this.getDenominator(),
         this.getDenominator() * other.getDenominator());
@@ -86,10 +85,9 @@ public class FractionImple implements Fraction {
    * @param subtractor
    * @return new Fraction
    */
-  @Override
   public Fraction subtract(Fraction other) {
 
-    return new FractionImple(
+    return new Fraction(
         this.getNumerator() * other.getDenominator()
             - other.getNumerator() * this.getDenominator(),
         this.getDenominator() * other.getDenominator());
@@ -101,10 +99,9 @@ public class FractionImple implements Fraction {
    * @param multiplier
    * @return new Fraction
    */
-  @Override
   public Fraction multiply(Fraction other) {
 
-    return new FractionImple(this.getNumerator() * other.getNumerator(),
+    return new Fraction(this.getNumerator() * other.getNumerator(),
         this.getDenominator() * other.getDenominator());
   }
 
@@ -114,10 +111,9 @@ public class FractionImple implements Fraction {
    * @param divisor
    * @return new Fraction
    */
-  @Override
   public Fraction divide(Fraction other) {
 
-    return new FractionImple(this.getNumerator() * other.getDenominator(),
+    return new Fraction(this.getNumerator() * other.getDenominator(),
         this.getDenominator() * other.getNumerator());
   }
 
@@ -126,7 +122,6 @@ public class FractionImple implements Fraction {
    * 
    * @return numerator
    */
-  @Override
   public int getNumerator() {
     return numerator;
   }
@@ -136,7 +131,6 @@ public class FractionImple implements Fraction {
    * 
    * @return denominator
    */
-  @Override
   public int getDenominator() {
     return denominator;
   }
