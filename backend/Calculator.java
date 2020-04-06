@@ -6,7 +6,7 @@ import java.util.Stack;
 /**
  * This class computes the result of the given expression
  * 
- * @author Jesse,
+ * @author Jesse
  *
  */
 public class Calculator {
