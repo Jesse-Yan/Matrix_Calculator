@@ -11,10 +11,21 @@ public class Matrix {
 
   private Fraction[][] matrix;
 
-  public Matrix() {
-    
+  /**
+   * Constructor of the matrix
+   * 
+   * @param row     the row the matrix has
+   * @param column  the column the matrix has
+   * @param content the content
+   */
+  public Matrix(int row, int column, Fraction[]... content) {
+
+    matrix = new Fraction[row][column];
+    for (int i = 0; i < row; i++) {
+      matrix[row] = content[i];
+    }
   }
-  
+
   /**
    * Calculate the determinant of the matrix
    * 
