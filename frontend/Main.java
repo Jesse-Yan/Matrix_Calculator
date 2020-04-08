@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -58,7 +59,8 @@ public class Main extends Application {
     open.setOnAction(event -> {
       File file = fileChooser.showOpenDialog(primaryStage);
       if (file == null || !file.getName().endsWith(".json")) {
-        alertFileType();
+        alert("Error: File name mismatch", "Please rechoose the file"
+            + lineSeparator + "The name of the file must end with '.json'!");
       } else {
         // Invoke Parser
       }
@@ -69,7 +71,8 @@ public class Main extends Application {
     save.setOnAction(event -> {
       File file = fileChooser.showSaveDialog(primaryStage);
       if (file == null || !file.getName().endsWith(".json")) {
-        alertFileType();
+        alert("Error: File name mismatch", "Please rechoose the file"
+            + lineSeparator + "The name of the file must end with '.json'!");
       } else {
         // Invoke Parser
       }
@@ -101,23 +104,23 @@ public class Main extends Application {
     root.setTop(menuBar);
 
     // Set the left scene
-    VBox vBox = new VBox();
+    VBox vBoxL = new VBox();
     TextField input = new TextField();
     input.setMaxWidth(360.0);
     TextArea result = new TextArea();
     result.setMaxWidth(360.0);
 
-    // Set three parallel buttons
-    HBox hBox = new HBox();
+    // Set two parallel buttons
+    HBox hBoxL = new HBox();
     Button analyzeSequence = new Button("Analyze/nSequence");
     Button space = new Button("Space");
 
     // Activated under analyzing sequence
     space.setDisable(true);
-    hBox.getChildren().addAll(analyzeSequence, space);
+    hBoxL.getChildren().addAll(analyzeSequence, space);
 
     // Set the gridPane
-    GridPane gridPane = new GridPane();
+    GridPane gridPaneL = new GridPane();
     List<Button> buttons =
         List.of("|x|", "  x!   ", "   π   ", "   e   ", "   C   ", "  <-   ",
             "  √x   ", "  x^2  ", "   (   ", "   )   ", "  exp  ", "   /   ",
@@ -133,13 +136,37 @@ public class Main extends Application {
       for (int column = 0; column < 6; column++) {
         Button button = buttons.get(number++);
         button.setMinSize(60.0, 40.0);
-        gridPane.add(button, column, row);
+        gridPaneL.add(button, column, row);
       }
     }
 
     // Add to the root
-    vBox.getChildren().addAll(input, result, hBox, gridPane);
-    root.setLeft(vBox);
+    vBoxL.getChildren().addAll(input, result, hBoxL, gridPaneL);
+    root.setLeft(vBoxL);
+
+    // Set the right scene
+    VBox vBoxR = new VBox();
+    HBox hBoxR = new HBox();
+
+    // Set the Matrix Panel
+    VBox matrix1 = matrixGenerator();
+    VBox matrix2 = matrixGenerator();
+
+    // Set the operation
+    GridPane matrixOperators = new GridPane();
+    List<Button> operators = List.of("c", "+", "-", "*").stream().map(str -> {
+      Button temp = new Button(str);
+      temp.setMinWidth(30);
+      return temp;
+    }).collect(toList());
+    for (int i = 0; i < 4; i++) {
+      matrixOperators.add(operators.get(i), 0, i);
+    }
+    matrixOperators.setVgap(23);
+    hBoxR.getChildren().addAll(matrix1, matrixOperators, matrix2);
+
+    vBoxR.getChildren().addAll(hBoxR);
+    root.setRight(vBoxR);
 
     // Use the optimized width and height
     Scene mainScene =
@@ -149,13 +176,101 @@ public class Main extends Application {
   }
 
   /**
-   * Show alert to remind user to choose the right file
+   * Generate a Matrix
+   * 
+   * @return
    */
-  private void alertFileType() {
+  private VBox matrixGenerator() {
+    VBox vBoxMatrix = new VBox();
+    HBox rowMatrix = new HBox();
+    Label labelRowMatrix = new Label("Row:      ");
+    labelRowMatrix.setMinWidth(52);
+    TextField inputRowMatrix = new TextField();
+    inputRowMatrix.setMaxWidth(50);
+    rowMatrix.getChildren().addAll(labelRowMatrix, inputRowMatrix);
+    HBox columnMatrix = new HBox();
+    Label labelColumnMatrix = new Label("Column: ");
+    labelColumnMatrix.setMaxWidth(52);
+    TextField inputColumnMatrix = new TextField();
+    inputColumnMatrix.setMaxWidth(50);
+    columnMatrix.getChildren().addAll(labelColumnMatrix, inputColumnMatrix);
+    GridPane gridMatrix = new GridPane();
+    gridMatrix.setMaxWidth(300);
+    gridMatrix.setMaxHeight(300);
+    inputRowMatrix.setText("5");
+    inputColumnMatrix.setText("5");
+
+    for (int i = 0; i < Integer.parseInt(inputRowMatrix.getText()); i++) {
+      for (int j =
+          0; j < Integer.parseInt(inputColumnMatrix.getText()); j++) {
+
+        TextField temp = new TextField();
+        gridMatrix.add(temp, j, i);
+      }
+    }
+    
+    inputRowMatrix.setOnKeyReleased(event -> {
+      try {
+
+        if (Integer.parseInt(inputRowMatrix.getText()) < 0) {
+          throw new Exception();
+        }
+
+        gridMatrix.getChildren().clear();
+
+        for (int i = 0; i < Integer.parseInt(inputRowMatrix.getText()); i++) {
+          for (int j =
+              0; j < Integer.parseInt(inputColumnMatrix.getText()); j++) {
+
+            TextField temp = new TextField();
+            gridMatrix.add(temp, j, i);
+          }
+        }
+      } catch (Exception e) {
+        alert("Error", "Number you entered is invalid" + lineSeparator
+            + "Please reenter an positive integer");
+        inputRowMatrix.setText("0");
+      }
+    });
+
+    inputColumnMatrix.setOnKeyReleased(event -> {
+      try {
+
+        if (Integer.parseInt(inputColumnMatrix.getText()) < 0) {
+          throw new Exception();
+        }
+
+        gridMatrix.getChildren().clear();
+
+        for (int i = 0; i < Integer.parseInt(inputRowMatrix.getText()); i++) {
+          for (int j =
+              0; j < Integer.parseInt(inputColumnMatrix.getText()); j++) {
+            TextField temp = new TextField();
+            gridMatrix.add(temp, j, i);
+          }
+        }
+      } catch (Exception e) {
+        alert("Error", "Number you entered is invalid" + lineSeparator
+            + "Please reenter an positive integer");
+        inputColumnMatrix.setText("0");
+      }
+    });
+
+    vBoxMatrix.getChildren().addAll(rowMatrix, columnMatrix, gridMatrix);
+
+    return vBoxMatrix;
+  }
+
+  /**
+   * Show alert to remind user
+   * 
+   * @param title
+   * @param content
+   */
+  private void alert(String title, String content) {
     Alert alert = new Alert(AlertType.ERROR);
-    alert.setTitle("Error: File name mismatch");
-    alert.setContentText("Please rechoose the file" + lineSeparator
-        + "The name of the file must end with '.json'!");
+    alert.setTitle(title);
+    alert.setContentText(content);
     alert.showAndWait();
   }
 
