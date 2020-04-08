@@ -14,6 +14,27 @@ public class Fraction {
   private int denominator;
 
   /**
+   * Return a Fraction form of integer
+   * 
+   * @param  number the integer
+   * @return        the Fraction
+   */
+  public static Fraction of(int number) {
+    return new Fraction(number, 1);
+  }
+
+  /**
+   * Return a Fraction
+   * 
+   * @param  numerator
+   * @param  denominator
+   * @return             the Fraction
+   */
+  public static Fraction of(int numerator, int denominator) {
+    return new Fraction(numerator, denominator);
+  }
+
+  /**
    * Constructor of this Fraction
    * 
    * @param numerator
@@ -66,10 +87,28 @@ public class Fraction {
   }
 
   /**
+   * Return the Integer form of the Fraction
+   * 
+   * @return Integer
+   */
+  public Integer toInteger() {
+    return numerator / denominator;
+  }
+
+  /**
+   * Return the Double form of the Fraction
+   * 
+   * @return Double
+   */
+  public Double toDouble() {
+    return (double) numerator / (double) denominator;
+  }
+
+  /**
    * Add two Fractions
    * 
-   * @param adder
-   * @return new Fraction
+   * @param  adder
+   * @return       new Fraction
    */
   public Fraction add(Fraction other) {
 
@@ -82,8 +121,8 @@ public class Fraction {
   /**
    * Subtract a Fraction from another one
    * 
-   * @param subtractor
-   * @return new Fraction
+   * @param  subtractor
+   * @return            new Fraction
    */
   public Fraction subtract(Fraction other) {
 
@@ -96,8 +135,8 @@ public class Fraction {
   /**
    * Multiply two Fractions
    * 
-   * @param multiplier
-   * @return new Fraction
+   * @param  multiplier
+   * @return            new Fraction
    */
   public Fraction multiply(Fraction other) {
 
@@ -108,8 +147,8 @@ public class Fraction {
   /**
    * Divide a Fraction from another one
    * 
-   * @param divisor
-   * @return new Fraction
+   * @param  divisor
+   * @return         new Fraction
    */
   public Fraction divide(Fraction other) {
 
