@@ -196,7 +196,6 @@ public class Main extends Application {
     columnMatrix.getChildren().addAll(labelColumnMatrix, inputColumnMatrix);
     GridPane gridMatrix = new GridPane();
     gridMatrix.setMaxWidth(300);
-    gridMatrix.setMaxHeight(300);
     inputRowMatrix.setText("5");
     inputColumnMatrix.setText("5");
 
@@ -212,7 +211,11 @@ public class Main extends Application {
     inputRowMatrix.setOnKeyReleased(event -> {
       try {
 
-        if (Integer.parseInt(inputRowMatrix.getText()) < 0) {
+        if(inputRowMatrix.getText().equals("")) {
+          return;
+        }
+        
+        if (Integer.parseInt(inputRowMatrix.getText()) <= 0) {
           throw new Exception();
         }
 
@@ -229,14 +232,18 @@ public class Main extends Application {
       } catch (Exception e) {
         alert("Error", "Number you entered is invalid" + lineSeparator
             + "Please reenter an positive integer");
-        inputRowMatrix.setText("0");
+        inputRowMatrix.setText("1");
       }
     });
 
     inputColumnMatrix.setOnKeyReleased(event -> {
       try {
 
-        if (Integer.parseInt(inputColumnMatrix.getText()) < 0) {
+        if(inputColumnMatrix.getText().equals("")) {
+          return;
+        }
+        
+        if (Integer.parseInt(inputColumnMatrix.getText()) <= 0) {
           throw new Exception();
         }
 
@@ -252,7 +259,7 @@ public class Main extends Application {
       } catch (Exception e) {
         alert("Error", "Number you entered is invalid" + lineSeparator
             + "Please reenter an positive integer");
-        inputColumnMatrix.setText("0");
+        inputColumnMatrix.setText("1");
       }
     });
 
