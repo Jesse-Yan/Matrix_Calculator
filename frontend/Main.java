@@ -1,6 +1,7 @@
 package frontend;
 
 import java.util.List;
+import java.io.File;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -18,7 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import static java.util.stream.Collectors.toList;
-import java.io.File;
 
 /**
  * This class is the Main class for JavaFx application
