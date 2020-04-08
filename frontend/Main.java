@@ -87,12 +87,12 @@ public class Main extends Application {
       Alert alert = new Alert(AlertType.WARNING);
       alert.setTitle("About Developer");
       alert.setHeaderText("Matrix-Calculator");
-      alert.setContentText(
-          "Developedby:  " + lineSeparator + "    Chengpo Yan - cyan46@wisc.edu"
-              + lineSeparator + "    Jinming Zhang - jzhang2279@wisc.edu"
-              + lineSeparator + "    Zexin Li - zli885@wisc.edu" + lineSeparator
-              + "    Houming Chen - hchen634@wisc.edu" + lineSeparator
-              + "    Chengxu Bian - cbian4@wisc.edu");
+      alert.setContentText("Developedby:        " + lineSeparator
+          + "    Chengpo Yan - cyan46@wisc.edu" + lineSeparator
+          + "    Jinming Zhang - jzhang2279@wisc.edu" + lineSeparator
+          + "    Zexin Li - zli885@wisc.edu" + lineSeparator
+          + "    Houming Chen - hchen634@wisc.edu" + lineSeparator
+          + "    Chengxu Bian - cbian4@wisc.edu");
       alert.showAndWait();
     });
     about.getItems().add(developer);
