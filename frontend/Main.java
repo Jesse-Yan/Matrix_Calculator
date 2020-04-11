@@ -165,7 +165,30 @@ public class Main extends Application {
     matrixOperators.setVgap(23);
     hBoxR.getChildren().addAll(matrix1, matrixOperators, matrix2);
 
-    vBoxR.getChildren().addAll(hBoxR);
+    // Set the operation panel
+    GridPane mOperations = new GridPane();
+    mOperations.setHgap(76.7);
+    mOperations.setVgap(10);
+    List<Button> mButtons = List.of("Det", "Inverse", "QR", "SVD", "Trace",
+        "PowerOf2", "LU", "Gauss-Elim", "EiVector", "EiValue", "exp", "ln")
+                                .stream()
+                                .map(operator -> {
+                                  Button temp = new Button(operator);
+                                  temp.setMinWidth(100);
+                                  return temp;
+                                })
+                                .collect(toList());
+    int count = 0;
+    for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 4; j++) {
+        mOperations.add(mButtons.get(count++), j, i);
+      }
+    }
+
+    TextArea mResult = new TextArea();
+    mResult.setMinHeight(207);
+    
+    vBoxR.getChildren().addAll(hBoxR, mOperations, mResult);
     root.setRight(vBoxR);
 
     // Use the optimized width and height
@@ -200,21 +223,20 @@ public class Main extends Application {
     inputColumnMatrix.setText("5");
 
     for (int i = 0; i < Integer.parseInt(inputRowMatrix.getText()); i++) {
-      for (int j =
-          0; j < Integer.parseInt(inputColumnMatrix.getText()); j++) {
+      for (int j = 0; j < Integer.parseInt(inputColumnMatrix.getText()); j++) {
 
         TextField temp = new TextField();
         gridMatrix.add(temp, j, i);
       }
     }
-    
+
     inputRowMatrix.setOnKeyReleased(event -> {
       try {
 
-        if(inputRowMatrix.getText().equals("")) {
+        if (inputRowMatrix.getText().equals("")) {
           return;
         }
-        
+
         if (Integer.parseInt(inputRowMatrix.getText()) <= 0) {
           throw new Exception();
         }
@@ -239,10 +261,10 @@ public class Main extends Application {
     inputColumnMatrix.setOnKeyReleased(event -> {
       try {
 
-        if(inputColumnMatrix.getText().equals("")) {
+        if (inputColumnMatrix.getText().equals("")) {
           return;
         }
-        
+
         if (Integer.parseInt(inputColumnMatrix.getText()) <= 0) {
           throw new Exception();
         }
