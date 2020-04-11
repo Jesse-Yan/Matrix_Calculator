@@ -205,7 +205,11 @@ public class Main extends Application {
     Scene mainScene =
         new Scene(root, primaryStage.getWidth(), primaryStage.getHeight());
     primaryStage.setScene(mainScene);
-    mainScene.getStylesheets().add("./application/styleSheet.css");
+    try {
+      mainScene.getStylesheets().add("./application/styleSheet.css");
+    } catch (Exception e) {
+
+    }
     primaryStage.show();
   }
 
