@@ -121,7 +121,9 @@ public class Main extends Application {
     // Set two parallel buttons
     HBox hBoxL = new HBox();
     Button analyzeSequence = new Button("Analyze/nSequence");
+    analyzeSequence.setMinWidth(180);
     Button space = new Button("Space");
+    space.setMinWidth(180);
 
     // Activated under analyzing sequence
     space.setDisable(true);
@@ -203,6 +205,7 @@ public class Main extends Application {
     Scene mainScene =
         new Scene(root, primaryStage.getWidth(), primaryStage.getHeight());
     primaryStage.setScene(mainScene);
+    mainScene.getStylesheets().add("./application/styleSheet.css");
     primaryStage.show();
   }
 
