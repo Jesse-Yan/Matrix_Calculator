@@ -43,8 +43,12 @@ public class Main extends Application {
     // Set the title of the primaryStage
     primaryStage.setTitle("Matrix Calculator - Developed by ateam2");
 
-    // Set the application icon
-    primaryStage.getIcons().add(new Image("./assets/calculator.png"));
+    try {
+      // Set the application icon
+      primaryStage.getIcons().add(new Image("./assets/calculator.png"));
+    } catch (Exception e) {
+
+    }
 
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Open Resource File");
