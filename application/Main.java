@@ -13,6 +13,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -41,6 +42,9 @@ public class Main extends Application {
 
     // Set the title of the primaryStage
     primaryStage.setTitle("Matrix Calculator - Developed by ateam2");
+
+    // Set the application icon
+    primaryStage.getIcons().add(new Image("./assets/calculator.png"));
 
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Open Resource File");
@@ -187,7 +191,7 @@ public class Main extends Application {
 
     TextArea mResult = new TextArea();
     mResult.setMinHeight(207);
-    
+
     vBoxR.getChildren().addAll(hBoxR, mOperations, mResult);
     root.setRight(vBoxR);
 
