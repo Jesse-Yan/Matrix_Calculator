@@ -1,4 +1,4 @@
-package frontend;
+package application;
 
 public class DisplayWindow {
 

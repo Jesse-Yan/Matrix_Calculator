@@ -1,4 +1,4 @@
-package backend;
+package application;
 
 /**
  * This class represents a Matrix and defines required operation needed for a

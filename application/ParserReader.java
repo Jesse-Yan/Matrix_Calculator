@@ -1,4 +1,4 @@
-package backend;
+package application;
 
 /**
  * This class parse from a JSON file

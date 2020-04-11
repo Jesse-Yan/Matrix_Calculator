@@ -1,4 +1,4 @@
-package backend;
+package application;
 
 /**
  * This class is Fraction, provides several methods to modify fraction, fraction
