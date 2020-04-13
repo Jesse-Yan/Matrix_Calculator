@@ -45,7 +45,7 @@ public class Main extends Application {
 
     try {
       // Set the application icon
-      primaryStage.getIcons().add(new Image("./assets/calculator.png"));
+      primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("./assets/calculator.png")));
     } catch (Exception e) {
 
     }
