@@ -161,6 +161,7 @@ public class Main extends Application {
     // Set the Matrix Panel
     VBox matrix1 = matrixGenerator();
     VBox matrix2 = matrixGenerator();
+    matrix2.setDisable(true);
 
     // Set the operation
     GridPane matrixOperators = new GridPane();
