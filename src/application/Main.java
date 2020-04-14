@@ -180,22 +180,31 @@ public class Main extends Application {
     GridPane mOperations = new GridPane();
     mOperations.setHgap(76.7);
     mOperations.setVgap(10);
-    List<Button> mButtons = List.of("Det", "Inverse", "QR", "SVD", "Trace",
-        "PowerOf2", "LU", "Gauss-Elim", "EiVector", "EiValue", "exp", "ln")
-                                .stream()
-                                .map(operator -> {
-                                  Button temp = new Button(operator);
-                                  temp.setMinWidth(100);
-                                  return temp;
-                                })
-                                .collect(toList());
+
+    List<Button> mButtons =
+        List.of("Det", "Inverse", "QR", "SVD", "Trace", "LU", "Gauss-Elim",
+            "EiVector", "EiValue", "exp", "ln").stream().map(operator -> {
+              Button temp = new Button(operator);
+              temp.setMinWidth(100);
+              return temp;
+            }).collect(toList());
     int count = 0;
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 4; j++) {
         mOperations.add(mButtons.get(count++), j, i);
+        if(count == 11) {
+          break;
+        }
       }
     }
 
+    HBox power = new HBox();
+    Button powerButton = new Button("Power");
+    TextField powerInput = new TextField();
+    powerInput.setMaxWidth(55);
+    power.getChildren().addAll(powerButton, powerInput);
+    mOperations.add(power, 3, 2);
+    
     TextArea mResult = new TextArea();
     mResult.setMinHeight(207);
 
