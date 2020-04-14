@@ -91,6 +91,18 @@ public class Matrix implements MatrixADT{
   public Numeric getEntry(int row, int column) {
     return matrix[row][column];
   }
+  
+  @Override
+  public String toString() {
+    String string = "";
+    for (int i = 0; i < matrix.length; i++) {
+      for (int j = 0; j < matrix[0].length; j++) {
+        string += matrix[i][j].toString() + " ";
+      }
+      string += '\n';
+    }
+    return string;
+  }
 
   private void additionCheck(MatrixADT other) throws MatrixDimensionsMismatchException{
     if(this.getNumberOfRow() != other.getNumberOfRow())
@@ -132,7 +144,7 @@ public class Matrix implements MatrixADT{
       for (int j = 0; j < other.getNumberOfColumn(); j++)
         for (int k = 0; k < this.getNumberOfColumn(); k++)
           answer.matrix[i][j] = answer.matrix[i][j].add(this.getEntry(i, k).multiply(other.getEntry(k, j)));
-    return null;
+    return answer;
   }
 
   @Override

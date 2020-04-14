@@ -42,7 +42,11 @@ public class Numeric {
    * @param fractionNumber the given Fraction instance
    */
   public Numeric(Fraction fractionNumber) {
-    number = fractionNumber;
+    try {
+      number = fractionNumber.toInteger();;
+    } catch (ClassCastException e) {
+      number = fractionNumber;
+    }
   }
 
   /**
@@ -171,7 +175,7 @@ public class Numeric {
     if (number instanceof Integer) {
       return ((Integer) number);
     }
-    throw new ClassCastException("Cannot cast to Integer");
+    throw new ClassCastException("Cannot cast to an Integer");
   }
   
   /**

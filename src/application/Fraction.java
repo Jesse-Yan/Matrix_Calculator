@@ -95,7 +95,6 @@ public class Fraction implements Comparable<Fraction>{
    */
   @Override
   public String toString() {
-
     return denominator == 1 ? numerator + "" : numerator + "/" + denominator;
   }
 
@@ -105,6 +104,8 @@ public class Fraction implements Comparable<Fraction>{
    * @return Integer
    */
   public Integer toInteger() {
+    if(numerator % denominator == 0)
+      throw new ClassCastException("Cannot cast to an Integer");
     return numerator / denominator;
   }
 

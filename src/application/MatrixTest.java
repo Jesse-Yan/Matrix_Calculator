@@ -25,10 +25,10 @@ public class MatrixTest {
   
   
   /**
-   * Test the constructor.
+   * Test the constructor and getEntry
    */
   @Test
-  public void test000_constructor() {
+  public void test000_constructor_and_getEntry() {
     try {
       MatrixADT matrix = new Matrix(new int[][] {{-1, 0, 1}, {2, 3, 4}});
       assertEquals(-1, matrix.getEntry(0, 0).toInteger());
@@ -50,14 +50,10 @@ public class MatrixTest {
     try {
       MatrixADT matrix1 = new Matrix(new int[][] {{-1, 0, 1}, {2, 3, 4}});
       MatrixADT matrix2 = new Matrix(new int[][] {{-1, 0, -1}, {-4, 0, 10}});
-      MatrixADT sumMatrix;
+      MatrixADT expectedMatrix = new Matrix(new int[][] {{-2, 0, 0}, {-2, 3, 14}});
+      MatrixADT sumMatrix = matrix1.add(matrix2);
+      assertEquals(expectedMatrix.toString(), sumMatrix.toString());
       sumMatrix = matrix1.add(matrix2);
-      assertEquals(-2, sumMatrix.getEntry(0, 0).toInteger());
-      assertEquals(0, sumMatrix.getEntry(0, 1).toInteger());
-      assertEquals(0, sumMatrix.getEntry(0, 2).toInteger());
-      assertEquals(-2, sumMatrix.getEntry(1, 0).toInteger());
-      assertEquals(3, sumMatrix.getEntry(1, 1).toInteger());
-      assertEquals(14, sumMatrix.getEntry(1, 2).toInteger());
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -71,14 +67,29 @@ public class MatrixTest {
     try {
       MatrixADT matrix1 = new Matrix(new int[][] {{-1, 0, 1}, {2, 3, 4}});
       MatrixADT matrix2 = new Matrix(new int[][] {{-1, 0, -1}, {-4, 0, 10}});
-      MatrixADT differenceMatrix;
-      differenceMatrix = matrix1.subtract(matrix2);
+      MatrixADT differenceMatrix = matrix1.subtract(matrix2);
       assertEquals(0, differenceMatrix.getEntry(0, 0).toInteger());
       assertEquals(0, differenceMatrix.getEntry(0, 1).toInteger());
       assertEquals(2, differenceMatrix.getEntry(0, 2).toInteger());
       assertEquals(6, differenceMatrix.getEntry(1, 0).toInteger());
       assertEquals(3, differenceMatrix.getEntry(1, 1).toInteger());
       assertEquals(-6, differenceMatrix.getEntry(1, 2).toInteger());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * Test multiplication
+   */
+  @Test
+  public void test002_multiplication() {
+    try {
+      MatrixADT matrix1 = new Matrix(new int[][] {{1, 2}, {-4, 0}, {0, -6}});
+      MatrixADT matrix2 = new Matrix(new int[][] {{4, 3, 0}, {-2, 0, -5}});
+      MatrixADT expectedMatrix = new Matrix(new int[][] {{0, 3, -10}, {-16, -12, 0}, {12, 0, 30}});
+      MatrixADT productMatrix = matrix1.multiply(matrix2);
+      assertEquals(expectedMatrix.toString(), productMatrix.toString());
     } catch (Exception e) {
       e.printStackTrace();
     }
