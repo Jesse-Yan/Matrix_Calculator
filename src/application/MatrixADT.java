@@ -1,6 +1,11 @@
 package application;
 
-
+/**
+ * The ADT for matrix.
+ * 
+ * @author Houming Chen
+ *
+ */
 public interface MatrixADT {
   
   int getNumberOfColumn();
