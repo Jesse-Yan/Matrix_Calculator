@@ -5,6 +5,6 @@ package application;
  * @author Jesse
  *
  */
-public class ParserReader {
+public class Parser {
 
 }
