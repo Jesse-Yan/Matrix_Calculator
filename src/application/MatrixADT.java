@@ -14,9 +14,9 @@ public interface MatrixADT {
   
   MatrixADT add(MatrixADT other) throws MatrixDimensionsMismatchException;
   MatrixADT subtract(MatrixADT other) throws MatrixDimensionsMismatchException;
-  MatrixADT multiply(Fraction number);
-  MatrixADT GaussianElimination(MatrixADT other) throws MatrixDimensionsMismatchException;
   MatrixADT multiply(MatrixADT other) throws MatrixDimensionsMismatchException;
+  MatrixADT GaussianElimination(MatrixADT other) throws MatrixDimensionsMismatchException;
+  
   MatrixADT inverse();
   Numeric getDeterminant();
   

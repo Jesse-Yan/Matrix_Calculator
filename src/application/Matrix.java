@@ -23,7 +23,7 @@ public class Matrix implements MatrixADT{
   }
   
   /**
-   * Constructor of the matrix
+   * Constructor of the matrix with Integers
    * 
    * @param row     the row the matrix has
    * @param column  the column the matrix has
@@ -37,7 +37,7 @@ public class Matrix implements MatrixADT{
   }
   
   /**
-   * Constructor of the matrix
+   * Constructor of the matrix with Fractions
    * 
    * @param row     the row the matrix has
    * @param column  the column the matrix has
@@ -51,7 +51,7 @@ public class Matrix implements MatrixADT{
   }
   
   /**
-   * Constructor of the matrix
+   * Constructor of the matrix with Doubles
    * 
    * @param row     the row the matrix has
    * @param column  the column the matrix has
@@ -146,6 +146,34 @@ public class Matrix implements MatrixADT{
           answer.matrix[i][j] = answer.matrix[i][j].add(this.getEntry(i, k).multiply(other.getEntry(k, j)));
     return answer;
   }
+  
+  private Numeric getPivotOfARow(int row) {
+    for (int i = 0; i < this.getNumberOfColumn(); i++)
+      if(matrix[row][i].compareTo(new Numeric(0)) != 0) {
+        return matrix[row][i];
+      }
+    return null;
+  }
+  
+  private void multiplyAConstantToARow(Numeric constanct, int row) {
+    for (int i = 0; i < this.getNumberOfColumn(); i++)
+      matrix[row][i] = matrix[row][i].multiply(constanct);
+  }
+  
+  private void subtractAnotherRowFromARow(int row1, int row2) {
+    for (int i = 0; i < this.getNumberOfColumn(); i++)
+      matrix[row1][i] = matrix[row1][i].subtract(matrix[row2][i]);
+  }
+  
+  private void eliminateRowXUsingRowY(int RowX, int RowY) {
+    //for (int i = 0; i < this.getNumberOfColumn(); i++)
+  }
+  
+  @Override
+  public MatrixADT GaussianElimination(MatrixADT other) throws MatrixDimensionsMismatchException {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
   @Override
   public MatrixADT inverse() {
@@ -206,16 +234,8 @@ public class Matrix implements MatrixADT{
     return det;
   }
 
-  @Override
-  public MatrixADT multiply(Fraction number) {
-    // TODO Auto-generated method stub
-    return null;
-  }
+  
 
-  @Override
-  public MatrixADT GaussianElimination(MatrixADT other) throws MatrixDimensionsMismatchException {
-    // TODO Auto-generated method stub
-    return null;
-  }
+  
   
 }

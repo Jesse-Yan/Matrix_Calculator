@@ -63,7 +63,7 @@ public class MatrixTest {
    * Test subtraction
    */
   @Test
-  public void test001_subtraction() {
+  public void test002_subtraction() {
     try {
       MatrixADT matrix1 = new Matrix(new int[][] {{-1, 0, 1}, {2, 3, 4}});
       MatrixADT matrix2 = new Matrix(new int[][] {{-1, 0, -1}, {-4, 0, 10}});
@@ -79,7 +79,7 @@ public class MatrixTest {
    * Test multiplication
    */
   @Test
-  public void test002_multiplication() {
+  public void test003_multiplication() {
     try {
       MatrixADT matrix1 = new Matrix(new int[][] {{1, 2}, {-4, 0}, {0, -6}});
       MatrixADT matrix2 = new Matrix(new int[][] {{4, 3, 0}, {-2, 0, -5}});

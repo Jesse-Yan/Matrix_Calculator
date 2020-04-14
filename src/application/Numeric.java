@@ -11,42 +11,35 @@ package application;
  * @author Houming Chen
  *
  */
-public class Numeric {
+public class Numeric implements Comparable<Numeric> {
   /**
    * A private Object representing the number, which can only be a Integer, or a Fraction, or a
    * Double.
    */
-  private Object number;
+  private Number number;
 
   /**
-   * The constructor to construct this Numeric instance with an Integer.
+   * The constructor to construct this Numeric instance with an given number
    * 
-   * @param integerNumber the given Integer instance
+   * @param integerNumber the given number
    */
-  public Numeric(Integer integerNumber) {
-    number = integerNumber;
-  }
-
-  /**
-   * The constructor to construct this Numeric instance with a Double.
-   * 
-   * @param doubleNumber the given Double instance
-   */
-  public Numeric(Double doubleNumber) {
-    number = doubleNumber;
-  }
-
-  /**
-   * The constructor to construct this Numeric instance with a Fraction.
-   * 
-   * @param fractionNumber the given Fraction instance
-   */
-  public Numeric(Fraction fractionNumber) {
-    try {
-      number = fractionNumber.toInteger();;
-    } catch (ClassCastException e) {
-      number = fractionNumber;
+  public Numeric(Number number) {
+    if(number instanceof Fraction) {
+      try {
+        this.number = number.intValue();
+      } catch (ClassCastException e) {
+        this.number = number;
+      }
     }
+    else if(number instanceof Long)
+      if(Integer.MIN_VALUE <= number.longValue() && number.longValue() <= Integer.MAX_VALUE)
+        this.number = number.intValue();
+      else 
+        this.number = number.doubleValue();
+    else if(number instanceof Integer || number instanceof Short)
+      this.number = number.intValue();
+    else
+      this.number = number.doubleValue();
   }
 
   /**
@@ -55,54 +48,12 @@ public class Numeric {
    * @param other another given Numeric instance.
    */
   public Numeric(Numeric other) {
-    if (other.number instanceof Integer) {
-      number = (Integer) other.number;
-    } else if (other.number instanceof Fraction) {
-      number = (Fraction) other.number;
-    } else if (other.number instanceof Double) {
-      number = (Double) other.number;
-    } else
-      throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
-  }
-
-  /**
-   * Receive two Numeric reference, and cast their instance down until the instance become the same
-   * type of the data. (Integer -> Fraction -> Double)
-   * 
-   * @param num1 the first given Numeric reference
-   * @param num2 the second given Numeric reference
-   */
-  static void castUntilBalance(Numeric num1, Numeric num2) {
-    if (num1.number instanceof Double) {
-      if (num2.number instanceof Integer)
-        num2.number = Double.valueOf((Integer) num2.number);
-      else if (num2.number instanceof Fraction)
-        num2.number = ((Fraction) num2.number).toDouble();
-    } else if (num1.number instanceof Fraction) {
-      if (num2.number instanceof Integer)
-        num2.number = Fraction.of((Integer) num2.number);
-      else if (num2.number instanceof Double)
-        num1.number = ((Fraction) num1.number).toDouble();
-    } else if (num1.number instanceof Integer) {
-      if (num2.number instanceof Fraction)
-        num1.number = Fraction.of((Integer) num1.number);
-      else if (num2.number instanceof Double)
-        num1.number = Double.valueOf((Integer) num1.number);
-    }
+    number = other.number;
   }
 
   @Override
   public String toString() {
-    if (number instanceof Integer) {
-      return ((Integer) number).toString();
-    }
-    if (number instanceof Double) {
-      return ((Double) number).toString();
-    }
-    if (number instanceof Fraction) {
-      return ((Fraction) number).toString();
-    }
-    throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
+    return number.toString();
   }
 
   /**
@@ -112,21 +63,20 @@ public class Numeric {
    * @return the difference
    */
   public Numeric add(Numeric other) {
+    
     other = new Numeric(other);
     Numeric thisNum = new Numeric(this);
-    castUntilBalance(thisNum, other);
-    if (thisNum.number instanceof Integer) {
-      return new Numeric((Integer) thisNum.number + (Integer) other.number);
+    if (thisNum.number instanceof Double || other.number instanceof Double) {
+      return new Numeric(thisNum.number.doubleValue() + other.number.doubleValue());
     }
-    if (thisNum.number instanceof Fraction) {
-      return new Numeric(((Fraction) thisNum.number).add((Fraction) other.number));
+    if (thisNum.number instanceof Fraction || other.number instanceof Fraction) {
+      return new Numeric(Fraction.of(thisNum.number).add(Fraction.of(other.number)));
     }
-    if (thisNum.number instanceof Double) {
-      return new Numeric((Double) thisNum.number + (Double) other.number);
+    if (thisNum.number instanceof Integer || other.number instanceof Integer) {
+      return new Numeric(thisNum.number.longValue() + other.number.longValue());
     }
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
-
   /**
    * Get the difference of this Numeric Instance and another given Numeric Instance.
    * This method will not change the value of both of the instances.
@@ -136,15 +86,14 @@ public class Numeric {
   public Numeric subtract(Numeric other) {
     other = new Numeric(other);
     Numeric thisNum = new Numeric(this);
-    castUntilBalance(thisNum, other);
-    if (thisNum.number instanceof Integer) {
-      return new Numeric((Integer) thisNum.number - (Integer) other.number);
+    if (thisNum.number instanceof Double || other.number instanceof Double) {
+      return new Numeric(thisNum.number.doubleValue() - other.number.doubleValue());
     }
-    if (thisNum.number instanceof Fraction) {
-      return new Numeric(((Fraction) thisNum.number).subtract((Fraction) other.number));
+    if (thisNum.number instanceof Fraction || other.number instanceof Fraction) {
+      return new Numeric(Fraction.of(thisNum.number).subtract(Fraction.of(other.number)));
     }
-    if (thisNum.number instanceof Double) {
-      return new Numeric((Double) thisNum.number - (Double) other.number);
+    if (thisNum.number instanceof Integer || other.number instanceof Integer) {
+      return new Numeric(thisNum.number.longValue()  - other.number.longValue());
     }
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
@@ -158,15 +107,35 @@ public class Numeric {
   public Numeric multiply(Numeric other) {
     other = new Numeric(other);
     Numeric thisNum = new Numeric(this);
-    castUntilBalance(thisNum, other);
-    if (thisNum.number instanceof Integer) {
-      return new Numeric((Integer) thisNum.number * (Integer) other.number);
+    if (thisNum.number instanceof Double || other.number instanceof Double) {
+      return new Numeric(thisNum.number.doubleValue() * other.number.doubleValue());
     }
-    if (thisNum.number instanceof Fraction) {
-      return new Numeric(((Fraction) thisNum.number).multiply((Fraction) other.number));
+    if (thisNum.number instanceof Fraction || other.number instanceof Fraction) {
+      return new Numeric(Fraction.of(thisNum.number).multiply(Fraction.of(other.number)));
     }
-    if (thisNum.number instanceof Double) {
-      return new Numeric((Double) thisNum.number * (Double) other.number);
+    if (thisNum.number instanceof Integer || other.number instanceof Integer) {
+      return new Numeric(thisNum.number.longValue() * other.number.longValue());
+    }
+    throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
+  }
+  
+  /**
+   * Get the difference of this Numeric Instance and another given Numeric Instance.
+   * This method will not change the value of both of the instances.
+   * @param other the other given Numeric Instance
+   * @return the difference
+   */
+  public Numeric dividedBy(Numeric other) {
+    other = new Numeric(other);
+    Numeric thisNum = new Numeric(this);
+    if (thisNum.number instanceof Double || other.number instanceof Double) {
+      return new Numeric(thisNum.number.doubleValue() / other.number.doubleValue());
+    }
+    if (thisNum.number instanceof Fraction || other.number instanceof Fraction) {
+      return new Numeric(Fraction.of(thisNum.number).dividedBy(Fraction.of(other.number)));
+    }
+    if (thisNum.number instanceof Integer || other.number instanceof Integer) {
+      return new Numeric(new Fraction(thisNum.number.intValue(), other.number.intValue()));
     }
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
@@ -178,6 +147,22 @@ public class Numeric {
     throw new ClassCastException("Cannot cast to an Integer");
   }
   
+  @Override
+  public int compareTo(Numeric other) {
+    other = new Numeric(other);
+    Numeric thisNum = new Numeric(this);
+    if (thisNum.number instanceof Double || other.number instanceof Double) {
+      return Double.valueOf(thisNum.number.doubleValue()).compareTo(Double.valueOf(other.number.doubleValue()));
+    }
+    if (thisNum.number instanceof Fraction || other.number instanceof Fraction) {
+      return (Fraction.of(thisNum.number).compareTo(Fraction.of(other.number)));
+    }
+    if (thisNum.number instanceof Integer || other.number instanceof Integer) {
+      return Integer.valueOf(thisNum.number.intValue()).compareTo(Integer.valueOf(other.number.intValue()));
+    }
+    throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
+  }
+  
   /**
    * A main method, just for test.
    * 
@@ -187,11 +172,23 @@ public class Numeric {
     Numeric n1 = new Numeric(1); // n1 = 1
     Numeric n2 = new Numeric(new Fraction(1, 7)); // n2 = 1/7
     Numeric n3 = new Numeric(1.5); // n3 = 0.5
+    Numeric n4 = new Numeric(2147483647); // n4 = int_max
     System.out.println(n1.add(n1)); // n1 + n1 = 2
     System.out.println(n1.add(n2)); // n1 + n2 = 8/7
     System.out.println(n1.add(n3)); // n1 + n3 = 2.5
     System.out.println(n2.add(n3)); // n2 + n3 = 1.642857142857
     System.out.println(n1.subtract(n1)); // n1 - n1 = 0
     System.out.println(n2.multiply(n2)); // 1/7 * 1/7 = 1/49
-  }
+    System.out.println(n1.add(n4)); // 1/7 * 1/7 = 1/49
+    
+    Numeric n5 = new Numeric(2); // n5 = 2
+    Numeric n6 = new Numeric(3); // n6 = 3
+    Numeric n7 = new Numeric(0); // n7 = 0
+    System.out.println(n5.dividedBy(n6)); // n5 / n6 = 0
+    try {
+      System.out.println(n5.dividedBy(n7));
+    } catch (Exception e) {
+      System.out.println(e.getMessage()); // "/ by zero"
+    }
+  } 
 }

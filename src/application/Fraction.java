@@ -7,7 +7,7 @@ package application;
  * @author Jesse
  *
  */
-public class Fraction implements Comparable<Fraction>{
+public class Fraction extends Number implements Comparable<Fraction>{
 
   // Store for numerator and denominator
   private int numerator;
@@ -19,8 +19,13 @@ public class Fraction implements Comparable<Fraction>{
    * @param  number the integer
    * @return        the Fraction
    */
-  public static Fraction of(int number) {
-    return new Fraction(number, 1);
+  public static Fraction of(Number number) {
+    if(number instanceof Integer || number instanceof Short)
+      return new Fraction(number.intValue(), 1);
+    if(number instanceof Fraction) {
+      return new Fraction((Fraction) number);
+    }
+    throw new ClassCastException();
   }
 
   /**
@@ -41,12 +46,13 @@ public class Fraction implements Comparable<Fraction>{
    * @param denominator
    */
   public Fraction(int numerator, int denominator) {
+    
     if ((numerator < 0 && denominator < 0)
         || (numerator > 0 && denominator < 0)) {
       numerator = -numerator;
       denominator = -denominator;
     }
-    int gcd = gCD(numerator, denominator);
+    int gcd = gcd(numerator, denominator);
     this.numerator = numerator / gcd;
     this.denominator = denominator / gcd;
   }
@@ -68,7 +74,7 @@ public class Fraction implements Comparable<Fraction>{
    * @param  denominator
    * @return             the greatest Common Divisor
    */
-  private int gCD(int numerator, int denominator) {
+  private int gcd(int numerator, int denominator) {
     numerator = Math.abs(numerator);
     denominator = Math.abs(denominator);
     return gcdHelper(numerator, denominator);
@@ -97,24 +103,26 @@ public class Fraction implements Comparable<Fraction>{
   public String toString() {
     return denominator == 1 ? numerator + "" : numerator + "/" + denominator;
   }
-
-  /**
-   * Return the Integer form of the Fraction
-   * 
-   * @return Integer
-   */
-  public Integer toInteger() {
-    if(numerator % denominator == 0)
+  
+  @Override
+  public int intValue() {
+    if(numerator % denominator != 0)
       throw new ClassCastException("Cannot cast to an Integer");
     return numerator / denominator;
   }
 
-  /**
-   * Return the Double form of the Fraction
-   * 
-   * @return Double
-   */
-  public Double toDouble() {
+  @Override
+  public long longValue() {
+    return numerator / denominator;
+  }
+
+  @Override
+  public float floatValue() {
+    return (float) numerator / (float) denominator;
+  }
+
+  @Override
+  public double doubleValue() {
     return (double) numerator / (double) denominator;
   }
 
@@ -164,7 +172,7 @@ public class Fraction implements Comparable<Fraction>{
    * @param  divisor
    * @return         new Fraction
    */
-  public Fraction divide(Fraction other) {
+  public Fraction dividedBy(Fraction other) {
 
     return new Fraction(this.getNumerator() * other.getDenominator(),
         this.getDenominator() * other.getNumerator());
@@ -200,4 +208,6 @@ public class Fraction implements Comparable<Fraction>{
       return 0;
     }
   }
+
+  
 }
