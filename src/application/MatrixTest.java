@@ -67,13 +67,9 @@ public class MatrixTest {
     try {
       MatrixADT matrix1 = new Matrix(new int[][] {{-1, 0, 1}, {2, 3, 4}});
       MatrixADT matrix2 = new Matrix(new int[][] {{-1, 0, -1}, {-4, 0, 10}});
+      MatrixADT expectedMatrix = new Matrix(new int[][] {{0, 0, 2}, {6, 3, -6}});
       MatrixADT differenceMatrix = matrix1.subtract(matrix2);
-      assertEquals(0, differenceMatrix.getEntry(0, 0).toInteger());
-      assertEquals(0, differenceMatrix.getEntry(0, 1).toInteger());
-      assertEquals(2, differenceMatrix.getEntry(0, 2).toInteger());
-      assertEquals(6, differenceMatrix.getEntry(1, 0).toInteger());
-      assertEquals(3, differenceMatrix.getEntry(1, 1).toInteger());
-      assertEquals(-6, differenceMatrix.getEntry(1, 2).toInteger());
+      assertEquals(expectedMatrix.toString(), differenceMatrix.toString());
     } catch (Exception e) {
       e.printStackTrace();
     }
