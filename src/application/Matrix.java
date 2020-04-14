@@ -9,17 +9,17 @@ package application;
  */
 public class Matrix implements MatrixADT{
 
-  private Fraction[][] matrix;
+  private Numeric[][] matrix;
   
   /**
    * Zero Matrix
    * @param content
    */
   public Matrix(int row, int column) {
-    matrix = new Fraction[row][column];
+    matrix = new Numeric[row][column];
     for (int i = 0; i < row; i++)
       for (int j = 0; j < column; j++)
-      matrix[i][j] = Fraction.of(0);
+      matrix[i][j] = new Numeric(0);
   }
   
   /**
@@ -30,10 +30,10 @@ public class Matrix implements MatrixADT{
    * @param content the content
    */
   public Matrix(int [][] content) {
-    matrix = new Fraction[content.length][content[0].length];
+    matrix = new Numeric[content.length][content[0].length];
     for (int i = 0; i < content.length; i++)
       for (int j = 0; j < content[0].length; j++)
-        matrix[i][j] = Fraction.of(content[i][j]);
+        matrix[i][j] = new Numeric(content[i][j]);
   }
   
   /**
@@ -44,9 +44,37 @@ public class Matrix implements MatrixADT{
    * @param content the content
    */
   public Matrix(Fraction[][] content) {
-    matrix = new Fraction[content.length][];
+    matrix = new Numeric[content.length][content[0].length];
     for (int i = 0; i < content.length; i++)
-      matrix[i] = content[i].clone();
+      for (int j = 0; j < content[0].length; j++)
+        matrix[i][j] = new Numeric(content[i][j]);
+  }
+  
+  /**
+   * Constructor of the matrix
+   * 
+   * @param row     the row the matrix has
+   * @param column  the column the matrix has
+   * @param content the content
+   */
+  public Matrix(double[][] content) {
+    matrix = new Numeric[content.length][content[0].length];
+    for (int i = 0; i < content.length; i++)
+      for (int j = 0; j < content[0].length; j++)
+        matrix[i][j] = new Numeric(content[i][j]);
+  }
+  
+  /**
+   * Constructor of the matrix
+   * 
+   * @param row     the row the matrix has
+   * @param column  the column the matrix has
+   * @param content the content
+   */
+  public Matrix(Numeric[][] content) {
+    matrix = new Numeric[content.length][content[0].length];
+    for (int i = 0; i < content.length; i++)
+        matrix[i] = content[i].clone();
   }
   
   @Override
@@ -60,7 +88,7 @@ public class Matrix implements MatrixADT{
   }
 
   @Override
-  public Fraction getEntry(int row, int column) {
+  public Numeric getEntry(int row, int column) {
     return matrix[row][column];
   }
 
@@ -114,7 +142,7 @@ public class Matrix implements MatrixADT{
   }
 
   @Override
-  public Fraction getDeterminant() {
+  public Numeric getDeterminant() {
     // TODO Auto-generated method stub
     return null;
   }
@@ -126,7 +154,7 @@ public class Matrix implements MatrixADT{
    * 
    * @return the determinant
    */
-  public Fraction determinant() {
+  public Numeric determinant() {
     return determinant(matrix);
   }
 
@@ -136,7 +164,7 @@ public class Matrix implements MatrixADT{
    * @param  submatrix
    * @return           Fraction
    */
-  private Fraction determinant(Fraction[][] submatrix) {
+  private Numeric determinant(Numeric[][] submatrix) {
     if (matrix.length == 1)
       return matrix[0][0];
 
@@ -144,13 +172,13 @@ public class Matrix implements MatrixADT{
       return (matrix[0][0].multiply(matrix[1][1])).subtract(
           matrix[0][1].multiply(matrix[1][0]));
 
-    Fraction det = Fraction.of(0);
+    Numeric det = new Numeric(0);
 
     int flag = 0;
 
     // Recursively calculate the determinant
     for (int i = 0; i < matrix.length; i++) {
-      Fraction[][] temp = new Fraction[matrix.length - 1][matrix.length - 1];
+      Numeric[][] temp = new Numeric[matrix.length - 1][matrix.length - 1];
       for (int j = 0; j < temp.length; j++) {
         int index = 0;
         for (int j2 = 0; j2 < temp.length; j2++) {
@@ -160,8 +188,8 @@ public class Matrix implements MatrixADT{
           temp[j][j2] = matrix[j + 1][index++];
         }
       }
-      det.add(matrix[0][i].multiply(Fraction.of((int) Math.pow(-1, flag++)))
-                          .multiply(determinant(temp)));
+      det.add(matrix[0][i].multiply(new Numeric(Fraction.of((int) Math.pow(-1, flag++)))
+          .multiply(determinant(temp))));
     }
     return det;
   }

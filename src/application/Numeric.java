@@ -167,6 +167,13 @@ public class Numeric {
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
 
+  int toInteger() {
+    if (number instanceof Integer) {
+      return ((Integer) number);
+    }
+    throw new ClassCastException("Cannot cast to Integer");
+  }
+  
   /**
    * A main method, just for test.
    * 

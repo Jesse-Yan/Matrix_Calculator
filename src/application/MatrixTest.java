@@ -30,14 +30,7 @@ public class MatrixTest {
   @Test
   public void test000_constructor() {
     try {
-      Fraction content[][] = new Fraction[2][3];
-      content[0][0] = Fraction.of(-1);
-      content[0][1] = Fraction.of(0);
-      content[0][2] = Fraction.of(1);
-      content[1][0] = Fraction.of(2);
-      content[1][1] = Fraction.of(3);
-      content[1][2] = Fraction.of(4);
-      MatrixADT matrix = new Matrix(content);
+      MatrixADT matrix = new Matrix(new int[][] {{-1, 0, 1}, {2, 3, 4}});
       assertEquals(-1, matrix.getEntry(0, 0).toInteger());
       assertEquals(0, matrix.getEntry(0, 1).toInteger());
       assertEquals(1, matrix.getEntry(0, 2).toInteger());
