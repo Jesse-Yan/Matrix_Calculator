@@ -144,6 +144,28 @@ public class Numeric {
     }
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
+  
+  /**
+   * Get the difference of this Numeric Instance and another given Numeric Instance.
+   * This method will not change the value of both of the instances.
+   * @param other the other given Numeric Instance
+   * @return the difference
+   */
+  public Numeric multiply(Numeric other) {
+    other = new Numeric(other);
+    Numeric thisNum = new Numeric(this);
+    castUntilBalance(thisNum, other);
+    if (thisNum.number instanceof Integer) {
+      return new Numeric((Integer) thisNum.number * (Integer) other.number);
+    }
+    if (thisNum.number instanceof Fraction) {
+      return new Numeric(((Fraction) thisNum.number).multiply((Fraction) other.number));
+    }
+    if (thisNum.number instanceof Double) {
+      return new Numeric((Double) thisNum.number * (Double) other.number);
+    }
+    throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
+  }
 
   /**
    * A main method, just for test.
@@ -159,5 +181,6 @@ public class Numeric {
     System.out.println(n1.add(n3)); // n1 + n3 = 2.5
     System.out.println(n2.add(n3)); // n2 + n3 = 1.642857142857
     System.out.println(n1.subtract(n1)); // n1 - n1 = 0
+    System.out.println(n2.multiply(n2)); // 1/7 * 1/7 = 1/49
   }
 }
