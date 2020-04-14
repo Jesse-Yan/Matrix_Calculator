@@ -7,5 +7,5 @@ package application;
  *
  */
 public class MatrixCalculator {
-
+  
 }

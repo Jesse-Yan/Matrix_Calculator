@@ -7,7 +7,7 @@ package application;
  * @author Jesse
  *
  */
-public class Fraction {
+public class Fraction implements Comparable<Fraction>{
 
   // Store for numerator and denominator
   private int numerator;
@@ -50,6 +50,16 @@ public class Fraction {
     this.numerator = numerator / gcd;
     this.denominator = denominator / gcd;
   }
+  
+  /**
+   * Construct the Fraction with another fraction
+   * 
+   * @param other
+   */
+  public Fraction(Fraction other) {
+    this.numerator = other.numerator;
+    this.denominator = other.denominator;
+  }
 
   /**
    * Find the greatest common divisor
@@ -59,20 +69,23 @@ public class Fraction {
    * @return             the greatest Common Divisor
    */
   private int gCD(int numerator, int denominator) {
-
-    int gcdVal;
-
     numerator = Math.abs(numerator);
     denominator = Math.abs(denominator);
-    if (numerator == denominator) {
-      gcdVal = numerator;
-    } else {
-      if (numerator > denominator)
-        gcdVal = gCD(numerator - denominator, denominator);
-      else
-        gcdVal = gCD(numerator, denominator - numerator);
-    }
-    return gcdVal;
+    return gcdHelper(numerator, denominator);
+  }
+  
+  /**
+   * A helper method that find the greatest common divisor of two positive integers recursively
+   * 
+   * @param numA the first given number
+   * @param numB the second given number
+   * @return the greatest common divisor of numA and numB
+   */
+  private int gcdHelper(int numA, int numB) {
+    if(numB == 0)
+      return numA;
+    else 
+      return gcdHelper(numB, numA % numB);
   }
 
   /**
@@ -172,5 +185,18 @@ public class Fraction {
    */
   public int getDenominator() {
     return denominator;
+  }
+
+  @Override
+  public int compareTo(Fraction other) {
+    int x = this.getNumerator() * other.getDenominator();
+    int y = this.getDenominator() * other.getNumerator();
+    if(x > y) {
+      return 1;
+    } if (x < y) {
+      return -1;
+    } else {
+      return 0;
+    }
   }
 }
