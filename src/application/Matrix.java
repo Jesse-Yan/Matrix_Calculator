@@ -166,7 +166,7 @@ public class Matrix implements MatrixADT{
   }
   
   private void eliminateRowXUsingRowY(int RowX, int RowY) {
-    //for (int i = 0; i < this.getNumberOfColumn(); i++)
+    // TODO
   }
   
   @Override
