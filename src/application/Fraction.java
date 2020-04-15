@@ -1,13 +1,13 @@
 package application;
 
 /**
- * This class is Fraction, provides several methods to modify fraction, fraction
- * will be transformed to minimum form when first created
+ * This class is Fraction, provides several methods to modify fraction, fraction will be transformed
+ * to minimum form when first created
  * 
  * @author Jesse
  *
  */
-public class Fraction extends Number implements Comparable<Fraction>{
+public class Fraction extends Number implements Comparable<Fraction> {
 
   // Store for numerator and denominator
   private int numerator;
@@ -16,13 +16,13 @@ public class Fraction extends Number implements Comparable<Fraction>{
   /**
    * Return a Fraction form of integer
    * 
-   * @param  number the integer
-   * @return        the Fraction
+   * @param number the integer
+   * @return the Fraction
    */
   public static Fraction of(Number number) {
-    if(number instanceof Integer || number instanceof Short)
+    if (number instanceof Integer || number instanceof Short)
       return new Fraction(number.intValue(), 1);
-    if(number instanceof Fraction) {
+    if (number instanceof Fraction) {
       return new Fraction((Fraction) number);
     }
     throw new ClassCastException();
@@ -31,9 +31,9 @@ public class Fraction extends Number implements Comparable<Fraction>{
   /**
    * Return a Fraction
    * 
-   * @param  numerator
-   * @param  denominator
-   * @return             the Fraction
+   * @param numerator
+   * @param denominator
+   * @return the Fraction
    */
   public static Fraction of(int numerator, int denominator) {
     return new Fraction(numerator, denominator);
@@ -46,9 +46,8 @@ public class Fraction extends Number implements Comparable<Fraction>{
    * @param denominator
    */
   public Fraction(int numerator, int denominator) {
-    
-    if ((numerator < 0 && denominator < 0)
-        || (numerator > 0 && denominator < 0)) {
+
+    if ((numerator < 0 && denominator < 0) || (numerator > 0 && denominator < 0)) {
       numerator = -numerator;
       denominator = -denominator;
     }
@@ -56,7 +55,7 @@ public class Fraction extends Number implements Comparable<Fraction>{
     this.numerator = numerator / gcd;
     this.denominator = denominator / gcd;
   }
-  
+
   /**
    * Construct the Fraction with another fraction
    * 
@@ -70,16 +69,16 @@ public class Fraction extends Number implements Comparable<Fraction>{
   /**
    * Find the greatest common divisor
    * 
-   * @param  numerator
-   * @param  denominator
-   * @return             the greatest Common Divisor
+   * @param numerator
+   * @param denominator
+   * @return the greatest Common Divisor
    */
   private int gcd(int numerator, int denominator) {
     numerator = Math.abs(numerator);
     denominator = Math.abs(denominator);
     return gcdHelper(numerator, denominator);
   }
-  
+
   /**
    * A helper method that find the greatest common divisor of two positive integers recursively
    * 
@@ -88,9 +87,9 @@ public class Fraction extends Number implements Comparable<Fraction>{
    * @return the greatest common divisor of numA and numB
    */
   private int gcdHelper(int numA, int numB) {
-    if(numB == 0)
+    if (numB == 0)
       return numA;
-    else 
+    else
       return gcdHelper(numB, numA % numB);
   }
 
@@ -103,10 +102,10 @@ public class Fraction extends Number implements Comparable<Fraction>{
   public String toString() {
     return denominator == 1 ? numerator + "" : numerator + "/" + denominator;
   }
-  
+
   @Override
   public int intValue() {
-    if(numerator % denominator != 0)
+    if (numerator % denominator != 0)
       throw new ClassCastException("Cannot cast to an Integer");
     return numerator / denominator;
   }
@@ -129,53 +128,51 @@ public class Fraction extends Number implements Comparable<Fraction>{
   /**
    * Add two Fractions
    * 
-   * @param  adder
-   * @return       new Fraction
+   * @param adder
+   * @return new Fraction
    */
   public Fraction add(Fraction other) {
-
     return new Fraction(
-        this.getNumerator() * other.getDenominator()
-            + other.getNumerator() * this.getDenominator(),
-        this.getDenominator() * other.getDenominator());
+        Math.addExact(Math.multiplyExact(this.getNumerator(), other.getDenominator()),
+            Math.multiplyExact(other.getNumerator(), this.getDenominator())),
+        Math.multiplyExact(this.getDenominator(), other.getDenominator()));
   }
 
   /**
    * Subtract a Fraction from another one
    * 
-   * @param  subtractor
-   * @return            new Fraction
+   * @param subtractor
+   * @return new Fraction
    */
   public Fraction subtract(Fraction other) {
-
     return new Fraction(
-        this.getNumerator() * other.getDenominator()
-            - other.getNumerator() * this.getDenominator(),
-        this.getDenominator() * other.getDenominator());
+        Math.subtractExact(Math.multiplyExact(this.getNumerator(), other.getDenominator()),
+            Math.multiplyExact(other.getNumerator(), this.getDenominator())),
+        Math.multiplyExact(this.getDenominator(), other.getDenominator()));
   }
 
   /**
    * Multiply two Fractions
    * 
-   * @param  multiplier
-   * @return            new Fraction
+   * @param multiplier
+   * @return new Fraction
    */
   public Fraction multiply(Fraction other) {
-
-    return new Fraction(this.getNumerator() * other.getNumerator(),
-        this.getDenominator() * other.getDenominator());
+    return new Fraction(
+        Math.multiplyExact(this.getNumerator(), other.getNumerator()),
+        Math.multiplyExact(this.getDenominator(), other.getDenominator()));
   }
 
   /**
    * Divide a Fraction from another one
    * 
-   * @param  divisor
-   * @return         new Fraction
+   * @param divisor
+   * @return new Fraction
    */
   public Fraction dividedBy(Fraction other) {
-
-    return new Fraction(this.getNumerator() * other.getDenominator(),
-        this.getDenominator() * other.getNumerator());
+    return new Fraction(
+        Math.multiplyExact(this.getNumerator(), other.getDenominator()),
+        Math.multiplyExact(this.getDenominator(), other.getNumerator()));
   }
 
   /**
@@ -200,14 +197,15 @@ public class Fraction extends Number implements Comparable<Fraction>{
   public int compareTo(Fraction other) {
     int x = this.getNumerator() * other.getDenominator();
     int y = this.getDenominator() * other.getNumerator();
-    if(x > y) {
+    if (x > y) {
       return 1;
-    } if (x < y) {
+    }
+    if (x < y) {
       return -1;
     } else {
       return 0;
     }
   }
 
-  
+
 }

@@ -1,5 +1,6 @@
 package application;
 
+
 /**
  * The instance of this Numeric class represents a number, which can be a Integer, or a Fraction, or
  * a Double. It supports calculations like addition and subtraction, in which the number will be
@@ -60,10 +61,9 @@ public class Numeric implements Comparable<Numeric> {
    * Get the sum of this Numeric Instance and another given Numeric Instance.
    * This method will not change the value of both of the instances.
    * @param other the other given Numeric Instance
-   * @return the difference
+   * @return the sum
    */
   public Numeric add(Numeric other) {
-    
     other = new Numeric(other);
     Numeric thisNum = new Numeric(this);
     if (thisNum.number instanceof Double || other.number instanceof Double) {
@@ -77,6 +77,16 @@ public class Numeric implements Comparable<Numeric> {
     }
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
+  
+  /**
+   * Get the sum of this Numeric Instance and another given Number Instance.
+   * @param other other the other given Numeric Instance
+   * @return the sum
+   */
+  public Numeric add(Number other) {
+    return this.add(new Numeric(other));
+  }
+  
   /**
    * Get the difference of this Numeric Instance and another given Numeric Instance.
    * This method will not change the value of both of the instances.
@@ -99,10 +109,19 @@ public class Numeric implements Comparable<Numeric> {
   }
   
   /**
-   * Get the difference of this Numeric Instance and another given Numeric Instance.
+   * Get the difference of this Numeric Instance and another given Number Instance.
+   * @param other other the other given Numeric Instance
+   * @return the difference
+   */
+  public Numeric subtract(Number other) {
+    return this.subtract(new Numeric(other));
+  }
+  
+  /**
+   * Get the product of this Numeric Instance and another given Numeric Instance.
    * This method will not change the value of both of the instances.
    * @param other the other given Numeric Instance
-   * @return the difference
+   * @return the product
    */
   public Numeric multiply(Numeric other) {
     other = new Numeric(other);
@@ -120,10 +139,19 @@ public class Numeric implements Comparable<Numeric> {
   }
   
   /**
-   * Get the difference of this Numeric Instance and another given Numeric Instance.
+   * Get the product of this Numeric Instance and another given Number Instance.
+   * @param other other the other given Numeric Instance
+   * @return the product
+   */
+  public Numeric multiply(Number other) {
+    return this.multiply(new Numeric(other));
+  }
+  
+  /**
+   * Get the quotient of this Numeric Instance and another given Numeric Instance.
    * This method will not change the value of both of the instances.
    * @param other the other given Numeric Instance
-   * @return the difference
+   * @return the quotient
    */
   public Numeric dividedBy(Numeric other) {
     other = new Numeric(other);
@@ -138,6 +166,15 @@ public class Numeric implements Comparable<Numeric> {
       return new Numeric(new Fraction(thisNum.number.intValue(), other.number.intValue()));
     }
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
+  }
+  
+  /**
+   * Get the quotient of this Numeric Instance and another given Number Instance.
+   * @param other other the other given Numeric Instance
+   * @return the quotient
+   */
+  public Numeric dividedBy(Number other) {
+    return this.dividedBy(new Numeric(other));
   }
 
   int toInteger() {
