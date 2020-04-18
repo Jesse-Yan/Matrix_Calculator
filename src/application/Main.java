@@ -91,7 +91,7 @@ public class Main extends Application {
     exit.setOnAction(event -> System.exit(0));
     menu.getItems().addAll(open, save, exit);
 
-    // Set About Tag
+    // Set About Tag with alert
     Menu about = new Menu("About");
     MenuItem developer = new MenuItem("Developer");
     developer.setOnAction(event -> {
@@ -130,11 +130,12 @@ public class Main extends Application {
     hBoxL.getChildren().addAll(analyzeSequence, space);
 
     // Set the gridPane
+    //Applying Unicode for pi = u+03c0, sqrt = U+221A
     GridPane gridPaneL = new GridPane();
     List<Button> buttons =
-        List.of("|x|", "  x!   ", "   π   ", "   e   ", "   C   ", "  <-   ",
-            "  √x   ", "  x^2  ", "   (   ", "   )   ", "  exp  ", "   /   ",
-            "  y√x  ", "  x^y  ", "   7   ", "   8   ", "   9   ", "   *   ",
+        List.of("|x|", "  x!   ", "\u03c0", "   e   ", "   C   ", "  <-   ",
+            "\u221A"+"x", "  x^2  ", "   (   ", "   )   ", "  exp  ", "   /   ",
+            "y"+"\u221A"+"x", "  x^y  ", "   7   ", "   8   ", "   9   ", "   *   ",
             " logx  ", " 10^x  ", "   4   ", "   5   ", "   6   ", "   -   ",
             "(log2)x", "  2^x  ", "   1   ", "   2   ", "   3   ", "   +   ",
             "(logy)x", "  lnx  ", "  +/-  ", "   0   ", "   .   ", "   =   ")
