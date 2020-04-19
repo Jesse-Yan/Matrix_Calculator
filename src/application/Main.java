@@ -116,6 +116,7 @@ public class Main extends Application {
     TextField input = new TextField();
     input.setMaxWidth(360.0);
     TextArea result = new TextArea();
+    result.setWrapText(true);
     result.setMaxWidth(360.0);
 
     // Set two parallel buttons
@@ -130,18 +131,16 @@ public class Main extends Application {
     hBoxL.getChildren().addAll(analyzeSequence, space);
 
     // Set the gridPane
-    //Applying Unicode for pi = u+03c0, sqrt = U+221A
+    // Applying Unicode for pi = u+03c0, sqrt = U+221A
     GridPane gridPaneL = new GridPane();
     List<Button> buttons =
         List.of("|x|", "  x!   ", "\u03c0", "   e   ", "   C   ", "  <-   ",
-            "\u221A"+"x", "  x^2  ", "   (   ", "   )   ", "  exp  ", "   /   ",
-            "y"+"\u221A"+"x", "  x^y  ", "   7   ", "   8   ", "   9   ", "   *   ",
-            " logx  ", " 10^x  ", "   4   ", "   5   ", "   6   ", "   -   ",
-            "(log2)x", "  2^x  ", "   1   ", "   2   ", "   3   ", "   +   ",
-            "(logy)x", "  lnx  ", "  +/-  ", "   0   ", "   .   ", "   =   ")
-            .stream()
-            .map(Button::new)
-            .collect(toList());
+            "\u221A" + "x", "  x^2  ", "   (   ", "   )   ", "  exp  ",
+            "   /   ", "y" + "\u221A" + "x", "  x^y  ", "   7   ", "   8   ",
+            "   9   ", "   *   ", " logx  ", " 10^x  ", "   4   ", "   5   ",
+            "   6   ", "   -   ", "log2(x)", "  2^x  ", "   1   ", "   2   ",
+            "   3   ", "   +   ", "logy(x)", "  ln(x)  ", "  +/-  ", "   0   ",
+            "   .   ", "   =   ").stream().map(Button::new).collect(toList());
     int number = 0;
     for (int row = 0; row < 6; row++) {
       for (int column = 0; column < 6; column++) {
@@ -150,6 +149,44 @@ public class Main extends Application {
         gridPaneL.add(button, column, row);
       }
     }
+
+    // Add event handler to the buttons
+
+    buttons.stream().forEach(btn -> {
+      btn.setOnAction(event -> {
+        String temp = btn.getText();
+        if (temp.equals("exp")) {
+          input.appendText("exp");
+        } else if (temp.equals("y" + "\u221A" + "x")) {
+          input.appendText("\u221A");
+        } else if (temp.equals("  x^y  ")) {
+          input.appendText("^");
+        } else if (temp.equals("   C   ")) {
+          input.clear();
+        } else if (temp.equals("  <-   ")) {
+          try {
+            input.setText(
+                input.getText().substring(0, input.getText().length() - 1));
+          } catch (Exception e) {
+
+          }
+        } else if (temp.equals("  +/-  ")) {
+          String fromInput = input.getText();
+          input.setText(fromInput.startsWith("-") ? fromInput.substring(1)
+              : "-" + fromInput);
+        } else if (temp.equals("   =   ")) {
+          try {
+            result.appendText(input.getText() + "\n="
+                + Calculator.calcul("0" + input.getText()) + "\n");
+          } catch (Exception e) {
+            alert("Wrong Expression",
+                "The equation you entered cannot be calculated\nPlease press 'C' and try again");
+          }
+        } else {
+          input.appendText(temp.replace("x", "").trim());
+        }
+      });
+    });
 
     // Add to the root
     vBoxL.getChildren().addAll(input, result, hBoxL, gridPaneL);
@@ -193,7 +230,7 @@ public class Main extends Application {
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 4; j++) {
         mOperations.add(mButtons.get(count++), j, i);
-        if(count == 11) {
+        if (count == 11) {
           break;
         }
       }
@@ -205,13 +242,15 @@ public class Main extends Application {
     powerInput.setMaxWidth(55);
     power.getChildren().addAll(powerButton, powerInput);
     mOperations.add(power, 3, 2);
-    
+
     TextArea mResult = new TextArea();
     mResult.setMinHeight(207);
 
     vBoxR.getChildren().addAll(hBoxR, mOperations, mResult);
     root.setRight(vBoxR);
- 
+
+
+
     // Use the optimized width and height
     Scene mainScene =
         new Scene(root, primaryStage.getWidth(), primaryStage.getHeight());

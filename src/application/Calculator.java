@@ -11,7 +11,11 @@ import java.util.Stack;
  */
 public class Calculator {
 
-  public static double calculate(String expression) {
+  public static double calcul(String expression) {
+    return calculate(expression);
+  }
+
+  private static double calculate(String expression) {
     if (expression.matches("\\-?\\d+"))
       return Double.valueOf(expression);
     ArrayList<String> s = new ArrayList<String>();
