@@ -1,11 +1,6 @@
 package application;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONReader;
-import com.alibaba.fastjson.annotation.JSONField;
-import org.hamcrest.core.IsInstanceOf;
-
 import java.io.*;
 import java.util.List;
 
@@ -50,37 +45,35 @@ public class Parser {
 
     /**
      * Read json string from given file
+     *
      * @param filePath
      * @return json string
      */
-    public String readJsonFile(String filePath) {
+    public String readJsonFile(String filePath) throws IOException {
         String jsonStr = "";
-        try {
-            File jsonFile = new File(filePath);
-            FileReader fileReader = new FileReader(jsonFile);
 
-            Reader reader = new InputStreamReader(new FileInputStream(jsonFile), "utf-8");
-            int ch = 0;
-            StringBuffer sb = new StringBuffer();
-            while ((ch = reader.read()) != -1) {
-                sb.append((char) ch);
-            }
-            fileReader.close();
-            reader.close();
-            jsonStr = sb.toString();
-            return jsonStr;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+        File jsonFile = new File(filePath);
+        FileReader fileReader = new FileReader(jsonFile);
+
+        Reader reader = new InputStreamReader(new FileInputStream(jsonFile), "utf-8");
+        int ch = 0;
+        StringBuffer sb = new StringBuffer();
+        while ((ch = reader.read()) != -1) {
+            sb.append((char) ch);
         }
+        fileReader.close();
+        reader.close();
+        jsonStr = sb.toString();
+        return jsonStr;
     }
 
     /**
      * constructor method to parse a json file
+     *
      * @param jsonFilepath
      * @throws FileNotFoundException
      */
-    public Parser(String jsonFilepath) throws FileNotFoundException {
+    public Parser(String jsonFilepath) throws IOException {
 
         // read the json file
         if (jsonFilepath == null) throw new FileNotFoundException();
@@ -92,6 +85,7 @@ public class Parser {
 
     /**
      * get list of matrix
+     *
      * @return list of matrix
      */
     public List getMatrix() {
@@ -100,11 +94,13 @@ public class Parser {
 
     /**
      * get list of operations
+     *
      * @return list of operations
      */
-    public List getOperations(){
+    public List getOperations() {
         return operations;
     }
+
     public static void main(String[] args) {
         try {
             Parser parser = new Parser("1.json");
