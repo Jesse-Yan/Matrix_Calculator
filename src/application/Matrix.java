@@ -216,7 +216,7 @@ public class Matrix implements MatrixADT {
         indexOfMaxPivot = i;
       }
 
-    if (entry[k][indexOfMaxPivot].compareTo(new Numeric(0)) == 0)
+    if (maxPivot.compareTo(new Numeric(0)) == 0)
       throw new SingularException();
 
     if (indexOfMaxPivot != k) {
