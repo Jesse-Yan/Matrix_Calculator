@@ -83,13 +83,19 @@ public class Matrix implements MatrixADT {
     return string;
   }
 
+  @Override
+  protected Matrix clone() {
+    return new Matrix(entry);
+  }
+
   /**
    * 
    * A private helper method that gets a submatrix of the matrix. It will get the submatrix with
    * rows from the given start row to the given end row and with columns from the given start column
    * to the given end column.
    * 
-   * The startRow and the startColumn will be included, but the endRow and endColumn will not be included
+   * The startRow and the startColumn will be included, but the endRow and endColumn will not be
+   * included
    * 
    * @param startRow the given start row of the matrix to get the submatirx
    * @param endRow the given end row of the matrix to get the submatirx
@@ -166,21 +172,33 @@ public class Matrix implements MatrixADT {
     return answer;
   }
 
+  /**
+   * Get the absolute value of a Numeric number
+   * 
+   * @param n a given numeric number
+   * @return the absolute value of n.
+   */
   private static Numeric abs(Numeric n) {
-    if(n.compareTo(new Numeric(0)) < 0)
+    if (n.compareTo(new Numeric(0)) < 0)
       return new Numeric(0).subtract(n);
     return n;
   }
-  
+
+  /**
+   * Swap two rows of the matrix. That is, swap rowX and rowY.
+   * 
+   * @param rowX the index of the first row
+   * @param rowY the index of the second row
+   */
   private void swapRow(int rowX, int rowY) {
     int M = getNumberOfColumn();
-    for(int i = 0; i < M; i++) {
+    for (int i = 0; i < M; i++) {
       Numeric tmp = entry[rowX][i];
       entry[rowX][i] = entry[rowY][i];
       entry[rowY][i] = tmp;
     }
   }
-  
+
   /**
    * Do partial pivoting at kth row, return whether the row is swapped
    * 
@@ -189,17 +207,17 @@ public class Matrix implements MatrixADT {
    * @throws SingularException if singular
    */
   private boolean partialPivoting(int k) throws SingularException {
-    int indexOfMaxPivot = k; 
-    Numeric maxPivot = entry[indexOfMaxPivot][k]; 
+    int indexOfMaxPivot = k;
+    Numeric maxPivot = entry[indexOfMaxPivot][k];
 
-    for (int i = k+1; i < getNumberOfRow(); i++) 
-        if (abs(entry[i][k]).compareTo(maxPivot) > 0) {
-          maxPivot = entry[i][k];
-          indexOfMaxPivot = i; 
-        }
-    
-    if (entry[k][indexOfMaxPivot].compareTo(new Numeric(0)) == 0) 
-        throw new SingularException(); 
+    for (int i = k + 1; i < getNumberOfRow(); i++)
+      if (abs(entry[i][k]).compareTo(maxPivot) > 0) {
+        maxPivot = entry[i][k];
+        indexOfMaxPivot = i;
+      }
+
+    if (entry[k][indexOfMaxPivot].compareTo(new Numeric(0)) == 0)
+      throw new SingularException();
 
     if (indexOfMaxPivot != k) {
       swapRow(k, indexOfMaxPivot);
@@ -207,10 +225,13 @@ public class Matrix implements MatrixADT {
     }
     return false;
   }
-  
+
   /**
-   * Do the forward elimination of the Gaussian Elimination. That is, eliminate the matrix to an Echelon form.
-   * @throws SingularException 
+   * Do the forward elimination of the Gaussian Elimination. That is, eliminate the matrix to an
+   * Echelon form.
+   * 
+   * @throws SingularException
+   * @return true if there are odd number of row swaps, false otherwise.
    */
   public boolean forwardElimination() throws SingularException {
     int N = getNumberOfRow();
@@ -219,9 +240,6 @@ public class Matrix implements MatrixADT {
     for (int k = 0; k < N; k++) {
       signChanged = signChanged | partialPivoting(k);
       for (int i = k + 1; i < N; i++) {
-        if (entry[k][k].compareTo(new Numeric(0)) == 0) {
-          throw new SingularException();
-        }
         Numeric f = entry[i][k].dividedBy(entry[k][k]);
         for (int j = 0; j < M; j++)
           entry[i][j] = entry[i][j].subtract(entry[k][j].multiply(f));
@@ -233,16 +251,14 @@ public class Matrix implements MatrixADT {
 
   /**
    * Do the backward elimination of the Gaussian Elimination. That is, eliminate the Echelon form.
-   * @throws SingularException 
+   * 
+   * @throws SingularException
    */
   public void backwardElimination() throws SingularException {
     int N = getNumberOfRow();
     int M = getNumberOfColumn();
     for (int k = N - 1; k >= 0; k--) {
       for (int i = 0; i < k; i++) {
-        if (entry[k][k].compareTo(new Numeric(0)) == 0) {
-          throw new SingularException();
-        }
         Numeric f = entry[i][k].dividedBy(entry[k][k]);
         for (int j = 0; j < M; j++)
           entry[i][j] = entry[i][j].subtract(entry[k][j].multiply(f));
@@ -251,7 +267,9 @@ public class Matrix implements MatrixADT {
     }
   }
 
-  // This should be private. Now it is public just for tests.
+  /**
+   * Simplify the matrix after elimination.
+   */
   public void simplifyAfterElimination() {
     int N = getNumberOfRow();
     int M = getNumberOfColumn();
@@ -270,8 +288,8 @@ public class Matrix implements MatrixADT {
 
   @Override
   public MatrixADT inverse() throws MatrixDimensionsMismatchException {
-    if (!isSquareMatirx()) {
-      throw new MatrixDimensionsMismatchException();
+    if (getNumberOfRow() != getNumberOfColumn()) {
+      throw new MatrixDimensionsMismatchException("The matrix should be a square");
     }
     int N = getNumberOfRow();
     Numeric[][] augmentedMatrixEntries = new Numeric[N][2 * N];
@@ -296,15 +314,10 @@ public class Matrix implements MatrixADT {
     return augmentedMatrix.subMatrix(0, N, N, 2 * N);
   }
 
-
-  private boolean isSquareMatirx() {
-    return getNumberOfRow() == getNumberOfColumn();
-  }
-
   @Override
   public Numeric getDeterminant() throws MatrixDimensionsMismatchException {
-    if (!isSquareMatirx()) {
-      throw new MatrixDimensionsMismatchException();
+    if (getNumberOfRow() != getNumberOfColumn()) {
+      throw new MatrixDimensionsMismatchException("The matrix should be a square");
     }
     Matrix answerMatrix = new Matrix(entry);
     boolean signChanged = false;

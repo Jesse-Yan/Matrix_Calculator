@@ -115,6 +115,14 @@ public class MatrixTest {
     try {
       MatrixADT matrix;
       matrix = new Matrix(new Integer[][] {{1, 2}, {3, 5}});
+      assertEquals(new Matrix(new Integer[][] {{-5, 2}, {3, -1}}).toString(), matrix.inverse().toString());
+      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+      try {
+        matrix.inverse();
+        fail("The matrix is not invertible, but no ArithmeticException thrown");
+      } catch (ArithmeticException e) {
+        // Expected
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }

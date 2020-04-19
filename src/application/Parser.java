@@ -6,7 +6,6 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 /**
  * This class parse from a JSON file

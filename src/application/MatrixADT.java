@@ -62,7 +62,6 @@ public interface MatrixADT {
    * Do Gaussian Elimination (reduce Matrix into leading ones)
    * 
    * @return - Result Matrix
-   * @throws MatrixDimensionsMismatchException - when properties of Matrix mismatch
    */
   MatrixADT gaussianElimination();
 
@@ -72,7 +71,7 @@ public interface MatrixADT {
    * @return matrix that been inverted
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
    */
-  MatrixADT inverse()  throws MatrixDimensionsMismatchException ;
+  MatrixADT inverse()  throws MatrixDimensionsMismatchException;
 
   /**
    * get determinant of matrix
