@@ -182,6 +182,33 @@ public class Matrix implements MatrixADT {
   }
   
   /**
+   * Do partial pivoting at kth row, return whether the row is swapped
+   * 
+   * @param k the row to do partial pivoting
+   * @return true if the row is swapped
+   * @throws SingularException if singular
+   */
+  private boolean partialPivoting(int k) throws SingularException {
+    int indexOfMaxPivot = k; 
+    Numeric maxPivot = entry[indexOfMaxPivot][k]; 
+
+    for (int i = k+1; i < getNumberOfRow(); i++) 
+        if (abs(entry[i][k]).compareTo(maxPivot) > 0) {
+          maxPivot = entry[i][k];
+          indexOfMaxPivot = i; 
+        }
+    
+    if (entry[k][indexOfMaxPivot].compareTo(new Numeric(0)) == 0) 
+        throw new SingularException(); 
+
+    if (indexOfMaxPivot != k) {
+      swapRow(k, indexOfMaxPivot);
+      return true;
+    }
+    return false;
+  }
+  
+  /**
    * Do the forward elimination of the Gaussian Elimination. That is, eliminate the matrix to an Echelon form.
    * @throws SingularException 
    */
@@ -190,26 +217,7 @@ public class Matrix implements MatrixADT {
     int M = getNumberOfColumn();
     boolean signChanged = false;
     for (int k = 0; k < N; k++) {
-
-      int i_max = k; 
-      Numeric v_max = entry[i_max][k]; 
-
-      for (int i = k+1; i < N; i++) 
-          if (abs(entry[i][k]).compareTo(v_max) > 0) {
-            v_max = entry[i][k];
-            i_max = i; 
-          }
-              
-
-      if (entry[k][i_max].compareTo(new Numeric(0)) == 0) 
-          throw new SingularException(); 
-
-      if (i_max != k) {
-        swapRow(k, i_max);
-        signChanged = !signChanged;
-      }
-      
-      
+      signChanged = signChanged | partialPivoting(k);
       for (int i = k + 1; i < N; i++) {
         if (entry[k][k].compareTo(new Numeric(0)) == 0) {
           throw new SingularException();
