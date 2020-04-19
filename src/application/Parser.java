@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONReader;
 import com.alibaba.fastjson.annotation.JSONField;
+import org.hamcrest.core.IsInstanceOf;
 
 import java.io.*;
+import java.util.List;
 
 /**
  * This class parse from a JSON file
@@ -43,9 +45,14 @@ import java.io.*;
  */
 public class Parser {
 
-    private String[] operations;
-    public int matrix[][][];
+    private List operations;
+    private List matrixList;
 
+    /**
+     * Read json string from given file
+     * @param filePath
+     * @return json string
+     */
     public String readJsonFile(String filePath) {
         String jsonStr = "";
         try {
@@ -68,15 +75,36 @@ public class Parser {
         }
     }
 
+    /**
+     * constructor method to parse a json file
+     * @param jsonFilepath
+     * @throws FileNotFoundException
+     */
     public Parser(String jsonFilepath) throws FileNotFoundException {
 
         // read the json file
         if (jsonFilepath == null) throw new FileNotFoundException();
         String data = readJsonFile(jsonFilepath);
         JSONObject json = JSONObject.parseObject(data);
-        System.out.println(json.get("Matrix"));
+        matrixList = (List) json.get("matrix");
+        operations = (List) json.get("operations");
     }
 
+    /**
+     * get list of matrix
+     * @return list of matrix
+     */
+    public List getMatrix() {
+        return matrixList;
+    }
+
+    /**
+     * get list of operations
+     * @return list of operations
+     */
+    public List getOperations(){
+        return operations;
+    }
     public static void main(String[] args) {
         try {
             Parser parser = new Parser("1.json");
