@@ -1,0 +1,48 @@
+<component name="libraryTable">
+  <library name="junit5-r5.6.2">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/documentation/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/documentation/src/test/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-jupiter-api/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-jupiter-api/src/testFixtures/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-jupiter-engine/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-jupiter-engine/src/test/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-jupiter-migrationsupport/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-jupiter-migrationsupport/src/test/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-jupiter-params/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-jupiter-params/src/test/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-platform-commons/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-platform-commons/src/main/java9" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-platform-console/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-platform-console/src/main/java9" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-platform-engine/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-platform-engine/src/testFixtures/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-platform-launcher/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-platform-launcher/src/testFixtures/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-platform-reporting/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-platform-runner/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-platform-suite-api/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-platform-testkit/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-vintage-engine/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/junit-vintage-engine/src/test/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tests/src/jmh/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tests/src/test/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tooling-support-tests/projects/ant-starter/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tooling-support-tests/projects/ant-starter/src/test/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tooling-support-tests/projects/gradle-missing-engine/src/test/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tooling-support-tests/projects/gradle-starter/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tooling-support-tests/projects/gradle-starter/src/test/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tooling-support-tests/projects/java-versions/src/test/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tooling-support-tests/projects/maven-starter/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tooling-support-tests/projects/maven-starter/src/test/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tooling-support-tests/projects/multi-release-jar/default/src/test/java/integration" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tooling-support-tests/projects/standalone/src" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tooling-support-tests/projects/vintage/src/test/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tooling-support-tests/src/main/java" />
+      <root url="jar://$USER_HOME$/下载/junit5-r5.6.2.zip!/junit5-r5.6.2/platform-tooling-support-tests/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

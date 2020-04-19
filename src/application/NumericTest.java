@@ -1,6 +1,6 @@
 package application;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

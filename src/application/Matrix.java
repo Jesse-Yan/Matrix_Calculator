@@ -10,18 +10,20 @@ import javax.swing.plaf.basic.BasicBorders.MarginBorder;
  */
 public class Matrix implements MatrixADT {
 
-  private Numeric[][] matrix;
+  private Numeric[][] entry;
 
   /**
-   * Zero Matrix
+   * This constructor construct a matrix with a given number of rows and a given number of columns.
+   * All entries of the matrix created by this constructor will be zero.
    * 
-   * @param content
+   * @param numberOfRow the given number of rows
+   * @param numberOfColumn the given number of columns
    */
-  public Matrix(int row, int column) {
-    matrix = new Numeric[row][column];
-    for (int i = 0; i < row; i++)
-      for (int j = 0; j < column; j++)
-        matrix[i][j] = new Numeric(0);
+  public Matrix(int numberOfRow, int numberOfColumn) {
+    entry = new Numeric[numberOfRow][numberOfColumn];
+    for (int i = 0; i < numberOfRow; i++)
+      for (int j = 0; j < numberOfColumn; j++)
+        entry[i][j] = new Numeric(0);
   }
 
   /**
@@ -31,87 +33,75 @@ public class Matrix implements MatrixADT {
    * @param column the column the matrix has
    * @param content the content
    */
-  public Matrix(int[][] content) {
-    matrix = new Numeric[content.length][content[0].length];
-    for (int i = 0; i < content.length; i++)
-      for (int j = 0; j < content[0].length; j++)
-        matrix[i][j] = new Numeric(content[i][j]);
-  }
 
   /**
-   * Constructor of the matrix with Fractions
+   * This constructor construct a matrix with a given 2D array of Number as content of the matrix.
    * 
-   * @param row the row the matrix has
-   * @param column the column the matrix has
-   * @param content the content
+   * @param content a 2D array of Number as content of the matrix
    */
-  public Matrix(Fraction[][] content) {
-    matrix = new Numeric[content.length][content[0].length];
+  public Matrix(Number[][] content) {
+    entry = new Numeric[content.length][content[0].length];
     for (int i = 0; i < content.length; i++)
       for (int j = 0; j < content[0].length; j++)
-        matrix[i][j] = new Numeric(content[i][j]);
+        entry[i][j] = new Numeric(content[i][j]);
   }
 
   /**
-   * Constructor of the matrix with Doubles
+   * This constructor construct a matrix with a given 2D array of Numeric as content of the matrix.
    * 
-   * @param row the row the matrix has
-   * @param column the column the matrix has
-   * @param content the content
-   */
-  public Matrix(double[][] content) {
-    matrix = new Numeric[content.length][content[0].length];
-    for (int i = 0; i < content.length; i++)
-      for (int j = 0; j < content[0].length; j++)
-        matrix[i][j] = new Numeric(content[i][j]);
-  }
-
-  /**
-   * Constructor of the matrix
-   * 
-   * @param row the row the matrix has
-   * @param column the column the matrix has
-   * @param content the content
+   * @param content a 2D array of Numeric as content of the matrix
    */
   public Matrix(Numeric[][] content) {
-    matrix = new Numeric[content.length][content[0].length];
+    entry = new Numeric[content.length][content[0].length];
     for (int i = 0; i < content.length; i++)
-      matrix[i] = content[i].clone();
+      entry[i] = content[i].clone();
   }
 
   @Override
   public int getNumberOfColumn() {
-    return matrix[0].length;
+    return entry[0].length;
   }
 
   @Override
   public int getNumberOfRow() {
-    return matrix.length;
+    return entry.length;
   }
 
   @Override
   public Numeric getEntry(int row, int column) {
-    return matrix[row][column];
+    return entry[row][column];
   }
 
   @Override
   public String toString() {
     String string = "";
-    for (int i = 0; i < matrix.length; i++) {
-      for (int j = 0; j < matrix[0].length; j++) {
-        string += matrix[i][j].toString() + " ";
-      }
+    for (int i = 0; i < entry.length; i++) {
+      for (int j = 0; j < entry[0].length; j++)
+        string += entry[i][j].toString() + " ";
       string += '\n';
     }
     return string;
   }
-  
-  // Submatrix. (Including the startRow and the startColumn, but not include the endRow and endColumn)
-  public Matrix subMatrix(int startRow, int endRow, int startColumn, int endColumn) {
+
+  /**
+   * 
+   * A private helper method that gets a submatrix of the matrix. It will get the submatrix with
+   * rows from the given start row to the given end row and with columns from the given start column
+   * to the given end column.
+   * 
+   * The startRow and the startColumn will be included, but the endRow and endColumn will not be included
+   * 
+   * @param startRow the given start row of the matrix to get the submatirx
+   * @param endRow the given end row of the matrix to get the submatirx
+   * @param startColumn the given start column of the matrix to get the submatirx
+   * @param endColumn the given end column of the matrix to get the submatirx
+   * @return a Matrix object which is the submatrix constructed by the given parameters.
+   */
+  private Matrix subMatrix(int startRow, int endRow, int startColumn, int endColumn) {
     Numeric[][] newEntires = new Numeric[endRow - startRow][endColumn - startColumn];
-    for(int i = 0; i < newEntires.length; i++)
-      for(int j = 0; j < newEntires[i].length; j++)
-        newEntires[i][j] = matrix[startRow + i][startColumn + j];
+    for (int i = 0; i < newEntires.length; i++)
+      for (int j = 0; j < newEntires[i].length; j++)
+        newEntires[i][j] = entry[startRow + i][startColumn + j];
     return new Matrix(newEntires);
   }
 
@@ -133,20 +123,20 @@ public class Matrix implements MatrixADT {
   @Override
   public Matrix add(MatrixADT other) throws MatrixDimensionsMismatchException {
     additionCheck(other);
-    Matrix answerMatrix = new Matrix(this.matrix);
+    Matrix answerMatrix = new Matrix(this.entry);
     for (int i = 0; i < answerMatrix.getNumberOfRow(); i++)
       for (int j = 0; j < answerMatrix.getNumberOfColumn(); j++)
-        answerMatrix.matrix[i][j] = answerMatrix.matrix[i][j].add(other.getEntry(i, j));
+        answerMatrix.entry[i][j] = answerMatrix.entry[i][j].add(other.getEntry(i, j));
     return answerMatrix;
   }
 
   @Override
   public MatrixADT subtract(MatrixADT other) throws MatrixDimensionsMismatchException {
     additionCheck(other);
-    Matrix answer = new Matrix(this.matrix);
+    Matrix answer = new Matrix(this.entry);
     for (int i = 0; i < answer.getNumberOfRow(); i++)
       for (int j = 0; j < answer.getNumberOfColumn(); j++)
-        answer.matrix[i][j] = answer.matrix[i][j].subtract(other.getEntry(i, j));
+        answer.entry[i][j] = answer.entry[i][j].subtract(other.getEntry(i, j));
     return answer;
   }
 
@@ -171,72 +161,106 @@ public class Matrix implements MatrixADT {
     for (int i = 0; i < this.getNumberOfRow(); i++)
       for (int j = 0; j < other.getNumberOfColumn(); j++)
         for (int k = 0; k < this.getNumberOfColumn(); k++)
-          answer.matrix[i][j] =
-              answer.matrix[i][j].add(this.getEntry(i, k).multiply(other.getEntry(k, j)));
+          answer.entry[i][j] =
+              answer.entry[i][j].add(this.getEntry(i, k).multiply(other.getEntry(k, j)));
     return answer;
   }
 
-  // This should be private. Now it is public just for tests.
-  public void forwardElimination() throws SingularException {
-    int N = getNumberOfRow();
+  private static Numeric abs(Numeric n) {
+    if(n.compareTo(new Numeric(0)) < 0)
+      return new Numeric(0).subtract(n);
+    return n;
+  }
+  
+  private void swapRow(int rowX, int rowY) {
     int M = getNumberOfColumn();
-    for (int k = 0; k < N; k++) {
-      for (int i = k + 1; i < N; i++) {
-        
-        if(matrix[k][k].compareTo(new Numeric(0)) == 0) {
-          throw new SingularException();
-        }
-        
-        /*
-         * factor f to set current row kth element to 0, and subsequently remaining kth column to 0
-         */
-        Numeric f = matrix[i][k].dividedBy(matrix[k][k]);
-
-        /*
-         * subtract fth multiple of corresponding kth row element
-         */
-        for (int j = 0; j < M; j++)
-          matrix[i][j] = matrix[i][j].subtract(matrix[k][j].multiply(f));
-
-        /* filling lower triangular matrix with zeros */
-        matrix[i][k] = new Numeric(0);
-      }
+    for(int i = 0; i < M; i++) {
+      Numeric tmp = entry[rowX][i];
+      entry[rowX][i] = entry[rowY][i];
+      entry[rowY][i] = tmp;
     }
   }
+  
+  /**
+   * Do partial pivoting at kth row, return whether the row is swapped
+   * 
+   * @param k the row to do partial pivoting
+   * @return true if the row is swapped
+   * @throws SingularException if singular
+   */
+  private boolean partialPivoting(int k) throws SingularException {
+    int indexOfMaxPivot = k; 
+    Numeric maxPivot = entry[indexOfMaxPivot][k]; 
 
-  //This should be private. Now it is public just for tests.
+    for (int i = k+1; i < getNumberOfRow(); i++) 
+        if (abs(entry[i][k]).compareTo(maxPivot) > 0) {
+          maxPivot = entry[i][k];
+          indexOfMaxPivot = i; 
+        }
+    
+    if (entry[k][indexOfMaxPivot].compareTo(new Numeric(0)) == 0) 
+        throw new SingularException(); 
+
+    if (indexOfMaxPivot != k) {
+      swapRow(k, indexOfMaxPivot);
+      return true;
+    }
+    return false;
+  }
+  
+  /**
+   * Do the forward elimination of the Gaussian Elimination. That is, eliminate the matrix to an Echelon form.
+   * @throws SingularException 
+   */
+  public boolean forwardElimination() throws SingularException {
+    int N = getNumberOfRow();
+    int M = getNumberOfColumn();
+    boolean signChanged = false;
+    for (int k = 0; k < N; k++) {
+      signChanged = signChanged | partialPivoting(k);
+      for (int i = k + 1; i < N; i++) {
+        if (entry[k][k].compareTo(new Numeric(0)) == 0) {
+          throw new SingularException();
+        }
+        Numeric f = entry[i][k].dividedBy(entry[k][k]);
+        for (int j = 0; j < M; j++)
+          entry[i][j] = entry[i][j].subtract(entry[k][j].multiply(f));
+        entry[i][k] = new Numeric(0);
+      }
+    }
+    return signChanged;
+  }
+
+  /**
+   * Do the backward elimination of the Gaussian Elimination. That is, eliminate the Echelon form.
+   * @throws SingularException 
+   */
   public void backwardElimination() throws SingularException {
     int N = getNumberOfRow();
     int M = getNumberOfColumn();
     for (int k = N - 1; k >= 0; k--) {
       for (int i = 0; i < k; i++) {
-        
-        if(matrix[k][k].compareTo(new Numeric(0)) == 0) {
+        if (entry[k][k].compareTo(new Numeric(0)) == 0) {
           throw new SingularException();
         }
-
-        Numeric f = matrix[i][k].dividedBy(matrix[k][k]);
-
+        Numeric f = entry[i][k].dividedBy(entry[k][k]);
         for (int j = 0; j < M; j++)
-          matrix[i][j] = matrix[i][j].subtract(matrix[k][j].multiply(f));
-
-        matrix[i][k] = new Numeric(0);
+          entry[i][j] = entry[i][j].subtract(entry[k][j].multiply(f));
+        entry[i][k] = new Numeric(0);
       }
     }
   }
-  
-//This should be private. Now it is public just for tests.
-  public void simplifyAfterElimination(){
+
+  // This should be private. Now it is public just for tests.
+  public void simplifyAfterElimination() {
     int N = getNumberOfRow();
     int M = getNumberOfColumn();
-      for (int i = 0; i < N; i++) {
-        Numeric f = matrix[i][i];
-        for (int j = 0; j < M; j++)
-          matrix[i][j] = matrix[i][j].dividedBy(f);
-      }
+    for (int i = 0; i < N; i++) {
+      Numeric f = entry[i][i];
+      for (int j = 0; j < M; j++)
+        entry[i][j] = entry[i][j].dividedBy(f);
+    }
   }
-
-
 
   @Override
   public MatrixADT gaussianElimination() {
@@ -246,18 +270,17 @@ public class Matrix implements MatrixADT {
 
   @Override
   public MatrixADT inverse() throws MatrixDimensionsMismatchException {
-    if(!isSquareMatirx()) {
+    if (!isSquareMatirx()) {
       throw new MatrixDimensionsMismatchException();
     }
     int N = getNumberOfRow();
     Numeric[][] augmentedMatrixEntries = new Numeric[N][2 * N];
     for (int i = 0; i < N; i++) {
       for (int j = 0; j < N; j++) {
-        augmentedMatrixEntries[i][j] = new Numeric(matrix[i][j]);
-        if(i == j) {
+        augmentedMatrixEntries[i][j] = new Numeric(entry[i][j]);
+        if (i == j) {
           augmentedMatrixEntries[i][j + N] = new Numeric(1);
-        }
-        else {
+        } else {
           augmentedMatrixEntries[i][j + N] = new Numeric(0);
         }
       }
@@ -273,76 +296,29 @@ public class Matrix implements MatrixADT {
     return augmentedMatrix.subMatrix(0, N, N, 2 * N);
   }
 
-  
+
   private boolean isSquareMatirx() {
-     return getNumberOfRow() == getNumberOfColumn();
+    return getNumberOfRow() == getNumberOfColumn();
   }
-  
+
   @Override
   public Numeric getDeterminant() throws MatrixDimensionsMismatchException {
-    if(!isSquareMatirx()) {
+    if (!isSquareMatirx()) {
       throw new MatrixDimensionsMismatchException();
     }
-    Matrix answerMatrix = new Matrix(matrix);
+    Matrix answerMatrix = new Matrix(entry);
+    boolean signChanged = false;
     try {
-      answerMatrix.forwardElimination();
+      signChanged = answerMatrix.forwardElimination();
       answerMatrix.backwardElimination();
     } catch (SingularException singularException) {
       return new Numeric(0);
     }
     Numeric ansNumeric = new Numeric(1);
-    for(int i = 0; i < answerMatrix.getNumberOfColumn(); i++) {
+    for (int i = 0; i < answerMatrix.getNumberOfColumn(); i++)
       ansNumeric = ansNumeric.multiply(answerMatrix.getEntry(i, i));
-    }
+    if (signChanged)
+      ansNumeric = new Numeric(0).subtract(ansNumeric);
     return ansNumeric;
   }
-
-
-
-  /**
-   * Calculate the determinant of the matrix
-   * 
-   * @return the determinant
-   */
-  public Numeric determinant() {
-    return determinant(matrix);
-  }
-
-  /**
-   * private helper method to calculate the determinant of a matrix
-   * 
-   * @param submatrix
-   * @return Fraction
-   */
-  private Numeric determinant(Numeric[][] submatrix) {
-    if (matrix.length == 1)
-      return matrix[0][0];
-
-    if (matrix.length == 2)
-      return (matrix[0][0].multiply(matrix[1][1])).subtract(matrix[0][1].multiply(matrix[1][0]));
-
-    Numeric det = new Numeric(0);
-
-    int flag = 0;
-
-    // Recursively calculate the determinant
-    for (int i = 0; i < matrix.length; i++) {
-      Numeric[][] temp = new Numeric[matrix.length - 1][matrix.length - 1];
-      for (int j = 0; j < temp.length; j++) {
-        int index = 0;
-        for (int j2 = 0; j2 < temp.length; j2++) {
-          if (i == index) {
-            index++;
-          }
-          temp[j][j2] = matrix[j + 1][index++];
-        }
-      }
-      det.add(matrix[0][i].multiply(
-          new Numeric(Fraction.of((int) Math.pow(-1, flag++))).multiply(determinant(temp))));
-    }
-    return det;
-  }
-
-
-
 }
