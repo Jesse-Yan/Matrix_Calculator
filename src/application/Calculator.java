@@ -6,16 +6,24 @@ import java.util.Stack;
 /**
  * This class computes the result of the given expression
  * 
- * @author Jesse
+ * @author Jesse, Archer
  *
  */
 public class Calculator {
+
 
   public static double calcul(String expression) {
     return calculate(expression);
   }
 
-  private static double calculate(String expression) {
+  /**
+   * build up calculation expression and calculate result.
+   * 
+   * @param expression -String math expression
+   * @return result after calculation
+   */
+  public static double calculate(String expression) {
+
     if (expression.matches("\\-?\\d+"))
       return Double.valueOf(expression);
     ArrayList<String> s = new ArrayList<String>();
@@ -109,12 +117,20 @@ class ModifiedCal {
     output = new ArrayList<String>();
   }
 
+  /**
+   * Calculation method that read input expression base on stack
+   * 
+   * @return result after process
+   */
   public double doCal() {
     doTrans();
     doParse();
     return theStackI.pop();
   }
 
+  /**
+   * Read expression from stack and store result in stack
+   */
   public void doParse() {
     theStackI = new Stack<Double>();
     for (int i = 0; i < output.size(); i++) {
@@ -147,6 +163,9 @@ class ModifiedCal {
     }
   }
 
+  /**
+   * read and distribute calculation priority
+   */
   public void doTrans() {
     for (int i = 0; i < input.length; i++) {
       String temp = input[i];
@@ -168,6 +187,9 @@ class ModifiedCal {
     }
   }
 
+  /**
+   * add sting in stackP into output if there's no bracket in stack
+   */
   private void goParen() {
 
     while (!theStackP.isEmpty()) {
@@ -180,6 +202,12 @@ class ModifiedCal {
 
   }
 
+  /**
+   * helper method that process operations in level
+   * 
+   * @param temp -expression piece
+   * @param i - level limit
+   */
   private void goOper(String temp, int i) {
 
     while (!theStackP.isEmpty()) {
