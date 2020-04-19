@@ -16,7 +16,7 @@ import org.json.simple.parser.ParseException;
  */
 public class Parser {
   
-  private String expression = null;
+ 	private String expression = null;
 	public String matrix[][];
 	
 	public void parse(String jsonFilepath) throws FileNotFoundException, IOException, ParseException {
