@@ -12,7 +12,7 @@ package application;
  * @author Houming Chen
  *
  */
-public class Numeric implements Comparable<Numeric> {
+public class Numeric extends Number implements Comparable<Numeric> {
   /**
    * A private Object representing the number, which can only be a Integer, or a Fraction, or a
    * Double.
@@ -25,57 +25,30 @@ public class Numeric implements Comparable<Numeric> {
    * @param integerNumber the given number
    */
   public Numeric(Number number) {
-    if (number instanceof Fraction) {
-      try {
+    if (number instanceof Numeric) {
+      this.number = ((Numeric) number).number;
+    } else if (number instanceof Fraction) {
+      try { // Try to turn fraction back to int value.
         this.number = number.intValue();
       } catch (ClassCastException e) {
         this.number = number;
       }
-    } else if (number instanceof Long)
-      if (Integer.MIN_VALUE <= number.longValue() && number.longValue() <= Integer.MAX_VALUE)
+    } else if (number instanceof Long) {
+      if (Integer.MIN_VALUE <= number.longValue() && number.longValue() <= Integer.MAX_VALUE) {
         this.number = number.intValue();
-      else
+      } else {
         this.number = number.doubleValue();
-    else if (number instanceof Integer || number instanceof Short)
+      }
+    } else if (number instanceof Integer || number instanceof Short) {
       this.number = number.intValue();
-    else
+    } else {
       this.number = number.doubleValue();
-  }
-
-  /**
-   * The copy constructor that construct this Numeric instance with a another Numeric instance.
-   * 
-   * @param other another given Numeric instance.
-   */
-  public Numeric(Numeric other) {
-    number = other.number;
+    }
   }
 
   @Override
   public String toString() {
     return number.toString();
-  }
-
-  /**
-   * Get the sum of this Numeric Instance and another given Numeric Instance. This method will not
-   * change the value of both of the instances.
-   * 
-   * @param other the other given Numeric Instance
-   * @return the sum
-   */
-  public Numeric add(Numeric other) {
-    other = new Numeric(other);
-    Numeric thisNum = new Numeric(this);
-    if (thisNum.number instanceof Double || other.number instanceof Double) {
-      return new Numeric(thisNum.number.doubleValue() + other.number.doubleValue());
-    }
-    if (thisNum.number instanceof Fraction || other.number instanceof Fraction) {
-      return new Numeric(Fraction.of(thisNum.number).add(Fraction.of(other.number)));
-    }
-    if (thisNum.number instanceof Integer || other.number instanceof Integer) {
-      return new Numeric(thisNum.number.longValue() + other.number.longValue());
-    }
-    throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
 
   /**
@@ -85,29 +58,24 @@ public class Numeric implements Comparable<Numeric> {
    * @return the sum
    */
   public Numeric add(Number other) {
+    if(other instanceof Numeric) {
+      Numeric otherNum = new Numeric(other);
+      Numeric thisNum = new Numeric(this);
+      System.out.println(thisNum);
+      System.out.println(otherNum);
+      if (thisNum.number instanceof Double || otherNum.number instanceof Double) {
+        return new Numeric(thisNum.number.doubleValue() + otherNum.number.doubleValue());
+      }
+      if (thisNum.number instanceof Fraction || otherNum.number instanceof Fraction) {
+        return new Numeric(Fraction.of(thisNum.number).add(Fraction.of(otherNum.number)));
+      }
+      if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
+        return new Numeric(thisNum.number.longValue() + otherNum.number.longValue());
+      }
+      
+      throw new ClassCastException(thisNum.number.getClass() + ":" + otherNum.number.getClass() + ": Cannot cast to Integer or Double or Fraction");
+    }
     return this.add(new Numeric(other));
-  }
-
-  /**
-   * Get the difference of this Numeric Instance and another given Numeric Instance. This method
-   * will not change the value of both of the instances.
-   * 
-   * @param other the other given Numeric Instance
-   * @return the difference
-   */
-  public Numeric subtract(Numeric other) {
-    other = new Numeric(other);
-    Numeric thisNum = new Numeric(this);
-    if (thisNum.number instanceof Double || other.number instanceof Double) {
-      return new Numeric(thisNum.number.doubleValue() - other.number.doubleValue());
-    }
-    if (thisNum.number instanceof Fraction || other.number instanceof Fraction) {
-      return new Numeric(Fraction.of(thisNum.number).subtract(Fraction.of(other.number)));
-    }
-    if (thisNum.number instanceof Integer || other.number instanceof Integer) {
-      return new Numeric(thisNum.number.longValue() - other.number.longValue());
-    }
-    throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
 
   /**
@@ -117,29 +85,21 @@ public class Numeric implements Comparable<Numeric> {
    * @return the difference
    */
   public Numeric subtract(Number other) {
+    if(other instanceof Numeric) {
+      Numeric otherNum = new Numeric(other);
+      Numeric thisNum = new Numeric(this);
+      if (thisNum.number instanceof Double || otherNum.number instanceof Double) {
+        return new Numeric(thisNum.number.doubleValue() - otherNum.number.doubleValue());
+      }
+      if (thisNum.number instanceof Fraction || otherNum.number instanceof Fraction) {
+        return new Numeric(Fraction.of(thisNum.number).subtract(Fraction.of(otherNum.number)));
+      }
+      if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
+        return new Numeric(thisNum.number.longValue() - otherNum.number.longValue());
+      }
+      throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
+    }
     return this.subtract(new Numeric(other));
-  }
-
-  /**
-   * Get the product of this Numeric Instance and another given Numeric Instance. This method will
-   * not change the value of both of the instances.
-   * 
-   * @param other the other given Numeric Instance
-   * @return the product
-   */
-  public Numeric multiply(Numeric other) {
-    other = new Numeric(other);
-    Numeric thisNum = new Numeric(this);
-    if (thisNum.number instanceof Double || other.number instanceof Double) {
-      return new Numeric(thisNum.number.doubleValue() * other.number.doubleValue());
-    }
-    if (thisNum.number instanceof Fraction || other.number instanceof Fraction) {
-      return new Numeric(Fraction.of(thisNum.number).multiply(Fraction.of(other.number)));
-    }
-    if (thisNum.number instanceof Integer || other.number instanceof Integer) {
-      return new Numeric(thisNum.number.longValue() * other.number.longValue());
-    }
-    throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
 
   /**
@@ -149,29 +109,21 @@ public class Numeric implements Comparable<Numeric> {
    * @return the product
    */
   public Numeric multiply(Number other) {
+    if(other instanceof Numeric) {
+      Numeric otherNum = new Numeric(other);
+      Numeric thisNum = new Numeric(this);
+      if (thisNum.number instanceof Double || otherNum.number instanceof Double) {
+        return new Numeric(thisNum.number.doubleValue() * otherNum.number.doubleValue());
+      }
+      if (thisNum.number instanceof Fraction || otherNum.number instanceof Fraction) {
+        return new Numeric(Fraction.of(thisNum.number).subtract(Fraction.of(otherNum.number)));
+      }
+      if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
+        return new Numeric(thisNum.number.longValue() * otherNum.number.longValue());
+      }
+      throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
+    }
     return this.multiply(new Numeric(other));
-  }
-
-  /**
-   * Get the quotient of this Numeric Instance and another given Numeric Instance. This method will
-   * not change the value of both of the instances.
-   * 
-   * @param other the other given Numeric Instance
-   * @return the quotient
-   */
-  public Numeric dividedBy(Numeric other) {
-    other = new Numeric(other);
-    Numeric thisNum = new Numeric(this);
-    if (thisNum.number instanceof Double || other.number instanceof Double) {
-      return new Numeric(thisNum.number.doubleValue() / other.number.doubleValue());
-    }
-    if (thisNum.number instanceof Fraction || other.number instanceof Fraction) {
-      return new Numeric(Fraction.of(thisNum.number).dividedBy(Fraction.of(other.number)));
-    }
-    if (thisNum.number instanceof Integer || other.number instanceof Integer) {
-      return new Numeric(new Fraction(thisNum.number.intValue(), other.number.intValue()));
-    }
-    throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
 
   /**
@@ -181,15 +133,23 @@ public class Numeric implements Comparable<Numeric> {
    * @return the quotient
    */
   public Numeric dividedBy(Number other) {
+    if(other instanceof Numeric) {
+      Numeric otherNum = new Numeric(other);
+      Numeric thisNum = new Numeric(this);
+      if (thisNum.number instanceof Double || otherNum.number instanceof Double) {
+        return new Numeric(thisNum.number.doubleValue() / otherNum.number.doubleValue());
+      }
+      if (thisNum.number instanceof Fraction || otherNum.number instanceof Fraction) {
+        return new Numeric(Fraction.of(thisNum.number).dividedBy(Fraction.of(otherNum.number)));
+      }
+      if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
+        return new Numeric(new Fraction(thisNum.number.intValue(), otherNum.number.intValue()));
+      }
+      throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
+    }
     return this.dividedBy(new Numeric(other));
   }
 
-  int toInteger() {
-    if (number instanceof Integer) {
-      return ((Integer) number);
-    }
-    throw new ClassCastException("Cannot cast to an Integer");
-  }
 
   @Override
   public int compareTo(Numeric other) {
@@ -209,8 +169,34 @@ public class Numeric implements Comparable<Numeric> {
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
 
+  @Override
+  public int intValue() {
+    if (number instanceof Integer) {
+      return ((Integer) number);
+    }
+    throw new ClassCastException("Cannot cast to an Integer");
+  }
+
+  @Override
+  public long longValue() {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public float floatValue() {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public double doubleValue() {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+  
   /**
-   * A main method, just for test.
+   * A main method, just for test and demo.
    * 
    * @param args args
    */
@@ -237,4 +223,5 @@ public class Numeric implements Comparable<Numeric> {
       System.out.println(e.getMessage()); // "/ by zero"
     }
   }
+
 }

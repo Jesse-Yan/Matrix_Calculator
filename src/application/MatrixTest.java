@@ -32,12 +32,12 @@ public class MatrixTest {
   public void test000_constructor_and_getEntry() {
     try {
       MatrixADT matrix = new Matrix(new Integer[][] {{-1, 0, 1}, {2, 3, 4}});
-      assertEquals(-1, matrix.getEntry(0, 0).toInteger());
-      assertEquals(0, matrix.getEntry(0, 1).toInteger());
-      assertEquals(1, matrix.getEntry(0, 2).toInteger());
-      assertEquals(2, matrix.getEntry(1, 0).toInteger());
-      assertEquals(3, matrix.getEntry(1, 1).toInteger());
-      assertEquals(4, matrix.getEntry(1, 2).toInteger());
+      assertEquals(-1, matrix.getEntry(0, 0).intValue());
+      assertEquals(0, matrix.getEntry(0, 1).intValue());
+      assertEquals(1, matrix.getEntry(0, 2).intValue());
+      assertEquals(2, matrix.getEntry(1, 0).intValue());
+      assertEquals(3, matrix.getEntry(1, 1).intValue());
+      assertEquals(4, matrix.getEntry(1, 2).intValue());
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -93,11 +93,11 @@ public class MatrixTest {
     try {
       MatrixADT matrix;
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
-      assertEquals(0, matrix.getDeterminant().toInteger());
+      assertEquals(0, matrix.getDeterminant().intValue());
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {1, 2, 4}, {1, 3, 5}});
-      assertEquals(-1, matrix.getDeterminant().toInteger());
+      assertEquals(-1, matrix.getDeterminant().intValue());
       matrix = new Matrix(new Integer[][] {{1, 2}, {3, 4}});
-      assertEquals(-2, matrix.getDeterminant().toInteger());
+      assertEquals(-2, matrix.getDeterminant().intValue());
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}});
       try {
         matrix.getDeterminant();
