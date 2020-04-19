@@ -117,6 +117,7 @@ public class Main extends Application {
     input.setMaxWidth(360.0);
     TextArea result = new TextArea();
     result.setWrapText(true);
+    result.setEditable(false);
     result.setMaxWidth(360.0);
 
     // Set two parallel buttons
