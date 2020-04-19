@@ -89,18 +89,64 @@ public class MatrixTest {
   }
   
   @Test
+  public void test_pow() {
+    try {
+      MatrixADT matrix, expectedMatirx;
+      matrix = new Matrix(new Integer[][] {{1, 1}, {1, 0}});
+      expectedMatirx = new Matrix(new Integer[][] {{55, 34}, {34, 21}});
+      assertEquals(expectedMatirx.toString(), matrix.pow(9).toString());
+      
+      matrix = new Matrix(new Integer[][] {{1, 2}, {3, 4}});
+      expectedMatirx = new Matrix(new Integer[][] {{1069, 1558}, {2337, 3406}});
+      assertEquals(expectedMatirx.toString(), matrix.pow(5).toString());
+      
+      matrix = new Matrix(new Integer[][] {{1, 2}, {3, 4}});
+      expectedMatirx = new Matrix(new Integer[][] {{1069, 1558}, {2337, 3406}});
+      assertEquals(expectedMatirx.toString(), matrix.pow(5).toString());
+      
+      matrix = new Matrix(new Integer[][] {{1, 1}, {1, 0}});
+      expectedMatirx = new Matrix(new Integer[][] {{5, -8}, {-8, 13}});
+      assertEquals(expectedMatirx.toString(), matrix.pow(-6).toString());
+      
+      matrix = new Matrix(new Integer[][] {{1, 1}, {1, 0}});
+      expectedMatirx = new Matrix(new Integer[][] {{1, 0}, {0, 1}});
+      assertEquals(expectedMatirx.toString(), matrix.pow(0).toString());
+      
+      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+      expectedMatirx = new Matrix(new Integer[][] {{468, 576, 684}, {1062, 1305, 1548}, {1656, 2034, 2412}});
+      assertEquals(expectedMatirx.toString(), matrix.pow(3).toString());
+      
+      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+      expectedMatirx = new Matrix(new Integer[][] {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
+      assertEquals(expectedMatirx.toString(), matrix.pow(0).toString());
+      
+      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+      try {
+        matrix.pow(-2).toString();
+        fail("The matrix is not invertible, but no ArithmeticException thrown");
+      } catch (ArithmeticException arithmeticException) {
+        // Expected
+      }
+      
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  @Test
   public void test_Deteminant() {
     try {
       MatrixADT matrix;
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
-      assertEquals(0, matrix.getDeterminant().intValue());
+      assertEquals(0, matrix.determinant().intValue());
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {1, 2, 4}, {1, 3, 5}});
-      assertEquals(-1, matrix.getDeterminant().intValue());
+      assertEquals(-1, matrix.determinant().intValue());
       matrix = new Matrix(new Integer[][] {{1, 2}, {3, 4}});
-      assertEquals(-2, matrix.getDeterminant().intValue());
+      assertEquals(-2, matrix.determinant().intValue());
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}});
       try {
-        matrix.getDeterminant();
+        matrix.determinant();
         fail("The matrix is not a square matrix, but MatrixDimensionsMismatchException is not thrown");
       } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
         // Expected

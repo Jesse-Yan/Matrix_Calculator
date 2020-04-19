@@ -61,8 +61,6 @@ public class Numeric extends Number implements Comparable<Numeric> {
     if(other instanceof Numeric) {
       Numeric otherNum = new Numeric(other);
       Numeric thisNum = new Numeric(this);
-      System.out.println(thisNum);
-      System.out.println(otherNum);
       if (thisNum.number instanceof Double || otherNum.number instanceof Double) {
         return new Numeric(thisNum.number.doubleValue() + otherNum.number.doubleValue());
       }
@@ -116,7 +114,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
         return new Numeric(thisNum.number.doubleValue() * otherNum.number.doubleValue());
       }
       if (thisNum.number instanceof Fraction || otherNum.number instanceof Fraction) {
-        return new Numeric(Fraction.of(thisNum.number).subtract(Fraction.of(otherNum.number)));
+        return new Numeric(Fraction.of(thisNum.number).multiply(Fraction.of(otherNum.number)));
       }
       if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
         return new Numeric(thisNum.number.longValue() * otherNum.number.longValue());

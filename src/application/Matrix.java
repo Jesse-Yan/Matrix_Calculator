@@ -1,7 +1,5 @@
 package application;
 
-import java.net.ConnectException;
-import javax.swing.plaf.basic.BasicBorders.MarginBorder;
 
 /**
  * This class represents a Matrix and defines required operation needed for a Matrix
@@ -57,7 +55,7 @@ public class Matrix implements MatrixADT {
     for (int i = 0; i < content.length; i++)
       entry[i] = content[i].clone();
   }
-  
+
   /**
    * A private helper method that generate a n*n identity matrix
    * 
@@ -68,7 +66,7 @@ public class Matrix implements MatrixADT {
     Numeric[][] identityMatirxEntries = new Numeric[n][n];
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
-        if(i == j)
+        if (i == j)
           identityMatirxEntries[i][j] = new Numeric(1);
         else
           identityMatirxEntries[i][j] = new Numeric(0);
@@ -132,7 +130,7 @@ public class Matrix implements MatrixADT {
   }
 
   @Override
-  public MatrixADT subtract(MatrixADT other) throws MatrixDimensionsMismatchException {
+  public Matrix subtract(MatrixADT other) throws MatrixDimensionsMismatchException {
     additionCheck(other);
     Matrix answer = new Matrix(this.entry);
     for (int i = 0; i < answer.getNumberOfRow(); i++)
@@ -156,7 +154,7 @@ public class Matrix implements MatrixADT {
   }
 
   @Override
-  public MatrixADT multiply(MatrixADT other) throws MatrixDimensionsMismatchException {
+  public Matrix multiply(MatrixADT other) throws MatrixDimensionsMismatchException {
     multipicationCheck(other);
     Matrix answer = new Matrix(this.getNumberOfRow(), other.getNumberOfColumn());
     for (int i = 0; i < this.getNumberOfRow(); i++)
@@ -165,6 +163,51 @@ public class Matrix implements MatrixADT {
           answer.entry[i][j] =
               answer.entry[i][j].add(this.getEntry(i, k).multiply(other.getEntry(k, j)));
     return answer;
+  }
+
+  /**
+   * 
+   * A private helper method to get the size of the square matrix.
+   * 
+   * For example, a n*n square matrix will return n.
+   * 
+   * @return n, which is not only the number of rows but also the number of columns of the square
+   *         matrix.
+   * @throws MatrixDimensionsMismatchException if the matrix is not a square matrix.
+   */
+  private int getSizeOfSquareMatrix() throws MatrixDimensionsMismatchException {
+    if (getNumberOfRow() != getNumberOfColumn()) {
+      throw new MatrixDimensionsMismatchException("The matrix is nor square.");
+    }
+    return getNumberOfRow();
+  }
+
+  public Matrix helperpow(int n) {
+    if (n == 1)
+      return new Matrix(entry);
+    try {
+      Matrix matrixPowHalfN = helperpow(n / 2);
+      if (n % 2 == 0)
+        return matrixPowHalfN.multiply(matrixPowHalfN);
+      if (n % 2 == 1)
+        return this.multiply(matrixPowHalfN.multiply(matrixPowHalfN));
+    } catch (MatrixDimensionsMismatchException e) {
+      // Unexpected, since it must be a square matrix.
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  @Override
+  public Matrix pow(int n) throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
+    if(n == 0)
+      return identityMatrixWithSizeOf(N);
+    else if(n > 0)
+      return helperpow(n);
+    else if(n < 0)
+      return inverse().helperpow(-n);
+    return null;
   }
 
   /**
@@ -272,12 +315,6 @@ public class Matrix implements MatrixADT {
     }
   }
 
-  @Override
-  public MatrixADT gaussianElimination() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
   /**
    * 
    * A private helper method that gets a submatrix of the matrix. It will get the submatrix with
@@ -302,7 +339,8 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * A private helper method that connect another matrix to this matrix to construct a new augmented matrix.
+   * A private helper method that connect another matrix to this matrix to construct a new augmented
+   * matrix.
    * 
    * The given matrix must have the same number of rows with this matrix.
    * 
@@ -326,26 +364,10 @@ public class Matrix implements MatrixADT {
     }
     return new Matrix(augmentedMatrixEntries);
   }
-  
-  /**
-   * 
-   * A private helper method to get the size of the square matrix.
-   * 
-   * For example, a n*n square matrix will return n.
-   * 
-   * @return n, which is not only the number of rows but also the number of columns of the square matrix.
-   * @throws MatrixDimensionsMismatchException if the matrix is not a square matrix.
-   */
-  private int sizeOfSquareMatirx() throws MatrixDimensionsMismatchException {
-    if (getNumberOfRow() != getNumberOfColumn()) {
-      throw new MatrixDimensionsMismatchException("The matrix is nor square.");
-    }
-    return getNumberOfRow();
-  }
 
   @Override
-  public MatrixADT inverse() throws MatrixDimensionsMismatchException {
-    int N = sizeOfSquareMatirx();
+  public Matrix inverse() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
     Matrix augmentedMatrix = augmentMatirx(identityMatrixWithSizeOf(N));
     try {
       augmentedMatrix.forwardElimination();
@@ -358,8 +380,8 @@ public class Matrix implements MatrixADT {
   }
 
   @Override
-  public Numeric getDeterminant() throws MatrixDimensionsMismatchException {
-    int N = sizeOfSquareMatirx();
+  public Numeric determinant() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
     Matrix answerMatrix = new Matrix(entry);
     boolean signChanged = false;
     try {
@@ -374,5 +396,11 @@ public class Matrix implements MatrixADT {
     if (signChanged)
       ansNumeric = new Numeric(0).subtract(ansNumeric);
     return ansNumeric;
+  }
+
+  @Override
+  public Numeric EigenValue() throws MatrixDimensionsMismatchException {
+    // TODO Auto-generated method stub
+    return null;
   }
 }
