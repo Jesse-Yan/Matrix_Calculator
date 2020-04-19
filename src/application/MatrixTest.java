@@ -31,7 +31,7 @@ public class MatrixTest {
   @Test
   public void test000_constructor_and_getEntry() {
     try {
-      MatrixADT matrix = new Matrix(new int[][] {{-1, 0, 1}, {2, 3, 4}});
+      MatrixADT matrix = new Matrix(new Integer[][] {{-1, 0, 1}, {2, 3, 4}});
       assertEquals(-1, matrix.getEntry(0, 0).toInteger());
       assertEquals(0, matrix.getEntry(0, 1).toInteger());
       assertEquals(1, matrix.getEntry(0, 2).toInteger());
@@ -49,12 +49,10 @@ public class MatrixTest {
   @Test
   public void test001_addition() {
     try {
-      MatrixADT matrix1 = new Matrix(new int[][] {{-1, 0, 1}, {2, 3, 4}});
-      MatrixADT matrix2 = new Matrix(new int[][] {{-1, 0, -1}, {-4, 0, 10}});
-      MatrixADT expectedMatrix = new Matrix(new int[][] {{-2, 0, 0}, {-2, 3, 14}});
-      MatrixADT sumMatrix = matrix1.add(matrix2);
-      assertEquals(expectedMatrix.toString(), sumMatrix.toString());
-      sumMatrix = matrix1.add(matrix2);
+      MatrixADT matrix1 = new Matrix(new Integer[][] {{-1, 0, 1}, {2, 3, 4}});
+      MatrixADT matrix2 = new Matrix(new Integer[][] {{-1, 0, -1}, {-4, 0, 10}});
+      MatrixADT expectedMatrix = new Matrix(new Integer[][] {{-2, 0, 0}, {-2, 3, 14}});
+      assertEquals(expectedMatrix.toString(), matrix1.add(matrix2).toString());
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -66,11 +64,10 @@ public class MatrixTest {
   @Test
   public void test002_subtraction() {
     try {
-      MatrixADT matrix1 = new Matrix(new int[][] {{-1, 0, 1}, {2, 3, 4}});
-      MatrixADT matrix2 = new Matrix(new int[][] {{-1, 0, -1}, {-4, 0, 10}});
-      MatrixADT expectedMatrix = new Matrix(new int[][] {{0, 0, 2}, {6, 3, -6}});
-      MatrixADT differenceMatrix = matrix1.subtract(matrix2);
-      assertEquals(expectedMatrix.toString(), differenceMatrix.toString());
+      MatrixADT matrix1 = new Matrix(new Integer[][] {{-1, 0, 1}, {2, 3, 4}});
+      MatrixADT matrix2 = new Matrix(new Integer[][] {{-1, 0, -1}, {-4, 0, 10}});
+      MatrixADT expectedMatrix = new Matrix(new Integer[][] {{0, 0, 2}, {6, 3, -6}});
+      assertEquals(expectedMatrix.toString(), matrix1.subtract(matrix2).toString());
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -82,11 +79,10 @@ public class MatrixTest {
   @Test
   public void test003_multiplication() {
     try {
-      MatrixADT matrix1 = new Matrix(new int[][] {{1, 2}, {-4, 0}, {0, -6}});
-      MatrixADT matrix2 = new Matrix(new int[][] {{4, 3, 0}, {-2, 0, -5}});
-      MatrixADT expectedMatrix = new Matrix(new int[][] {{0, 3, -10}, {-16, -12, 0}, {12, 0, 30}});
-      MatrixADT productMatrix = matrix1.multiply(matrix2);
-      assertEquals(expectedMatrix.toString(), productMatrix.toString());
+      MatrixADT matrix1 = new Matrix(new Integer[][] {{1, 2}, {-4, 0}, {0, -6}});
+      MatrixADT matrix2 = new Matrix(new Integer[][] {{4, 3, 0}, {-2, 0, -5}});
+      MatrixADT expectedMatrix = new Matrix(new Integer[][] {{0, 3, -10}, {-16, -12, 0}, {12, 0, 30}});
+      assertEquals(expectedMatrix.toString(), matrix1.multiply(matrix2).toString());
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -96,11 +92,13 @@ public class MatrixTest {
   public void test_Deteminant() {
     try {
       MatrixADT matrix;
-      matrix = new Matrix(new int[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
       assertEquals(0, matrix.getDeterminant().toInteger());
-      matrix = new Matrix(new int[][] {{1, 2}, {3, 4}});
+      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {1, 2, 4}, {1, 3, 5}});
+      assertEquals(-1, matrix.getDeterminant().toInteger());
+      matrix = new Matrix(new Integer[][] {{1, 2}, {3, 4}});
       assertEquals(-2, matrix.getDeterminant().toInteger());
-      matrix = new Matrix(new int[][] {{1, 2, 3}, {4, 5, 6}});
+      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}});
       try {
         matrix.getDeterminant();
         fail("The matrix is not a square matrix, but MatrixDimensionsMismatchException is not thrown");
@@ -116,8 +114,7 @@ public class MatrixTest {
   public void test_Inverse() {
     try {
       MatrixADT matrix;
-      matrix = new Matrix(new int[][] {{1, 2}, {3, 5}});
-      System.out.println(matrix.inverse());
+      matrix = new Matrix(new Integer[][] {{1, 2}, {3, 5}});
     } catch (Exception e) {
       e.printStackTrace();
     }
