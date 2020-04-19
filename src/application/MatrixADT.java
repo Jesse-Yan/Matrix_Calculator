@@ -61,11 +61,10 @@ public interface MatrixADT {
   /**
    * Do Gaussian Elimination (reduce Matrix into leading ones)
    * 
-   * @param other - Matrix that being multiply
    * @return - Result Matrix
    * @throws MatrixDimensionsMismatchException - when properties of Matrix mismatch
    */
-  MatrixADT GaussianElimination(MatrixADT other) throws MatrixDimensionsMismatchException;
+  MatrixADT gaussianElimination();
 
   /**
    * inverse the matrix
@@ -78,7 +77,8 @@ public interface MatrixADT {
    * get determinant of matrix
    * 
    * @return matrix determinant
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
    */
-  Numeric getDeterminant();
+  Numeric getDeterminant() throws MatrixDimensionsMismatchException;
 
 }

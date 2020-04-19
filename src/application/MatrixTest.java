@@ -1,5 +1,6 @@
 package application;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.After;
 import org.junit.Before;
@@ -90,4 +91,25 @@ public class MatrixTest {
       e.printStackTrace();
     }
   }
+  
+  @Test
+  public void test_Deteminant() {
+    try {
+      MatrixADT matrix;
+      matrix = new Matrix(new int[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+      assertEquals(0, matrix.getDeterminant().toInteger());
+      matrix = new Matrix(new int[][] {{1, 2}, {3, 4}});
+      assertEquals(-2, matrix.getDeterminant().toInteger());
+      matrix = new Matrix(new int[][] {{1, 2, 3}, {4, 5, 6}});
+      try {
+        matrix.getDeterminant();
+        fail("The matrix is not a square matrix, but MatrixDimensionsMismatchException is not thrown");
+      } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
+        // Expected
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
 }
