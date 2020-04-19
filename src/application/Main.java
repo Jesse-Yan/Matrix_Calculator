@@ -210,7 +210,7 @@ public class Main extends Application {
 
     vBoxR.getChildren().addAll(hBoxR, mOperations, mResult);
     root.setRight(vBoxR);
-
+ 
     // Use the optimized width and height
     Scene mainScene =
         new Scene(root, primaryStage.getWidth(), primaryStage.getHeight());
