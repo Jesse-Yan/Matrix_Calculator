@@ -6,7 +6,7 @@ This is the final project of ateam2 of CS 400 Spring 2020
 #### Jinming Zhang, LEC001, x-team132 - jzhang2279@wisc.edu
 #### Archer Li LEC001 x-team145 - zli885@wisc.edu
 #### Houming Chen, LEC001, xteam149 - hchen634@wisc.edu
-#### Chengxu Bian, LEC001, xteam102 - cbian4@wisc.edu
+#### Chengxu Bian, LEC001, xteam102 - cbian7@wisc.edu
 
 
 ## Installation
@@ -17,7 +17,7 @@ Running in Java code need JavaFx and JDK11 pre-installed.
 run .jar for demo
 
 ## Program Description
-program function as a calculator that support Matrix calculation
+program functions as a calculator that support Matrix calculation
 
 ## Code Organization
 UW-madison default setup.
