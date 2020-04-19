@@ -19,8 +19,8 @@ public class Calculator {
   /**
    * build up calculation expression and calculate result.
    * 
-   * @param expression -String math expression
-   * @return result after calculation
+   * @param  expression -String math expression
+   * @return            result after calculation
    */
   public static double calculate(String expression) {
 
@@ -206,7 +206,7 @@ class ModifiedCal {
    * helper method that process operations in level
    * 
    * @param temp -expression piece
-   * @param i - level limit
+   * @param i    - level limit
    */
   private void goOper(String temp, int i) {
 
