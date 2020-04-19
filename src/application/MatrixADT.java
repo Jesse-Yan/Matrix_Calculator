@@ -70,8 +70,9 @@ public interface MatrixADT {
    * inverse the matrix
    * 
    * @return matrix that been inverted
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
    */
-  MatrixADT inverse();
+  MatrixADT inverse()  throws MatrixDimensionsMismatchException ;
 
   /**
    * get determinant of matrix

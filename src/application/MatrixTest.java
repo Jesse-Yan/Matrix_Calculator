@@ -112,4 +112,15 @@ public class MatrixTest {
     }
   }
   
+  @Test
+  public void test_Inverse() {
+    try {
+      MatrixADT matrix;
+      matrix = new Matrix(new int[][] {{1, 2}, {3, 5}});
+      System.out.println(matrix.inverse());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
 }

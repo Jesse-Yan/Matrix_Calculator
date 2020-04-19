@@ -1,5 +1,7 @@
 package application;
 
+import javax.swing.plaf.basic.BasicBorders.MarginBorder;
+
 /**
  * This class represents a Matrix and defines required operation needed for a Matrix
  * 
@@ -102,6 +104,15 @@ public class Matrix implements MatrixADT {
       string += '\n';
     }
     return string;
+  }
+  
+  // Submatrix. (Including the startRow and the startColumn, but not include the endRow and endColumn)
+  public Matrix subMatrix(int startRow, int endRow, int startColumn, int endColumn) {
+    Numeric[][] newEntires = new Numeric[endRow - startRow][endColumn - startColumn];
+    for(int i = 0; i < newEntires.length; i++)
+      for(int j = 0; j < newEntires[i].length; j++)
+        newEntires[i][j] = matrix[startRow + i][startColumn + j];
+    return new Matrix(newEntires);
   }
 
   /**
@@ -206,12 +217,23 @@ public class Matrix implements MatrixADT {
 
         Numeric f = matrix[i][k].dividedBy(matrix[k][k]);
 
-        for (int j = M - 1; j >= 0; j--)
+        for (int j = 0; j < M; j++)
           matrix[i][j] = matrix[i][j].subtract(matrix[k][j].multiply(f));
 
         matrix[i][k] = new Numeric(0);
       }
     }
+  }
+  
+//This should be private. Now it is public just for tests.
+  public void simplifyAfterElimination(){
+    int N = getNumberOfRow();
+    int M = getNumberOfColumn();
+      for (int i = 0; i < N; i++) {
+        Numeric f = matrix[i][i];
+        for (int j = 0; j < M; j++)
+          matrix[i][j] = matrix[i][j].dividedBy(f);
+      }
   }
 
 
@@ -223,9 +245,32 @@ public class Matrix implements MatrixADT {
   }
 
   @Override
-  public MatrixADT inverse() {
-    // TODO Auto-generated method stub
-    return null;
+  public MatrixADT inverse() throws MatrixDimensionsMismatchException {
+    if(!isSquareMatirx()) {
+      throw new MatrixDimensionsMismatchException();
+    }
+    int N = getNumberOfRow();
+    Numeric[][] augmentedMatrixEntries = new Numeric[N][2 * N];
+    for (int i = 0; i < N; i++) {
+      for (int j = 0; j < N; j++) {
+        augmentedMatrixEntries[i][j] = new Numeric(matrix[i][j]);
+        if(i == j) {
+          augmentedMatrixEntries[i][j + N] = new Numeric(1);
+        }
+        else {
+          augmentedMatrixEntries[i][j + N] = new Numeric(0);
+        }
+      }
+    }
+    Matrix augmentedMatrix = new Matrix(augmentedMatrixEntries);
+    try {
+      augmentedMatrix.forwardElimination();
+      augmentedMatrix.backwardElimination();
+      augmentedMatrix.simplifyAfterElimination();
+    } catch (SingularException singularException) {
+      throw new ArithmeticException("The marix is not invertible!");
+    }
+    return augmentedMatrix.subMatrix(0, N, N, 2 * N);
   }
 
   
@@ -249,7 +294,6 @@ public class Matrix implements MatrixADT {
     for(int i = 0; i < answerMatrix.getNumberOfColumn(); i++) {
       ansNumeric = ansNumeric.multiply(answerMatrix.getEntry(i, i));
     }
-      
     return ansNumeric;
   }
 
