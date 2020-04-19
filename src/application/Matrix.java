@@ -1,5 +1,6 @@
 package application;
 
+import java.net.ConnectException;
 import javax.swing.plaf.basic.BasicBorders.MarginBorder;
 
 /**
@@ -56,6 +57,23 @@ public class Matrix implements MatrixADT {
     for (int i = 0; i < content.length; i++)
       entry[i] = content[i].clone();
   }
+  
+  /**
+   * A private helper method that generate a n*n identity matrix
+   * 
+   * @param n a given integer to represent the number of rows and colomns of the identity matirx
+   * @return a n*n identity matirx
+   */
+  private static Matrix identityMatrixWithSizeOf(int n) {
+    Numeric[][] identityMatirxEntries = new Numeric[n][n];
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++)
+        if(i == j)
+          identityMatirxEntries[i][j] = new Numeric(1);
+        else
+          identityMatirxEntries[i][j] = new Numeric(0);
+    return new Matrix(identityMatirxEntries);
+  }
 
   @Override
   public int getNumberOfColumn() {
@@ -86,29 +104,6 @@ public class Matrix implements MatrixADT {
   @Override
   protected Matrix clone() {
     return new Matrix(entry);
-  }
-
-  /**
-   * 
-   * A private helper method that gets a submatrix of the matrix. It will get the submatrix with
-   * rows from the given start row to the given end row and with columns from the given start column
-   * to the given end column.
-   * 
-   * The startRow and the startColumn will be included, but the endRow and endColumn will not be
-   * included
-   * 
-   * @param startRow the given start row of the matrix to get the submatirx
-   * @param endRow the given end row of the matrix to get the submatirx
-   * @param startColumn the given start column of the matrix to get the submatirx
-   * @param endColumn the given end column of the matrix to get the submatirx
-   * @return a Matrix object which is the submatrix constructed by the given parameters.
-   */
-  private Matrix subMatrix(int startRow, int endRow, int startColumn, int endColumn) {
-    Numeric[][] newEntires = new Numeric[endRow - startRow][endColumn - startColumn];
-    for (int i = 0; i < newEntires.length; i++)
-      for (int j = 0; j < newEntires[i].length; j++)
-        newEntires[i][j] = entry[startRow + i][startColumn + j];
-    return new Matrix(newEntires);
   }
 
   /**
@@ -173,7 +168,7 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Get the absolute value of a Numeric number
+   * A private helper method that get the absolute value of a Numeric number
    * 
    * @param n a given numeric number
    * @return the absolute value of n.
@@ -185,7 +180,7 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Swap two rows of the matrix. That is, swap rowX and rowY.
+   * A private helper method that swap two rows of the matrix. That is, swap rowX and rowY.
    * 
    * @param rowX the index of the first row
    * @param rowY the index of the second row
@@ -200,27 +195,24 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Do partial pivoting at kth row, return whether the row is swapped
+   * A pivate helper method that do partial pivoting at kth row, return whether the row is swapped
    * 
    * @param k the row to do partial pivoting
    * @return true if the row is swapped
    * @throws SingularException if singular
    */
   private boolean partialPivoting(int k) throws SingularException {
-    int indexOfMaxPivot = k;
-    Numeric maxPivot = entry[indexOfMaxPivot][k];
-
+    int pivotRow = k;
+    Numeric pivotElement = entry[pivotRow][k];
     for (int i = k + 1; i < getNumberOfRow(); i++)
-      if (abs(entry[i][k]).compareTo(maxPivot) > 0) {
-        maxPivot = entry[i][k];
-        indexOfMaxPivot = i;
+      if (abs(entry[i][k]).compareTo(pivotElement) > 0) {
+        pivotElement = entry[i][k];
+        pivotRow = i;
       }
-
-    if (maxPivot.compareTo(new Numeric(0)) == 0)
+    if (pivotElement.compareTo(new Numeric(0)) == 0)
       throw new SingularException();
-
-    if (indexOfMaxPivot != k) {
-      swapRow(k, indexOfMaxPivot);
+    if (pivotRow != k) {
+      swapRow(k, pivotRow);
       return true;
     }
     return false;
@@ -286,24 +278,75 @@ public class Matrix implements MatrixADT {
     return null;
   }
 
-  @Override
-  public MatrixADT inverse() throws MatrixDimensionsMismatchException {
-    if (getNumberOfRow() != getNumberOfColumn()) {
-      throw new MatrixDimensionsMismatchException("The matrix should be a square");
-    }
+  /**
+   * 
+   * A private helper method that gets a submatrix of the matrix. It will get the submatrix with
+   * rows from the given start row to the given end row and with columns from the given start column
+   * to the given end column.
+   * 
+   * The startRow and the startColumn will be included, but the endRow and endColumn will not be
+   * included
+   * 
+   * @param startRow the given start row of the matrix to get the submatirx
+   * @param endRow the given end row of the matrix to get the submatirx
+   * @param startColumn the given start column of the matrix to get the submatirx
+   * @param endColumn the given end column of the matrix to get the submatirx
+   * @return a Matrix object which is the submatrix constructed by the given parameters.
+   */
+  private Matrix subMatrix(int startRow, int endRow, int startColumn, int endColumn) {
+    Numeric[][] newEntires = new Numeric[endRow - startRow][endColumn - startColumn];
+    for (int i = 0; i < newEntires.length; i++)
+      for (int j = 0; j < newEntires[i].length; j++)
+        newEntires[i][j] = entry[startRow + i][startColumn + j];
+    return new Matrix(newEntires);
+  }
+
+  /**
+   * A private helper method that connect another matrix to this matrix to construct a new augmented matrix.
+   * 
+   * The given matrix must have the same number of rows with this matrix.
+   * 
+   * @param other a given matrix
+   * @return the augmented matrix
+   * @throws MatrixDimensionsMismatchException if the given matrix does not have the same number of
+   *         rows with this matrix.
+   */
+  private Matrix augmentMatirx(Matrix other) throws MatrixDimensionsMismatchException {
+    if (this.getNumberOfRow() != other.getNumberOfRow())
+      throw new MatrixDimensionsMismatchException("Must have same number of rows");
     int N = getNumberOfRow();
-    Numeric[][] augmentedMatrixEntries = new Numeric[N][2 * N];
+    int M1 = this.getNumberOfColumn();
+    int M2 = other.getNumberOfColumn();
+    Numeric[][] augmentedMatrixEntries = new Numeric[N][M1 + M2];
     for (int i = 0; i < N; i++) {
       for (int j = 0; j < N; j++) {
         augmentedMatrixEntries[i][j] = new Numeric(entry[i][j]);
-        if (i == j) {
-          augmentedMatrixEntries[i][j + N] = new Numeric(1);
-        } else {
-          augmentedMatrixEntries[i][j + N] = new Numeric(0);
-        }
+        augmentedMatrixEntries[i][j + M1] = new Numeric(other.entry[i][j]);
       }
     }
-    Matrix augmentedMatrix = new Matrix(augmentedMatrixEntries);
+    return new Matrix(augmentedMatrixEntries);
+  }
+  
+  /**
+   * 
+   * A private helper method to get the size of the square matrix.
+   * 
+   * For example, a n*n square matrix will return n.
+   * 
+   * @return n, which is not only the number of rows but also the number of columns of the square matrix.
+   * @throws MatrixDimensionsMismatchException if the matrix is not a square matrix.
+   */
+  private int sizeOfSquareMatirx() throws MatrixDimensionsMismatchException {
+    if (getNumberOfRow() != getNumberOfColumn()) {
+      throw new MatrixDimensionsMismatchException("The matrix is nor square.");
+    }
+    return getNumberOfRow();
+  }
+
+  @Override
+  public MatrixADT inverse() throws MatrixDimensionsMismatchException {
+    int N = sizeOfSquareMatirx();
+    Matrix augmentedMatrix = augmentMatirx(identityMatrixWithSizeOf(N));
     try {
       augmentedMatrix.forwardElimination();
       augmentedMatrix.backwardElimination();
@@ -316,9 +359,7 @@ public class Matrix implements MatrixADT {
 
   @Override
   public Numeric getDeterminant() throws MatrixDimensionsMismatchException {
-    if (getNumberOfRow() != getNumberOfColumn()) {
-      throw new MatrixDimensionsMismatchException("The matrix should be a square");
-    }
+    int N = sizeOfSquareMatirx();
     Matrix answerMatrix = new Matrix(entry);
     boolean signChanged = false;
     try {
@@ -328,7 +369,7 @@ public class Matrix implements MatrixADT {
       return new Numeric(0);
     }
     Numeric ansNumeric = new Numeric(1);
-    for (int i = 0; i < answerMatrix.getNumberOfColumn(); i++)
+    for (int i = 0; i < N; i++)
       ansNumeric = ansNumeric.multiply(answerMatrix.getEntry(i, i));
     if (signChanged)
       ansNumeric = new Numeric(0).subtract(ansNumeric);
