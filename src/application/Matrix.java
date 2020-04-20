@@ -1,24 +1,30 @@
 package application;
 
 import java.util.Arrays;
-import com.sun.corba.se.impl.orb.NormalDataCollector;
-import com.sun.org.apache.bcel.internal.generic.CPInstruction;
-import com.sun.org.apache.bcel.internal.generic.NEW;
-import jdk.nashorn.internal.ir.WhileNode;
 
 /**
- * This class represents a Matrix and defines required operation needed for a Matrix
+ * This class represents a Matrix and defines operations needed for a Matrix.
+ * 
+ * The field of this class only contains an 2D array that stores the entries of this Matrix.
  * 
  * @author Jesse, Houming Chen
  *
  */
 public class Matrix implements MatrixADT {
 
+  /*
+   * The entries of the matrix
+   */
   private Numeric[][] entry;
 
   /**
-   * This constructor construct a matrix with a given number of rows and a given number of columns.
-   * All entries of the matrix created by this constructor will be zero.
+   * 
+   * Zero Matrix constructor.
+   * 
+   * This constructor construct a Zero matrix with a given number of rows and a given number of
+   * columns. All entries of the matrix created by this constructor will be zero.
+   * 
+   * For example, new Matrix(2, 3) will gives {{0, 0, 0}, {0, 0, 0}}
    * 
    * @param numberOfRow the given number of rows
    * @param numberOfColumn the given number of columns
@@ -31,40 +37,31 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Constructor of the matrix with Integers
-   * 
-   * @param row the row the matrix has
-   * @param column the column the matrix has
-   * @param content the content
-   */
-
-  /**
    * This constructor construct a matrix with a given 2D array of Number as content of the matrix.
    * 
+   * Fraction and Numeric both extends Number, and a Number can also be Integer, or Double, or ...
+   * 
    * @param content a 2D array of Number as content of the matrix
+   * 
+   * @see https://docs.oracle.com/javase/8/docs/api/java/lang/Number.html
    */
   public Matrix(Number[][] content) {
     entry = new Numeric[content.length][content[0].length];
     for (int i = 0; i < content.length; i++)
-      for (int j = 0; j < content[0].length; j++)
-        entry[i][j] = new Numeric(content[i][j]);
+      if (content[0][0] instanceof Numeric)
+        entry[i] = (Numeric[]) content[i].clone();
+      else
+        for (int j = 0; j < content[0].length; j++)
+          entry[i][j] = new Numeric(content[i][j]);
   }
 
   /**
-   * This constructor construct a matrix with a given 2D array of Numeric as content of the matrix.
    * 
-   * @param content a 2D array of Numeric as content of the matrix
-   */
-  public Matrix(Numeric[][] content) {
-    entry = new Numeric[content.length][content[0].length];
-    for (int i = 0; i < content.length; i++)
-      entry[i] = content[i].clone();
-  }
-  
-  /**
-   * This constructor copies a matrix
+   * A copy constructor
    * 
-   * @param other another Matrix
+   * This constructor copies the given matrix to construct the matrix.
+   * 
+   * @param other a given Matrix used to construct this matrix
    */
   public Matrix(Matrix other) {
     this(other.entry);
@@ -74,7 +71,9 @@ public class Matrix implements MatrixADT {
    * A private helper method that generate a n*n identity matrix
    * 
    * @param n a given integer to represent the number of rows and colomns of the identity matirx
-   * @return a n*n identity matirx
+   * @return a n*n identity matrix
+   * 
+   * @see https://en.wikipedia.org/wiki/Identity_matrix
    */
   private static Matrix identityMatrixWithSizeOf(int n) {
     Numeric[][] identityMatirxEntries = new Numeric[n][n];
@@ -102,6 +101,10 @@ public class Matrix implements MatrixADT {
     return entry[row][column];
   }
 
+  /**
+   * Convert this matrix to string. The entries are converted to string by rows. In each row,
+   * numbers are separated by a " ". Rows are separated with "\n".
+   */
   @Override
   public String toString() {
     String string = "";
@@ -114,7 +117,7 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Get a copy/clone of the matrix. 
+   * Get a deepest copy of the matrix. Which is exactly the same as this matrix.
    * 
    * @return a copy of matrix.
    */
@@ -122,6 +125,11 @@ public class Matrix implements MatrixADT {
     return new Matrix(entry);
   }
 
+  /**
+   * Receives another object (which should be a matrix), and check whether the given matrix is equal
+   * to this matrix. Return true if the given object is a martix, and matrices have exactly same
+   * dimension, and all entries are equal. Return false otherwise.
+   */
   @Override
   public boolean equals(Object obj) {
     if (obj instanceof Matrix) {
@@ -139,6 +147,9 @@ public class Matrix implements MatrixADT {
     return false;
   }
 
+  /*
+   * Return the transpose of the matrix.
+   */
   @Override
   public Matrix transpose() {
     Numeric[][] newEntiry = new Numeric[getNumberOfColumn()][getNumberOfRow()];
@@ -151,8 +162,8 @@ public class Matrix implements MatrixADT {
   /**
    * A private helper method that checks whether the given matrix has exactly the same number of
    * rows and the same number of columns with this matrix. If they have exactly the same number of
-   * rows and columns, nothing will happen, otherwise it will throw a
-   * MatrixDimensionsMismatchException,
+   * rows and columns, nothing will happen, otherwise this method will throw a
+   * MatrixDimensionsMismatchException.
    * 
    * @param other the given matrix
    * @throws MatrixDimensionsMismatchException if the given matrix do not have the exactly same
@@ -165,6 +176,11 @@ public class Matrix implements MatrixADT {
       throw new MatrixDimensionsMismatchException("Different number of columns");
   }
 
+  /*
+   * Add matrices
+   * 
+   * @see https://en.wikipedia.org/wiki/Matrix_addition#Entrywise_sum
+   */
   @Override
   public Matrix add(MatrixADT other) throws MatrixDimensionsMismatchException {
     sameDimensionCheck(other);
@@ -175,6 +191,9 @@ public class Matrix implements MatrixADT {
     return answerMatrix;
   }
 
+  /*
+   * Subtract matrices
+   */
   @Override
   public Matrix subtract(MatrixADT other) throws MatrixDimensionsMismatchException {
     sameDimensionCheck(other);
@@ -210,22 +229,22 @@ public class Matrix implements MatrixADT {
               answer.entry[i][j].add(this.getEntry(i, k).multiply(other.getEntry(k, j)));
     return answer;
   }
-  
+
   @Override
   public Matrix multiply(Number constant) {
     Matrix answer = copy();
     for (int i = 0; i < this.getNumberOfRow(); i++)
       for (int j = 0; j < this.getNumberOfColumn(); j++)
-          answer.entry[i][j] = answer.entry[i][j].multiply(constant);
+        answer.entry[i][j] = answer.entry[i][j].multiply(constant);
     return answer;
   }
-  
+
   @Override
   public Matrix dividedBy(Number constant) {
     Matrix answer = copy();
     for (int i = 0; i < this.getNumberOfRow(); i++)
       for (int j = 0; j < this.getNumberOfColumn(); j++)
-          answer.entry[i][j] = answer.entry[i][j].dividedBy(constant);
+        answer.entry[i][j] = answer.entry[i][j].dividedBy(constant);
     return answer;
   }
 
@@ -248,13 +267,19 @@ public class Matrix implements MatrixADT {
 
   /**
    * 
-   * A helper method that helps to calculate the matrix to the power of n, in which n must be a
+   * A private helper method that helps to calculate the matrix to the power of n when n is a
    * positive integer.
+   * 
+   * The algorithm used is exponentiation by squaring.
    * 
    * @param n given n, which must be a positive integer
    * @return the matrix to the power of n
+   * 
+   * @see https://en.wikipedia.org/wiki/Exponentiation_by_squaring
    */
-  public Matrix helperpow(int n) {
+  private Matrix helperpow(int n) {
+    if (n < 0)
+      throw new IllegalArgumentException("Parameter must be greater than 0.");
     if (n == 1)
       return copy();
     try {
@@ -310,11 +335,15 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * A private helper method that do partial pivoting at kth row, return whether the row is swapped
+   * 
+   * A private helper method that do partial pivoting at kth row, return whether the row is swapped.
    * 
    * @param k the row to do partial pivoting
-   * @return true if the row is swapped
-   * @throws SingularException if singular
+   * @return true if rows are swapped during the partial pivoting
+   * @throws SingularException if the pivot of this row is 0 and no rows have non-zero pivot can be
+   *         swapped with this row to make the pivot a non-zero number.
+   * 
+   * @see https://en.wikipedia.org/wiki/Pivot_element#Partial_and_complete_pivoting
    */
   private boolean partialPivoting(int k) throws SingularException {
     int pivotRow = k;
@@ -334,13 +363,17 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Do the forward elimination of the Gaussian Elimination. That is, eliminate the matrix to an
-   * Echelon form.
    * 
-   * @throws SingularException
+   * The first step of Gaussian-Elimination.
+   * 
+   * A private helper method that do the forward elimination of the Gaussian Elimination. That is,
+   * eliminate the matrix to an Echelon form.
+   * 
+   * @throws SingularException if the matrix cannot be eliminate into a upper triangle matrix with
+   *         no zero element on the main diagonal.
    * @return true if there are odd number of row swaps, false otherwise.
    */
-  public boolean forwardElimination() throws SingularException {
+  private boolean forwardElimination() throws SingularException {
     int N = getNumberOfRow();
     int M = getNumberOfColumn();
     boolean signChanged = false;
@@ -357,11 +390,16 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Do the backward elimination of the Gaussian Elimination. That is, eliminate the Echelon form.
    * 
-   * @throws SingularException
+   * The second step of Gaussian-Elimination.
+   * 
+   * A private helper method that do the backward elimination of the Gaussian Elimination. That is,
+   * eliminate the Echelon form.
+   * 
+   * @throws SingularException if the matrix cannot be eliminate into a diagnal triangle matrix with
+   *         no zero element on the main diagonal.
    */
-  public void backwardElimination() throws SingularException {
+  private void backwardElimination() throws SingularException {
     int N = getNumberOfRow();
     int M = getNumberOfColumn();
     for (int k = N - 1; k >= 0; k--) {
@@ -375,7 +413,10 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Simplify the matrix after elimination.
+   * 
+   * The third step of Gaussian-Elimination.
+   * 
+   * Simplify the matrix after elimination. Make sure that all elements on the main diagonal is 1.
    */
   public void simplifyAfterElimination() {
     int N = getNumberOfRow();
@@ -437,6 +478,11 @@ public class Matrix implements MatrixADT {
     return new Matrix(augmentedMatrixEntries);
   }
 
+  /**
+   * Find the inverse of the matrix by using Gaussian-Elimination on a augmentedMatrix.
+   * 
+   * @see https://en.wikipedia.org/wiki/Invertible_matrix#Gaussian_elimination
+   */
   @Override
   public Matrix inverse() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
@@ -446,15 +492,16 @@ public class Matrix implements MatrixADT {
       augmentedMatrix.backwardElimination();
       augmentedMatrix.simplifyAfterElimination();
     } catch (SingularException singularException) {
-      throw new ArithmeticException("The marix is not invertible!");
+      throw new ArithmeticException("The matrix is not invertible!");
     }
     return augmentedMatrix.subMatrix(0, N, N, 2 * N);
   }
 
   /**
-   * Return the product of the diagonal
+   * If the matrix is a square matrix, return the product of the diagonal.
+   * 
    * @return the product of the diagonal
-   * @throws MatrixDimensionsMismatchException 
+   * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix.
    */
   private Numeric productOfDiagonal() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
@@ -463,7 +510,11 @@ public class Matrix implements MatrixADT {
       ansNumeric = ansNumeric.multiply(entry[i][i]);
     return ansNumeric;
   }
-  
+
+  /**
+   * Find the determinant of the matrix by using Gaussian-Elimination method.
+   * 
+   */
   @Override
   public Numeric determinant() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
@@ -482,9 +533,11 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Calculate the norm of the matrix.
+   * Calculate the Frobenius norm of the matrix.
    * 
-   * @return the norm of the matrix.
+   * That is, find the square root of the sum of the square of all entries.
+   * 
+   * @see https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm
    */
   protected Numeric norm() {
     Numeric ans = new Numeric(0);
@@ -500,20 +553,28 @@ public class Matrix implements MatrixADT {
    * 
    * A private helper method that separate the matrix into column vectors.
    * 
-   * @return an array of row vectors representing the separated column vectors.
+   * @return an array of column vectors representing the separated column vectors.
+   * 
    */
   public ColumnVector[] toColumnVectors() {
     ColumnVector[] columnVectors = new ColumnVector[getNumberOfColumn()];
-    for(int j = 0; j < getNumberOfColumn(); j++) {
+    for (int j = 0; j < getNumberOfColumn(); j++) {
       Numeric[] columnContent = new Numeric[getNumberOfRow()];
-      for(int i = 0; i < getNumberOfRow(); i++) {
+      for (int i = 0; i < getNumberOfRow(); i++) {
         columnContent[i] = entry[i][j];
       }
       columnVectors[j] = new ColumnVector(columnContent);
     }
     return columnVectors;
   }
-  
+
+  /**
+   * 
+   * A private static helper method that combine an array of ColumnVector back to a matrix.
+   * 
+   * @param columnVectors an array of ColumnVector
+   * @return a matrix which is generated by combineing the column vectors.
+   */
   public static Matrix combineColumnVectorsToMatirx(ColumnVector[] columnVectors) {
     Numeric[][] entry = new Numeric[columnVectors[0].getNumberOfRow()][columnVectors.length];
     for (int i = 0; i < entry.length; i++)
@@ -521,34 +582,40 @@ public class Matrix implements MatrixADT {
         entry[i][j] = columnVectors[j].getEntry(i, 0);
     return new Matrix(entry);
   }
-  
+
+  /**
+   * Do QR decomposition using Gram–Schmidt process.
+   * 
+   * @see https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process
+   * @see https://en.wikipedia.org/wiki/QR_decomposition#Using_the_Gram%E2%80%93Schmidt_process
+   */
   @Override
-  public Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException{
+  public Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
     ColumnVector[] a = toColumnVectors();
     ColumnVector[] u = new ColumnVector[N];
     ColumnVector[] e = new ColumnVector[N];
-    
-    
-    for(int i = 0; i < N; i++) {
+
+    for (int i = 0; i < N; i++) {
       u[i] = a[i].copy();
-      for(int j = 0; j < i; j++) {
+      for (int j = 0; j < i; j++) {
         u[i] = new ColumnVector(u[i].subtract(e[j].multiply(a[i].innerProduct(e[j]))));
       }
       e[i] = new ColumnVector(u[i].dividedBy(u[i].norm()));
     }
-    
+
     Matrix Q = combineColumnVectorsToMatirx(e);
     Matrix R = Q.transpose().multiply(this);
-    
+
     return new Matrix[] {Q, R};
   };
-  
+
   /**
-   * Get an array of numeric which are the entries on the diagonal line.
+   * A private helper method that get an array of Numeric which are the entries on the diagonal
+   * line. The matrix must be square matrix.
    * 
-   * @return
-   * @throws MatrixDimensionsMismatchException
+   * @return an array of Numeric which is the enties on the diagonal line of the square matrix
+   * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix
    */
   private Numeric[] diagonal() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
@@ -557,18 +624,21 @@ public class Matrix implements MatrixADT {
       diagnal[i] = new Numeric(entry[i][i]);
     return diagnal;
   }
-  
+
+  /**
+   * Find the eigenvalue of the matrix by QR algorithm.
+   * 
+   * @see https://en.wikipedia.org/wiki/QR_algorithm
+   */
   @Override
   public Numeric[] eigenValues() throws MatrixDimensionsMismatchException {
-    int N = getSizeOfSquareMatrix();
     Matrix A = copy(), lastA;
-    Matrix Q, R;
     Matrix[] QRDecomposition;
     do {
       lastA = A.copy();
       QRDecomposition = A.QRDecomposition();
       A = QRDecomposition[1].multiply(QRDecomposition[0]);
-    } while(!Arrays.equals(A.diagonal(), lastA.diagonal()));
+    } while (!Arrays.equals(A.diagonal(), lastA.diagonal()));
     return A.diagonal();
   }
 }
