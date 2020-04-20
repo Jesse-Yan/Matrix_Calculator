@@ -174,7 +174,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
 
   private static double round(double value) {
     BigDecimal bigDecimal = new BigDecimal(Double.toString(value));
-    bigDecimal = bigDecimal.round(new MathContext(10));
+    bigDecimal = bigDecimal.round(new MathContext(MAXIMUM_SIGNIFICANT_FIGURE));
     return bigDecimal.doubleValue();
   }
 
