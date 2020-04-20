@@ -269,7 +269,24 @@ public class NumericTest {
   @Test
   public void test_fraction_addition() {
     try {
-      // TODO add more tests
+      assertEquals(Numeric.of(Fraction.of(1)).add(Fraction.of(1)), 2);
+      assertEquals(Numeric.of(new Fraction(1, 2)).add(new Fraction(3, 2)), 2);
+      assertEquals(Numeric.of(new Fraction(0, 2)).add(new Fraction(0, 2)), 0);
+      assertEquals(Numeric.of(new Fraction(1, 2)).add(new Fraction(-3, 2)), -1);
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * fraction addition with overflow
+   */
+  @Test
+  public void test_fraction_addition_with_overflow() {
+    try {
+      assertEquals(Numeric.of(new Fraction(1, 2147483647)).add(new Fraction(1, 2147483646)), 9.3132257526599982E-10);
+      
     } catch (Exception e) {
       e.printStackTrace();
     }

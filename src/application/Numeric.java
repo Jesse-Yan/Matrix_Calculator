@@ -1,7 +1,5 @@
 package application;
 
-import java.util.PrimitiveIterator.OfDouble;
-
 /**
  * The instance of this Numeric class represents a number, which can be a Integer, or a Fraction, or
  * a Double. It supports calculations like addition and subtraction, in which the number will be
@@ -70,7 +68,16 @@ public class Numeric extends Number implements Comparable<Numeric> {
         return new Numeric(thisNum.number.doubleValue() + otherNum.number.doubleValue());
       }
       if (thisNum.number instanceof Fraction || otherNum.number instanceof Fraction) {
-        return new Numeric(Fraction.of(thisNum.number).add(Fraction.of(otherNum.number)));
+        try {
+          return new Numeric(Fraction.of(thisNum.number).add(Fraction.of(otherNum.number)));
+        } catch (ArithmeticException arithmeticException) {
+          if(arithmeticException.getMessage().equals("integer overflow")) {
+            return new Numeric(thisNum.number.doubleValue() + otherNum.number.doubleValue());
+          }
+          else 
+            throw arithmeticException;
+        }
+        
       }
       if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
         return new Numeric(thisNum.number.longValue() + otherNum.number.longValue());
