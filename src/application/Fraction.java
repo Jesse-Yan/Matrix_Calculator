@@ -14,7 +14,11 @@ public class Fraction extends Number implements Comparable<Fraction> {
   private int denominator;
 
   /**
-   * Return a Fraction form of integer
+   * Receives a number and turn it to a fraction, only if:
+   * 1. it is an integer (Integer or Short)
+   * 2. itself is a fraction
+   * 
+   * Otherwise a ClassCastException will be thrown.
    * 
    * @param number the integer
    * @return the Fraction
@@ -25,17 +29,19 @@ public class Fraction extends Number implements Comparable<Fraction> {
     if (number instanceof Fraction) {
       return new Fraction((Fraction) number);
     }
-    throw new ClassCastException();
+    throw new ClassCastException("Cannot cast into a Fraction");
   }
 
   /**
    * Return a Fraction
    * 
-   * @param numerator
-   * @param denominator
-   * @return the Fraction
+   * @param numerator the numerator of the fraction
+   * @param denominator the denominator of the fraction
+   * @return the Fraction the returned fraction.
    */
   public static Fraction of(int numerator, int denominator) {
+    if(denominator == 0)
+      throw new ArithmeticException("/ by zero");
     return new Fraction(numerator, denominator);
   }
 
