@@ -3,6 +3,10 @@ package application;
 import java.util.List;
 import java.io.File;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -13,7 +17,9 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -25,12 +31,14 @@ import static java.util.stream.Collectors.toList;
 /**
  * This class is the Main class for JavaFx application
  * 
- * @author Jesse
+ * @author Jesse, archer
  *
  */
 public class Main extends Application {
 
   private final String lineSeparator = System.lineSeparator();
+  
+  int caretPosition;
 
   /**
    * This is the start method of the Main class
@@ -115,7 +123,6 @@ public class Main extends Application {
     VBox vBoxL = new VBox();
     TextField input = new TextField();
     input.setMaxWidth(360.0);
-    input.setEditable(false);
     TextArea result = new TextArea();
     result.setWrapText(true);
     result.setEditable(false);
@@ -151,20 +158,41 @@ public class Main extends Application {
         gridPaneL.add(button, column, row);
       }
     }
-
+    //take in runtime caret position
+    EventHandler<ActionEvent> textEvent = new EventHandler<ActionEvent>() {
+      public void handle(ActionEvent e) 
+      { 
+        caretPosition = input.getCaretPosition();
+      }       
+    };
+    //detect when mouse clicked
+    EventHandler<MouseEvent> textEvent1 = new EventHandler<MouseEvent>() { 
+      @Override 
+      public void handle(MouseEvent e) { 
+        input.fireEvent(new ActionEvent());
+      } 
+   };   
+    
+    input.addEventFilter(MouseEvent.MOUSE_CLICKED, textEvent1);
+    input.setOnAction(textEvent);
     // Add event handler to the buttons
 
     buttons.stream().forEach(btn -> {
       btn.setOnAction(event -> {
         String temp = btn.getText();
+        
         if (temp.equals("exp")) {
-          input.appendText("exp");
+          input.insertText(caretPosition, "exp");
+          ++caretPosition;
         } else if (temp.equals("y" + "\u221A" + "x")) {
-          input.appendText("\u221A");
+          input.insertText(caretPosition,"\u221A");
+          ++caretPosition;
         } else if (temp.equals("  x^y  ")) {
-          input.appendText("^");
+          input.insertText(caretPosition,"^");
+          ++caretPosition;
         } else if (temp.equals("   C   ")) {
           input.clear();
+          caretPosition=0;
         } else if (temp.equals("  <-   ")) {
           try {
             input.setText(
@@ -185,7 +213,8 @@ public class Main extends Application {
                 "The equation you entered cannot be calculated\nPlease press 'C' and try again");
           }
         } else {
-          input.appendText(temp.replace("x", "").trim());
+          input.insertText(caretPosition,temp.replace("x", "").trim());
+          ++caretPosition;
         }
       });
     });
