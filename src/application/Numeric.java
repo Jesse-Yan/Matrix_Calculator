@@ -191,6 +191,39 @@ public class Numeric extends Number implements Comparable<Numeric> {
     return this.dividedBy(new Numeric(other));
   }
 
+  private static boolean isPerfectSquare(int x) {
+    double sqrt = Math.sqrt(x);
+    int sqrtInt = (int) Math.floor(sqrt);
+    return sqrtInt * sqrtInt == x;
+  }
+
+  private static Integer perfectSquareRoot(int x) {
+    double sqrt = Math.sqrt(x);
+    int sqrtInt = (int) Math.floor(sqrt);
+    return sqrtInt;
+  }
+
+  /**
+   * 
+   * Get the square root of this Numeric instance.
+   * 
+   * @return the square root of this Numeric instance.
+   */
+  public Numeric sqrt() {
+    Numeric thisNum = new Numeric(this);
+    if (thisNum.number instanceof Integer && isPerfectSquare((Integer) thisNum.number)) {
+      return new Numeric(perfectSquareRoot((Integer) thisNum.number));
+    }
+    if (thisNum.number instanceof Fraction
+        && isPerfectSquare(((Fraction) thisNum.number).getNumerator())
+        && isPerfectSquare(((Fraction) thisNum.number).getDenominator())) {
+      return new Numeric(new Fraction(perfectSquareRoot(((Fraction) thisNum.number).getNumerator()),
+          perfectSquareRoot(((Fraction) thisNum.number).getDenominator())));
+    } else {
+      return new Numeric(Math.sqrt(thisNum.number.doubleValue()));
+    }
+  }
+
   /**
    * Round a given double to having at most MAXIMUM_SIGNIFICANT_FIGURE significant figures.
    * 
@@ -285,6 +318,9 @@ public class Numeric extends Number implements Comparable<Numeric> {
     } catch (Exception e) {
       System.out.println(e.getMessage()); // "/ by zero"
     }
+    
+    System.out.println(Numeric.of(new Fraction(4, 9)).sqrt()); 
+    System.out.println(Numeric.of(2).sqrt()); 
   }
 
 }
