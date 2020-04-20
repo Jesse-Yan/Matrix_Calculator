@@ -37,7 +37,7 @@ import static java.util.stream.Collectors.toList;
 public class Main extends Application {
 
   private final String lineSeparator = System.lineSeparator();
-  
+
   int caretPosition;
 
   /**
@@ -158,21 +158,20 @@ public class Main extends Application {
         gridPaneL.add(button, column, row);
       }
     }
-    //take in runtime caret position
+    // take in runtime caret position
     EventHandler<ActionEvent> textEvent = new EventHandler<ActionEvent>() {
-      public void handle(ActionEvent e) 
-      { 
+      public void handle(ActionEvent e) {
         caretPosition = input.getCaretPosition();
-      }       
+      }
     };
-    //detect when mouse clicked
-    EventHandler<MouseEvent> textEvent1 = new EventHandler<MouseEvent>() { 
-      @Override 
-      public void handle(MouseEvent e) { 
+    // detect when mouse clicked
+    EventHandler<MouseEvent> textEvent1 = new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
         input.fireEvent(new ActionEvent());
-      } 
-   };   
-    
+      }
+    };
+
     input.addEventFilter(MouseEvent.MOUSE_CLICKED, textEvent1);
     input.setOnAction(textEvent);
     // Add event handler to the buttons
@@ -180,19 +179,19 @@ public class Main extends Application {
     buttons.stream().forEach(btn -> {
       btn.setOnAction(event -> {
         String temp = btn.getText();
-        
+
         if (temp.equals("exp")) {
           input.insertText(caretPosition, "exp");
           ++caretPosition;
         } else if (temp.equals("y" + "\u221A" + "x")) {
-          input.insertText(caretPosition,"\u221A");
+          input.insertText(caretPosition, "\u221A");
           ++caretPosition;
         } else if (temp.equals("  x^y  ")) {
-          input.insertText(caretPosition,"^");
+          input.insertText(caretPosition, "^");
           ++caretPosition;
         } else if (temp.equals("   C   ")) {
           input.clear();
-          caretPosition=0;
+          caretPosition = 0;
         } else if (temp.equals("  <-   ")) {
           try {
             input.setText(
@@ -213,7 +212,7 @@ public class Main extends Application {
                 "The equation you entered cannot be calculated\nPlease press 'C' and try again");
           }
         } else {
-          input.insertText(caretPosition,temp.replace("x", "").trim());
+          input.insertText(caretPosition, temp.replace("x", "").trim());
           ++caretPosition;
         }
       });
