@@ -19,7 +19,7 @@ public class Calculator {
   /**
    * build up calculation expression and calculate result.
    * 
-   * @param  expression -String math expression
+   * @param  expression String math expression
    * @return            result after calculation
    */
   public static double calculate(String expression) {
