@@ -2,7 +2,6 @@ package application;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
 
 /**
  * The instance of this Numeric class represents a number, which can be a Integer, or a Fraction, or
@@ -191,12 +190,26 @@ public class Numeric extends Number implements Comparable<Numeric> {
     return this.dividedBy(new Numeric(other));
   }
 
+  /**
+   * 
+   * Check whether the given integer x is a perfect square number
+   * 
+   * @param x a given integer
+   * @return true if x is a perfect square number, false otherwise.
+   */
   private static boolean isPerfectSquare(int x) {
     double sqrt = Math.sqrt(x);
     int sqrtInt = (int) Math.floor(sqrt);
     return sqrtInt * sqrtInt == x;
   }
 
+  /**
+   * 
+   * If x is a perfect square number, get its square root.
+   * 
+   * @param x a given integer
+   * @return a integer which is the square root of x.
+   */
   private static Integer perfectSquareRoot(int x) {
     double sqrt = Math.sqrt(x);
     int sqrtInt = (int) Math.floor(sqrt);
@@ -281,14 +294,12 @@ public class Numeric extends Number implements Comparable<Numeric> {
 
   @Override
   public float floatValue() {
-    // TODO Auto-generated method stub
-    return 0;
+    return (float) number.doubleValue();
   }
 
   @Override
   public double doubleValue() {
-    // TODO Auto-generated method stub
-    return 0;
+    return number.doubleValue();
   }
 
   /**
@@ -319,8 +330,8 @@ public class Numeric extends Number implements Comparable<Numeric> {
       System.out.println(e.getMessage()); // "/ by zero"
     }
     
-    System.out.println(Numeric.of(new Fraction(4, 9)).sqrt()); 
-    System.out.println(Numeric.of(2).sqrt()); 
+    System.out.println(Numeric.of(new Fraction(4, 9)).sqrt()); // sqrt(4/9) = 2/3
+    System.out.println(Numeric.of(2).sqrt());  // sqrt(2) = 1.41421...
   }
 
 }
