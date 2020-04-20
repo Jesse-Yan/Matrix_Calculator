@@ -85,7 +85,7 @@ public class MatrixTest {
       MatrixADT matrix1 = new Matrix(new Integer[][] {{-1, 0, 1}, {2, 3, 4}});
       MatrixADT matrix2 = new Matrix(new Integer[][] {{-1, 0, -1}, {-4, 0, 10}});
       MatrixADT expectedMatrix = new Matrix(new Integer[][] {{0, 0, 2}, {6, 3, -6}});
-      assertEquals(expectedMatrix.toString(), matrix1.subtract(matrix2).toString());
+      assertEquals(expectedMatrix, matrix1.subtract(matrix2));
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -100,7 +100,7 @@ public class MatrixTest {
       MatrixADT matrix1 = new Matrix(new Integer[][] {{1, 2}, {-4, 0}, {0, -6}});
       MatrixADT matrix2 = new Matrix(new Integer[][] {{4, 3, 0}, {-2, 0, -5}});
       MatrixADT expectedMatrix = new Matrix(new Integer[][] {{0, 3, -10}, {-16, -12, 0}, {12, 0, 30}});
-      assertEquals(expectedMatrix.toString(), matrix1.multiply(matrix2).toString());
+      assertEquals(expectedMatrix, matrix1.multiply(matrix2));
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -112,35 +112,35 @@ public class MatrixTest {
       MatrixADT matrix, expectedMatirx;
       matrix = new Matrix(new Integer[][] {{1, 1}, {1, 0}});
       expectedMatirx = new Matrix(new Integer[][] {{55, 34}, {34, 21}});
-      assertEquals(expectedMatirx.toString(), matrix.pow(9).toString());
+      assertEquals(expectedMatirx, matrix.pow(9));
       
       matrix = new Matrix(new Integer[][] {{1, 2}, {3, 4}});
       expectedMatirx = new Matrix(new Integer[][] {{1069, 1558}, {2337, 3406}});
-      assertEquals(expectedMatirx.toString(), matrix.pow(5).toString());
+      assertEquals(expectedMatirx, matrix.pow(5));
       
       matrix = new Matrix(new Integer[][] {{1, 2}, {3, 4}});
       expectedMatirx = new Matrix(new Integer[][] {{1069, 1558}, {2337, 3406}});
-      assertEquals(expectedMatirx.toString(), matrix.pow(5).toString());
+      assertEquals(expectedMatirx, matrix.pow(5));
       
       matrix = new Matrix(new Integer[][] {{1, 1}, {1, 0}});
       expectedMatirx = new Matrix(new Integer[][] {{5, -8}, {-8, 13}});
-      assertEquals(expectedMatirx.toString(), matrix.pow(-6).toString());
+      assertEquals(expectedMatirx, matrix.pow(-6));
       
       matrix = new Matrix(new Integer[][] {{1, 1}, {1, 0}});
       expectedMatirx = new Matrix(new Integer[][] {{1, 0}, {0, 1}});
-      assertEquals(expectedMatirx.toString(), matrix.pow(0).toString());
+      assertEquals(expectedMatirx, matrix.pow(0));
       
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
       expectedMatirx = new Matrix(new Integer[][] {{468, 576, 684}, {1062, 1305, 1548}, {1656, 2034, 2412}});
-      assertEquals(expectedMatirx.toString(), matrix.pow(3).toString());
+      assertEquals(expectedMatirx, matrix.pow(3));
       
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
       expectedMatirx = new Matrix(new Integer[][] {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
-      assertEquals(expectedMatirx.toString(), matrix.pow(0).toString());
+      assertEquals(expectedMatirx, matrix.pow(0));
       
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
       try {
-        matrix.pow(-2).toString();
+        matrix.pow(-2);
         fail("The matrix is not invertible, but no ArithmeticException thrown");
       } catch (ArithmeticException arithmeticException) {
         // Expected
@@ -159,7 +159,7 @@ public class MatrixTest {
       
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}});
       expectedMatrix = new Matrix(new Integer[][] {{1, 4}, {2, 5}, {3, 6}});
-      assertEquals(expectedMatrix.toString(), matrix.transpose().toString());
+      assertEquals(expectedMatrix, matrix.transpose());
       
     } catch (Exception e) {
       e.printStackTrace();
@@ -193,7 +193,7 @@ public class MatrixTest {
     try {
       MatrixADT matrix;
       matrix = new Matrix(new Integer[][] {{1, 2}, {3, 5}});
-      assertEquals(new Matrix(new Integer[][] {{-5, 2}, {3, -1}}).toString(), matrix.inverse().toString());
+      assertEquals(new Matrix(new Integer[][] {{-5, 2}, {3, -1}}), matrix.inverse());
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
       try {
         matrix.inverse();
@@ -213,12 +213,12 @@ public class MatrixTest {
       rowVector1 = new RowVector(new Integer[] {1, 2, 3, 4});
       rowVector2 = new RowVector(new Integer[] {-1, 0, 1, -2});
       rowVector3 = new RowVector(new Integer[] {0, 2, 4, 2});
-      assertEquals(rowVector3.toString(), rowVector1.add(rowVector2).toString());
+      assertEquals(rowVector3, rowVector1.add(rowVector2));
       
       rowVector1 = new ColumnVector(new Integer[] {1, 2, 3, 4});
       rowVector2 = new ColumnVector(new Integer[] {-1, 0, 1, -2});
       rowVector3 = new ColumnVector(new Integer[] {0, 2, 4, 2});
-      assertEquals(rowVector3.toString(), rowVector1.add(rowVector2).toString());
+      assertEquals(rowVector3, rowVector1.add(rowVector2));
       
       
     } catch (Exception e) {
