@@ -101,10 +101,22 @@ public class Matrix implements MatrixADT {
   }
 
   @Override
-  protected Matrix clone() {
-    return new Matrix(entry);
+  public boolean equals(Object obj) {
+    if(obj instanceof Matrix) {
+      try {
+        sameDimensionCheck(((Matrix) obj));
+      } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
+        return false;
+      }
+      for (int i = 0; i < entry.length; i++) 
+        for (int j = 0; j < entry[0].length; j++)
+          if(!entry[i][j].equals(((Matrix) obj).entry[i][j]))
+            return false;
+      return true;
+    }
+    return false;
   }
-  
+
   @Override
   public Matrix transpose() {
     Numeric[][] newEntiry = new Numeric[getNumberOfColumn()][getNumberOfRow()];
@@ -115,14 +127,16 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * A private helper method that checks whether the given matrix is able to be added on this
-   * matrix. If the given matrix cannot be added, it will throw a MatrixDimensionsMismatchException,
-   * otherwise nothing would happen.
+   * A private helper method that checks whether the given matrix has exactly the same number of
+   * rows and the same number of columns with this matrix. If they have exactly the same number of
+   * rows and columns, nothing will happen, otherwise it will throw a
+   * MatrixDimensionsMismatchException,
    * 
    * @param other the given matrix
-   * @throws MatrixDimensionsMismatchException if the given matrix cannot be added on this matrix.
+   * @throws MatrixDimensionsMismatchException if the given matrix do not have the exactly same
+   *         dimensions with this one.
    */
-  private void additionCheck(MatrixADT other) throws MatrixDimensionsMismatchException {
+  private void sameDimensionCheck(MatrixADT other) throws MatrixDimensionsMismatchException {
     if (this.getNumberOfRow() != other.getNumberOfRow())
       throw new MatrixDimensionsMismatchException("Different number of rows");
     if (this.getNumberOfColumn() != other.getNumberOfColumn())
@@ -131,7 +145,7 @@ public class Matrix implements MatrixADT {
 
   @Override
   public Matrix add(MatrixADT other) throws MatrixDimensionsMismatchException {
-    additionCheck(other);
+    sameDimensionCheck(other);
     Matrix answerMatrix = new Matrix(this.entry);
     for (int i = 0; i < answerMatrix.getNumberOfRow(); i++)
       for (int j = 0; j < answerMatrix.getNumberOfColumn(); j++)
@@ -141,7 +155,7 @@ public class Matrix implements MatrixADT {
 
   @Override
   public Matrix subtract(MatrixADT other) throws MatrixDimensionsMismatchException {
-    additionCheck(other);
+    sameDimensionCheck(other);
     Matrix answer = new Matrix(this.entry);
     for (int i = 0; i < answer.getNumberOfRow(); i++)
       for (int j = 0; j < answer.getNumberOfColumn(); j++)
@@ -211,11 +225,11 @@ public class Matrix implements MatrixADT {
   @Override
   public Matrix pow(int n) throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
-    if(n == 0)
+    if (n == 0)
       return identityMatrixWithSizeOf(N);
-    else if(n > 0)
+    else if (n > 0)
       return helperpow(n);
-    else if(n < 0)
+    else if (n < 0)
       return inverse().helperpow(-n);
     return null;
   }
@@ -407,9 +421,10 @@ public class Matrix implements MatrixADT {
       ansNumeric = new Numeric(0).subtract(ansNumeric);
     return ansNumeric;
   }
-  
+
   /**
    * Calculate the norm of the matrix.
+   * 
    * @return the norm of the matrix.
    */
   private Numeric Norm() {

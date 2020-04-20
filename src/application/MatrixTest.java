@@ -29,7 +29,7 @@ public class MatrixTest {
    * Test the constructor and getEntry
    */
   @Test
-  public void test000_constructor_and_getEntry() {
+  public void test_constructor_and_getEntry() {
     try {
       MatrixADT matrix = new Matrix(new Integer[][] {{-1, 0, 1}, {2, 3, 4}});
       assertEquals(-1, matrix.getEntry(0, 0).intValue());
@@ -44,15 +44,33 @@ public class MatrixTest {
   }
   
   /**
+   * Test equal to
+   */
+  @Test
+  public void test_equal_to() {
+    try {
+      MatrixADT matrix1 = new Matrix(new Integer[][] {{-1, 0, 1}, {2, 3, 4}});
+      MatrixADT matrix2 = new Matrix(new Integer[][] {{-1, 0, 1}, {2, 3, 4}});
+      assertEquals(matrix1, matrix2);
+      matrix2 = new Matrix(new Integer[][] {{1, 0, 1}, {2, 3, 4}});
+      assertNotEquals(matrix1, matrix2);
+      matrix2 = new Matrix(new Integer[][] {{-1, 0}, {2, 3}});
+      assertNotEquals(matrix1, matrix2);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
    * Test addition
    */
   @Test
-  public void test001_addition() {
+  public void test_addition() {
     try {
       MatrixADT matrix1 = new Matrix(new Integer[][] {{-1, 0, 1}, {2, 3, 4}});
       MatrixADT matrix2 = new Matrix(new Integer[][] {{-1, 0, -1}, {-4, 0, 10}});
       MatrixADT expectedMatrix = new Matrix(new Integer[][] {{-2, 0, 0}, {-2, 3, 14}});
-      assertEquals(expectedMatrix.toString(), matrix1.add(matrix2).toString());
+      assertEquals(expectedMatrix, matrix1.add(matrix2));
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -62,7 +80,7 @@ public class MatrixTest {
    * Test subtraction
    */
   @Test
-  public void test002_subtraction() {
+  public void test_subtraction() {
     try {
       MatrixADT matrix1 = new Matrix(new Integer[][] {{-1, 0, 1}, {2, 3, 4}});
       MatrixADT matrix2 = new Matrix(new Integer[][] {{-1, 0, -1}, {-4, 0, 10}});
@@ -77,7 +95,7 @@ public class MatrixTest {
    * Test multiplication
    */
   @Test
-  public void test003_multiplication() {
+  public void test_multiplication() {
     try {
       MatrixADT matrix1 = new Matrix(new Integer[][] {{1, 2}, {-4, 0}, {0, -6}});
       MatrixADT matrix2 = new Matrix(new Integer[][] {{4, 3, 0}, {-2, 0, -5}});
