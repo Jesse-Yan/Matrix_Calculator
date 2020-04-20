@@ -1,5 +1,7 @@
 package application;
 
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+
 /**
  * The ADT for matrix.
  * 
@@ -25,7 +27,7 @@ public interface MatrixADT {
   /**
    * Getter of Matrix entry in certain position
    * 
-   * @param row    - row number where entry is
+   * @param row - row number where entry is
    * @param column - column where entry is
    * @return - a Numeric Object that represent entry
    */
@@ -37,7 +39,7 @@ public interface MatrixADT {
    * @return the transpose of the Matrix
    */
   MatrixADT transpose();
-  
+
   /**
    * ADD two Matrix
    * 
@@ -64,7 +66,23 @@ public interface MatrixADT {
    * @throws MatrixDimensionsMismatchException - when properties of Matrix mismatch
    */
   MatrixADT multiply(MatrixADT other) throws MatrixDimensionsMismatchException;
-  
+
+  /**
+   * multiply Matrix by a constant number (which can be int, double, Fraction, Numeric ...)
+   * 
+   * @param constant - a constant that being multiply to the matrix
+   * @return - Result Matrix
+   */
+  MatrixADT multiply(Number constant);
+
+  /**
+   * divide the matrix by a constant number (which can be int, double, Fraction, Numeric ...)
+   * 
+   * @param constant - a constant that divide the matrix
+   * @return - Result Matrix
+   */
+  MatrixADT dividedBy(Number constant);
+
   /**
    * Get the matrix to the power of n
    * 
@@ -80,7 +98,7 @@ public interface MatrixADT {
    * @return matrix that been inverted
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
    */
-  MatrixADT inverse()  throws MatrixDimensionsMismatchException;
+  MatrixADT inverse() throws MatrixDimensionsMismatchException;
 
   /**
    * get determinant of matrix
@@ -89,7 +107,9 @@ public interface MatrixADT {
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
    */
   Numeric determinant() throws MatrixDimensionsMismatchException;
-  
+
+  Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException;
+
   /**
    * get EigenValue of matrix
    * 

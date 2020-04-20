@@ -188,6 +188,24 @@ public class Matrix implements MatrixADT {
               answer.entry[i][j].add(this.getEntry(i, k).multiply(other.getEntry(k, j)));
     return answer;
   }
+  
+  @Override
+  public Matrix multiply(Number constant) {
+    Matrix answer = new Matrix(entry);
+    for (int i = 0; i < this.getNumberOfRow(); i++)
+      for (int j = 0; j < this.getNumberOfColumn(); j++)
+          answer.entry[i][j] = answer.entry[i][j].multiply(constant);
+    return answer;
+  }
+  
+  @Override
+  public Matrix dividedBy(Number constant) {
+    Matrix answer = new Matrix(entry);
+    for (int i = 0; i < this.getNumberOfRow(); i++)
+      for (int j = 0; j < this.getNumberOfColumn(); j++)
+          answer.entry[i][j] = answer.entry[i][j].dividedBy(constant);
+    return answer;
+  }
 
   /**
    * 
@@ -446,8 +464,15 @@ public class Matrix implements MatrixADT {
   }
 
   @Override
+  public Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException{
+    return null;
+  };
+  
+  @Override
   public Numeric eigenValue() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
     return null;
   }
+
+  
 }
