@@ -584,7 +584,7 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Do QR decomposition using Gram–Schmidt process.
+   * Do QR decomposition using Gramï¿½Schmidt process.
    * 
    * @see https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process
    * @see https://en.wikipedia.org/wiki/QR_decomposition#Using_the_Gram%E2%80%93Schmidt_process
