@@ -69,7 +69,7 @@ public interface MatrixADT {
    * Get the matrix to the power of n
    * 
    * @param n - given n
-   * @return - Result Matrix
+   * @return - the matrix to the power of n
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
    */
   MatrixADT pow(int n) throws MatrixDimensionsMismatchException;

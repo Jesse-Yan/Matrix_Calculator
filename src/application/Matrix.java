@@ -102,15 +102,15 @@ public class Matrix implements MatrixADT {
 
   @Override
   public boolean equals(Object obj) {
-    if(obj instanceof Matrix) {
+    if (obj instanceof Matrix) {
       try {
         sameDimensionCheck(((Matrix) obj));
       } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
         return false;
       }
-      for (int i = 0; i < entry.length; i++) 
+      for (int i = 0; i < entry.length; i++)
         for (int j = 0; j < entry[0].length; j++)
-          if(!entry[i][j].equals(((Matrix) obj).entry[i][j]))
+          if (!entry[i][j].equals(((Matrix) obj).entry[i][j]))
             return false;
       return true;
     }
@@ -206,6 +206,14 @@ public class Matrix implements MatrixADT {
     return getNumberOfRow();
   }
 
+  /**
+   * 
+   * A helper method that helps to calculate the matrix to the power of n, in which n must be a
+   * positive integer.
+   * 
+   * @param n given n, which must be a positive integer
+   * @return the matrix to the power of n
+   */
   public Matrix helperpow(int n) {
     if (n == 1)
       return new Matrix(entry);
@@ -262,7 +270,7 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * A pivate helper method that do partial pivoting at kth row, return whether the row is swapped
+   * A private helper method that do partial pivoting at kth row, return whether the row is swapped
    * 
    * @param k the row to do partial pivoting
    * @return true if the row is swapped
