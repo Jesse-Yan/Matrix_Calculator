@@ -179,7 +179,8 @@ public class Main extends Application {
         } else if (temp.equals("  <-   ")) {
           try {
             input.setText(
-                input.getText().substring(0, input.getText().length() - 1));
+                input.getText().substring(0, caretPosition - 1) + input.getText().substring(caretPosition));
+            caretPosition--;
           } catch (Exception e) {
 
           }
