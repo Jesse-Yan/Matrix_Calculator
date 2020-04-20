@@ -155,24 +155,29 @@ public class Main extends Application {
         gridPaneL.add(button, column, row);
       }
     }
-    // take in runtime caret position
-    EventHandler<ActionEvent> textEvent = new EventHandler<ActionEvent>() {
-      public void handle(ActionEvent e) {
-        caretPosition = input.getCaretPosition();
-      }
-    };
-    // detect when mouse clicked
-    EventHandler<MouseEvent> textEvent1 = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        input.fireEvent(new ActionEvent());
-      }
-    };
-
-    input.addEventFilter(MouseEvent.MOUSE_CLICKED, textEvent1);
-    input.setOnAction(textEvent);
+    
+//    // take in runtime caret position
+//    EventHandler<ActionEvent> textEvent = new EventHandler<ActionEvent>() {
+//      public void handle(ActionEvent e) {
+//        caretPosition = input.getCaretPosition();
+//      }
+//    };
+//    // detect when mouse clicked
+//    EventHandler<MouseEvent> textEvent1 = new EventHandler<MouseEvent>() {
+//      @Override
+//      public void handle(MouseEvent e) {
+//        input.fireEvent(new ActionEvent());
+//      }
+//    };
+//
+//    input.addEventFilter(MouseEvent.MOUSE_CLICKED, textEvent1);
+//    input.setOnAction(textEvent);
+    
+    // Set the caretPosition
+    input.setOnMouseClicked(e -> {
+      caretPosition = input.getCaretPosition();
+    });
     // Add event handler to the buttons
-
     buttons.stream().forEach(btn -> {
       btn.setOnAction(event -> {
         String temp = btn.getText();
