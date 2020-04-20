@@ -1,5 +1,9 @@
 package application;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+
 /**
  * The instance of this Numeric class represents a number, which can be a Integer, or a Fraction, or
  * a Double. It supports calculations like addition and subtraction, in which the number will be
@@ -12,6 +16,13 @@ package application;
  *
  */
 public class Numeric extends Number implements Comparable<Numeric> {
+
+  /**
+   * Since there are float error. Two doubles are considered the same number if their first 12
+   * significant digits are same and have same exponent number.
+   */
+  final static int MAXIMUM_SIGNIFICANT_FIGURE = 12;
+
   /**
    * A private Object representing the number, which can only be a Integer, or a Fraction, or a
    * Double.
@@ -44,8 +55,8 @@ public class Numeric extends Number implements Comparable<Numeric> {
       this.number = number.doubleValue();
     }
   }
-  
-  public static Numeric of (Number number) {
+
+  public static Numeric of(Number number) {
     return new Numeric(number);
   }
 
@@ -61,7 +72,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
    * @return the sum
    */
   public Numeric add(Number other) {
-    if(other instanceof Numeric) {
+    if (other instanceof Numeric) {
       Numeric otherNum = new Numeric(other);
       Numeric thisNum = new Numeric(this);
       if (thisNum.number instanceof Double || otherNum.number instanceof Double) {
@@ -71,19 +82,19 @@ public class Numeric extends Number implements Comparable<Numeric> {
         try {
           return new Numeric(Fraction.of(thisNum.number).add(Fraction.of(otherNum.number)));
         } catch (ArithmeticException arithmeticException) {
-          if(arithmeticException.getMessage().equals("integer overflow")) {
+          if (arithmeticException.getMessage().equals("integer overflow")) {
             return new Numeric(thisNum.number.doubleValue() + otherNum.number.doubleValue());
-          }
-          else 
+          } else
             throw arithmeticException;
         }
-        
+
       }
       if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
         return new Numeric(thisNum.number.longValue() + otherNum.number.longValue());
       }
-      
-      throw new ClassCastException(thisNum.number.getClass() + ":" + otherNum.number.getClass() + ": Cannot cast to Integer or Double or Fraction");
+
+      throw new ClassCastException(thisNum.number.getClass() + ":" + otherNum.number.getClass()
+          + ": Cannot cast to Integer or Double or Fraction");
     }
     return this.add(new Numeric(other));
   }
@@ -95,7 +106,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
    * @return the difference
    */
   public Numeric subtract(Number other) {
-    if(other instanceof Numeric) {
+    if (other instanceof Numeric) {
       Numeric otherNum = new Numeric(other);
       Numeric thisNum = new Numeric(this);
       if (thisNum.number instanceof Double || otherNum.number instanceof Double) {
@@ -119,7 +130,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
    * @return the product
    */
   public Numeric multiply(Number other) {
-    if(other instanceof Numeric) {
+    if (other instanceof Numeric) {
       Numeric otherNum = new Numeric(other);
       Numeric thisNum = new Numeric(this);
       if (thisNum.number instanceof Double || otherNum.number instanceof Double) {
@@ -143,7 +154,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
    * @return the quotient
    */
   public Numeric dividedBy(Number other) {
-    if(other instanceof Numeric) {
+    if (other instanceof Numeric) {
       Numeric otherNum = new Numeric(other);
       Numeric thisNum = new Numeric(this);
       if (thisNum.number instanceof Double || otherNum.number instanceof Double) {
@@ -161,13 +172,19 @@ public class Numeric extends Number implements Comparable<Numeric> {
   }
 
 
+  private static double round(double value) {
+    BigDecimal bigDecimal = new BigDecimal(Double.toString(value));
+    bigDecimal = bigDecimal.round(new MathContext(10));
+    return bigDecimal.doubleValue();
+  }
+
   @Override
   public int compareTo(Numeric other) {
     other = new Numeric(other);
     Numeric thisNum = new Numeric(this);
     if (thisNum.number instanceof Double || other.number instanceof Double) {
-      return Double.valueOf(thisNum.number.doubleValue())
-          .compareTo(Double.valueOf(other.number.doubleValue()));
+      return Double.valueOf(round(thisNum.number.doubleValue()))
+          .compareTo(Double.valueOf(round(other.number.doubleValue())));
     }
     if (thisNum.number instanceof Fraction || other.number instanceof Fraction) {
       return (Fraction.of(thisNum.number).compareTo(Fraction.of(other.number)));
@@ -178,12 +195,12 @@ public class Numeric extends Number implements Comparable<Numeric> {
     }
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
-  
+
   @Override
   public boolean equals(Object obj) {
     if (obj instanceof Numeric)
       return compareTo((Numeric) obj) == 0;
-    else if(obj instanceof Number)
+    else if (obj instanceof Number)
       return compareTo(new Numeric((Number) obj)) == 0;
     return false;
   }
@@ -215,7 +232,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
     // TODO Auto-generated method stub
     return 0;
   }
-  
+
   /**
    * A main method, just for test and demo.
    * 
