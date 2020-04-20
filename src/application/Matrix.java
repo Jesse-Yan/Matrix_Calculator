@@ -48,7 +48,7 @@ public class Matrix implements MatrixADT {
   public Matrix(Number[][] content) {
     entry = new Numeric[content.length][content[0].length];
     for (int i = 0; i < content.length; i++)
-      if (content[0][0] instanceof Numeric)
+      if (content[i] instanceof Numeric[])
         entry[i] = (Numeric[]) content[i].clone();
       else
         for (int j = 0; j < content[0].length; j++)
