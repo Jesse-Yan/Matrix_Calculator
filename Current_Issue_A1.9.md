@@ -5,6 +5,5 @@
 #### *keyboard input mismatch (newly input number doesn't add at cursor)
 
 # CODING ISSUE
-#### *missing singular exception (class: Matrix.java)
 #### *implemention issue at com.alibaba.fastjson.JSONObject (class: Parser.java)
 
