@@ -107,10 +107,10 @@ public class NumericTest {
           fail("Test " + i + " : " + x + "+" + y + ", which should be" + expectedAns + ". " + "But get" + calculatedAns + ". ");
         }
         if(Numeric.of(x).add(y).equals(expectedAns + 1)) {
-          fail("Test " + i + " : " + x + "+" + y + ", and get" + Numeric.of(x).add(y) + ", which should equal to " + expectedAns + " but not " + (expectedAns + 1) + ". ");
+          fail("Test " + i + " : " + x + "+" + y + ", and get" + calculatedAns + ", which should equal to " + expectedAns + " but not " + (expectedAns + 1) + ". ");
         }
         if(Numeric.of(x).add(y).equals(expectedAns - 1)) {
-          fail("Test " + i + " : " + x + "+" + y + ", and get" + Numeric.of(x).add(y) + ", which should equal to " + expectedAns + " but not " + (expectedAns - 1) + ". ");
+          fail("Test " + i + " : " + x + "+" + y + ", and get" + calculatedAns + ", which should equal to " + expectedAns + " but not " + (expectedAns - 1) + ". ");
         }
       }
     } catch (Exception e) {
@@ -152,11 +152,11 @@ public class NumericTest {
         if(!calculatedAns.equals(expectedAns)) {
           fail("Test " + i + " : " + x + "-" + y + ", which should be" + expectedAns + ". " + "But get" + calculatedAns + ". ");
         }
-        if(Numeric.of(x).add(y).equals(expectedAns + 1)) {
-          fail("Test " + i + " : " + x + "-" + y + ", and get" + Numeric.of(x).add(y) + ", which should equal to " + expectedAns + " but not " + (expectedAns + 1) + ". ");
+        if(calculatedAns.equals(expectedAns + 1)) {
+          fail("Test " + i + " : " + x + "-" + y + ", and get" + calculatedAns + ", which should equal to " + expectedAns + " but not " + (expectedAns + 1) + ". ");
         }
-        if(Numeric.of(x).add(y).equals(expectedAns - 1)) {
-          fail("Test " + i + " : " + x + "-" + y + ", and get" + Numeric.of(x).add(y) + ", which should equal to " + expectedAns + " but not " + (expectedAns - 1) + ". ");
+        if(calculatedAns.equals(expectedAns - 1)) {
+          fail("Test " + i + " : " + x + "-" + y + ", and get" + calculatedAns + ", which should equal to " + expectedAns + " but not " + (expectedAns - 1) + ". ");
         }
       }
     } catch (Exception e) {
@@ -217,12 +217,7 @@ public class NumericTest {
         if(!calculatedAns.equals(expectedAns)) {
           fail("Test " + i + " : " + x + "*" + y + ", which should be" + expectedAns + ". " + "But get" + calculatedAns + ". ");
         }
-        if(Numeric.of(x).add(y).equals(expectedAns + 1)) {
-          fail("Test " + i + " : " + x + "*" + y + ", and get" + Numeric.of(x).add(y) + ", which should equal to " + expectedAns + " but not " + (expectedAns + 1) + ". ");
-        }
-        if(Numeric.of(x).add(y).equals(expectedAns - 1)) {
-          fail("Test " + i + " : " + x + "*" + y + ", and get" + Numeric.of(x).add(y) + ", which should equal to " + expectedAns + " but not " + (expectedAns - 1) + ". ");
-        }
+        /** The float error is too large for an int * int **/
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -240,6 +235,33 @@ public class NumericTest {
       assertEquals("3", new Numeric(-9).dividedBy(-3).toString());
       assertEquals("-9/2", new Numeric(-9).dividedBy(2).toString());
       // TODO add more tests
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * integer division with random data. Random seed 1.
+   */
+  @Test
+  public void test_integer_division_random_data() {
+    try {
+      Random random = new Random(1);
+      for(int i = 0; i < 1000; i++) {
+        int x = random.nextInt();
+        int y = random.nextInt();
+        double expectedAns = (double)x / (double)y; 
+        Numeric calculatedAns = Numeric.of(new Fraction(x, y));
+        if(!calculatedAns.equals(expectedAns)) {
+          fail("Test " + i + " : " + x + "*" + y + ", which should be" + expectedAns + ". " + "But get" + calculatedAns + ". ");
+        }
+        if(calculatedAns.equals(expectedAns + 1)) {
+          fail("Test " + i + " : " + x + "*" + y + ", and get" + calculatedAns + ", which should equal to " + expectedAns + " but not " + (expectedAns + 1) + ". ");
+        }
+        if(calculatedAns.equals(expectedAns - 1)) {
+          fail("Test " + i + " : " + x + "*" + y + ", and get" + calculatedAns + ", which should equal to " + expectedAns + " but not " + (expectedAns - 1) + ". ");
+        }
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -322,6 +344,24 @@ public class NumericTest {
   @Test
   public void test_fraction_division() {
     try {
+      // TODO add more tests
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * fraction division - divided by 0
+   */
+  @Test
+  public void test_fraction_division_zero_divisor() {
+    try {
+      try {
+        new Numeric(new Fraction(3, 2)).dividedBy(new Fraction(1, 3).subtract(new Fraction(1, 3))).toString();
+        Assert.fail("Did not caught ArithmeticException");
+      } catch (ArithmeticException e) {
+        // Expected
+      }
       // TODO add more tests
     } catch (Exception e) {
       e.printStackTrace();

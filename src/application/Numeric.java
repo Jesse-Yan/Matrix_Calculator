@@ -87,7 +87,6 @@ public class Numeric extends Number implements Comparable<Numeric> {
           } else
             throw arithmeticException;
         }
-
       }
       if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
         return new Numeric(thisNum.number.longValue() + otherNum.number.longValue());
@@ -113,7 +112,14 @@ public class Numeric extends Number implements Comparable<Numeric> {
         return new Numeric(thisNum.number.doubleValue() - otherNum.number.doubleValue());
       }
       if (thisNum.number instanceof Fraction || otherNum.number instanceof Fraction) {
-        return new Numeric(Fraction.of(thisNum.number).subtract(Fraction.of(otherNum.number)));
+        try {
+          return new Numeric(Fraction.of(thisNum.number).subtract(Fraction.of(otherNum.number)));
+        } catch (ArithmeticException arithmeticException) {
+          if (arithmeticException.getMessage().equals("integer overflow")) {
+            return new Numeric(thisNum.number.doubleValue() - otherNum.number.doubleValue());
+          } else
+            throw arithmeticException;
+        }
       }
       if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
         return new Numeric(thisNum.number.longValue() - otherNum.number.longValue());
@@ -137,7 +143,14 @@ public class Numeric extends Number implements Comparable<Numeric> {
         return new Numeric(thisNum.number.doubleValue() * otherNum.number.doubleValue());
       }
       if (thisNum.number instanceof Fraction || otherNum.number instanceof Fraction) {
-        return new Numeric(Fraction.of(thisNum.number).multiply(Fraction.of(otherNum.number)));
+        try {
+          return new Numeric(Fraction.of(thisNum.number).multiply(Fraction.of(otherNum.number)));
+        } catch (ArithmeticException arithmeticException) {
+          if (arithmeticException.getMessage().equals("integer overflow")) {
+            return new Numeric(thisNum.number.doubleValue() * otherNum.number.doubleValue());
+          } else
+            throw arithmeticException;
+        }
       }
       if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
         return new Numeric(thisNum.number.longValue() * otherNum.number.longValue());
@@ -161,7 +174,14 @@ public class Numeric extends Number implements Comparable<Numeric> {
         return new Numeric(thisNum.number.doubleValue() / otherNum.number.doubleValue());
       }
       if (thisNum.number instanceof Fraction || otherNum.number instanceof Fraction) {
-        return new Numeric(Fraction.of(thisNum.number).dividedBy(Fraction.of(otherNum.number)));
+        try {
+          return new Numeric(Fraction.of(thisNum.number).dividedBy(Fraction.of(otherNum.number)));
+        } catch (ArithmeticException arithmeticException) {
+          if (arithmeticException.getMessage().equals("integer overflow")) {
+            return new Numeric(thisNum.number.doubleValue() / otherNum.number.doubleValue());
+          } else
+            throw arithmeticException;
+        }
       }
       if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
         return new Numeric(new Fraction(thisNum.number.intValue(), otherNum.number.intValue()));
@@ -171,7 +191,12 @@ public class Numeric extends Number implements Comparable<Numeric> {
     return this.dividedBy(new Numeric(other));
   }
 
-
+  /**
+   * Round a given double to having at most MAXIMUM_SIGNIFICANT_FIGURE significant figures.
+   * 
+   * @param value a given double
+   * @return the rounded double
+   */
   private static double round(double value) {
     BigDecimal bigDecimal = new BigDecimal(Double.toString(value));
     bigDecimal = bigDecimal.round(new MathContext(MAXIMUM_SIGNIFICANT_FIGURE));
