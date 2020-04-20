@@ -5,7 +5,7 @@ import com.sun.corba.se.impl.orb.NormalDataCollector;
 /**
  * This class represents a Matrix and defines required operation needed for a Matrix
  * 
- * @author Jesse
+ * @author Jesse, Houming Chen
  *
  */
 public class Matrix implements MatrixADT {
@@ -414,7 +414,12 @@ public class Matrix implements MatrixADT {
    */
   private Numeric Norm() {
     Numeric ans = new Numeric(0);
-    return ans;
+    for (int i = 0; i < entry.length; i++) {
+      for (int j = 0; j < entry[0].length; j++) {
+        ans = ans.add(entry[i][j].multiply(entry[i][j]));
+      }
+    }
+    return ans.sqrt();
   }
 
   @Override
