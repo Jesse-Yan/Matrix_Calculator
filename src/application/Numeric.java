@@ -1,5 +1,6 @@
 package application;
 
+import java.util.PrimitiveIterator.OfDouble;
 
 /**
  * The instance of this Numeric class represents a number, which can be a Integer, or a Fraction, or
@@ -44,6 +45,10 @@ public class Numeric extends Number implements Comparable<Numeric> {
     } else {
       this.number = number.doubleValue();
     }
+  }
+  
+  public static Numeric of (Number number) {
+    return new Numeric(number);
   }
 
   @Override
@@ -166,6 +171,15 @@ public class Numeric extends Number implements Comparable<Numeric> {
     }
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof Numeric)
+      return compareTo((Numeric) obj) == 0;
+    else if(obj instanceof Number)
+      return compareTo(new Numeric((Number) obj)) == 0;
+    return false;
+  }
 
   @Override
   public int intValue() {
@@ -177,8 +191,10 @@ public class Numeric extends Number implements Comparable<Numeric> {
 
   @Override
   public long longValue() {
-    // TODO Auto-generated method stub
-    return 0;
+    if (number instanceof Integer) {
+      return ((Integer) number).longValue();
+    }
+    throw new ClassCastException("Cannot cast to an Long");
   }
 
   @Override
