@@ -1,7 +1,11 @@
 # CS400_final_project
 This is the final project of ateam2 of CS 400 Spring 2020
 
-## contributer
+#### Course: cs400
+#### Semester: Fall 2019
+#### Project name: Social Network
+
+## contributer/Team member
 #### Chengpo Yan LEC001 xteam186 - cyan46@wisc.edu
 #### Jinming Zhang, LEC001, x-team132 - jzhang2279@wisc.edu
 #### Archer Li LEC001 x-team145 - zli885@wisc.edu
