@@ -1,6 +1,7 @@
 package application;
 
 import static org.junit.Assert.*;
+import java.util.Random;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,7 +31,7 @@ public class NumericTest {
   @Test
   public void test_integer_addition() {
     try {
-      assertEquals(Numeric.of(1).add(1), 2);
+      assertEquals(Numeric.of(0).add(0), 0);
       assertEquals(Numeric.of(1).add(1), 2);
       assertEquals(Numeric.of(8).add(7), 15);
       assertEquals(Numeric.of(0).add(1), 1);
@@ -41,6 +42,7 @@ public class NumericTest {
       assertEquals(Numeric.of(3).add(-3), 0);
       assertEquals(Numeric.of(-1).add(-3), -4);
       assertEquals(Numeric.of(1023).add(1), 1024);
+      assertEquals(Numeric.of(1).add(1023), 1024);
       // TODO add more tests
     } catch (Exception e) {
       e.printStackTrace();
@@ -58,10 +60,6 @@ public class NumericTest {
       assertEquals(Numeric.of(2147483647).add(-2147483647), 0);
       assertEquals(Numeric.of(0).add(-2147483648), -2147483648);
       assertEquals(Numeric.of(-2147483648).add(2147483648L), 0);
-      assertEquals(Numeric.of(100000000000L).add(200000000000L), 300000000000L);
-      assertEquals(Numeric.of(-100000000000L).add(200000000000L), 100000000000L);
-      assertEquals(Numeric.of(100000000000L).add(-200000000000L), -100000000000L);
-      assertEquals(Numeric.of(-100000000000L).add(-200000000000L), -300000000000L);
       // TODO add more tests
     } catch (Exception e) {
       e.printStackTrace();
@@ -69,15 +67,23 @@ public class NumericTest {
   }
   
   /**
-   * basic subtraction
+   * integer subtraction
    */
   @Test
-  public void test_basic_subtraction() {
+  public void test_integer_subtraction() {
     try {
-      assertEquals("2", new Numeric(4).subtract(2).toString());
-      assertEquals("2", new Numeric(2).subtract(0).toString());
-      assertEquals("2", new Numeric(0).subtract(-2).toString());
-      assertEquals("0", new Numeric(-2).subtract(-2).toString());
+      assertEquals(Numeric.of(0).subtract(0), 0);
+      assertEquals(Numeric.of(1).subtract(1), 0);
+      assertEquals(Numeric.of(8).subtract(7), 1);
+      assertEquals(Numeric.of(0).subtract(1), -1);
+      assertEquals(Numeric.of(0).subtract(-1), 1);
+      assertEquals(Numeric.of(-1).subtract(0), -1);
+      assertEquals(Numeric.of(-17).subtract(0), -17);
+      assertEquals(Numeric.of(-3).subtract(3), -6);
+      assertEquals(Numeric.of(3).subtract(-3), 6);
+      assertEquals(Numeric.of(-1).subtract(-3), 2);
+      assertEquals(Numeric.of(1023).subtract(1), 1022);
+      assertEquals(Numeric.of(1).subtract(1023), -1022);
       // TODO add more tests
     } catch (Exception e) {
       e.printStackTrace();
@@ -85,13 +91,139 @@ public class NumericTest {
   }
   
   /**
-   * basic multiplication
+   * integer addition with random data. Random seed 1.
    */
   @Test
-  public void test_basic_multiplication() {
+  public void test_integer_addition_random_data() {
     try {
-      assertEquals("8", new Numeric(4).multiply(2).toString());
+      Random random = new Random(1);
+      for(int i = 0; i < 1000; i++) {
+        // Use long to avoid overflow.
+        long x = random.nextInt();
+        long y = random.nextInt();
+        long expectedAns = x + y; 
+        Numeric calculatedAns = Numeric.of(x).add(y);
+        if(!calculatedAns.equals(expectedAns)) {
+          fail("Test " + i + " : " + x + "+" + y + ", which should be" + expectedAns + ". " + "But get" + calculatedAns + ". ");
+        }
+        if(Numeric.of(x).add(y).equals(expectedAns + 1)) {
+          fail("Test " + i + " : " + x + "+" + y + ", and get" + Numeric.of(x).add(y) + ", which should equal to " + expectedAns + " but not " + (expectedAns + 1) + ". ");
+        }
+        if(Numeric.of(x).add(y).equals(expectedAns - 1)) {
+          fail("Test " + i + " : " + x + "+" + y + ", and get" + Numeric.of(x).add(y) + ", which should equal to " + expectedAns + " but not " + (expectedAns - 1) + ". ");
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  
+  /**
+   * integer subtraction with overflow
+   */
+  @Test
+  public void test_integer_subtraction_with_overflow() {
+    try {
+      assertEquals(Numeric.of(-2147483648).subtract(1), -2147483649L);
+      assertEquals(Numeric.of(2147483647).subtract(-1), 2147483648L);
+      assertEquals(Numeric.of(2147483647).subtract(2147483647), 0);
+      assertEquals(Numeric.of(0).subtract(-2147483648), 2147483648L);
+      assertEquals(Numeric.of(-2).subtract(2147483647), -2147483649L);
       // TODO add more tests
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * integer subtraction with random data. Random seed 1.
+   */
+  @Test
+  public void test_integer_subtraction_random_data() {
+    try {
+      Random random = new Random(1);
+      for(int i = 0; i < 1000; i++) {
+        // Use long to avoid overflow.
+        long x = random.nextInt();
+        long y = random.nextInt();
+        long expectedAns = x - y; 
+        Numeric calculatedAns = Numeric.of(x).subtract(y);
+        if(!calculatedAns.equals(expectedAns)) {
+          fail("Test " + i + " : " + x + "-" + y + ", which should be" + expectedAns + ". " + "But get" + calculatedAns + ". ");
+        }
+        if(Numeric.of(x).add(y).equals(expectedAns + 1)) {
+          fail("Test " + i + " : " + x + "-" + y + ", and get" + Numeric.of(x).add(y) + ", which should equal to " + expectedAns + " but not " + (expectedAns + 1) + ". ");
+        }
+        if(Numeric.of(x).add(y).equals(expectedAns - 1)) {
+          fail("Test " + i + " : " + x + "-" + y + ", and get" + Numeric.of(x).add(y) + ", which should equal to " + expectedAns + " but not " + (expectedAns - 1) + ". ");
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * integer multiplication
+   */
+  @Test
+  public void test_integer_multiplication() {
+    try {
+      assertEquals(Numeric.of(0).multiply(0), 0);
+      assertEquals(Numeric.of(0).multiply(1), 0);
+      assertEquals(Numeric.of(0).multiply(-1), 0);
+      assertEquals(Numeric.of(1).multiply(0), 0);
+      assertEquals(Numeric.of(-1).multiply(0), 0);
+      assertEquals(Numeric.of(-1).multiply(1), -1);
+      assertEquals(Numeric.of(-1).multiply(-1), 1);
+      // TODO add more tests
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * integer multiplication with overflow
+   */
+  @Test
+  public void test_integer_multiplication_with_overflow() {
+    try {
+      assertEquals(Numeric.of(0).multiply(2147483648L), 0);
+      assertEquals(Numeric.of(2147483648L).multiply(0), 0);
+      assertEquals(Numeric.of(2147483647).multiply(2147483647), 2147483647L * 2147483647L);
+      assertEquals(Numeric.of(2147483647).multiply(-2147483648), 2147483647L * -2147483648L);
+      assertEquals(Numeric.of(-2147483648).multiply(2147483647), -2147483648L * 2147483647L);
+      assertEquals(Numeric.of(-2147483648).multiply(-2147483648), -2147483648L * -2147483648L);
+      // TODO add more tests
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * integer multiplication with random data. Random seed 1.
+   */
+  @Test
+  public void test_integer_multiplication_random_data() {
+    try {
+      Random random = new Random(1);
+      for(int i = 0; i < 1000; i++) {
+        // Use long to avoid overflow.
+        long x = random.nextInt();
+        long y = random.nextInt();
+        long expectedAns = x * y; 
+        Numeric calculatedAns = Numeric.of(x).multiply(y);
+        if(!calculatedAns.equals(expectedAns)) {
+          fail("Test " + i + " : " + x + "*" + y + ", which should be" + expectedAns + ". " + "But get" + calculatedAns + ". ");
+        }
+        if(Numeric.of(x).add(y).equals(expectedAns + 1)) {
+          fail("Test " + i + " : " + x + "*" + y + ", and get" + Numeric.of(x).add(y) + ", which should equal to " + expectedAns + " but not " + (expectedAns + 1) + ". ");
+        }
+        if(Numeric.of(x).add(y).equals(expectedAns - 1)) {
+          fail("Test " + i + " : " + x + "*" + y + ", and get" + Numeric.of(x).add(y) + ", which should equal to " + expectedAns + " but not " + (expectedAns - 1) + ". ");
+        }
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
