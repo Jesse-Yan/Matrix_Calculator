@@ -108,8 +108,15 @@ public interface MatrixADT {
    */
   Numeric determinant() throws MatrixDimensionsMismatchException;
 
+  /**
+   * 
+   * QR decomposition.
+   * 
+   * @return an array of length 2. The first is Q, and the second is R.
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   */
   Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException;
-
+  
   /**
    * get EigenValue of matrix
    * 

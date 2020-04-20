@@ -1,6 +1,7 @@
 package application;
 
 import com.sun.corba.se.impl.orb.NormalDataCollector;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
  * This class represents a Matrix and defines required operation needed for a Matrix
@@ -56,6 +57,15 @@ public class Matrix implements MatrixADT {
     for (int i = 0; i < content.length; i++)
       entry[i] = content[i].clone();
   }
+  
+  /**
+   * This constructor copies a matrix
+   * 
+   * @param other another Matrix
+   */
+  public Matrix(Matrix other) {
+    this(other.entry);
+  }
 
   /**
    * A private helper method that generate a n*n identity matrix
@@ -98,6 +108,15 @@ public class Matrix implements MatrixADT {
       string += '\n';
     }
     return string;
+  }
+
+  /**
+   * Get a copy/clone of the matrix. 
+   * 
+   * @return a copy of matrix.
+   */
+  protected Matrix copy() {
+    return new Matrix(entry);
   }
 
   @Override
@@ -146,7 +165,7 @@ public class Matrix implements MatrixADT {
   @Override
   public Matrix add(MatrixADT other) throws MatrixDimensionsMismatchException {
     sameDimensionCheck(other);
-    Matrix answerMatrix = new Matrix(this.entry);
+    Matrix answerMatrix = copy();
     for (int i = 0; i < answerMatrix.getNumberOfRow(); i++)
       for (int j = 0; j < answerMatrix.getNumberOfColumn(); j++)
         answerMatrix.entry[i][j] = answerMatrix.entry[i][j].add(other.getEntry(i, j));
@@ -156,7 +175,7 @@ public class Matrix implements MatrixADT {
   @Override
   public Matrix subtract(MatrixADT other) throws MatrixDimensionsMismatchException {
     sameDimensionCheck(other);
-    Matrix answer = new Matrix(this.entry);
+    Matrix answer = copy();
     for (int i = 0; i < answer.getNumberOfRow(); i++)
       for (int j = 0; j < answer.getNumberOfColumn(); j++)
         answer.entry[i][j] = answer.entry[i][j].subtract(other.getEntry(i, j));
@@ -191,7 +210,7 @@ public class Matrix implements MatrixADT {
   
   @Override
   public Matrix multiply(Number constant) {
-    Matrix answer = new Matrix(entry);
+    Matrix answer = copy();
     for (int i = 0; i < this.getNumberOfRow(); i++)
       for (int j = 0; j < this.getNumberOfColumn(); j++)
           answer.entry[i][j] = answer.entry[i][j].multiply(constant);
@@ -200,7 +219,7 @@ public class Matrix implements MatrixADT {
   
   @Override
   public Matrix dividedBy(Number constant) {
-    Matrix answer = new Matrix(entry);
+    Matrix answer = copy();
     for (int i = 0; i < this.getNumberOfRow(); i++)
       for (int j = 0; j < this.getNumberOfColumn(); j++)
           answer.entry[i][j] = answer.entry[i][j].dividedBy(constant);
@@ -234,7 +253,7 @@ public class Matrix implements MatrixADT {
    */
   public Matrix helperpow(int n) {
     if (n == 1)
-      return new Matrix(entry);
+      return copy();
     try {
       Matrix matrixPowHalfN = helperpow(n / 2);
       if (n % 2 == 0)
@@ -432,7 +451,7 @@ public class Matrix implements MatrixADT {
   @Override
   public Numeric determinant() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
-    Matrix answerMatrix = new Matrix(entry);
+    Matrix answerMatrix = copy();
     boolean signChanged = false;
     try {
       signChanged = answerMatrix.forwardElimination();
@@ -453,7 +472,7 @@ public class Matrix implements MatrixADT {
    * 
    * @return the norm of the matrix.
    */
-  private Numeric Norm() {
+  protected Numeric norm() {
     Numeric ans = new Numeric(0);
     for (int i = 0; i < entry.length; i++) {
       for (int j = 0; j < entry[0].length; j++) {
@@ -463,9 +482,52 @@ public class Matrix implements MatrixADT {
     return ans.sqrt();
   }
 
+  /**
+   * 
+   * A private helper method that separate the matrix into column vectors.
+   * 
+   * @return an array of row vectors representing the separated column vectors.
+   */
+  public ColumnVector[] toColumnVectors() {
+    ColumnVector[] columnVectors = new ColumnVector[getNumberOfColumn()];
+    for(int j = 0; j < getNumberOfColumn(); j++) {
+      Numeric[] columnContent = new Numeric[getNumberOfRow()];
+      for(int i = 0; i < getNumberOfRow(); i++) {
+        columnContent[i] = entry[i][j];
+      }
+      columnVectors[j] = new ColumnVector(columnContent);
+    }
+    return columnVectors;
+  }
+  
+  public static Matrix combineColumnVectorsToMatirx(ColumnVector[] columnVectors) {
+    Numeric[][] entry = new Numeric[columnVectors[0].getNumberOfRow()][columnVectors.length];
+    for (int i = 0; i < entry.length; i++)
+      for (int j = 0; j < entry[0].length; j++)
+        entry[i][j] = columnVectors[j].getEntry(i, 0);
+    return new Matrix(entry);
+  }
+  
   @Override
   public Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException{
-    return null;
+    int N = getSizeOfSquareMatrix();
+    ColumnVector[] a = toColumnVectors();
+    ColumnVector[] u = new ColumnVector[N];
+    ColumnVector[] e = new ColumnVector[N];
+    
+    
+    for(int i = 0; i < N; i++) {
+      u[i] = a[i].copy();
+      for(int j = 0; j < i; j++) {
+        u[i] = new ColumnVector(u[i].subtract(e[j].multiply(a[i].innerProduct(e[j]))));
+      }
+      e[i] = new ColumnVector(u[i].dividedBy(u[i].norm()));
+    }
+    
+    Matrix Q = combineColumnVectorsToMatirx(e);
+    Matrix R = Q.transpose().multiply(this);
+    
+    return new Matrix[] {Q, R};
   };
   
   @Override
