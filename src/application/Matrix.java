@@ -1,5 +1,6 @@
 package application;
 
+import com.sun.corba.se.impl.orb.NormalDataCollector;
 
 /**
  * This class represents a Matrix and defines required operation needed for a Matrix
@@ -102,6 +103,15 @@ public class Matrix implements MatrixADT {
   @Override
   protected Matrix clone() {
     return new Matrix(entry);
+  }
+  
+  @Override
+  public Matrix transpose() {
+    Numeric[][] newEntiry = new Numeric[getNumberOfColumn()][getNumberOfRow()];
+    for (int i = 0; i < entry.length; i++)
+      for (int j = 0; j < entry[i].length; j++)
+        newEntiry[j][i] = entry[i][j];
+    return new Matrix(newEntiry);
   }
 
   /**
@@ -397,10 +407,19 @@ public class Matrix implements MatrixADT {
       ansNumeric = new Numeric(0).subtract(ansNumeric);
     return ansNumeric;
   }
+  
+  /**
+   * Calculate the norm of the matrix.
+   * @return the norm of the matrix.
+   */
+  private Numeric Norm() {
+    Numeric ans = new Numeric(0);
+    return ans;
+  }
 
   @Override
-  public Numeric EigenValue() throws MatrixDimensionsMismatchException {
-    // TODO Auto-generated method stub
+  public Numeric eigenValue() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
     return null;
   }
 }

@@ -32,6 +32,13 @@ public interface MatrixADT {
   Numeric getEntry(int row, int column);
 
   /**
+   * Return the transpose of the Matrix.
+   * 
+   * @return the transpose of the Matrix
+   */
+  MatrixADT transpose();
+  
+  /**
    * ADD two Matrix
    * 
    * @param other - Matrix that being added
@@ -89,6 +96,6 @@ public interface MatrixADT {
    * @return matrix determinant
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
    */
-  Numeric EigenValue() throws MatrixDimensionsMismatchException;
+  Numeric eigenValue() throws MatrixDimensionsMismatchException;
 
 }

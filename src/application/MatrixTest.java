@@ -135,6 +135,20 @@ public class MatrixTest {
   }
   
   @Test
+  public void test_Transpose() {
+    try {
+      MatrixADT matrix, expectedMatrix;
+      
+      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}});
+      expectedMatrix = new Matrix(new Integer[][] {{1, 4}, {2, 5}, {3, 6}});
+      assertEquals(expectedMatrix.toString(), matrix.transpose().toString());
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  @Test
   public void test_Deteminant() {
     try {
       MatrixADT matrix;
@@ -169,6 +183,26 @@ public class MatrixTest {
       } catch (ArithmeticException e) {
         // Expected
       }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  @Test
+  public void test_Vector() {
+    try {
+      MatrixADT rowVector1, rowVector2, rowVector3;
+      rowVector1 = new RowVector(new Integer[] {1, 2, 3, 4});
+      rowVector2 = new RowVector(new Integer[] {-1, 0, 1, -2});
+      rowVector3 = new RowVector(new Integer[] {0, 2, 4, 2});
+      assertEquals(rowVector3.toString(), rowVector1.add(rowVector2).toString());
+      
+      rowVector1 = new ColumnVector(new Integer[] {1, 2, 3, 4});
+      rowVector2 = new ColumnVector(new Integer[] {-1, 0, 1, -2});
+      rowVector3 = new ColumnVector(new Integer[] {0, 2, 4, 2});
+      assertEquals(rowVector3.toString(), rowVector1.add(rowVector2).toString());
+      
+      
     } catch (Exception e) {
       e.printStackTrace();
     }
