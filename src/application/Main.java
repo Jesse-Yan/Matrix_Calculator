@@ -115,6 +115,7 @@ public class Main extends Application {
     VBox vBoxL = new VBox();
     TextField input = new TextField();
     input.setMaxWidth(360.0);
+    input.setEditable(false);
     TextArea result = new TextArea();
     result.setWrapText(true);
     result.setEditable(false);
