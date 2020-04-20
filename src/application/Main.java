@@ -3,8 +3,6 @@ package application;
 import java.util.List;
 import java.io.File;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -16,7 +14,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -156,27 +153,11 @@ public class Main extends Application {
       }
     }
     
-//    // take in runtime caret position
-//    EventHandler<ActionEvent> textEvent = new EventHandler<ActionEvent>() {
-//      public void handle(ActionEvent e) {
-//        caretPosition = input.getCaretPosition();
-//      }
-//    };
-//    // detect when mouse clicked
-//    EventHandler<MouseEvent> textEvent1 = new EventHandler<MouseEvent>() {
-//      @Override
-//      public void handle(MouseEvent e) {
-//        input.fireEvent(new ActionEvent());
-//      }
-//    };
-//
-//    input.addEventFilter(MouseEvent.MOUSE_CLICKED, textEvent1);
-//    input.setOnAction(textEvent);
-    
     // Set the caretPosition
     input.setOnMouseClicked(e -> {
       caretPosition = input.getCaretPosition();
     });
+    
     // Add event handler to the buttons
     buttons.stream().forEach(btn -> {
       btn.setOnAction(event -> {
