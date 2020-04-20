@@ -1,6 +1,9 @@
 package application;
 
 import static org.junit.Assert.fail;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.TreeSet;
 import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
@@ -272,7 +275,28 @@ public class MatrixTest {
       e.printStackTrace();
     }
   }
+  
+  /**
+   * 
+   * Test eigenValue
+   * 
+   */
+  @Test
+  public void test_EigenValue() {
+    try {
+      MatrixADT matrix, expectedQ, expectedR;
 
+      matrix = new Matrix(new Integer[][] {{2, 1}, {1, 2}});
+      
+      TreeSet<Numeric> eigenValues = new TreeSet<Numeric>(Arrays.asList(matrix.eigenValues()));
+      
+      assertTrue(eigenValues.contains(Numeric.of(1)));
+      assertTrue(eigenValues.contains(Numeric.of(3)));
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
 
 }

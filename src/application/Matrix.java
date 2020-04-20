@@ -1,7 +1,10 @@
 package application;
 
+import java.util.Arrays;
 import com.sun.corba.se.impl.orb.NormalDataCollector;
+import com.sun.org.apache.bcel.internal.generic.CPInstruction;
 import com.sun.org.apache.bcel.internal.generic.NEW;
+import jdk.nashorn.internal.ir.WhileNode;
 
 /**
  * This class represents a Matrix and defines required operation needed for a Matrix
@@ -448,6 +451,19 @@ public class Matrix implements MatrixADT {
     return augmentedMatrix.subMatrix(0, N, N, 2 * N);
   }
 
+  /**
+   * Return the product of the diagonal
+   * @return the product of the diagonal
+   * @throws MatrixDimensionsMismatchException 
+   */
+  private Numeric productOfDiagonal() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
+    Numeric ansNumeric = new Numeric(1);
+    for (int i = 0; i < N; i++)
+      ansNumeric = ansNumeric.multiply(entry[i][i]);
+    return ansNumeric;
+  }
+  
   @Override
   public Numeric determinant() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
@@ -459,9 +475,7 @@ public class Matrix implements MatrixADT {
     } catch (SingularException singularException) {
       return new Numeric(0);
     }
-    Numeric ansNumeric = new Numeric(1);
-    for (int i = 0; i < N; i++)
-      ansNumeric = ansNumeric.multiply(answerMatrix.getEntry(i, i));
+    Numeric ansNumeric = answerMatrix.productOfDiagonal();
     if (signChanged)
       ansNumeric = new Numeric(0).subtract(ansNumeric);
     return ansNumeric;
@@ -530,11 +544,31 @@ public class Matrix implements MatrixADT {
     return new Matrix[] {Q, R};
   };
   
-  @Override
-  public Numeric eigenValue() throws MatrixDimensionsMismatchException {
+  /**
+   * Get an array of numeric which are the entries on the diagonal line.
+   * 
+   * @return
+   * @throws MatrixDimensionsMismatchException
+   */
+  private Numeric[] diagonal() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
-    return null;
+    Numeric[] diagnal = new Numeric[N];
+    for (int i = 0; i < N; i++)
+      diagnal[i] = new Numeric(entry[i][i]);
+    return diagnal;
   }
-
   
+  @Override
+  public Numeric[] eigenValues() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
+    Matrix A = copy(), lastA;
+    Matrix Q, R;
+    Matrix[] QRDecomposition;
+    do {
+      lastA = A.copy();
+      QRDecomposition = A.QRDecomposition();
+      A = QRDecomposition[1].multiply(QRDecomposition[0]);
+    } while(!Arrays.equals(A.diagonal(), lastA.diagonal()));
+    return A.diagonal();
+  }
 }

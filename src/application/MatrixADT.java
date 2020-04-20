@@ -123,6 +123,6 @@ public interface MatrixADT {
    * @return matrix determinant
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
    */
-  Numeric eigenValue() throws MatrixDimensionsMismatchException;
+  Numeric[] eigenValues() throws MatrixDimensionsMismatchException;
 
 }
