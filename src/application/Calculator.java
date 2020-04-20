@@ -25,7 +25,7 @@ public class Calculator {
   public static double calculate(String expression) {
 
     expression = expression.replaceAll("(\\d+)\\(", "$1*(");
-    
+
     if (expression.matches("\\-?\\d+"))
       return Double.valueOf(expression);
     ArrayList<String> s = new ArrayList<String>();

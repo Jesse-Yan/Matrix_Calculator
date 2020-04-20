@@ -1,5 +1,6 @@
 package application;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 import javafx.application.Application;
@@ -152,12 +153,12 @@ public class Main extends Application {
         gridPaneL.add(button, column, row);
       }
     }
-    
+
     // Set the caretPosition
     input.setOnMouseClicked(e -> {
       caretPosition = input.getCaretPosition();
     });
-    
+
     // Add event handler to the buttons
     buttons.stream().forEach(btn -> {
       btn.setOnAction(event -> {
@@ -210,11 +211,15 @@ public class Main extends Application {
     HBox hBoxR = new HBox();
 
     // Set the Matrix Panel
-    VBox matrix1 = matrixGenerator();
-    VBox matrix2 = matrixGenerator();
+    List<TextField> matrix1Data = new ArrayList<>();
+    List<TextField> matrix2Data = new ArrayList<>();
+    VBox matrix1 = matrixGenerator(matrix1Data);
+    VBox matrix2 = matrixGenerator(matrix2Data);
+
+    // Should be enable when needed
     matrix2.setDisable(true);
 
-    // Set the operation
+    // Set the operation of Two Matrixes
     GridPane matrixOperators = new GridPane();
     List<Button> operators = List.of("c", "+", "-", "*").stream().map(str -> {
       Button temp = new Button(str);
@@ -232,6 +237,7 @@ public class Main extends Application {
     mOperations.setHgap(76.7);
     mOperations.setVgap(10);
 
+    // Set the Operations of one Matrix
     List<Button> mButtons =
         List.of("Det", "Inverse", "QR", "SVD", "Trace", "LU", "Gauss-Elim",
             "EiVector", "EiValue", "exp", "ln").stream().map(operator -> {
@@ -239,6 +245,8 @@ public class Main extends Application {
               temp.setMinWidth(100);
               return temp;
             }).collect(toList());
+
+    // Add to the GridPane
     int count = 0;
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 4; j++) {
@@ -249,6 +257,7 @@ public class Main extends Application {
       }
     }
 
+    // Add the special Power button
     HBox power = new HBox();
     Button powerButton = new Button("Power");
     TextField powerInput = new TextField();
@@ -259,6 +268,7 @@ public class Main extends Application {
     TextArea mResult = new TextArea();
     mResult.setMinHeight(207);
 
+    // Add to the overall panel
     vBoxR.getChildren().addAll(hBoxR, mOperations, mResult);
     root.setRight(vBoxR);
 
@@ -279,90 +289,121 @@ public class Main extends Application {
   /**
    * Generate a Matrix
    * 
+   * @param  textFields
    * @return
    */
-  private VBox matrixGenerator() {
+  private VBox matrixGenerator(List<TextField> textFields) {
+
+    // Create the Panel of the Matrix
     VBox vBoxMatrix = new VBox();
+
+    // Row Label
     HBox rowMatrix = new HBox();
     Label labelRowMatrix = new Label("Row:      ");
     labelRowMatrix.setMinWidth(52);
     TextField inputRowMatrix = new TextField();
     inputRowMatrix.setMaxWidth(50);
     rowMatrix.getChildren().addAll(labelRowMatrix, inputRowMatrix);
+
+    // Column Label
     HBox columnMatrix = new HBox();
     Label labelColumnMatrix = new Label("Column: ");
     labelColumnMatrix.setMaxWidth(52);
     TextField inputColumnMatrix = new TextField();
     inputColumnMatrix.setMaxWidth(50);
     columnMatrix.getChildren().addAll(labelColumnMatrix, inputColumnMatrix);
+
+    // The GridPane for the Matrix
     GridPane gridMatrix = new GridPane();
     gridMatrix.setMaxWidth(300);
     inputRowMatrix.setText("5");
     inputColumnMatrix.setText("5");
 
+    textFields.clear();
+
+    // Constructing Input fields
     for (int i = 0; i < Integer.parseInt(inputRowMatrix.getText()); i++) {
       for (int j = 0; j < Integer.parseInt(inputColumnMatrix.getText()); j++) {
 
         TextField temp = new TextField();
+        textFields.add(temp);
         gridMatrix.add(temp, j, i);
       }
     }
 
+    // Add event handler to the TextField
     inputRowMatrix.setOnKeyReleased(event -> {
       try {
 
+        // Avoid to throw Exception when the TextField is empty
         if (inputRowMatrix.getText().equals("")) {
           return;
         }
 
+        // For IllegalArgument
         if (Integer.parseInt(inputRowMatrix.getText()) <= 0) {
-          throw new Exception();
+          throw new IllegalArgumentException();
         }
 
         gridMatrix.getChildren().clear();
 
+        textFields.clear();
+
+        // Constructing Input fields
         for (int i = 0; i < Integer.parseInt(inputRowMatrix.getText()); i++) {
           for (int j =
               0; j < Integer.parseInt(inputColumnMatrix.getText()); j++) {
 
             TextField temp = new TextField();
+            textFields.add(temp);
             gridMatrix.add(temp, j, i);
           }
         }
       } catch (Exception e) {
+
+        // Alert when detecting IllegalArgument
         alert("Error", "Number you entered is invalid" + lineSeparator
             + "Please reenter an positive integer");
         inputRowMatrix.setText("1");
       }
     });
 
+    // Add event handler to the TextField
     inputColumnMatrix.setOnKeyReleased(event -> {
       try {
 
+        // Avoid to throw Exception when the TextField is empty
         if (inputColumnMatrix.getText().equals("")) {
           return;
         }
 
+        // For IllegalArgument
         if (Integer.parseInt(inputColumnMatrix.getText()) <= 0) {
           throw new Exception();
         }
 
         gridMatrix.getChildren().clear();
+        textFields.clear();
 
+        // Constructing Input fields
         for (int i = 0; i < Integer.parseInt(inputRowMatrix.getText()); i++) {
           for (int j =
               0; j < Integer.parseInt(inputColumnMatrix.getText()); j++) {
             TextField temp = new TextField();
+            textFields.add(temp);
             gridMatrix.add(temp, j, i);
           }
         }
       } catch (Exception e) {
+
+        // Alert when detecting IllegalArgument
         alert("Error", "Number you entered is invalid" + lineSeparator
             + "Please reenter an positive integer");
         inputColumnMatrix.setText("1");
       }
     });
 
+    // Add to the overall Panel
     vBoxMatrix.getChildren().addAll(rowMatrix, columnMatrix, gridMatrix);
 
     return vBoxMatrix;
