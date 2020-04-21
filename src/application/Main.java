@@ -321,12 +321,22 @@ public class Main extends Application {
     }
     matrixOperators.setVgap(5.5);
     operators.stream().forEach(b -> b.setDisable(true));
-//    hBoxR.getChildren().addAll(matrix1, matrixOperators, matrix2);
     matrix1.setMinWidth(400);
     matrix2.setMinWidth(400);
     matrixs.setLeft(matrix1);
     matrixs.setCenter(matrixOperators);
     matrixs.setRight(matrix2);
+
+    // Set the EventHandler for matrixOperators
+    c1.setOnMouseClicked(event -> {
+      matrix1Data.stream().forEach(TextField::clear);
+    });
+    operators.get(0).setOnMouseClicked(event -> {
+      matrix2Data.stream().forEach(TextField::clear);
+    });
+    operators.get(1).setOnMouseClicked(event -> {
+      String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
+    });
 
     // Set the operation panel
     GridPane mOperations = new GridPane();
@@ -334,13 +344,15 @@ public class Main extends Application {
     mOperations.setVgap(10);
 
     // Set the Operations of one Matrix
-    List<Button> mButtons =
-        List.of("Det", "Inverse", "QR", "SVD", "Trace", "LU", "Gauss-Elim",
-            "EiVector", "EiValue", "exp", "ln").stream().map(operator -> {
-              Button temp = new Button(operator);
-              temp.setMinWidth(100);
-              return temp;
-            }).collect(toList());
+    List<Button> mButtons = List.of("Det", "Inverse", "QR", "SVD", "Trace",
+        "LU", "Gauss-Elim", "diagonalize", "EiValue", "rank", "transpose")
+                                .stream()
+                                .map(operator -> {
+                                  Button temp = new Button(operator);
+                                  temp.setMinWidth(100);
+                                  return temp;
+                                })
+                                .collect(toList());
 
     // Add to the GridPane
     int count = 0;
@@ -393,6 +405,21 @@ public class Main extends Application {
 
     }
     primaryStage.show();
+  }
+
+  /**
+   * Matrix's TextFields Reader
+   * 
+   * @param  matrix1Data
+   * @param  rowAndCol1
+   * @return             String[][] representation of the data within the Matrix
+   */
+  private String[][] reader(List<TextField> matrix1Data,
+      List<TextField> rowAndCol1) {
+    
+    
+    
+    return null;
   }
 
   /**
