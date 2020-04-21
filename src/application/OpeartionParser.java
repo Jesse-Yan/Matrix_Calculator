@@ -64,7 +64,6 @@ public class OpeartionParser {
           matrixList.add(new Matrix(sumMatrix));  
         }
         calSteps.add(new CalSteps(operations,matrixList));
-        System.out.println("reached");
         matrixList = new ArrayList<Matrix>();
         operations = null;
       }
