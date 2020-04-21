@@ -18,10 +18,11 @@ Program can simply running by click the .jar file.
 Running in Java code need JavaFx and JDK11 pre-installed.
 
 ## Running demo
-run .jar for demo
+using command line to run .jar for demo(see file: running_command.txt)
 
 ## Program Description
-program functions as a calculator that support Matrix calculation
+program functions as a calculator that support Matrix calculations supports pirorty calculation.
+Matrixs and calculation can be read from json files and compute result.
 
 ## Code Organization
 UW-madison default setup.
