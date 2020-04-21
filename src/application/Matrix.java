@@ -407,24 +407,8 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-<<<<<<< HEAD
-   * A private helper method that swap two rows of the matrix. That is, swap rowX and rowY.
-=======
-   * A private helper method that get the absolute value of a Numeric number
-   * 
-   * @param  n a given numeric number
-   * @return   the absolute value of n.
-   */
-  private static Numeric abs(Numeric n) {
-    if (n.compareTo(new Numeric(0)) < 0)
-      return new Numeric(0).subtract(n);
-    return n;
-  }
-
-  /**
    * A private helper method that swap two rows of the matrix. That is, swap
    * rowX and rowY.
->>>>>>> f23299b25e5a73d52ed4802c3f168151dab50692
    * 
    * @param rowX the index of the first row
    * @param rowY the index of the second row
@@ -805,7 +789,7 @@ public class Matrix implements MatrixADT {
    * @return the product of the diagonal
    * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix.
    */
-  private Numeric trace() throws MatrixDimensionsMismatchException {
+  public Numeric trace() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
     Numeric ansNumeric = new Numeric(0);
     for (int i = 0; i < N; i++)

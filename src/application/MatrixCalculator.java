@@ -151,6 +151,17 @@ public class MatrixCalculator {
     Matrix firstMatrix = new Matrix(matrix1);
     return properFormatted(firstMatrix.inverse());
   }
+  
+  /**
+   * Return the trace of matrix1, which is represented by a String.
+   * 
+   * @return the trace of matrix1, which is represented by a String.
+   * @throws MatrixDimensionsMismatchException if matrix1 is not a square matrix.
+   */
+  public String getTrace() throws MatrixDimensionsMismatchException {
+    Matrix firstMatrix = new Matrix(matrix1);
+    return properFormatted(firstMatrix.trace());
+  }
 
   private String[][] properFormatted(Matrix matrix) {
     if (mode == Mode.DECIMAL)
@@ -161,9 +172,9 @@ public class MatrixCalculator {
 
   private String properFormatted(Numeric number) {
     if (mode == Mode.DECIMAL)
-      return number.toString();
-    else
       return number.castToDouble().toString();
+    else
+      return number.toString();
   }
 
   /**
@@ -174,29 +185,55 @@ public class MatrixCalculator {
    */
   public static void main(String[] args) throws MatrixDimensionsMismatchException {
 
-    String[][] matrixA = {{"1", "0", "0.1"}, {"5/3", "0", "-1/3"}, {"-3", "0.4", "-0.333"}};
-    String[][] matrixB = {{"1", "2", "-3"}, {"1/3", "1/2", "-1/1024"}, {"0.5", "0.2", "-0.3"},};
-
-    MatrixCalculator matrixCalculator = new MatrixCalculator(matrixA, matrixB);
-
-    System.out.println("matirxC = matirxA + matrixB");
-    String[][] matrixC = matrixCalculator.add();
-
-    System.out.println("Print matirx C");
+    String[][] matrixA, matrixB, matrixC;
+    MatrixCalculator matrixCalculator;
+    
+    //************************ Demo for Matrix Addition *********************************
+    
+    System.out.println("Demo for Matrix Addition");
+    matrixA = new String[][] {{"1", "0", "0.1"}, {"5/3", "0", "-1/3"}, {"-3", "0.4", "-0.333"}};
+    matrixB = new String[][] {{"1", "2", "-3"}, {"1/3", "1/2", "-1/1024"}, {"0.5", "0.2", "-0.3"}};
+    
+    matrixCalculator = new MatrixCalculator(matrixA, matrixB);
+    matrixC = matrixCalculator.add();
+    System.out.println("Fraction(Default) version: " + Arrays.deepToString(matrixC));
+    
+    matrixCalculator.mode = MatrixCalculator.Mode.DECIMAL; // Try decimal mode
+    matrixC = matrixCalculator.add();
+    System.out.println("Decimal version: " + Arrays.deepToString(matrixC) + '\n');
+    
+    //************************ Demo for Matrix Addition *********************************
+    
+    //************************ Demo for Matrix Multiplication *********************************
+    System.out.println("Demo for Matrix Multiplication");
+    matrixA = new String[][] {{"1", "2"}, {"3", "4"}, {"5", "6"}, {"7", "8"}};
+    matrixB = new String[][] {{"1", "0", "2"},{"1", "0", "1/2"}};
+    matrixCalculator = new MatrixCalculator(matrixA, matrixB);
+    matrixC = matrixCalculator.multiply();
     System.out.println(Arrays.deepToString(matrixC) + '\n');
+    //************************ Demo for Matrix Multiplication *********************************
+    
+    //************************ Demo for Determinant *********************************
+    System.out.println("Demo for Determinant");
+    matrixA = new String[][] {{"1/2", "1"}, {"3/2", "2"}};
+    matrixCalculator = new MatrixCalculator(matrixA);
+    System.out.println(matrixCalculator.getDeterminant() + '\n');
+    //************************ Demo for Determinant *********************************
+    
+    //************************ Demo for Inverse *********************************
+    System.out.println("Demo for Matrix Inverse");
+    matrixA = new String[][] {{"1/2", "1"}, {"3/2", "2"}};
+    matrixCalculator = new MatrixCalculator(matrixA);
+    matrixC = matrixCalculator.getInverse();
+    System.out.println(Arrays.deepToString(matrixC) + '\n');
+    //************************ Demo for Inverse *********************************
 
-    System.out.println("matirxD = inverse of matrixA");
-    String[][] matrixD = matrixCalculator.getInverse();
-
-    System.out.println("Print matirx D");
-    System.out.println(Arrays.deepToString(matrixD) + '\n');
-
-    System.out.println("matirxE = inverse of matrixA (in decimal)");
-    matrixCalculator.mode = MatrixCalculator.Mode.DECIMAL;
-    String[][] matrixE = matrixCalculator.getInverse();
-
-    System.out.println("Print matirx E");
-    System.out.println(Arrays.deepToString(matrixE) + '\n');
+    //************************ Demo for Trace *********************************
+    System.out.println("Demo for Trace");
+    matrixA = new String[][] {{"1/2", "1"}, {"3/2", "2"}};
+    matrixCalculator = new MatrixCalculator(matrixA);
+    System.out.println(matrixCalculator.getTrace() + '\n');
+    //************************ Demo for Trace *********************************
   }
 
 }

@@ -110,9 +110,14 @@ public class Numeric extends Number implements Comparable<Numeric> {
       int index = string.indexOf(".");
       int decimalPlaces = string.length() - index - 1;
       if (string.length() - 1 <= SIGNIFICANT_FIGURE_FOR_INPUT_PARSE_FRACTION) {
+        boolean negative = (string.charAt(0) == '-');
         String part[] = string.split("\\.");
         int integerPart = Integer.parseInt(part[0]);
+        if(negative)
+          part[1] = "-" + part[1];
         int decimalPart = Integer.parseInt(part[1]);
+        if(decimalPart == 0)
+          number = Integer.valueOf(integerPart);
         number = new Fraction(decimalPart, tenPow(decimalPlaces)).add(Fraction.of(integerPart));
       } else
         number = Double.parseDouble(string);
@@ -482,9 +487,11 @@ public class Numeric extends Number implements Comparable<Numeric> {
   }
   
   public static void main(String[] args) throws MatrixDimensionsMismatchException {
+    
+    System.out.println(Numeric.of("-1.333"));
     //System.out.println(Numeric.of("1/3").castToDouble().castToNearestFraction().mathematicallyEquals("1/3"));
-    Matrix matrix = new Matrix(new String[][] {{"0.5", "1"}, {"1", "0.5"}});
-    System.out.println(Arrays.toString(matrix.eigenValues()));
+    //Matrix matrix = new Matrix(new String[][] {{"0.5", "1"}, {"1", "0.5"}});
+    //System.out.println(Arrays.toString(matrix.eigenValues()));
     //System.out.println(Numeric.of("0.3333333332").castToNearestFraction());
   }
 }
