@@ -94,7 +94,7 @@ public class Main extends Application {
         // Invoke Parser
         try {
           Parser parser = new Parser(file.getName());
-          
+
         } catch (IOException e1) {
           e1.printStackTrace();
         }
@@ -460,6 +460,22 @@ public class Main extends Application {
       }
     });
 
+    // Add EventHandler to special matrix operation
+    mButtons.get(0).setOnMouseClicked(event -> {
+      try {
+        String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+        Matrix matrix = new Matrix(dataFromMatrix);
+        double determinant = matrix.determinant().doubleValue();
+        BorderPane resultShower = resultBuilder("Operation: Det", "Determinant",
+            dataFromMatrix, determinant);
+        vBoxR.getChildren().remove(2);
+        vBoxR.getChildren().add(resultShower);
+      } catch (MatrixDimensionsMismatchException e) {
+        alert("MatrixDimensionError",
+            "Sorry, the matrix you entered is not a square matrix\nTo compute the determinant of a matrix, it has to be a square matrix");
+      }
+    });
+
     // Add to the overall panel
     vBoxR.getChildren().addAll(matrixes, mOperations, mResult);
     root.setRight(vBoxR);
@@ -480,8 +496,52 @@ public class Main extends Application {
   /**
    * Method that returns a BorderPane of finished result
    * 
+   * @param  string         operation
+   * @param  mathString     operation
+   * @param  dataFromMatrix source Matrix
+   * @param  result         the result
+   * @return                resulted BorderPane
+   */
+  private BorderPane resultBuilder(String string, String mathString,
+      String[][] dataFromMatrix, double result) {
+    BorderPane resultedPane = new BorderPane();
+
+    resultedPane.setStyle("-fx-background-color: lightgray;");
+
+    // Set the title of the operation
+    Label operationName = new Label(string);
+    operationName.setStyle(
+        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    resultedPane.setTop(operationName);
+
+    Label operationMath = new Label(mathString);
+    operationMath.setStyle(
+        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+
+    Label equals = new Label("=");
+    equals.setStyle(
+        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+
+    GridPane gridSrc = matrixGenerator(dataFromMatrix);
+
+    Label resultedLabel = new Label(String.valueOf(result));
+    resultedLabel.setStyle(
+        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+
+    HBox resultedHBox = new HBox();
+    resultedHBox.getChildren()
+                .addAll(operationMath, gridSrc, equals, resultedLabel);
+
+    resultedPane.setCenter(resultedHBox);
+
+    return resultedPane;
+  }
+
+  /**
+   * Method that returns a BorderPane of finished result
+   * 
    * @param  string       operation
-   * @param  string       operation
+   * @param  mathString   operation
    * @param  src1         source Matrix1
    * @param  src2         source Matrix2
    * @param  resultMatrix resulted Matrix
@@ -612,8 +672,8 @@ public class Main extends Application {
     // The GridPane for the Matrix
     GridPane gridMatrix = new GridPane();
     gridMatrix.setMaxWidth(400);
-    inputRowMatrix.setText("5");
-    inputColumnMatrix.setText("5");
+    inputRowMatrix.setText("3");
+    inputColumnMatrix.setText("3");
 
     textFields.clear();
 
