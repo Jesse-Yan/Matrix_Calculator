@@ -2,6 +2,8 @@ package application;
 
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class computes the result of the given expression
@@ -11,10 +13,59 @@ import java.util.Stack;
  */
 public class Calculator {
 
-
+  /**
+   * Handling complex expressions
+   * 
+   * @param  expression
+   * @return
+   */
   public static double calcul(String expression) {
+
+    // Handling Absolute values
+    expression = expression.replaceAll("\\|\\-?(.+)\\|", "$1");
+
+    // Handling factorial
+    Pattern p1 = Pattern.compile("(\\d+!)");
+    Matcher m1 = p1.matcher(expression);
+    while (m1.find()) {
+      m1.replaceFirst(mr -> {
+        String temp = mr.group();
+        return factorial(temp.substring(0, temp.length() - 1));
+      });
+    }
+    
+    // Handling PI
+    expression = expression.replaceAll("\\u03c0", String.valueOf(Math.PI));
+
+    // Handling e
+    expression = expression.replaceAll("e", String.valueOf(Math.E));
+
+    System.out.println(expression);
+    
     return calculate(expression);
   }
+
+
+  /**
+   * 
+   * @param  string String expression of a Integer
+   * @return        String expression of the factorial
+   */
+  private static String factorial(String string) {
+
+    Integer num = Integer.parseInt(string);
+
+    if (num == 0) {
+      return String.valueOf(1);
+    }
+
+    for (int i = num - 1; i > 1; i--) {
+      num *= i;
+    }
+    return String.valueOf(num);
+  }
+
+
 
   /**
    * build up calculation expression and calculate result.

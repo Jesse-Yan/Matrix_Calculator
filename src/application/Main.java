@@ -164,41 +164,62 @@ public class Main extends Application {
       btn.setOnAction(event -> {
         String temp = btn.getText();
 
-        if (temp.equals("exp")) {
-          input.insertText(caretPosition, "exp");
-          ++caretPosition;
+        if (temp.equals("  exp  ")) {
+          try {
+            input.insertText(caretPosition, "exp");
+            ++caretPosition;
+          } catch (Exception e) {
+
+          }
         } else if (temp.equals("y" + "\u221A" + "x")) {
-          input.insertText(caretPosition, "\u221A");
-          ++caretPosition;
+          try {
+            input.insertText(caretPosition, "\u221A");
+            ++caretPosition;
+          } catch (Exception e) {
+
+          }
         } else if (temp.equals("  x^y  ")) {
-          input.insertText(caretPosition, "^");
-          ++caretPosition;
+          try {
+            input.insertText(caretPosition, "^");
+            ++caretPosition;
+          } catch (Exception e) {
+
+          }
         } else if (temp.equals("   C   ")) {
           input.clear();
           caretPosition = 0;
         } else if (temp.equals("  <-   ")) {
           try {
-            input.setText(
-                input.getText().substring(0, caretPosition - 1) + input.getText().substring(caretPosition));
+            input.setText(input.getText().substring(0, caretPosition - 1)
+                + input.getText().substring(caretPosition));
             caretPosition--;
           } catch (Exception e) {
 
           }
         } else if (temp.equals("  +/-  ")) {
-          String fromInput = input.getText();
-          input.setText(fromInput.startsWith("-") ? fromInput.substring(1)
-              : "-" + fromInput);
+          try {
+            String fromInput = input.getText();
+            input.setText(fromInput.startsWith("-") ? fromInput.substring(1)
+                : "-" + fromInput);
+          } catch (Exception e) {
+
+          }
         } else if (temp.equals("   =   ")) {
           try {
             result.appendText(input.getText() + "\n="
                 + Calculator.calcul("0" + input.getText()) + "\n");
           } catch (Exception e) {
+            e.printStackTrace();
             alert("Wrong Expression",
                 "The equation you entered cannot be calculated\nPlease press 'C' and try again");
           }
         } else {
-          input.insertText(caretPosition, temp.replace("x", "").trim());
-          ++caretPosition;
+          try {
+            input.insertText(caretPosition, temp.replace("x", "").trim());
+            ++caretPosition;
+          } catch (Exception e) {
+
+          }
         }
       });
     });
