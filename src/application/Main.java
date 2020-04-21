@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import java.io.File;
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -91,6 +92,12 @@ public class Main extends Application {
             + lineSeparator + "The name of the file must end with '.json'!");
       } else {
         // Invoke Parser
+        try {
+          Parser parser = new Parser(file.getName());
+          
+        } catch (IOException e1) {
+          e1.printStackTrace();
+        }
       }
     });
 

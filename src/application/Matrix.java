@@ -294,7 +294,17 @@ public class Matrix implements MatrixADT {
     return answer;
   }
 
-  @Override
+  /**
+   * A helper method that multiply Matrix by a constant number. That is, every entries of this matrix should be
+   * multiplied by this constant.
+   * 
+   * The number can be any type of instances of Number, which means it can be a Integer, or a
+   * Double, or a Fraction, or a Numeric, or ...
+   * 
+   * @param constant - a constant that being multiply to the matrix
+   * @return - Result Matrix
+   * 
+   */
   public Matrix multiply(Number constant) {
     Matrix answer = copy();
     for (int i = 0; i < this.getNumberOfRow(); i++)
@@ -303,7 +313,17 @@ public class Matrix implements MatrixADT {
     return answer;
   }
 
-  @Override
+  /**
+   * A helper method that divide the matrix by a constant number. That is, every entries of this matrix should be divided
+   * by this constant.
+   * 
+   * The number can be any type of instances of Number, which means it can be a Integer, or a
+   * Double, or a Fraction, or a Numeric, or ...
+   * 
+   * @param constant - a constant that divide the matrix
+   * @return - Result Matrix
+   * 
+   */
   public Matrix dividedBy(Number constant) {
     Matrix answer = copy();
     for (int i = 0; i < this.getNumberOfRow(); i++)
@@ -772,6 +792,20 @@ public class Matrix implements MatrixADT {
     Numeric ansNumeric = new Numeric(1);
     for (int i = 0; i < N; i++)
       ansNumeric = ansNumeric.multiply(entry[i][i]);
+    return ansNumeric;
+  }
+  
+  /**
+   * If the matrix is a square matrix, return the trace (sum of the diagonal).
+   * 
+   * @return the product of the diagonal
+   * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix.
+   */
+  private Numeric trace() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
+    Numeric ansNumeric = new Numeric(0);
+    for (int i = 0; i < N; i++)
+      ansNumeric = ansNumeric.add(entry[i][i]);
     return ansNumeric;
   }
 
