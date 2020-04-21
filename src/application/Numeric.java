@@ -408,13 +408,13 @@ public class Numeric extends Number implements Comparable<Numeric> {
   public String toString() {
     if (number instanceof Double)
       return "" + roundWithSignificantFigure((Double) number, OUTPUT_SIGNIFICANT_FIGURE);
-    if (number instanceof Fraction) {
+    /*if (number instanceof Fraction) {
         int numerator = ((Fraction) number).getNumerator();
         int denominator = ((Fraction) number).getDenominator();
         if(("" + numerator + denominator).length() >= 8) {
           return "" + roundWithSignificantFigure(((Fraction) number).doubleValue(), OUTPUT_SIGNIFICANT_FIGURE);
         }
-    }
+    }*/
     return number.toString();
   }
 }

@@ -1,5 +1,7 @@
 package application;
 
+import java.util.Arrays;
+
 /**
  * This class defines required methods to do calculation on Matrixs
  * 
@@ -79,34 +81,20 @@ public class MatrixCalculator {
     String[][] matrixC = matrixCalculator.add();
     
     System.out.println("Print matirx C");
-    for(String[] row : matrixC) {
-      for(String number : row)
-        System.out.print(number + ' ');
-      System.out.print("\n");
-    }
-    System.out.print("\n");
+    System.out.println(Arrays.deepToString(matrixC) + '\n');
     
     System.out.println("matirxD = inverse of matrixA");
     String[][] matrixD = matrixCalculator.getInverse();
     
     System.out.println("Print matirx D");
-    for(String[] row : matrixD) {
-      for(String number : row)
-        System.out.print(number + ' ');
-      System.out.print("\n");
-    }
-    System.out.print("\n");
+    System.out.println(Arrays.deepToString(matrixD) + '\n');
     
     System.out.println("matirxE = inverse of matrixA (in decimal)");
     matrixCalculator.mode = Mode.DECIMAL;
     String[][] matrixE = matrixCalculator.getInverse();
     
     System.out.println("Print matirx E");
-    for(String[] row : matrixE) {
-      for(String number : row)
-        System.out.print(number + ' ');
-      System.out.print("\n");
-    }
+    System.out.println(Arrays.deepToString(matrixE) + '\n');
   }
   
 }
