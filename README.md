@@ -1,9 +1,11 @@
 # CS400_final_project
 This is the final project of ateam2 of CS 400 Spring 2020
 
-\n*Course: cs400
-\n*Semester: Spring 2020
-\n*Project name: Matrix calculator
+#####*Course: cs400
+
+#####*Semester: Spring 2020
+
+#####*Project name: Matrix calculator
 
 ## contributer/Team member
 #### Chengpo Yan LEC001 xteam186 - cyan46@wisc.edu
