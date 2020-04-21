@@ -1,0 +1,4 @@
+PLEASE USING FOLLOWING COMMAND FOR RUNNING .JAR FILE
+REMEMBER TO CHANGE "Path-to-javafx-lib" TO YOUR OWN PATH
+
+java --module-path "Path-to-javafx-lib" --add-modules javafx.controls,javafx.fxml -jar executable.jar
