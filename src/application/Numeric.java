@@ -2,6 +2,7 @@ package application;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.regex.Pattern;
 
 /**
  * The instance of this Numeric class represents a number, which can be a Integer, or a Fraction, or
@@ -54,7 +55,42 @@ public class Numeric extends Number implements Comparable<Numeric> {
       this.number = number.doubleValue();
     }
   }
+  
+  private static boolean isDouble(String string) {
+    Pattern pattern = Pattern.compile("^[0-9]+\\.[0-9]+$"); 
+    return pattern.matcher(string).matches();
+  }
+  
+  private static boolean isFraction(String string) {
+    Pattern pattern = Pattern.compile("^[0-9]+\\/[0-9]+$");
+    return pattern.matcher(string).matches();
+  }
+  
+  private static boolean isInteger(String string) {
+    Pattern pattern = Pattern.compile("^[0-9]+$"); 
+    return pattern.matcher(string).matches();
+  }
 
+  public Numeric(String string) {
+    if(isInteger(string))
+      number = Numeric.of((Long)Long.parseLong(string)).number;
+    else if(isFraction(string)) {
+      String part[] = string.split("\\/");
+      int numerator = Integer.parseInt(part[0]);
+      int denominator = Integer.parseInt(part[1]);
+      number = Fraction.of(numerator, denominator);
+    } else if(isDouble(string)) {
+      number = Double.parseDouble(string);
+    } else {
+      throw new IllegalArgumentException("Cannot convert the String to Numeric");
+    }
+  }
+
+  /**
+   * Generate a Numeric object with a given number
+   * @param number a given number
+   * @return a constructed Numeric object
+   */
   public static Numeric of(Number number) {
     return new Numeric(number);
   }
@@ -308,14 +344,15 @@ public class Numeric extends Number implements Comparable<Numeric> {
    * @param args args
    */
   public static void main(String args[]) {
-    Numeric n1 = new Numeric(1); // n1 = 1
-    Numeric n2 = new Numeric(new Fraction(1, 7)); // n2 = 1/7
-    Numeric n3 = new Numeric(1.5); // n3 = 0.5
-    Numeric n4 = new Numeric(2147483647); // n4 = int_max
+    
+    Numeric n1 = new Numeric("1"); // n1 = 1
+    Numeric n2 = new Numeric("1/7"); // n2 = 1/7
+    Numeric n3 = new Numeric("1.5"); // n3 = 0.5
+    Numeric n4 = new Numeric("2147483647"); // n4 = int_max
     System.out.println(n1.add(n1)); // n1 + n1 = 2
     System.out.println(n1.add(n2)); // n1 + n2 = 8/7
     System.out.println(n1.add(n3)); // n1 + n3 = 2.5
-    System.out.println(n2.add(n3)); // n2 + n3 = 1.642857142857
+    System.out.println(n2.add(n3)); // n2 + n3 = 1.642857142857...
     System.out.println(n1.subtract(n1)); // n1 - n1 = 0
     System.out.println(n2.multiply(n2)); // 1/7 * 1/7 = 1/49
     System.out.println(n1.add(n4)); // 1 + int_Max = 2.147483648E9
