@@ -131,6 +131,20 @@ public class Matrix implements MatrixADT {
     }
     return string;
   }
+  
+  /**
+   * Return a 2D array of String to represent the matrix
+   * @return
+   */
+  public String[][] toStringMatrix() {
+    String string[][] = new String[entry.length][];
+    for (int i = 0; i < entry.length; i++) {
+      string[i] = new String[entry[i].length];
+      for (int j = 0; j < entry[i].length; j++)
+        string[i][j] = entry[i][j].toString();
+    }
+    return string;
+  }
 
   /**
    * Get a deepest copy of the matrix. Which is exactly the same as this matrix.
