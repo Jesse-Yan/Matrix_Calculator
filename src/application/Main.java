@@ -592,7 +592,41 @@ public class Main extends Application {
    */
   private BorderPane resultBuilderLUP(String string, String mathString,
       String[][] dataFromMatrix, String[][] l, String[][] u, String[][] p) {
-    return null;
+    BorderPane resultedPane = new BorderPane();
+
+    resultedPane.setStyle("-fx-background-color: lightgray;");
+
+    // Set the title of the operation
+    Label operationName = new Label(string);
+    operationName.setStyle(
+        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    resultedPane.setTop(operationName);
+
+    Label operationMath = new Label(mathString);
+    operationMath.setStyle(
+        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+
+    Label equals = new Label("=");
+    equals.setStyle(
+        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+
+    Label multiply = new Label("*");
+    equals.setStyle(
+        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+
+    GridPane gridSrc = matrixGenerator(dataFromMatrix);
+    GridPane lResult = matrixGenerator(l);
+    GridPane uResult = matrixGenerator(u);
+    GridPane pResult = matrixGenerator(p);
+
+    HBox resultedHBox = new HBox();
+    resultedHBox.getChildren()
+                .addAll(operationMath, gridSrc, equals, lResult, multiply,
+                    uResult, multiply, pResult);
+
+    resultedPane.setCenter(resultedHBox);
+
+    return resultedPane;
   }
 
   /**
