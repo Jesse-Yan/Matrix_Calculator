@@ -127,7 +127,7 @@ public class Main extends Application {
 
     // Set two parallel buttons
     HBox hBoxL = new HBox();
-    Button analyzeSequence = new Button("Analyze/nSequence");
+    Button analyzeSequence = new Button("Analyze Sequence");
     analyzeSequence.setMinWidth(180);
     Button space = new Button("Space");
     space.setMinWidth(180);

@@ -15,20 +15,22 @@ public class Calculator {
    * Handling complex expressions
    * 
    * @param  expression
-   * @return
+   * @return            String
    */
-  public static double calcul(String expression) {
+  public static String calcul(String expression) {
 
     // Handling Absolute values
     expression = expression.replaceAll("\\|\\-?(.+)\\|", "$1");
-    
+
     // Handling PI
     expression = expression.replaceAll("\\u03c0", String.valueOf(Math.PI));
 
     // Handling e
     expression = expression.replaceAll("e", String.valueOf(Math.E));
-    
-    return calculate(expression);
+
+    String result = String.valueOf(calculate(expression));
+
+    return result.endsWith(".0") ? result.replace(".0", "") : result;
   }
 
   /**
