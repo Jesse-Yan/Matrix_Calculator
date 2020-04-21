@@ -305,9 +305,9 @@ public class MatrixTest {
       matrix = new Matrix(new Integer[][] {{12, -51, 4}, {6, 167, -68}, {-4, 24, -41}});
 
       expectedQ = new Matrix(
-          new Fraction[][] {{new Fraction(6, 7), new Fraction(-69, 175), new Fraction(-58, 175)},
-              {new Fraction(3, 7), new Fraction(158, 175), new Fraction(6, 175)},
-              {new Fraction(-2, 7), new Fraction(6, 35), new Fraction(-33, 35)}});
+          new String[][] {{"6/7", "-69/175", "-58/175"},
+              {"3/7", "158/175", "6/175"},
+              {"-2/7", "6/35", "-33/35"}});
 
       expectedR = new Matrix(new Integer[][] {{14, 21, -14}, {0, 175, -70}, {0, 0, 35}});
       assertEquals(expectedQ, matrix.QRDecomposition()[0]);
