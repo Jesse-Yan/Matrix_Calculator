@@ -531,22 +531,20 @@ public class Main extends Application {
     // }
     // });
 
-    // mButtons.get(4).setOnMouseClicked(event -> {
-    // try {
-    // String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-    // Matrix matrix = new Matrix(dataFromMatrix);
-    // List<String[][]> resultInverse = Arrays.stream(matrix.???)
-    // .map(Matrix::toStringMatrix)
-    // .collect(toList());
-    // BorderPane resultShower = resultBuilderTrace("Operation: Trace", "Trace",
-    // dataFromMatrix, resultInverse.get(0), resultInverse.get(1));
-    // vBoxR.getChildren().remove(2);
-    // vBoxR.getChildren().add(resultShower);
-    // } catch (MatrixDimensionsMismatchException e) {
-    // alert("MatrixDimensionError",
-    // "Sorry, the matrix you entered cannot perform trace");
-    // }
-    // });
+//     mButtons.get(4).setOnMouseClicked(event -> {
+//     try {
+//     String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+//     MatrixCalculator matrix = new MatrixCalculator(dataFromMatrix);
+//     resultTrace = 
+//     BorderPane resultShower = resultBuilderTrace("Operation: Trace", "Trace",
+//     dataFromMatrix, resultInverse.get(0), resultInverse.get(1));
+//     vBoxR.getChildren().remove(2);
+//     vBoxR.getChildren().add(resultShower);
+//     } catch (MatrixDimensionsMismatchException e) {
+//     alert("MatrixDimensionError",
+//     "Sorry, the matrix you entered cannot perform trace");
+//     }
+//     });
 
     mButtons.get(5).setOnMouseClicked(event -> {
       try {
@@ -556,8 +554,8 @@ public class Main extends Application {
                                            .map(Matrix::toStringMatrix)
                                            .collect(toList());
         BorderPane resultShower =
-            resultBuilderLUP("Operation: LUP", "LUP", dataFromMatrix,
-                resultLUP.get(0), resultLUP.get(1), resultLUP.get(2));
+            resultBuilderLUP("Operation: LUP", "LUP", resultLUP.get(2),
+                dataFromMatrix, resultLUP.get(0), resultLUP.get(1));
         vBoxR.getChildren().remove(2);
         vBoxR.getChildren().add(resultShower);
       } catch (MatrixDimensionsMismatchException e) {
@@ -633,7 +631,7 @@ public class Main extends Application {
         alert("Error", "Sorry, but an Error happened");
       }
     });
-    
+
     // Add to the overall panel
     vBoxR.getChildren().addAll(matrixes, mOperations, mResult);
     root.setRight(vBoxR);
@@ -751,7 +749,7 @@ public class Main extends Application {
    * @param  string         operation
    * @param  mathString     operation
    * @param  dataFromMatrix source Matrix
-   * @param  result  the result
+   * @param  result         the result
    * @return                resulted BorderPane
    */
   private BorderPane resultBuilder(String string, String mathString,
