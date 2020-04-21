@@ -407,6 +407,9 @@ public class Matrix implements MatrixADT {
   }
 
   /**
+<<<<<<< HEAD
+   * A private helper method that swap two rows of the matrix. That is, swap rowX and rowY.
+=======
    * A private helper method that get the absolute value of a Numeric number
    * 
    * @param  n a given numeric number
@@ -421,6 +424,7 @@ public class Matrix implements MatrixADT {
   /**
    * A private helper method that swap two rows of the matrix. That is, swap
    * rowX and rowY.
+>>>>>>> f23299b25e5a73d52ed4802c3f168151dab50692
    * 
    * @param rowX the index of the first row
    * @param rowY the index of the second row
@@ -447,7 +451,7 @@ public class Matrix implements MatrixADT {
     int pivotRow = k;
     Numeric pivotElement = entry[pivotRow][k];
     for (int i = k + 1; i < getNumberOfRow(); i++)
-      if (abs(entry[i][k]).compareTo(pivotElement) > 0) {
+      if (entry[i][k].abs().compareTo(pivotElement) > 0) {
         pivotElement = entry[i][k];
         pivotRow = i;
       }
