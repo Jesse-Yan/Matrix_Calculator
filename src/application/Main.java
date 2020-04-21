@@ -44,7 +44,7 @@ public class Main extends Application {
   /**
    * This is the start method of the Main class
    * 
-   * @param primaryStage
+   * @param primaryStage the main Stage
    */
   @Override
   public void start(Stage primaryStage) {
