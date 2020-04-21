@@ -207,6 +207,13 @@ public class Fraction extends Number implements Comparable<Fraction> {
     return denominator;
   }
 
+  /**
+   * comparing function that specific comparing fractions. 
+   * 
+   * @return 1 if current Fraction is greater than other
+   *        -1 if current Fraction is smaller than other
+   *         0 if both Fraction are equals.
+   */
   @Override
   public int compareTo(Fraction other) {
     int x = this.getNumerator() * other.getDenominator();
