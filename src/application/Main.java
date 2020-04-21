@@ -349,8 +349,9 @@ public class Main extends Application {
     matrix1.setMinHeight(233);
     matrix2.setMinHeight(233);
     matrixes.setLeft(matrix1);
-    matrixes.setCenter(matrixOperators);
-    matrixes.setRight(matrix2);
+    HBox cAndR = new HBox();
+    cAndR.getChildren().addAll(matrixOperators, matrix2);
+    matrixes.setCenter(cAndR);
 
     // Set the EventHandler for matrixOperators
     c1.setOnMouseClicked(event -> {
@@ -499,11 +500,11 @@ public class Main extends Application {
       try {
         String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
         Matrix matrix = new Matrix(dataFromMatrix);
-        List<String[][]> resultInverse = Arrays.stream(matrix.QRDecomposition())
-                                               .map(Matrix::toStringMatrix)
-                                               .collect(toList());
+        List<String[][]> resultQR = Arrays.stream(matrix.QRDecomposition())
+                                          .map(Matrix::toStringMatrix)
+                                          .collect(toList());
         BorderPane resultShower = resultBuilderQR("Operation: QR", "QR",
-            dataFromMatrix, resultInverse.get(0), resultInverse.get(1));
+            dataFromMatrix, resultQR.get(0), resultQR.get(1));
         vBoxR.getChildren().remove(2);
         vBoxR.getChildren().add(resultShower);
       } catch (MatrixDimensionsMismatchException e) {
@@ -543,7 +544,7 @@ public class Main extends Application {
     // vBoxR.getChildren().add(resultShower);
     // } catch (MatrixDimensionsMismatchException e) {
     // alert("MatrixDimensionError",
-    // "Sorry, the matrix you entered cannot perform QR decomposition");
+    // "Sorry, the matrix you entered cannot perform trace");
     // }
     // });
 
@@ -551,13 +552,12 @@ public class Main extends Application {
       try {
         String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
         Matrix matrix = new Matrix(dataFromMatrix);
-        List<String[][]> resultInverse =
-            Arrays.stream(matrix.LUPDecomposition())
-                  .map(Matrix::toStringMatrix)
-                  .collect(toList());
-        BorderPane resultShower = resultBuilderLUP("Operation: LUP", "LUP",
-            dataFromMatrix, resultInverse.get(0), resultInverse.get(1),
-            resultInverse.get(2));
+        List<String[][]> resultLUP = Arrays.stream(matrix.LUPDecomposition())
+                                           .map(Matrix::toStringMatrix)
+                                           .collect(toList());
+        BorderPane resultShower =
+            resultBuilderLUP("Operation: LUP", "LUP", dataFromMatrix,
+                resultLUP.get(0), resultLUP.get(1), resultLUP.get(2));
         vBoxR.getChildren().remove(2);
         vBoxR.getChildren().add(resultShower);
       } catch (MatrixDimensionsMismatchException e) {
@@ -566,6 +566,74 @@ public class Main extends Application {
       }
     });
 
+    mButtons.get(6).setOnMouseClicked(event -> {
+      try {
+        String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+        Matrix matrix = new Matrix(dataFromMatrix);
+        matrix.simplifyAfterElimination();
+        String[][] resultGE = matrix.toStringMatrix();
+        BorderPane resultShower =
+            resultBuilder("Operation: GE", "GE", dataFromMatrix, resultGE);
+        vBoxR.getChildren().remove(2);
+        vBoxR.getChildren().add(resultShower);
+      } catch (Exception e) {
+        alert("Error", "Sorry, but an Error happened");
+      }
+    });
+
+    // mButtons.get(7).setOnMouseClicked(event -> {
+    // String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+    // Matrix matrix = new Matrix(dataFromMatrix);
+    // String[][] resultDI = matrix.???
+    // BorderPane resultShower =
+    // resultBuilder("Operation: DI", "DI", dataFromMatrix, resultDI);
+    // vBoxR.getChildren().remove(2);
+    // vBoxR.getChildren().add(resultShower);
+    // });
+
+    mButtons.get(8).setOnMouseClicked(event -> {
+      try {
+        String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+        Matrix matrix = new Matrix(dataFromMatrix);
+        double resultEIV = matrix.eigenValues()[0].doubleValue();
+        BorderPane resultShower =
+            resultBuilder("Operation: EIV", "EIV", dataFromMatrix, resultEIV);
+        vBoxR.getChildren().remove(2);
+        vBoxR.getChildren().add(resultShower);
+      } catch (MatrixDimensionsMismatchException e) {
+        alert("MatrixDimensionError",
+            "Sorry, the matrix you entered is not a square matrix\nTo compute the eigenvalue of a matrix, it has to be a square matrix");
+      }
+    });
+
+    // mButtons.get(9).setOnMouseClicked(event -> {
+    // try {
+    // String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+    // Matrix matrix = new Matrix(dataFromMatrix);
+    // int resultRank = matrix.???;
+    // BorderPane resultShower =
+    // resultBuilder("Operation: Rank", "Rank", dataFromMatrix, resultRank);
+    // vBoxR.getChildren().remove(2);
+    // vBoxR.getChildren().add(resultShower);
+    // } catch (Exception e) {
+    // alert("Error", "Sorry, but an Error happened");
+    // }
+    // });
+
+    mButtons.get(10).setOnMouseClicked(event -> {
+      try {
+        String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+        Matrix matrix = new Matrix(dataFromMatrix);
+        String[][] resultTS = matrix.transpose().toStringMatrix();
+        BorderPane resultShower =
+            resultBuilder("Operation: TS", "TS", dataFromMatrix, resultTS);
+        vBoxR.getChildren().remove(2);
+        vBoxR.getChildren().add(resultShower);
+      } catch (Exception e) {
+        alert("Error", "Sorry, but an Error happened");
+      }
+    });
+    
     // Add to the overall panel
     vBoxR.getChildren().addAll(matrixes, mOperations, mResult);
     root.setRight(vBoxR);
@@ -683,11 +751,11 @@ public class Main extends Application {
    * @param  string         operation
    * @param  mathString     operation
    * @param  dataFromMatrix source Matrix
-   * @param  resultInverse  the result
+   * @param  result  the result
    * @return                resulted BorderPane
    */
   private BorderPane resultBuilder(String string, String mathString,
-      String[][] dataFromMatrix, String[][] resultInverse) {
+      String[][] dataFromMatrix, String[][] result) {
     BorderPane resultedPane = new BorderPane();
 
     resultedPane.setStyle("-fx-background-color: lightgray;");
@@ -704,10 +772,10 @@ public class Main extends Application {
     equals.setStyle(labelStyle);
 
     GridPane gridSrc = matrixGenerator(dataFromMatrix);
-    GridPane result = matrixGenerator(resultInverse);
+    GridPane resultG = matrixGenerator(result);
 
     HBox resultedHBox = new HBox();
-    resultedHBox.getChildren().addAll(operationMath, gridSrc, equals, result);
+    resultedHBox.getChildren().addAll(operationMath, gridSrc, equals, resultG);
 
     resultedPane.setCenter(resultedHBox);
 
@@ -828,7 +896,7 @@ public class Main extends Application {
       length = singleLength > length ? singleLength : length;
     }
     for (Label single : allLabels) {
-      single.setMinWidth(length * 13);
+      single.setMinWidth(length * 16);
     }
     return resultedGrid;
   }
