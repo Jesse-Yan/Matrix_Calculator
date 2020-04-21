@@ -57,17 +57,17 @@ public class Numeric extends Number implements Comparable<Numeric> {
   }
   
   private static boolean isDouble(String string) {
-    Pattern pattern = Pattern.compile("^[0-9]+\\.[0-9]+$"); 
+    Pattern pattern = Pattern.compile("^-?[0-9]+\\.[0-9]+$"); 
     return pattern.matcher(string).matches();
   }
   
   private static boolean isFraction(String string) {
-    Pattern pattern = Pattern.compile("^[0-9]+\\/[0-9]+$");
+    Pattern pattern = Pattern.compile("^-?[0-9]+\\/[0-9]+$");
     return pattern.matcher(string).matches();
   }
   
   private static boolean isInteger(String string) {
-    Pattern pattern = Pattern.compile("^[0-9]+$"); 
+    Pattern pattern = Pattern.compile("^-?[0-9]+$"); 
     return pattern.matcher(string).matches();
   }
 
@@ -93,6 +93,10 @@ public class Numeric extends Number implements Comparable<Numeric> {
    */
   public static Numeric of(Number number) {
     return new Numeric(number);
+  }
+  
+  public static Numeric of(String string) {
+    return new Numeric(string);
   }
 
   @Override
@@ -132,6 +136,10 @@ public class Numeric extends Number implements Comparable<Numeric> {
     }
     return this.add(new Numeric(other));
   }
+  
+  public Numeric add(String other) {
+    return add(new Numeric(other));
+  }
 
   /**
    * Get the difference of this Numeric Instance and another given Number Instance.
@@ -162,6 +170,10 @@ public class Numeric extends Number implements Comparable<Numeric> {
       throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
     }
     return this.subtract(new Numeric(other));
+  }
+  
+  public Numeric subtract(String other) {
+    return subtract(new Numeric(other));
   }
 
   /**
@@ -194,6 +206,10 @@ public class Numeric extends Number implements Comparable<Numeric> {
     }
     return this.multiply(new Numeric(other));
   }
+  
+  public Numeric multiply(String other) {
+    return multiply(new Numeric(other));
+  }
 
   /**
    * Get the quotient of this Numeric Instance and another given Number Instance.
@@ -224,6 +240,10 @@ public class Numeric extends Number implements Comparable<Numeric> {
       throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
     }
     return this.dividedBy(new Numeric(other));
+  }
+  
+  public Numeric dividedBy(String other) {
+    return dividedBy(new Numeric(other));
   }
 
   /**
@@ -302,9 +322,15 @@ public class Numeric extends Number implements Comparable<Numeric> {
     }
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
+  
+  public int compareTo(String other) {
+    return compareTo(new Numeric(other));
+  }
 
   @Override
   public boolean equals(Object obj) {
+    if (obj instanceof String)
+      return compareTo((String) obj) == 0;
     if (obj instanceof Numeric)
       return compareTo((Numeric) obj) == 0;
     else if (obj instanceof Number)
