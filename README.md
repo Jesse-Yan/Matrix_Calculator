@@ -24,10 +24,11 @@ using command line to run executable.jar for demo(see file: running_command.txt)
 
 ## Program Description
 program functions as a calculator that support Matrix calculations supports pirorty calculation.
-Matrixs and calculation can be read from json files and compute result.
+Matrixs and calculation can be read from json files for computing result.
 
 ## Code Organization
 UW-madison default setup.
+program are base on stack, 2D array, Arraylist, and other combination of data structure. 
 Check design.pdf to learn more.
 
 ## IMPORTANT
