@@ -56,7 +56,9 @@ public class Main extends Application {
 
     try {
       // Set the application icon
-      primaryStage.getIcons().add(new Image("./assets/calculator.png"));
+      primaryStage.getIcons()
+                  .add(new Image(getClass().getResource("../calculator.png")
+                                           .toExternalForm()));
     } catch (Exception e) {
 
     }
@@ -376,7 +378,9 @@ public class Main extends Application {
         new Scene(root, primaryStage.getWidth(), primaryStage.getHeight());
     primaryStage.setScene(mainScene);
     try {
-      mainScene.getStylesheets().add("./application/styleSheet.css");
+      mainScene.getStylesheets()
+               .add(
+                   getClass().getResource("./styleSheet.css").toExternalForm());
     } catch (Exception e) {
 
     }
