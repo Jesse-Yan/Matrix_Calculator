@@ -37,6 +37,8 @@ public class Main extends Application {
 
   private TextField focusedTextField = null;
 
+  private boolean analyze = false;
+
   /**
    * This is the start method of the Main class
    * 
@@ -141,10 +143,12 @@ public class Main extends Application {
     GridPane gridPaneL = new GridPane();
     List<Button> buttons =
         List.of("\u03c0", "   e   ", "   C   ", "  <-   ", "   (   ", "   )   ",
-            "  |x|  ", "   /   ","   7   ", "   8   ", "   9   ",
-            "   *   ", "   4   ", "   5   ", "   6   ", "   -   ", "   1   ",
-            "   2   ", "   3   ", "   +   ", "  +/-  ", "   0   ", "   .   ",
-            "   =   ").stream().map(Button::new).collect(toList());
+            "  |x|  ", "   /   ", "   7   ", "   8   ", "   9   ", "   *   ",
+            "   4   ", "   5   ", "   6   ", "   -   ", "   1   ", "   2   ",
+            "   3   ", "   +   ", "  +/-  ", "   0   ", "   .   ", "   =   ")
+            .stream()
+            .map(Button::new)
+            .collect(toList());
     int number = 0;
     for (int row = 0; row < 6; row++) {
       for (int column = 0; column < 4; column++) {
@@ -171,28 +175,7 @@ public class Main extends Application {
       btn.setOnAction(event -> {
         String temp = btn.getText();
 
-        if (temp.equals("  exp  ")) {
-          try {
-            input.insertText(caretPosition, "exp");
-            ++caretPosition;
-          } catch (Exception e) {
-
-          }
-        } else if (temp.equals("y" + "\u221A" + "x")) {
-          try {
-            input.insertText(caretPosition, "\u221A");
-            ++caretPosition;
-          } catch (Exception e) {
-
-          }
-        } else if (temp.equals("  x^y  ")) {
-          try {
-            input.insertText(caretPosition, "^");
-            ++caretPosition;
-          } catch (Exception e) {
-
-          }
-        } else if (temp.equals("   C   ")) {
+        if (temp.equals("   C   ")) {
           input.clear();
           caretPosition = 0;
         } else if (temp.equals("  <-   ")) {
@@ -213,10 +196,19 @@ public class Main extends Application {
           }
         } else if (temp.equals("   =   ")) {
           try {
-            result.appendText(input.getText() + "\n="
-                + Calculator.calcul("0" + input.getText()) + "\n");
+            if (!analyze) {
+              result.appendText(input.getText() + "\n="
+                  + Calculator.calcul("0" + input.getText()) + "\n");
+            } else {
+              result.appendText(SequenceSummary.summary(input.getText()));
+              analyze = false;
+              space.setDisable(true);
+              notNumber.stream().forEach(b -> b.setDisable(false));
+              input.setOnMouseEntered(e -> {
+                notNumber.stream().forEach(b -> b.setDisable(false));
+              });
+            }
           } catch (Exception e) {
-            e.printStackTrace();
             alert("Wrong Expression",
                 "The equation you entered cannot be calculated\nPlease press 'C' and try again");
           }
@@ -251,10 +243,15 @@ public class Main extends Application {
 
     // Set for Sequence Actions
     analyzeSequence.setOnMouseClicked(e -> {
+      analyze = true;
       space.setDisable(false);
       notNumber.stream().forEach(b -> b.setDisable(true));
       buttons.get(buttons.size() - 1).setDisable(false);
       input.setOnMouseEntered(null);
+    });
+    space.setOnAction(e -> {
+      input.insertText(caretPosition, " ");;
+      ++caretPosition;
     });
 
 

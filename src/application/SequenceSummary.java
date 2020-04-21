@@ -16,10 +16,20 @@ public class SequenceSummary {
    * This method summarize the sequence
    * 
    * @param  sequence the sequence to be analyzed
-   * @return          DoubleSummaryStatistics information relates to the
-   *                    sequence
+   * @return          Resulting String
    */
-  public static DoubleSummaryStatistics summary(double[] sequence) {
-    return Arrays.stream(sequence).summaryStatistics();
+  public static String summary(String sequence) {
+
+    sequence = sequence.trim();
+
+    DoubleSummaryStatistics statistics = Arrays.stream(sequence.split(" +"))
+                                               .mapToDouble(Double::parseDouble)
+                                               .summaryStatistics();
+
+    return "Number of elements in this sequence is " + statistics.getCount()
+        + "\nSum of this sequence is " + statistics.getSum()
+        + "\nAverage of the sequence is " + statistics.getAverage()
+        + "\nMax is " + statistics.getMax() + "\nMin is " + statistics.getMin()
+        + "\n";
   }
 }
