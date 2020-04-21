@@ -507,50 +507,53 @@ public class Main extends Application {
             "Sorry, the matrix you entered cannot perform QR decomposition");
       }
     });
-    
-//    mButtons.get(3).setOnMouseClicked(event -> {
-//      try {
-//        String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-//        Matrix matrix = new Matrix(dataFromMatrix);
-//        List<String[][]> resultInverse = Arrays.stream(matrix.???)
-//                                               .map(Matrix::toStringMatrix)
-//                                               .collect(toList());
-//        BorderPane resultShower = resultBuilderSVD("Operation: SVD", "SVD",
-//            dataFromMatrix, resultInverse.get(0), resultInverse.get(1), resultInverse.get(2));
-//        vBoxR.getChildren().remove(2);
-//        vBoxR.getChildren().add(resultShower);
-//      } catch (MatrixDimensionsMismatchException e) {
-//        alert("MatrixDimensionError",
-//            "Sorry, the matrix you entered cannot perform SVD decomposition");
-//      }
-//    });
-    
-//    mButtons.get(4).setOnMouseClicked(event -> {
-//      try {
-//        String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-//        Matrix matrix = new Matrix(dataFromMatrix);
-//        List<String[][]> resultInverse = Arrays.stream(matrix.???)
-//                                               .map(Matrix::toStringMatrix)
-//                                               .collect(toList());
-//        BorderPane resultShower = resultBuilderTrace("Operation: Trace", "Trace",
-//            dataFromMatrix, resultInverse.get(0), resultInverse.get(1));
-//        vBoxR.getChildren().remove(2);
-//        vBoxR.getChildren().add(resultShower);
-//      } catch (MatrixDimensionsMismatchException e) {
-//        alert("MatrixDimensionError",
-//            "Sorry, the matrix you entered cannot perform QR decomposition");
-//      }
-//    });
-    
+
+    // mButtons.get(3).setOnMouseClicked(event -> {
+    // try {
+    // String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+    // Matrix matrix = new Matrix(dataFromMatrix);
+    // List<String[][]> resultInverse = Arrays.stream(matrix.???)
+    // .map(Matrix::toStringMatrix)
+    // .collect(toList());
+    // BorderPane resultShower = resultBuilderSVD("Operation: SVD", "SVD",
+    // dataFromMatrix, resultInverse.get(0), resultInverse.get(1),
+    // resultInverse.get(2));
+    // vBoxR.getChildren().remove(2);
+    // vBoxR.getChildren().add(resultShower);
+    // } catch (MatrixDimensionsMismatchException e) {
+    // alert("MatrixDimensionError",
+    // "Sorry, the matrix you entered cannot perform SVD decomposition");
+    // }
+    // });
+
+    // mButtons.get(4).setOnMouseClicked(event -> {
+    // try {
+    // String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+    // Matrix matrix = new Matrix(dataFromMatrix);
+    // List<String[][]> resultInverse = Arrays.stream(matrix.???)
+    // .map(Matrix::toStringMatrix)
+    // .collect(toList());
+    // BorderPane resultShower = resultBuilderTrace("Operation: Trace", "Trace",
+    // dataFromMatrix, resultInverse.get(0), resultInverse.get(1));
+    // vBoxR.getChildren().remove(2);
+    // vBoxR.getChildren().add(resultShower);
+    // } catch (MatrixDimensionsMismatchException e) {
+    // alert("MatrixDimensionError",
+    // "Sorry, the matrix you entered cannot perform QR decomposition");
+    // }
+    // });
+
     mButtons.get(5).setOnMouseClicked(event -> {
       try {
         String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
         Matrix matrix = new Matrix(dataFromMatrix);
-        List<String[][]> resultInverse = Arrays.stream(matrix.LUPDecomposition())
-                                               .map(Matrix::toStringMatrix)
-                                               .collect(toList());
+        List<String[][]> resultInverse =
+            Arrays.stream(matrix.LUPDecomposition())
+                  .map(Matrix::toStringMatrix)
+                  .collect(toList());
         BorderPane resultShower = resultBuilderLUP("Operation: LUP", "LUP",
-            dataFromMatrix, resultInverse.get(0), resultInverse.get(1), resultInverse.get(2));
+            dataFromMatrix, resultInverse.get(0), resultInverse.get(1),
+            resultInverse.get(2));
         vBoxR.getChildren().remove(2);
         vBoxR.getChildren().add(resultShower);
       } catch (MatrixDimensionsMismatchException e) {
@@ -576,9 +579,19 @@ public class Main extends Application {
     primaryStage.show();
   }
 
-  private BorderPane resultBuilderLUP(String string, String string2,
-      String[][] dataFromMatrix, String[][] strings, String[][] strings2,
-      String[][] strings3) {
+  /**
+   * Method that returns a BorderPane of finished result
+   * 
+   * @param  string         operation
+   * @param  mathString     operation
+   * @param  dataFromMatrix source Matrix
+   * @param  l              the L
+   * @param  u              the U
+   * @param  p              the P
+   * @return                resulted BorderPane
+   */
+  private BorderPane resultBuilderLUP(String string, String mathString,
+      String[][] dataFromMatrix, String[][] l, String[][] u, String[][] p) {
     return null;
   }
 
