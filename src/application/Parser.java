@@ -104,6 +104,7 @@ public class Parser {
     public static void main(String[] args) {
         try {
             Parser parser = new Parser("1.json");
+            System.out.println("success!!");
         } catch (Exception e) {
             System.out.println(e.toString());
         }
