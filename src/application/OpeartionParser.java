@@ -79,6 +79,7 @@ public class OpeartionParser {
      *
      * @return list of matrix
      */
+    @SuppressWarnings("rawtypes")
     public List getCalculations() {
         return calSteps;
     }
