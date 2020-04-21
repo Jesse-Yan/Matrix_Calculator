@@ -24,6 +24,11 @@ public class Numeric extends Number implements Comparable<Numeric> {
   final static int MAXIMUM_SIGNIFICANT_FIGURE = 12;
 
   /**
+   * Number of significant figures for output.
+   */
+  final static int OUTPUT_SIGNIFICANT_FIGURE = 5;
+
+  /**
    * A private Object representing the number, which can only be a Integer, or a Fraction, or a
    * Double.
    */
@@ -55,53 +60,65 @@ public class Numeric extends Number implements Comparable<Numeric> {
       this.number = number.doubleValue();
     }
   }
-  
+
   private static boolean isDouble(String string) {
-    Pattern pattern = Pattern.compile("^-?[0-9]+\\.[0-9]+$"); 
+    Pattern pattern = Pattern.compile("^-?[0-9]+\\.[0-9]+$");
     return pattern.matcher(string).matches();
   }
-  
+
   private static boolean isFraction(String string) {
     Pattern pattern = Pattern.compile("^-?[0-9]+\\/[0-9]+$");
     return pattern.matcher(string).matches();
   }
-  
+
   private static boolean isInteger(String string) {
-    Pattern pattern = Pattern.compile("^-?[0-9]+$"); 
+    Pattern pattern = Pattern.compile("^-?[0-9]+$");
     return pattern.matcher(string).matches();
   }
 
+  private int tenPow(int n) {
+    int ans = 1;
+    for(int i = 0; i < n; i++)
+      ans *= 10;
+    return ans;
+  }
+
   public Numeric(String string) {
-    if(isInteger(string))
-      number = Numeric.of((Long)Long.parseLong(string)).number;
-    else if(isFraction(string)) {
+    if (isInteger(string))
+      number = Numeric.of((Long) Long.parseLong(string)).number;
+    else if (isFraction(string)) {
       String part[] = string.split("\\/");
       int numerator = Integer.parseInt(part[0]);
       int denominator = Integer.parseInt(part[1]);
       number = Fraction.of(numerator, denominator);
-    } else if(isDouble(string)) {
-      number = Double.parseDouble(string);
+    } else if (isDouble(string)) {
+
+      int index = string.indexOf(".");
+      int decimalPlaces = string.length() - index - 1;
+      if (decimalPlaces <= 5) {
+        String part[] = string.split("\\.");
+        int integerPart = Integer.parseInt(part[0]);
+        int decimalPart = Integer.parseInt(part[1]);
+        number = new Fraction(decimalPart, tenPow(decimalPlaces)).add(Fraction.of(integerPart));
+      } else
+        number = Double.parseDouble(string);
     } else {
-      throw new IllegalArgumentException("Cannot convert the String to Numeric");
+      throw new IllegalArgumentException(string + ": Cannot convert the String to Numeric");
     }
   }
 
   /**
    * Generate a Numeric object with a given number
+   * 
    * @param number a given number
    * @return a constructed Numeric object
    */
   public static Numeric of(Number number) {
     return new Numeric(number);
   }
-  
+
   public static Numeric of(String string) {
     return new Numeric(string);
-  }
-
-  @Override
-  public String toString() {
-    return number.toString();
   }
 
   /**
@@ -136,7 +153,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
     }
     return this.add(new Numeric(other));
   }
-  
+
   public Numeric add(String other) {
     return add(new Numeric(other));
   }
@@ -171,7 +188,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
     }
     return this.subtract(new Numeric(other));
   }
-  
+
   public Numeric subtract(String other) {
     return subtract(new Numeric(other));
   }
@@ -186,6 +203,12 @@ public class Numeric extends Number implements Comparable<Numeric> {
     if (other instanceof Numeric) {
       Numeric otherNum = new Numeric(other);
       Numeric thisNum = new Numeric(this);
+      if ((thisNum.number instanceof Fraction || thisNum.number instanceof Integer) && thisNum.equals(Numeric.of(0))) {
+        return new Numeric(0);
+      }
+      if ((otherNum.number instanceof Fraction || otherNum.number instanceof Integer) && otherNum.equals(Numeric.of(0))) {
+        return new Numeric(0);
+      }
       if (thisNum.number instanceof Double || otherNum.number instanceof Double) {
         return new Numeric(thisNum.number.doubleValue() * otherNum.number.doubleValue());
       }
@@ -206,7 +229,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
     }
     return this.multiply(new Numeric(other));
   }
-  
+
   public Numeric multiply(String other) {
     return multiply(new Numeric(other));
   }
@@ -221,6 +244,9 @@ public class Numeric extends Number implements Comparable<Numeric> {
     if (other instanceof Numeric) {
       Numeric otherNum = new Numeric(other);
       Numeric thisNum = new Numeric(this);
+      if ((thisNum.number instanceof Fraction || thisNum.number instanceof Integer) && thisNum.equals(Numeric.of(0))) {
+        return new Numeric(0);
+      }
       if (thisNum.number instanceof Double || otherNum.number instanceof Double) {
         return new Numeric(thisNum.number.doubleValue() / otherNum.number.doubleValue());
       }
@@ -241,7 +267,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
     }
     return this.dividedBy(new Numeric(other));
   }
-  
+
   public Numeric dividedBy(String other) {
     return dividedBy(new Numeric(other));
   }
@@ -294,15 +320,26 @@ public class Numeric extends Number implements Comparable<Numeric> {
   }
 
   /**
+   * Round a given double to the given significant figures.
+   * 
+   * @param value            a given double
+   * @param significatFigure a given int representing the significant figures
+   * @return the rounded double
+   */
+  private static double roundWithSignificantFigure(double value, int significantFigure) {
+    BigDecimal bigDecimal = new BigDecimal(Double.toString(value));
+    bigDecimal = bigDecimal.round(new MathContext(significantFigure));
+    return bigDecimal.doubleValue();
+  }
+
+  /**
    * Round a given double to having at most MAXIMUM_SIGNIFICANT_FIGURE significant figures.
    * 
    * @param value a given double
    * @return the rounded double
    */
   private static double round(double value) {
-    BigDecimal bigDecimal = new BigDecimal(Double.toString(value));
-    bigDecimal = bigDecimal.round(new MathContext(MAXIMUM_SIGNIFICANT_FIGURE));
-    return bigDecimal.doubleValue();
+    return roundWithSignificantFigure(value, MAXIMUM_SIGNIFICANT_FIGURE);
   }
 
   @Override
@@ -322,7 +359,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
     }
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
-  
+
   public int compareTo(String other) {
     return compareTo(new Numeric(other));
   }
@@ -364,16 +401,30 @@ public class Numeric extends Number implements Comparable<Numeric> {
     return number.doubleValue();
   }
 
+  @Override
+  public String toString() {
+    if (number instanceof Double)
+      return "" + roundWithSignificantFigure((Double) number, OUTPUT_SIGNIFICANT_FIGURE);
+    if (number instanceof Fraction) {
+        int numerator = ((Fraction) number).getNumerator();
+        int denominator = ((Fraction) number).getDenominator();
+        if(("" + numerator + denominator).length() >= 8) {
+          return "" + roundWithSignificantFigure(((Fraction) number).doubleValue(), OUTPUT_SIGNIFICANT_FIGURE);
+        }
+    }
+    return number.toString();
+  }
+
   /**
    * A main method, just for test and demo.
    * 
    * @param args args
    */
   public static void main(String args[]) {
-    
+
     Numeric n1 = new Numeric("1"); // n1 = 1
     Numeric n2 = new Numeric("1/7"); // n2 = 1/7
-    Numeric n3 = new Numeric("1.5"); // n3 = 0.5
+    Numeric n3 = new Numeric("1.5000"); // n3 = 0.5
     Numeric n4 = new Numeric("2147483647"); // n4 = int_max
     System.out.println(n1.add(n1)); // n1 + n1 = 2
     System.out.println(n1.add(n2)); // n1 + n2 = 8/7
@@ -392,9 +443,9 @@ public class Numeric extends Number implements Comparable<Numeric> {
     } catch (Exception e) {
       System.out.println(e.getMessage()); // "/ by zero"
     }
-    
+
     System.out.println(Numeric.of(new Fraction(4, 9)).sqrt()); // sqrt(4/9) = 2/3
-    System.out.println(Numeric.of(2).sqrt());  // sqrt(2) = 1.41421...
+    System.out.println(Numeric.of(2).sqrt()); // sqrt(2) = 1.41421...
   }
 
 }

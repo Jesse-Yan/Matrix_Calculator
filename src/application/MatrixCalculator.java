@@ -42,19 +42,30 @@ public class MatrixCalculator {
    * @throws MatrixDimensionsMismatchException 
    */
   public static void main(String[] args) throws MatrixDimensionsMismatchException {
-    String[][] matrix1 = {{"1", "2", "-3"}, 
-                          {"1/3", "1/2", "-1/3"},
+    String[][] matrixA = {{"1", "2", "-3"}, 
+                          {"1/3", "1/2", "-1/1024"},
                           {"0.5", "0.2", "-0.3"},};
-    String[][] matrix2 = {{"1", "1", "0.111"}, 
-                          {"5/3", "-1/3", "0.222"},
-                          {"-3", "0.4", "-0.333"},};
+    String[][] matrixB = {{"1", "0", "0.1"}, 
+                          {"5/3", "0", "-1/3"},
+                          {"-3", "0.4", "-0.333"}};
     
-    String[][] matrix3 = MatrixCalculator.add(matrix1, matrix2);
-    for(String[] row : matrix3) {
+    String[][] matrixC = MatrixCalculator.add(matrixA, matrixB);
+    for(String[] row : matrixC) {
       for(String number : row)
         System.out.print(number + ' ');
       System.out.print("\n");
     }
+    
+    System.out.print("\n");
+    
+    String[][] matrixD = MatrixCalculator.getInverse(matrixB);
+    for(String[] row : matrixD) {
+      for(String number : row)
+        System.out.print(number + ' ');
+      System.out.print("\n");
+    }
+    
+    
   }
   
 }
