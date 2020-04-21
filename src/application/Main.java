@@ -57,7 +57,7 @@ public class Main extends Application {
     try {
       // Set the application icon
       primaryStage.getIcons()
-                  .add(new Image(getClass().getResource("../calculator.png")
+                  .add(new Image(getClass().getResource("/calculator.png")
                                            .toExternalForm()));
     } catch (Exception e) {
 
@@ -380,7 +380,7 @@ public class Main extends Application {
     try {
       mainScene.getStylesheets()
                .add(
-                   getClass().getResource("./styleSheet.css").toExternalForm());
+                   getClass().getResource("styleSheet.css").toExternalForm());
     } catch (Exception e) {
 
     }
