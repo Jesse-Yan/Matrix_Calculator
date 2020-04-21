@@ -352,7 +352,7 @@ public class Main extends Application {
 
     // Set the Operations of one Matrix
     List<Button> mButtons = List.of("Det", "Inverse", "QR", "SVD", "Trace",
-        "LU", "Gauss-Elim", "diagonalize", "EiValue", "rank", "transpose")
+        "LU", "Gauss-Elim", "Diagonalize", "EiValue", "Rank", "Transpose")
                                 .stream()
                                 .map(operator -> {
                                   Button temp = new Button(operator);
