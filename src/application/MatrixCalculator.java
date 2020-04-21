@@ -23,13 +23,6 @@ public class MatrixCalculator {
     this.matrix2 = matrix2;
   }
   
-  private String[][] properFormatted(Matrix matrix) {
-    if(mode == Mode.DECIMAL)
-      return matrix.toDecimalStringMatrix();
-    else 
-      return matrix.toStringMatrix();
-  }
-  
   public String[][] add() throws MatrixDimensionsMismatchException{
     Matrix firstMatrix = new Matrix(matrix1);
     Matrix secondMatrix = new Matrix(matrix2);
@@ -53,12 +46,26 @@ public class MatrixCalculator {
   
   public String getDeterminant() throws MatrixDimensionsMismatchException{
     Matrix firstMatrix = new Matrix(matrix1);
-    return firstMatrix.determinant().toString();
+    return properFormatted(firstMatrix.determinant());
   }
   
   public String[][] getInverse() throws MatrixDimensionsMismatchException{
     Matrix firstMatrix = new Matrix(matrix1);
     return properFormatted(firstMatrix.inverse());
+  }
+  
+  private String[][] properFormatted(Matrix matrix) {
+    if(mode == Mode.DECIMAL)
+      return matrix.toDecimalStringMatrix();
+    else 
+      return matrix.toStringMatrix();
+  }
+  
+  private String properFormatted(Numeric number) {
+    if(mode == Mode.DECIMAL)
+      return number.toString();
+    else 
+      return number.castToDouble().toString();
   }
   
   /**
