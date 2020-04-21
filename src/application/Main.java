@@ -314,7 +314,7 @@ public class Main extends Application {
       matrixOperators.add(operators.get(i), 0, i + 2);
     }
     matrixOperators.setVgap(5.5);
-    operators.stream().forEach(b -> b.setDisable(false));
+    operators.stream().forEach(b -> b.setDisable(true));
     hBoxR.getChildren().addAll(matrix1, matrixOperators, matrix2);
 
     // Set the operation panel
