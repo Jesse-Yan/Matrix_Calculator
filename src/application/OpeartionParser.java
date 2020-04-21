@@ -11,9 +11,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
+ * OpeartionParser - read .json file and form calculation steps object
+ * @author Archer (2020)
  * 
- * @author 
- *
  */
 public class OpeartionParser {
 
