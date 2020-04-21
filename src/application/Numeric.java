@@ -2,6 +2,7 @@ package application;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 /**
@@ -21,12 +22,14 @@ public class Numeric extends Number implements Comparable<Numeric> {
    * Since there are float error. Two doubles are considered the same number if their first 12
    * significant digits are same and have same exponent number.
    */
-  final static int MAXIMUM_SIGNIFICANT_FIGURE = 12;
+  final static int SIGNIFICANT_FIGURE_FOR_COMPARISON = 10;
+  
+  final static int SIGNIFICANT_FIGURE_FOR_INPUT_PARSE_FRACTION = 10;
 
   /**
    * Number of significant figures for output.
    */
-  final static int OUTPUT_SIGNIFICANT_FIGURE = 5;
+  static int outputSignificantFigures = 5;
 
   /**
    * A private Object representing the number, which can only be a Integer, or a Fraction, or a
@@ -43,13 +46,13 @@ public class Numeric extends Number implements Comparable<Numeric> {
     if (number instanceof Numeric) {
       this.number = ((Numeric) number).number;
     } else if (number instanceof Fraction) {
-      try { // Try to turn fraction back to int value.
+      try { // Try to turn fraction back to integer
         this.number = number.intValue();
       } catch (ClassCastException e) {
         this.number = number;
       }
     } else if (number instanceof Long) {
-      if (Integer.MIN_VALUE <= number.longValue() && number.longValue() <= Integer.MAX_VALUE) {
+      if (Integer.MIN_VALUE <= number.longValue() && number.longValue() <= Integer.MAX_VALUE) { 
         this.number = number.intValue();
       } else {
         this.number = number.doubleValue();
@@ -59,6 +62,18 @@ public class Numeric extends Number implements Comparable<Numeric> {
     } else {
       this.number = number.doubleValue();
     }
+  }
+  
+  public boolean isInteger() {
+    return number instanceof Integer;
+  }
+  
+  public boolean isFraction() {
+    return number instanceof Fraction;
+  }
+  
+  public boolean isDouble() {
+    return number instanceof Double;
   }
 
   private static boolean theStringIsDouble(String string) {
@@ -94,7 +109,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
     } else if (theStringIsDouble(string)) {
       int index = string.indexOf(".");
       int decimalPlaces = string.length() - index - 1;
-      if (decimalPlaces <= 10) {
+      if (string.length() - 1 <= SIGNIFICANT_FIGURE_FOR_INPUT_PARSE_FRACTION) {
         String part[] = string.split("\\.");
         int integerPart = Integer.parseInt(part[0]);
         int decimalPart = Integer.parseInt(part[1]);
@@ -338,7 +353,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
    * @return the rounded double
    */
   private static double round(double value) {
-    return roundWithSignificantFigure(value, MAXIMUM_SIGNIFICANT_FIGURE);
+    return roundWithSignificantFigure(value, SIGNIFICANT_FIGURE_FOR_COMPARISON);
   }
 
   @Override
@@ -373,6 +388,21 @@ public class Numeric extends Number implements Comparable<Numeric> {
       return compareTo(new Numeric((Number) obj)) == 0;
     return false;
   }
+  
+  public boolean mathematicallyEquals(Object obj) {
+    if (this.number instanceof Double)
+      return false;
+    if (obj instanceof String)
+      return mathematicallyEquals(new Numeric((String) obj));
+    if (obj instanceof Numeric) {
+      if(((Numeric) obj).number instanceof Double)
+        return false;
+      return compareTo((Numeric) obj) == 0;
+    }
+    else if (obj instanceof Number)
+      return mathematicallyEquals(new Numeric((Number) obj));
+    return false;
+  }
 
   @Override
   public int intValue() {
@@ -403,11 +433,44 @@ public class Numeric extends Number implements Comparable<Numeric> {
   public Numeric castToDouble() {
     return new Numeric(doubleValue());
   }
+  
+  public Numeric opposite() {
+    return Numeric.of(0).subtract(this);
+  }
+  
+  public Numeric abs() {
+    if (compareTo(new Numeric(0)) < 0)
+      return opposite();
+    return new Numeric(this);
+  }
+  
+  public Numeric castToNearestFraction() {
+    if (number instanceof Double) {
+      Numeric absThis = this.abs();
+      int numerator = 1;
+      int denominator = 1;
+      while(numerator < 1000 && denominator < 1000) {
+        Numeric fractionVersion = Numeric.of(new Fraction(numerator, denominator));
+        if(fractionVersion.compareTo(absThis) < 0) {
+          numerator++;
+        } else if (fractionVersion.compareTo(absThis) > 0){
+          denominator++;
+        } else {
+          if (compareTo(new Numeric(0)) < 0)
+            return fractionVersion.opposite();
+          return fractionVersion;
+        }
+      }
+      throw new ClassCastException("Cannot cast to nearest Fraction");
+    }
+    else
+      return new Numeric(number);
+  }
 
   @Override
   public String toString() {
     if (number instanceof Double)
-      return "" + roundWithSignificantFigure((Double) number, OUTPUT_SIGNIFICANT_FIGURE);
+      return "" + roundWithSignificantFigure((Double) number, outputSignificantFigures);
     /*if (number instanceof Fraction) {
         int numerator = ((Fraction) number).getNumerator();
         int denominator = ((Fraction) number).getDenominator();
@@ -416,5 +479,12 @@ public class Numeric extends Number implements Comparable<Numeric> {
         }
     }*/
     return number.toString();
+  }
+  
+  public static void main(String[] args) throws MatrixDimensionsMismatchException {
+    //System.out.println(Numeric.of("1/3").castToDouble().castToNearestFraction().mathematicallyEquals("1/3"));
+    Matrix matrix = new Matrix(new String[][] {{"0.5", "1"}, {"1", "0.5"}});
+    System.out.println(Arrays.toString(matrix.eigenValues()));
+    //System.out.println(Numeric.of("0.3333333332").castToNearestFraction());
   }
 }

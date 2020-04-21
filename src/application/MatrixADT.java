@@ -138,7 +138,7 @@ public interface MatrixADT {
   /**
    * Get the EigenValues of the matrix. The given matrix must be a square matrix.
    * 
-   * @return matrix determinant
+   * @return an array of Numeric[], which represents the eigenvalues of the matrix.
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
    * 
    * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
