@@ -2,12 +2,14 @@ package application;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import java.io.File;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -38,6 +40,8 @@ public class Main extends Application {
   private TextField focusedTextField = null;
 
   private boolean analyze = false;
+
+  private boolean secondMatrix = false;
 
   /**
    * This is the start method of the Main class
@@ -127,6 +131,8 @@ public class Main extends Application {
     result.setEditable(false);
     result.setMaxWidth(360.0);
 
+    focusedTextField = input;
+
     // Set two parallel buttons
     HBox hBoxL = new HBox();
     Button analyzeSequence = new Button("Analyze Sequence");
@@ -139,7 +145,6 @@ public class Main extends Application {
     hBoxL.getChildren().addAll(analyzeSequence, space);
 
     // Set the gridPane
-    // Applying Unicode for pi = u+03c0, sqrt = U+221A
     GridPane gridPaneL = new GridPane();
     List<Button> buttons =
         List.of("\u03c0", "   e   ", "   C   ", "  <-   ", "   (   ", "   )   ",
@@ -168,33 +173,36 @@ public class Main extends Application {
     // Set the caretPosition
     input.setOnMouseClicked(e -> {
       caretPosition = input.getCaretPosition();
+      focusedTextField = input;
     });
 
     // Add event handler to the buttons
     buttons.stream().forEach(btn -> {
       btn.setOnAction(event -> {
-        String temp = btn.getText();
+        String temp = btn.getText().trim();
 
-        if (temp.equals("   C   ")) {
+        if (temp.equals("C")) {
           input.clear();
           caretPosition = 0;
-        } else if (temp.equals("  <-   ")) {
+        } else if (temp.equals("<-")) {
           try {
-            input.setText(input.getText().substring(0, caretPosition - 1)
-                + input.getText().substring(caretPosition));
+            focusedTextField.setText(
+                focusedTextField.getText().substring(0, caretPosition - 1)
+                    + focusedTextField.getText().substring(caretPosition));
             caretPosition--;
           } catch (Exception e) {
 
           }
-        } else if (temp.equals("  +/-  ")) {
+        } else if (temp.equals("+/-")) {
           try {
-            String fromInput = input.getText();
-            input.setText(fromInput.startsWith("-") ? fromInput.substring(1)
-                : "-" + fromInput);
+            String fromInput = focusedTextField.getText();
+            focusedTextField.setText(
+                fromInput.startsWith("-") ? fromInput.substring(1)
+                    : "-" + fromInput);
           } catch (Exception e) {
 
           }
-        } else if (temp.equals("   =   ")) {
+        } else if (temp.equals("=")) {
           try {
             if (!analyze) {
               result.appendText(input.getText() + "\n="
@@ -211,6 +219,13 @@ public class Main extends Application {
           } catch (Exception e) {
             alert("Wrong Expression",
                 "The equation you entered cannot be calculated\nPlease press 'C' and try again");
+          }
+        } else if (temp.matches("\\d") || temp.matches("\\.")) {
+          try {
+            focusedTextField.insertText(caretPosition, temp.trim());
+            ++caretPosition;
+          } catch (Exception e) {
+
           }
         } else {
           try {
@@ -233,6 +248,7 @@ public class Main extends Application {
     // Set for Right and Left Disabling
     vBoxR.setOnMouseEntered(e -> {
       notNumber.stream().forEach(b -> b.setDisable(true));
+      buttons.get(3).setDisable(false);
     });
     input.setOnMouseEntered(e -> {
       notNumber.stream().forEach(b -> b.setDisable(false));
@@ -260,23 +276,45 @@ public class Main extends Application {
     // Set the Matrix Panel
     List<TextField> matrix1Data = new ArrayList<>();
     List<TextField> matrix2Data = new ArrayList<>();
-    VBox matrix1 = matrixGenerator(matrix1Data);
-    VBox matrix2 = matrixGenerator(matrix2Data);
+    List<TextField> rowAndCol1 = new ArrayList<>();
+    List<TextField> rowAndCol2 = new ArrayList<>();
+    VBox matrix1 = matrixGenerator(matrix1Data, rowAndCol1);
+    VBox matrix2 = matrixGenerator(matrix2Data, rowAndCol2);
+
+    rowAndCol1.stream().forEach(t -> t.setOnMouseClicked(e -> {
+      if (t.isFocused()) {
+        caretPosition = 1;
+        focusedTextField = t;
+      }
+    }));
+    rowAndCol2.stream().forEach(t -> t.setOnMouseClicked(e -> {
+      if (t.isFocused()) {
+        caretPosition = 1;
+        focusedTextField = t;
+      }
+    }));
 
     // Should be enable when needed
     matrix2.setDisable(true);
 
     // Set the operation of Two Matrixes
     GridPane matrixOperators = new GridPane();
-    List<Button> operators = List.of("c", "+", "-", "*").stream().map(str -> {
+    CheckBox enableSecond = new CheckBox("2?");
+
+    matrixOperators.add(enableSecond, 0, 0);
+    Button c1 = new Button("c1");
+    c1.setMinWidth(35);
+    matrixOperators.add(c1, 0, 1);
+    List<Button> operators = List.of("c2", "+", "-", "*").stream().map(str -> {
       Button temp = new Button(str);
-      temp.setMinWidth(30);
+      temp.setMinWidth(35);
       return temp;
     }).collect(toList());
     for (int i = 0; i < 4; i++) {
-      matrixOperators.add(operators.get(i), 0, i);
+      matrixOperators.add(operators.get(i), 0, i + 2);
     }
-    matrixOperators.setVgap(23);
+    matrixOperators.setVgap(5.5);
+    operators.stream().forEach(b -> b.setDisable(false));
     hBoxR.getChildren().addAll(matrix1, matrixOperators, matrix2);
 
     // Set the operation panel
@@ -312,6 +350,20 @@ public class Main extends Application {
     power.getChildren().addAll(powerButton, powerInput);
     mOperations.add(power, 3, 2);
 
+
+    // Add eventListener of enableSecond
+    enableSecond.setOnMouseClicked(event -> {
+      if (enableSecond.isSelected()) {
+        mOperations.setDisable(true);
+        operators.stream().forEach(b -> b.setDisable(false));
+        matrix2.setDisable(false);
+      } else {
+        mOperations.setDisable(false);
+        operators.stream().forEach(b -> b.setDisable(true));
+        matrix2.setDisable(true);
+      }
+    });
+
     TextArea mResult = new TextArea();
     mResult.setMinHeight(207);
 
@@ -335,9 +387,11 @@ public class Main extends Application {
    * Generate a Matrix
    * 
    * @param  textFields
-   * @return
+   * @param  textFields
+   * @return            VBox of the Matrix
    */
-  private VBox matrixGenerator(List<TextField> textFields) {
+  private VBox matrixGenerator(List<TextField> textFields,
+      List<TextField> rowAndColumn) {
 
     // Create the Panel of the Matrix
     VBox vBoxMatrix = new VBox();
@@ -358,6 +412,9 @@ public class Main extends Application {
     inputColumnMatrix.setMaxWidth(50);
     columnMatrix.getChildren().addAll(labelColumnMatrix, inputColumnMatrix);
 
+    rowAndColumn.add(inputRowMatrix);
+    rowAndColumn.add(inputColumnMatrix);
+
     // The GridPane for the Matrix
     GridPane gridMatrix = new GridPane();
     gridMatrix.setMaxWidth(300);
@@ -376,8 +433,16 @@ public class Main extends Application {
       }
     }
 
-    // Add event handler to the TextField
-    inputRowMatrix.setOnKeyReleased(event -> {
+    // Set focusedTextField
+    textFields.stream().forEach(t -> t.setOnMouseClicked(e -> {
+      if (t.isFocused()) {
+        caretPosition = t.getCaretPosition();
+        focusedTextField = t;
+      }
+    }));
+
+    // Add EventListener to inputRowMatrix
+    inputRowMatrix.textProperty().addListener(event -> {
       try {
 
         // Avoid to throw Exception when the TextField is empty
@@ -385,8 +450,9 @@ public class Main extends Application {
           return;
         }
 
-        // For IllegalArgument
-        if (Integer.parseInt(inputRowMatrix.getText()) <= 0) {
+        // For IllegalArgumentException
+        if (Integer.parseInt(inputRowMatrix.getText()) <= 0
+            || Integer.parseInt(inputRowMatrix.getText()) > 9) {
           throw new IllegalArgumentException();
         }
 
@@ -404,12 +470,110 @@ public class Main extends Application {
             gridMatrix.add(temp, j, i);
           }
         }
+
+        // Set focusedTextField
+        textFields.stream().forEach(t -> t.setOnMouseClicked(e -> {
+          if (t.isFocused()) {
+            caretPosition = t.getCaretPosition();
+            focusedTextField = t;
+          }
+        }));
       } catch (Exception e) {
 
         // Alert when detecting IllegalArgument
         alert("Error", "Number you entered is invalid" + lineSeparator
             + "Please reenter an positive integer");
-        inputRowMatrix.setText("1");
+        inputRowMatrix.setText("2");
+      }
+    });
+
+    // Add EventListener to inputColumnMatrix
+    inputColumnMatrix.textProperty().addListener(event -> {
+      try {
+
+        // Avoid to throw Exception when the TextField is empty
+        if (inputColumnMatrix.getText().equals("")) {
+          return;
+        }
+
+        // For IllegalArgumentException
+        if (Integer.parseInt(inputColumnMatrix.getText()) <= 0
+            || Integer.parseInt(inputColumnMatrix.getText()) > 9) {
+          throw new IllegalArgumentException();
+        }
+
+        gridMatrix.getChildren().clear();
+        textFields.clear();
+
+        // Constructing Input fields
+        for (int i = 0; i < Integer.parseInt(inputRowMatrix.getText()); i++) {
+          for (int j =
+              0; j < Integer.parseInt(inputColumnMatrix.getText()); j++) {
+            TextField temp = new TextField();
+            textFields.add(temp);
+            gridMatrix.add(temp, j, i);
+          }
+        }
+
+        // Set focusedTextField
+        textFields.stream().forEach(t -> t.setOnMouseClicked(e -> {
+          if (t.isFocused()) {
+            caretPosition = t.getCaretPosition();
+            focusedTextField = t;
+          }
+        }));
+      } catch (Exception e) {
+
+        // Alert when detecting IllegalArgument
+        alert("Error", "Number you entered is invalid" + lineSeparator
+            + "Please reenter an positive integer");
+        inputColumnMatrix.setText("2");
+      }
+    });
+
+    // Add event handler to the TextField
+    inputRowMatrix.setOnKeyReleased(event -> {
+      try {
+
+        // Avoid to throw Exception when the TextField is empty
+        if (inputRowMatrix.getText().equals("")) {
+          return;
+        }
+
+        // For IllegalArgumentException
+        if (Integer.parseInt(inputRowMatrix.getText()) <= 0
+            || Integer.parseInt(inputRowMatrix.getText()) > 9) {
+          throw new IllegalArgumentException();
+        }
+
+        gridMatrix.getChildren().clear();
+
+        textFields.clear();
+
+        // Constructing Input fields
+        for (int i = 0; i < Integer.parseInt(inputRowMatrix.getText()); i++) {
+          for (int j =
+              0; j < Integer.parseInt(inputColumnMatrix.getText()); j++) {
+
+            TextField temp = new TextField();
+            textFields.add(temp);
+            gridMatrix.add(temp, j, i);
+          }
+        }
+
+        // Set focusedTextField
+        textFields.stream().forEach(t -> t.setOnMouseClicked(e -> {
+          if (t.isFocused()) {
+            caretPosition = t.getCaretPosition();
+            focusedTextField = t;
+          }
+        }));
+      } catch (Exception e) {
+
+        // Alert when detecting IllegalArgument
+        alert("Error", "Number you entered is invalid" + lineSeparator
+            + "Please reenter an positive integer");
+        inputRowMatrix.setText("2");
       }
     });
 
@@ -422,9 +586,10 @@ public class Main extends Application {
           return;
         }
 
-        // For IllegalArgument
-        if (Integer.parseInt(inputColumnMatrix.getText()) <= 0) {
-          throw new Exception();
+        // For IllegalArgumentException
+        if (Integer.parseInt(inputColumnMatrix.getText()) <= 0
+            || Integer.parseInt(inputColumnMatrix.getText()) > 9) {
+          throw new IllegalArgumentException();
         }
 
         gridMatrix.getChildren().clear();
@@ -444,7 +609,7 @@ public class Main extends Application {
         // Alert when detecting IllegalArgument
         alert("Error", "Number you entered is invalid" + lineSeparator
             + "Please reenter an positive integer");
-        inputColumnMatrix.setText("1");
+        inputColumnMatrix.setText("2");
       }
     });
 
