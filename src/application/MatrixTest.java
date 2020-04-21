@@ -190,10 +190,10 @@ public class MatrixTest {
     try {
       Matrix matrix, expectedL, expectedU, expectedP;
 
-      matrix = new Matrix(new Integer[][] {{4, 3}, {6, 3}});
-      expectedL = new Matrix(new Fraction[][] {{Fraction.of(1), Fraction.of(0)}, {new Fraction(2, 3), Fraction.of(1)}});
-      expectedU = new Matrix(new Integer[][] {{6, 3}, {0, 1}});
-      expectedP = new Matrix(new Integer[][] {{0, 1}, {1, 0}});
+      matrix = new Matrix(new String[][] {{"4", "3"}, {"6", "3"}});
+      expectedL = new Matrix(new String[][] {{"1", "0"}, {"2/3", "1"}});
+      expectedU = new Matrix(new String[][] {{"6", "3"}, {"0", "1"}});
+      expectedP = new Matrix(new String[][] {{"0", "1"}, {"1", "0"}});
       assertEquals(expectedL, matrix.LUPDecomposition()[0]);
       assertEquals(expectedU, matrix.LUPDecomposition()[1]);
       assertEquals(expectedP, matrix.LUPDecomposition()[2]);

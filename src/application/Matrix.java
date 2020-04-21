@@ -54,6 +54,22 @@ public class Matrix implements MatrixADT {
         for (int j = 0; j < content[0].length; j++)
           entry[i][j] = new Numeric(content[i][j]);
   }
+  
+  /**
+   * This constructor construct a matrix with a given 2D array of Number as content of the matrix.
+   * 
+   * Fraction and Numeric both extends Number, and a Number can also be Integer, or Double, or ...
+   * 
+   * @param content a 2D array of Number as content of the matrix
+   * 
+   * @see https://docs.oracle.com/javase/8/docs/api/java/lang/Number.html
+   */
+  public Matrix(String[][] content) {
+    entry = new Numeric[content.length][content[0].length];
+    for (int i = 0; i < content.length; i++)
+        for (int j = 0; j < content[0].length; j++)
+          entry[i][j] = new Numeric(content[i][j]);
+  }
 
   /**
    * 
