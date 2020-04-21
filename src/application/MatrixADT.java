@@ -118,6 +118,8 @@ public interface MatrixADT {
    * @see https://en.wikipedia.org/wiki/Matrix_multiplication#Powers_of_a_matrix
    */
   MatrixADT pow(int n) throws MatrixDimensionsMismatchException;
+  
+  Matrix[] LUDecomposition() throws MatrixDimensionsMismatchException;
 
   /**
    * Get the inverse of a square matrix. The given matrix must be a square matrix.

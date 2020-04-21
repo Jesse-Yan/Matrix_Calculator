@@ -26,7 +26,7 @@ public class Matrix implements MatrixADT {
    * 
    * For example, new Matrix(2, 3) will gives {{0, 0, 0}, {0, 0, 0}}
    * 
-   * @param numberOfRow the given number of rows
+   * @param numberOfRow    the given number of rows
    * @param numberOfColumn the given number of columns
    */
   public Matrix(int numberOfRow, int numberOfColumn) {
@@ -167,7 +167,7 @@ public class Matrix implements MatrixADT {
    * 
    * @param other the given matrix
    * @throws MatrixDimensionsMismatchException if the given matrix do not have the exactly same
-   *         dimensions with this one.
+   *                                           dimensions with this one.
    */
   private void sameDimensionCheck(MatrixADT other) throws MatrixDimensionsMismatchException {
     if (this.getNumberOfRow() != other.getNumberOfRow())
@@ -211,7 +211,7 @@ public class Matrix implements MatrixADT {
    * 
    * @param other the given matrix
    * @throws MatrixDimensionsMismatchException if the given matrix cannot be multiplied on this
-   *         matrix.
+   *                                           matrix.
    */
   private void multipicationCheck(MatrixADT other) throws MatrixDimensionsMismatchException {
     if (this.getNumberOfColumn() != other.getNumberOfRow())
@@ -249,6 +249,19 @@ public class Matrix implements MatrixADT {
   }
 
   /**
+   * A private helper method that check whether the matrix is a square matrix. Nothing happens if it
+   * is a square matrix, otherwise throws a MatrixDimensionsMismatchException with message.
+   * 
+   * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix.
+   * 
+   */
+  private void checkSquare() throws MatrixDimensionsMismatchException {
+    if (getNumberOfRow() != getNumberOfColumn()) {
+      throw new MatrixDimensionsMismatchException("The matrix is nor square.");
+    }
+  }
+
+  /**
    * 
    * A private helper method to get the size of the square matrix.
    * 
@@ -256,12 +269,10 @@ public class Matrix implements MatrixADT {
    * 
    * @return n, which is not only the number of rows but also the number of columns of the square
    *         matrix.
-   * @throws MatrixDimensionsMismatchException if the matrix is not a square matrix.
+   * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix.
    */
   private int getSizeOfSquareMatrix() throws MatrixDimensionsMismatchException {
-    if (getNumberOfRow() != getNumberOfColumn()) {
-      throw new MatrixDimensionsMismatchException("The matrix is nor square.");
-    }
+    checkSquare();
     return getNumberOfRow();
   }
 
@@ -336,16 +347,13 @@ public class Matrix implements MatrixADT {
 
   /**
    * 
-   * A private helper method that do partial pivoting at kth row, return whether the row is swapped.
+   * This method receives a parameter k, and then it will find the index of the largest number on
+   * the Kth column and Lth row (L >= K)
    * 
-   * @param k the row to do partial pivoting
-   * @return true if rows are swapped during the partial pivoting
-   * @throws SingularException if the pivot of this row is 0 and no rows have non-zero pivot can be
-   *         swapped with this row to make the pivot a non-zero number.
-   * 
-   * @see https://en.wikipedia.org/wiki/Pivot_element#Partial_and_complete_pivoting
+   * @param k a given k
+   * @return the index of the largest number on the Kth column and Lth row (L >= K)
    */
-  private boolean partialPivoting(int k) throws SingularException {
+  private int indexOfLargestPivotElement(int k) {
     int pivotRow = k;
     Numeric pivotElement = entry[pivotRow][k];
     for (int i = k + 1; i < getNumberOfRow(); i++)
@@ -353,6 +361,23 @@ public class Matrix implements MatrixADT {
         pivotElement = entry[i][k];
         pivotRow = i;
       }
+    return pivotRow;
+  }
+
+  /**
+   * 
+   * A private helper method that do partial pivoting at kth row, return whether the row is swapped.
+   * 
+   * @param k the row to do partial pivoting
+   * @return true if rows are swapped during the partial pivoting
+   * @throws SingularException if the pivot of this row is 0 and no rows have non-zero pivot can be
+   *                           swapped with this row to make the pivot a non-zero number.
+   * 
+   * @see https://en.wikipedia.org/wiki/Pivot_element#Partial_and_complete_pivoting
+   */
+  private boolean partialPivoting(int k) throws SingularException {
+    int pivotRow = indexOfLargestPivotElement(k);
+    Numeric pivotElement = entry[pivotRow][k];
     if (pivotElement.compareTo(new Numeric(0)) == 0)
       throw new SingularException();
     if (pivotRow != k) {
@@ -370,7 +395,7 @@ public class Matrix implements MatrixADT {
    * eliminate the matrix to an Echelon form.
    * 
    * @throws SingularException if the matrix cannot be eliminate into a upper triangle matrix with
-   *         no zero element on the main diagonal.
+   *                           no zero element on the main diagonal.
    * @return true if there are odd number of row swaps, false otherwise.
    */
   private boolean forwardElimination() throws SingularException {
@@ -397,7 +422,7 @@ public class Matrix implements MatrixADT {
    * eliminate the Echelon form.
    * 
    * @throws SingularException if the matrix cannot be eliminate into a diagnal triangle matrix with
-   *         no zero element on the main diagonal.
+   *                           no zero element on the main diagonal.
    */
   private void backwardElimination() throws SingularException {
     int N = getNumberOfRow();
@@ -437,10 +462,10 @@ public class Matrix implements MatrixADT {
    * The startRow and the startColumn will be included, but the endRow and endColumn will not be
    * included
    * 
-   * @param startRow the given start row of the matrix to get the submatirx
-   * @param endRow the given end row of the matrix to get the submatirx
+   * @param startRow    the given start row of the matrix to get the submatirx
+   * @param endRow      the given end row of the matrix to get the submatirx
    * @param startColumn the given start column of the matrix to get the submatirx
-   * @param endColumn the given end column of the matrix to get the submatirx
+   * @param endColumn   the given end column of the matrix to get the submatirx
    * @return a Matrix object which is the submatrix constructed by the given parameters.
    */
   private Matrix subMatrix(int startRow, int endRow, int startColumn, int endColumn) {
@@ -451,16 +476,17 @@ public class Matrix implements MatrixADT {
     return new Matrix(newEntires);
   }
 
+
   /**
-   * A private helper method that connect another matrix to this matrix to construct a new augmented
-   * matrix.
+   * A private helper method that connect another matrix to the right of this this matrix to
+   * construct a new augmented matrix.
    * 
    * The given matrix must have the same number of rows with this matrix.
    * 
    * @param other a given matrix
    * @return the augmented matrix
    * @throws MatrixDimensionsMismatchException if the given matrix does not have the same number of
-   *         rows with this matrix.
+   *                                           rows with this matrix.
    */
   private Matrix augmentMatirx(Matrix other) throws MatrixDimensionsMismatchException {
     if (this.getNumberOfRow() != other.getNumberOfRow())
@@ -470,13 +496,148 @@ public class Matrix implements MatrixADT {
     int M2 = other.getNumberOfColumn();
     Numeric[][] augmentedMatrixEntries = new Numeric[N][M1 + M2];
     for (int i = 0; i < N; i++) {
-      for (int j = 0; j < N; j++) {
+      for (int j = 0; j < M1; j++) {
         augmentedMatrixEntries[i][j] = new Numeric(entry[i][j]);
+      }
+      for (int j = 0; j < M2; j++) {
         augmentedMatrixEntries[i][j + M1] = new Numeric(other.entry[i][j]);
       }
     }
     return new Matrix(augmentedMatrixEntries);
   }
+
+  /**
+   * A private helper method that connect another matrix to the bottom of this this matrix to
+   * construct a new augmented matrix.
+   * 
+   * The word "augment matrix" usually refers to connect another matrix/vector to the right of the
+   * original matrix. This method performs similar functions but it connect another matrix to the
+   * bottom of the original matrix. Therefore, it is called augmentMatirxByExtendingColumns.
+   * 
+   * The given matrix must have the same number of columns with this matrix.
+   * 
+   * @param other a given matrix
+   * @return the augmented matrix
+   * @throws MatrixDimensionsMismatchException if the given matrix does not have the same number of
+   *                                           columns with this matrix.
+   */
+  private Matrix augmentMatirxByExtendingColumns(Matrix other)
+      throws MatrixDimensionsMismatchException {
+    if (this.getNumberOfColumn() != other.getNumberOfColumn())
+      throw new MatrixDimensionsMismatchException("Must have same number of columns");
+    int N1 = this.getNumberOfRow();
+    int N2 = other.getNumberOfRow();
+    int M = getNumberOfColumn();
+    Numeric[][] augmentedMatrixEntries = new Numeric[N1 + N2][M];
+    for (int j = 0; j < M; j++) {
+      for (int i = 0; i < N1; i++) {
+        augmentedMatrixEntries[i][j] = new Numeric(entry[i][j]);
+      }
+      for (int i = 0; i < N2; i++) {
+        augmentedMatrixEntries[i + N1][j] = new Numeric(other.entry[i][j]);
+      }
+    }
+    return new Matrix(augmentedMatrixEntries);
+  }
+
+  /**
+   * 
+   * This is a private helper method that combines four matrices in to one matrix.
+   * 
+   * @param leftTop     a given matrix to be the left top part of the combined matrix
+   * @param rightTop    a given matrix to be the right top part of the combined matrix
+   * @param leftBottom  a given matrix to be the left bottom part of the combined matrix
+   * @param rightBottom a given matrix to be the right bottom part of the combined matrix
+   * @return the combined matrix
+   * @throws MatrixDimensionsMismatchException - if cannot combine due to number of rows or columns
+   *                                           mismatches.
+   */
+  private static Matrix combineMatrix(Matrix leftTop, Matrix rightTop, Matrix leftBottom,
+      Matrix rightBottom) throws MatrixDimensionsMismatchException {
+    return leftTop.augmentMatirx(rightTop)
+        .augmentMatirxByExtendingColumns(leftBottom.augmentMatirx(rightBottom));
+  }
+
+  public Matrix[] LUPDecomposition() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
+    if (N == 1)
+      return new Matrix[] {identityMatrixWithSizeOf(1), this.copy(), identityMatrixWithSizeOf(1)};
+
+    Matrix A = copy();
+
+    int i = A.indexOfLargestPivotElement(0);
+    A.swapRow(0, i);
+
+    Matrix A_bar11 = A.subMatrix(0, 1, 0, 1);
+    Matrix A_bar12 = A.subMatrix(0, 1, 1, N);
+    Matrix A_bar21 = A.subMatrix(1, N, 0, 1);
+    Matrix A_bar22 = A.subMatrix(1, N, 1, N);
+
+    Matrix S22 = A_bar22.subtract(A_bar21.multiply(A_bar12).dividedBy(A_bar11.getEntry(0, 0)));
+
+    Matrix[] tmp = S22.LUPDecomposition();
+    Matrix L22 = tmp[0];
+    Matrix U22 = tmp[1];
+    Matrix P22 = tmp[2];
+
+    Matrix L11 = identityMatrixWithSizeOf(1);
+    Matrix U11 = A_bar11.copy();
+    Matrix L12 = new Matrix(1, N - 1);
+    Matrix U12 = A_bar12.copy();
+
+    Matrix L21 = P22.multiply(A_bar21).dividedBy(A_bar11.getEntry(0, 0));
+    Matrix U21 = new Matrix(N - 1, 1);
+
+    Matrix upperPartOfP = new Matrix(1, i).augmentMatirx(identityMatrixWithSizeOf(1))
+        .augmentMatirx(new Matrix(1, N - i - 1));
+    Matrix lowerPartOfP = P22.subMatrix(0, N - 1, 0, i).augmentMatirx(new Matrix(N - 1, 1))
+        .augmentMatirx(P22.subMatrix(0, N - 1, i, N - 1));
+
+    Matrix L = combineMatrix(L11, L12, L21, L22);
+    Matrix U = combineMatrix(U11, U12, U21, U22);
+    Matrix P = upperPartOfP.augmentMatirxByExtendingColumns(lowerPartOfP);
+
+    return new Matrix[] {L, U, P};
+  }
+
+
+  public Matrix[] LUDecomposition() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
+    if (N == 1)
+      return new Matrix[] {identityMatrixWithSizeOf(1), this.copy()};
+
+    Matrix A = copy();
+
+    Matrix A_bar11 = A.subMatrix(0, 1, 0, 1);
+    Matrix A_bar12 = A.subMatrix(0, 1, 1, N);
+    Matrix A_bar21 = A.subMatrix(1, N, 0, 1);
+    Matrix A_bar22 = A.subMatrix(1, N, 1, N);
+
+    if (A_bar11.getEntry(0, 0).equals(Numeric.of(0)))
+      throw new IllegalArgumentException(
+          "This Matrix does not have LU decompositions! Try LUP decompostion!");
+
+    Matrix S22 = A_bar22.subtract(A_bar21.multiply(A_bar12).dividedBy(A_bar11.getEntry(0, 0)));
+
+    Matrix[] tmp = S22.LUDecomposition();
+    Matrix L22 = tmp[0];
+    Matrix U22 = tmp[1];
+
+    Matrix L11 = identityMatrixWithSizeOf(1);
+    Matrix U11 = A_bar11.copy();
+    Matrix L12 = new Matrix(1, N - 1);
+    Matrix U12 = A_bar12.copy();
+
+    Matrix L21 = A_bar21.dividedBy(A_bar11.getEntry(0, 0));
+    Matrix U21 = new Matrix(N - 1, 1);
+
+    Matrix L = combineMatrix(L11, L12, L21, L22);
+    Matrix U = combineMatrix(U11, U12, U21, U22);
+
+    return new Matrix[] {L, U};
+  }
+
+
 
   /**
    * Find the inverse of the matrix by using Gaussian-Elimination on a augmentedMatrix.
@@ -517,7 +678,7 @@ public class Matrix implements MatrixADT {
    */
   @Override
   public Numeric determinant() throws MatrixDimensionsMismatchException {
-    int N = getSizeOfSquareMatrix();
+    checkSquare();
     Matrix answerMatrix = copy();
     boolean signChanged = false;
     try {
@@ -584,7 +745,7 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Do QR decomposition using Gramï¿½Schmidt process.
+   * Do QR decomposition using Gram–Schmidt process.
    * 
    * @see https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process
    * @see https://en.wikipedia.org/wiki/QR_decomposition#Using_the_Gram%E2%80%93Schmidt_process
@@ -606,7 +767,6 @@ public class Matrix implements MatrixADT {
 
     Matrix Q = combineColumnVectorsToMatirx(e);
     Matrix R = Q.transpose().multiply(this);
-
     return new Matrix[] {Q, R};
   };
 

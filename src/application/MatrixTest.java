@@ -20,10 +20,12 @@ import org.junit.Test;
 public class MatrixTest {
 
   @Before
-  public void setUp() throws Exception {}
+  public void setUp() throws Exception {
+  }
 
   @After
-  public void tearDown() throws Exception {}
+  public void tearDown() throws Exception {
+  }
 
 
   /**
@@ -184,6 +186,46 @@ public class MatrixTest {
   }
 
   @Test
+  public void test_LUP() {
+    try {
+      Matrix matrix, expectedL, expectedU, expectedP;
+
+      matrix = new Matrix(new Integer[][] {{4, 3}, {6, 3}});
+      expectedL = new Matrix(new Fraction[][] {{Fraction.of(1), Fraction.of(0)}, {new Fraction(2, 3), Fraction.of(1)}});
+      expectedU = new Matrix(new Integer[][] {{6, 3}, {0, 1}});
+      expectedP = new Matrix(new Integer[][] {{0, 1}, {1, 0}});
+      assertEquals(expectedL, matrix.LUPDecomposition()[0]);
+      assertEquals(expectedU, matrix.LUPDecomposition()[1]);
+      assertEquals(expectedP, matrix.LUPDecomposition()[2]);
+
+    }catch(
+
+  Exception e)
+  {
+    e.printStackTrace();
+  }
+  }
+  
+  @Test
+  public void test_LU() {
+    try {
+      Matrix matrix, expectedL, expectedU, expectedP;
+
+      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+      expectedL = new Matrix(new Integer[][] {{1, 0, 0}, {4, 1, 0}, {7, 2, 1}});
+      expectedU = new Matrix(new Integer[][] {{1, 2, 3}, {0, -3, -6}, {0, 0, 0}});
+      assertEquals(expectedL, matrix.LUDecomposition()[0]);
+      assertEquals(expectedU, matrix.LUDecomposition()[1]);
+      
+    }catch(
+
+  Exception e)
+  {
+    e.printStackTrace();
+  }
+  }
+
+  @Test
   public void test_Deteminant() {
     try {
       MatrixADT matrix;
@@ -261,12 +303,12 @@ public class MatrixTest {
       MatrixADT matrix, expectedQ, expectedR;
 
       matrix = new Matrix(new Integer[][] {{12, -51, 4}, {6, 167, -68}, {-4, 24, -41}});
-      
+
       expectedQ = new Matrix(
           new Fraction[][] {{new Fraction(6, 7), new Fraction(-69, 175), new Fraction(-58, 175)},
               {new Fraction(3, 7), new Fraction(158, 175), new Fraction(6, 175)},
               {new Fraction(-2, 7), new Fraction(6, 35), new Fraction(-33, 35)}});
-      
+
       expectedR = new Matrix(new Integer[][] {{14, 21, -14}, {0, 175, -70}, {0, 0, 35}});
       assertEquals(expectedQ, matrix.QRDecomposition()[0]);
       assertEquals(expectedR, matrix.QRDecomposition()[1]);
@@ -275,7 +317,7 @@ public class MatrixTest {
       e.printStackTrace();
     }
   }
-  
+
   /**
    * 
    * Test eigenValue
@@ -284,12 +326,12 @@ public class MatrixTest {
   @Test
   public void test_EigenValue() {
     try {
-      MatrixADT matrix, expectedQ, expectedR;
+      MatrixADT matrix;
 
       matrix = new Matrix(new Integer[][] {{2, 1}, {1, 2}});
-      
+
       TreeSet<Numeric> eigenValues = new TreeSet<Numeric>(Arrays.asList(matrix.eigenValues()));
-      
+
       assertTrue(eigenValues.contains(Numeric.of(1)));
       assertTrue(eigenValues.contains(Numeric.of(3)));
 
