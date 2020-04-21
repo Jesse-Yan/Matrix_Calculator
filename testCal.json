@@ -1,7 +1,7 @@
 {
 	"calculations": [
     	{
-        	"opeartions": "+",
+        	"operations": "+",
         	"datas": [
 				[
 					["2","5","6","21"],
@@ -18,7 +18,7 @@
 			]
    	 	},
 	    {
-	        "opeartions": "*",
+	        "operations": "*",
 	        "datas": [
 				[
 					["2","5","6","21"],
@@ -35,7 +35,7 @@
 			]
 	    },
 	    {
-	    	"opeartions": "-",
+	    	"operations": "-",
 	    	"datas": [
 				[
 					["2","5","6","21"],
@@ -52,7 +52,7 @@
 			]
 	    },
 	    {
-	    	"opeartions": "det",
+	    	"operations": "det",
 	    	"datas": [
 				[
 					["2","5","6","21"],

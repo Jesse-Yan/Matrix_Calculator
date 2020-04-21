@@ -47,8 +47,8 @@ public class OpeartionParser {
 
       for (int i = 0; i < calculations.size(); i++) {
         JSONObject jsonPack = (JSONObject) calculations.get(i);
-        operations = (String) jsonPack.get("opeartions");
-//       System.out.println("opeartions: "+opeartions);//test purpose
+        operations = (String) jsonPack.get("operations");
+//       System.out.println("operations: "+operations);//test purpose
 
         JSONArray datas = (JSONArray) jsonPack.get("datas");
 
