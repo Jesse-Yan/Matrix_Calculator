@@ -16,11 +16,11 @@ This is the final project of ateam2 of CS 400 Spring 2020
 
 
 ## Installation
-Program can simply running by click the .jar file.
-Running in Java code need JavaFx and JDK11 pre-installed.
+Program can simply running by using command line to run the executable.jar file.
+Running in Java code required JavaFx and JDK11 pre-installed.
 
 ## Running demo
-using command line to run .jar for demo(see file: running_command.txt)
+using command line to run executable.jar for demo(see file: running_command.txt)
 
 ## Program Description
 program functions as a calculator that support Matrix calculations supports pirorty calculation.
