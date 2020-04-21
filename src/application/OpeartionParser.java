@@ -10,6 +10,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/**
+ * 
+ * @author 
+ *
+ */
 public class OpeartionParser {
 
     private ArrayList<CalSteps> calSteps;// list store all matrixs
