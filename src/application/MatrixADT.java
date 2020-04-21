@@ -73,32 +73,36 @@ public interface MatrixADT {
    * @see https://en.wikipedia.org/wiki/Matrix_multiplication
    */
   MatrixADT multiply(MatrixADT other) throws MatrixDimensionsMismatchException;
-
+  
   /**
-   * Multiply Matrix by a constant number. That is, every entries of this matrix should be
-   * multiplied by this constant.
+   * get determinant of matrix. The given matrix must be a square matrix.
    * 
-   * The number can be any type of instances of Number, which means it can be a Integer, or a
-   * Double, or a Fraction, or a Numeric, or ...
+   * @return the determinant of the matrix
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
    * 
-   * @param constant - a constant that being multiply to the matrix
-   * @return - Result Matrix
-   * 
+   * @see https://en.wikipedia.org/wiki/Determinant
    */
-  MatrixADT multiply(Number constant);
-
+  Numeric determinant() throws MatrixDimensionsMismatchException;
+  
   /**
-   * Divide the matrix by a constant number. That is, every entries of this matrix should be divided
-   * by this constant.
+   * Get the inverse of a square matrix. The given matrix must be a square matrix.
    * 
-   * The number can be any type of instances of Number, which means it can be a Integer, or a
-   * Double, or a Fraction, or a Numeric, or ...
+   * If the given matrix is not invertible, an ArithmeticException with message will be thrown.
    * 
-   * @param constant - a constant that divide the matrix
-   * @return - Result Matrix
+   * Warning: Although it is very rare, when entries have extremely large double values, float error
+   * might cause the matrix throw wrong ArithmeticException. That is, in extreme cases, an
+   * invertible matrix might also throw an ArithmeticException with messages telling that it is not
+   * invertible.
    * 
+   * @return matrix that been inverted
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * @throws ArithmeticException - if the matrix is not invertible.
+   * 
+   * @see https://en.wikipedia.org/wiki/Invertible_matrix
    */
-  MatrixADT dividedBy(Number constant);
+  MatrixADT inverse() throws MatrixDimensionsMismatchException;
+  
+  Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException;
 
   /**
    * Get the matrix to the power of n, the given matrix must be a square matrix.
@@ -119,36 +123,6 @@ public interface MatrixADT {
    */
   MatrixADT pow(int n) throws MatrixDimensionsMismatchException;
   
-  Matrix[] LUDecomposition() throws MatrixDimensionsMismatchException;
-
-  /**
-   * Get the inverse of a square matrix. The given matrix must be a square matrix.
-   * 
-   * If the given matrix is not invertible, an ArithmeticException with message will be thrown.
-   * 
-   * Warning: Although it is very rare, when entries have extremely large double values, float error
-   * might cause the matrix throw wrong ArithmeticException. That is, in extreme cases, an
-   * invertible matrix might also throw an ArithmeticException with messages telling that it is not
-   * invertible.
-   * 
-   * @return matrix that been inverted
-   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
-   * @throws ArithmeticException - if the matrix is not invertible.
-   * 
-   * @see https://en.wikipedia.org/wiki/Invertible_matrix
-   */
-  MatrixADT inverse() throws MatrixDimensionsMismatchException;
-
-  /**
-   * get determinant of matrix. The given matrix must be a square matrix.
-   * 
-   * @return the determinant of the matrix
-   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
-   * 
-   * @see https://en.wikipedia.org/wiki/Determinant
-   */
-  Numeric determinant() throws MatrixDimensionsMismatchException;
-
   /**
    * 
    * QR decomposition. The given matrix must be a square matrix.
@@ -158,7 +132,8 @@ public interface MatrixADT {
    * 
    * @see https://en.wikipedia.org/wiki/QR_decomposition
    */
-  Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException;
+  
+  Matrix[] LUDecomposition() throws MatrixDimensionsMismatchException;
 
   /**
    * Get the EigenValues of the matrix. The given matrix must be a square matrix.

@@ -110,20 +110,6 @@ public class MatrixTest {
     }
   }
 
-  /**
-   * Test multiplication by constant
-   */
-  @Test
-  public void test_multiplication_by_constant() {
-    try {
-      MatrixADT matrix1 = new Matrix(new Integer[][] {{1, 2}, {-4, 0}, {0, -6}});
-      MatrixADT expectedMatrix = new Matrix(new Integer[][] {{2, 4}, {-8, 0}, {0, -12}});
-      assertEquals(expectedMatrix, matrix1.multiply(2));
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
   @Test
   public void test_pow() {
     try {
