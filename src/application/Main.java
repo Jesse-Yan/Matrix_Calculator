@@ -49,6 +49,10 @@ public class Main extends Application {
   // Result shower
   BorderPane mResult = new BorderPane();
 
+  // CSS style for label
+  String labelStyle =
+      "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;";
+
   /**
    * This is the start method of the Main class
    * 
@@ -598,21 +602,21 @@ public class Main extends Application {
 
     // Set the title of the operation
     Label operationName = new Label(string);
-    operationName.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+
+    operationName.setStyle(labelStyle);
     resultedPane.setTop(operationName);
 
     Label operationMath = new Label(mathString);
-    operationMath.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    operationMath.setStyle(labelStyle);
 
     Label equals = new Label("=");
-    equals.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    equals.setStyle(labelStyle);
 
-    Label multiply = new Label("*");
-    equals.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    Label multiply1 = new Label("*");
+    equals.setStyle(labelStyle);
+
+    Label multiply2 = new Label("*");
+    equals.setStyle(labelStyle);
 
     GridPane gridSrc = matrixGenerator(dataFromMatrix);
     GridPane lResult = matrixGenerator(l);
@@ -621,8 +625,8 @@ public class Main extends Application {
 
     HBox resultedHBox = new HBox();
     resultedHBox.getChildren()
-                .addAll(operationMath, gridSrc, equals, lResult, multiply,
-                    uResult, multiply, pResult);
+                .addAll(operationMath, gridSrc, equals, lResult, multiply1,
+                    uResult, multiply2, pResult);
 
     resultedPane.setCenter(resultedHBox);
 
@@ -647,21 +651,17 @@ public class Main extends Application {
 
     // Set the title of the operation
     Label operationName = new Label(string);
-    operationName.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    operationName.setStyle(labelStyle);
     resultedPane.setTop(operationName);
 
     Label operationMath = new Label(mathString);
-    operationMath.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    operationMath.setStyle(labelStyle);
 
     Label equals = new Label("=");
-    equals.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    equals.setStyle(labelStyle);
 
     Label multiply = new Label("*");
-    equals.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    equals.setStyle(labelStyle);
 
     GridPane gridSrc = matrixGenerator(dataFromMatrix);
     GridPane qResult = matrixGenerator(q);
@@ -694,17 +694,14 @@ public class Main extends Application {
 
     // Set the title of the operation
     Label operationName = new Label(string);
-    operationName.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    operationName.setStyle(labelStyle);
     resultedPane.setTop(operationName);
 
     Label operationMath = new Label(mathString);
-    operationMath.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    operationMath.setStyle(labelStyle);
 
     Label equals = new Label("=");
-    equals.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    equals.setStyle(labelStyle);
 
     GridPane gridSrc = matrixGenerator(dataFromMatrix);
     GridPane result = matrixGenerator(resultInverse);
@@ -734,23 +731,19 @@ public class Main extends Application {
 
     // Set the title of the operation
     Label operationName = new Label(string);
-    operationName.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    operationName.setStyle(labelStyle);
     resultedPane.setTop(operationName);
 
     Label operationMath = new Label(mathString);
-    operationMath.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    operationMath.setStyle(labelStyle);
 
     Label equals = new Label("=");
-    equals.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    equals.setStyle(labelStyle);
 
     GridPane gridSrc = matrixGenerator(dataFromMatrix);
 
     Label resultedLabel = new Label(String.valueOf(result));
-    resultedLabel.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    resultedLabel.setStyle(labelStyle);
 
     HBox resultedHBox = new HBox();
     resultedHBox.getChildren()
@@ -780,17 +773,14 @@ public class Main extends Application {
 
     // Set the title of the operation
     Label operationName = new Label(string);
-    operationName.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    operationName.setStyle(labelStyle);
     resultedPane.setTop(operationName);
 
     Label operationMath = new Label(mathString);
-    operationMath.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    operationMath.setStyle(labelStyle);
 
     Label equals = new Label("=");
-    equals.setStyle(
-        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    equals.setStyle(labelStyle);
 
     GridPane gridSrc1 = matrixGenerator(src1);
     GridPane gridSrc2 = matrixGenerator(src2);
@@ -822,8 +812,7 @@ public class Main extends Application {
     for (int i = 0; i < matrix.length; i++) {
       List<Label> labels = Arrays.stream(matrix[i]).map(str -> {
         Label strLabel = new Label(str);
-        strLabel.setStyle(
-            "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+        strLabel.setStyle(labelStyle);
         strLabel.autosize();
         return strLabel;
       }).collect(toList());
