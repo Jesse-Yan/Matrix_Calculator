@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import java.io.File;
@@ -36,11 +37,17 @@ public class Main extends Application {
 
   private final String lineSeparator = System.lineSeparator();
 
+  // Spectating caret Position
   int caretPosition;
 
+  // Spectating focusedTextField
   private TextField focusedTextField = null;
 
+  // Whether is undergoing analyzing process
   private boolean analyze = false;
+
+  // Result shower
+  BorderPane mResult = new BorderPane();
 
   /**
    * This is the start method of the Main class
@@ -61,6 +68,8 @@ public class Main extends Application {
     } catch (Exception e) {
 
     }
+
+    mResult.setStyle("-fx-background-color: lightgray;");
 
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Open Resource File");
@@ -137,6 +146,7 @@ public class Main extends Application {
     result.setWrapText(true);
     result.setEditable(false);
     result.setMaxWidth(360.0);
+    result.setMinHeight(220.0);
 
     focusedTextField = input;
 
@@ -144,8 +154,10 @@ public class Main extends Application {
     HBox hBoxL = new HBox();
     Button analyzeSequence = new Button("Analyze Sequence");
     analyzeSequence.setMinWidth(180);
+    analyzeSequence.setMinHeight(44);
     Button space = new Button("Space");
     space.setMinWidth(180);
+    space.setMinHeight(44);
 
     // Activated under analyzing sequence
     space.setDisable(true);
@@ -284,7 +296,7 @@ public class Main extends Application {
     });
 
 
-    BorderPane matrixs = new BorderPane();
+    BorderPane matrixes = new BorderPane();
 
     // Set the Matrix Panel
     List<TextField> matrix1Data = new ArrayList<>();
@@ -312,7 +324,7 @@ public class Main extends Application {
 
     // Set the operation of Two Matrixes
     GridPane matrixOperators = new GridPane();
-    CheckBox enableSecond = new CheckBox("2?");
+    CheckBox enableSecond = new CheckBox("?");
 
     matrixOperators.add(enableSecond, 0, 0);
     Button c1 = new Button("c1");
@@ -330,9 +342,11 @@ public class Main extends Application {
     operators.stream().forEach(b -> b.setDisable(true));
     matrix1.setMinWidth(400);
     matrix2.setMinWidth(400);
-    matrixs.setLeft(matrix1);
-    matrixs.setCenter(matrixOperators);
-    matrixs.setRight(matrix2);
+    matrix1.setMinHeight(233);
+    matrix2.setMinHeight(233);
+    matrixes.setLeft(matrix1);
+    matrixes.setCenter(matrixOperators);
+    matrixes.setRight(matrix2);
 
     // Set the EventHandler for matrixOperators
     c1.setOnMouseClicked(event -> {
@@ -340,9 +354,6 @@ public class Main extends Application {
     });
     operators.get(0).setOnMouseClicked(event -> {
       matrix2Data.stream().forEach(TextField::clear);
-    });
-    operators.get(1).setOnMouseClicked(event -> {
-      String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
     });
 
     // Set the operation panel
@@ -394,11 +405,63 @@ public class Main extends Application {
       }
     });
 
-    TextArea mResult = new TextArea();
+
     mResult.setMinHeight(207);
 
+    // Add Operations related to MatrixCalculator
+    operators.get(1).setOnMouseClicked(event -> {
+      String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
+      String[][] dataFromMatrix2 = reader(matrix2Data, rowAndCol2);
+      MatrixCalculator matrixCalculator =
+          new MatrixCalculator(dataFromMatrix1, dataFromMatrix2);
+      try {
+        String[][] resultMatrix = matrixCalculator.add();
+        BorderPane resultShower = resultBuilder("Operation: Add", "+",
+            dataFromMatrix1, dataFromMatrix2, resultMatrix);
+        vBoxR.getChildren().remove(2);
+        vBoxR.getChildren().add(resultShower);
+      } catch (MatrixDimensionsMismatchException e1) {
+        alert("MatrixDimensionError",
+            "The dimensions of the Matrixs you entered did not match");
+      }
+    });
+
+    operators.get(2).setOnMouseClicked(event -> {
+      String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
+      String[][] dataFromMatrix2 = reader(matrix2Data, rowAndCol2);
+      MatrixCalculator matrixCalculator =
+          new MatrixCalculator(dataFromMatrix1, dataFromMatrix2);
+      try {
+        String[][] resultMatrix = matrixCalculator.subtract();
+        BorderPane resultShower = resultBuilder("Operation: Subtract", "-",
+            dataFromMatrix1, dataFromMatrix2, resultMatrix);
+        vBoxR.getChildren().remove(2);
+        vBoxR.getChildren().add(resultShower);
+      } catch (MatrixDimensionsMismatchException e1) {
+        alert("MatrixDimensionError",
+            "The dimensions of the Matrixs you entered did not match");
+      }
+    });
+
+    operators.get(3).setOnMouseClicked(event -> {
+      String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
+      String[][] dataFromMatrix2 = reader(matrix2Data, rowAndCol2);
+      MatrixCalculator matrixCalculator =
+          new MatrixCalculator(dataFromMatrix1, dataFromMatrix2);
+      try {
+        String[][] resultMatrix = matrixCalculator.multiply();
+        BorderPane resultShower = resultBuilder("Operation: Multiply", "*",
+            dataFromMatrix1, dataFromMatrix2, resultMatrix);
+        vBoxR.getChildren().remove(2);
+        vBoxR.getChildren().add(resultShower);
+      } catch (MatrixDimensionsMismatchException e1) {
+        alert("MatrixDimensionError",
+            "The dimensions of the Matrixs you entered did not match");
+      }
+    });
+
     // Add to the overall panel
-    vBoxR.getChildren().addAll(matrixs, mOperations, mResult);
+    vBoxR.getChildren().addAll(matrixes, mOperations, mResult);
     root.setRight(vBoxR);
 
     // Use the optimized width and height
@@ -415,18 +478,100 @@ public class Main extends Application {
   }
 
   /**
+   * Method that returns a BorderPane of finished result
+   * 
+   * @param  string       operation
+   * @param  string       operation
+   * @param  src1         source Matrix1
+   * @param  src2         source Matrix2
+   * @param  resultMatrix resulted Matrix
+   * @return              resulted BorderPane
+   */
+  private BorderPane resultBuilder(String string, String mathString,
+      String[][] src1, String[][] src2, String[][] resultMatrix) {
+
+    BorderPane resultedPane = new BorderPane();
+
+    resultedPane.setStyle("-fx-background-color: lightgray;");
+
+    // Set the title of the operation
+    Label operationName = new Label(string);
+    operationName.setStyle(
+        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    resultedPane.setTop(operationName);
+
+    Label operationMath = new Label(mathString);
+    operationMath.setStyle(
+        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+
+    Label equals = new Label("=");
+    equals.setStyle(
+        "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+
+    GridPane gridSrc1 = matrixGenerator(src1);
+    GridPane gridSrc2 = matrixGenerator(src2);
+    GridPane resultedGrid = matrixGenerator(resultMatrix);
+
+    HBox resultedHBox = new HBox();
+    resultedHBox.getChildren()
+                .addAll(gridSrc1, operationMath, gridSrc2, equals,
+                    resultedGrid);
+
+    resultedPane.setCenter(resultedHBox);
+
+    return resultedPane;
+  }
+
+  /**
+   * Generate a GridPane representation of Matrix
+   * 
+   * @param  matrix parameter matrix
+   * @return        GridPane representation of the matrix
+   */
+  private GridPane matrixGenerator(String matrix[][]) {
+
+    GridPane resultedGrid = new GridPane();
+    resultedGrid.setStyle(
+        "-fx-background-color: lightgray;-fx-vgap: 1;-fx-hgap: 1;-fx-padding: 1;");
+    resultedGrid.setMinHeight(207);
+    for (int i = 0; i < matrix.length; i++) {
+      List<Label> labels = Arrays.stream(matrix[i]).map(str -> {
+        Label strLabel = new Label(str);
+        strLabel.setStyle(
+            "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+        strLabel.autosize();
+        return strLabel;
+      }).collect(toList());
+      for (int j = 0; j < labels.size(); j++) {
+        resultedGrid.add(labels.get(j), j, i);
+      }
+    }
+
+    return resultedGrid;
+  }
+
+  /**
    * Matrix's TextFields Reader
    * 
    * @param  matrix1Data
    * @param  rowAndCol1
    * @return             String[][] representation of the data within the Matrix
    */
-  private String[][] reader(List<TextField> matrix1Data,
-      List<TextField> rowAndCol1) {
-    
-    
-    
-    return null;
+  private String[][] reader(List<TextField> matrixData,
+      List<TextField> rowAndCol) {
+
+    int row = Integer.parseInt(rowAndCol.get(0).getText());
+    int col = Integer.parseInt(rowAndCol.get(1).getText());
+
+    String[][] stringMatrix = new String[row][col];
+    int count = 0;
+    for (int i = 0; i < row; i++) {
+      for (int j = 0; j < col; j++) {
+        stringMatrix[i][j] = matrixData.get(count++).getText();
+      }
+    }
+
+    return stringMatrix;
   }
 
   /**
@@ -460,6 +605,9 @@ public class Main extends Application {
 
     rowAndColumn.add(inputRowMatrix);
     rowAndColumn.add(inputColumnMatrix);
+
+    HBox dimension = new HBox();
+    dimension.getChildren().addAll(rowMatrix, columnMatrix);
 
     // The GridPane for the Matrix
     GridPane gridMatrix = new GridPane();
@@ -660,7 +808,7 @@ public class Main extends Application {
     });
 
     // Add to the overall Panel
-    vBoxMatrix.getChildren().addAll(rowMatrix, columnMatrix, gridMatrix);
+    vBoxMatrix.getChildren().addAll(dimension, gridMatrix);
 
     return vBoxMatrix;
   }
