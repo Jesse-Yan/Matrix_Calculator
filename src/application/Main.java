@@ -41,8 +41,6 @@ public class Main extends Application {
 
   private boolean analyze = false;
 
-  private boolean secondMatrix = false;
-
   /**
    * This is the start method of the Main class
    * 
@@ -265,11 +263,17 @@ public class Main extends Application {
       space.setDisable(false);
       notNumber.stream().forEach(b -> b.setDisable(true));
       buttons.get(buttons.size() - 1).setDisable(false);
-      input.setOnMouseEntered(null);
+      input.setOnMouseEntered(event -> {
+        buttons.get(buttons.size() - 1).setDisable(false);
+      });
     });
-    space.setOnAction(e -> {
-      input.insertText(caretPosition, " ");;
-      ++caretPosition;
+    space.setOnAction(event -> {
+      try {
+        input.insertText(caretPosition, " ");;
+        ++caretPosition;
+      } catch (Exception e) {
+
+      }
     });
 
 
@@ -379,8 +383,7 @@ public class Main extends Application {
     primaryStage.setScene(mainScene);
     try {
       mainScene.getStylesheets()
-               .add(
-                   getClass().getResource("styleSheet.css").toExternalForm());
+               .add(getClass().getResource("styleSheet.css").toExternalForm());
     } catch (Exception e) {
 
     }
