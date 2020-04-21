@@ -89,33 +89,9 @@ public class Main extends Application {
     // Set open file tag
     Menu menu = new Menu("Menu");
     MenuItem open = new MenuItem("Open");
-    open.setOnAction(event -> {
-      File file = fileChooser.showOpenDialog(primaryStage);
-      if (file == null || !file.getName().endsWith(".json")) {
-        alert("Error: File name mismatch", "Please rechoose the file"
-            + lineSeparator + "The name of the file must end with '.json'!");
-      } else {
-        // Invoke Parser
-        try {
-          Parser parser = new Parser(file.getName());
-
-        } catch (IOException e1) {
-          e1.printStackTrace();
-        }
-      }
-    });
 
     // Set save file tag
     MenuItem save = new MenuItem("Save");
-    save.setOnAction(event -> {
-      File file = fileChooser.showSaveDialog(primaryStage);
-      if (file == null || !file.getName().endsWith(".json")) {
-        alert("Error: File name mismatch", "Please rechoose the file"
-            + lineSeparator + "The name of the file must end with '.json'!");
-      } else {
-        // Invoke Parser
-      }
-    });
 
     // Set Exit tag
     MenuItem exit = new MenuItem("Exit");
@@ -654,6 +630,34 @@ public class Main extends Application {
     // Add to the overall panel
     vBoxR.getChildren().addAll(matrixes, mOperations, mResult);
     root.setRight(vBoxR);
+
+    // Set the action for FileChooser-open
+    open.setOnAction(event -> {
+      File file = fileChooser.showOpenDialog(primaryStage);
+      if (file == null || !file.getName().endsWith(".json")) {
+        alert("Error: File name mismatch", "Please rechoose the file"
+            + lineSeparator + "The name of the file must end with '.json'!");
+      } else {
+        // Invoke Parser
+        try {
+          Parser parser = new Parser(file.getName());
+
+        } catch (IOException e1) {
+          e1.printStackTrace();
+        }
+      }
+    });
+
+    // Set the action for FileChooser-save
+    save.setOnAction(event -> {
+      File file = fileChooser.showSaveDialog(primaryStage);
+      if (file == null || !file.getName().endsWith(".json")) {
+        alert("Error: File name mismatch", "Please rechoose the file"
+            + lineSeparator + "The name of the file must end with '.json'!");
+      } else {
+        // Invoke Parser
+      }
+    });
 
     // Use the optimized width and height
     Scene mainScene =
