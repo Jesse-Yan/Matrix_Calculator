@@ -8,32 +8,55 @@ package application;
  */
 public class MatrixCalculator {
   
-  public static String[][] add(String[][] matrix1, String[][] matrix2) throws MatrixDimensionsMismatchException{
-    Matrix firstMatrix = new Matrix(matrix1);
-    Matrix secondMatrix = new Matrix(matrix2);
-    return firstMatrix.add(secondMatrix).toStringMatrix();
+  public enum Mode {
+    FRACTION, // Gives the result in fraction
+    DECIMAL // Gives the result in decimal
   }
   
-  public static String[][] subtract(String[][] matrix1, String[][] matrix2) throws MatrixDimensionsMismatchException{
-    Matrix firstMatrix = new Matrix(matrix1);
-    Matrix secondMatrix = new Matrix(matrix2);
-    return firstMatrix.subtract(secondMatrix).toStringMatrix();
+  public Mode mode;
+  public String[][] matrix1, matrix2;
+  
+  public MatrixCalculator(String[][] matrix1, String[][] matrix2) {
+    this.matrix1 = matrix1;
+    this.matrix2 = matrix2;
   }
   
-  public static String[][] multiply(String[][] matrix1, String[][] matrix2) throws MatrixDimensionsMismatchException{
-    Matrix firstMatrix = new Matrix(matrix1);
-    Matrix secondMatrix = new Matrix(matrix2);
-    return firstMatrix.multiply(secondMatrix).toStringMatrix();
+  private String[][] properFormatted(Matrix matrix) {
+    if(mode == Mode.DECIMAL)
+      return matrix.toDecimalStringMatrix();
+    else 
+      return matrix.toStringMatrix();
   }
   
-  public static String getDeterminant(String[][] matrix1) throws MatrixDimensionsMismatchException{
+  public String[][] add() throws MatrixDimensionsMismatchException{
+    Matrix firstMatrix = new Matrix(matrix1);
+    Matrix secondMatrix = new Matrix(matrix2);
+    Matrix answeMatrix = firstMatrix.add(secondMatrix);
+    return properFormatted(answeMatrix);
+  }
+  
+  public String[][] subtract() throws MatrixDimensionsMismatchException{
+    Matrix firstMatrix = new Matrix(matrix1);
+    Matrix secondMatrix = new Matrix(matrix2);
+    Matrix answeMatrix = firstMatrix.subtract(secondMatrix);
+    return properFormatted(answeMatrix);
+  }
+  
+  public String[][] multiply() throws MatrixDimensionsMismatchException{
+    Matrix firstMatrix = new Matrix(matrix1);
+    Matrix secondMatrix = new Matrix(matrix2);
+    Matrix answeMatrix = firstMatrix.multiply(secondMatrix);
+    return properFormatted(answeMatrix);
+  }
+  
+  public String getDeterminant() throws MatrixDimensionsMismatchException{
     Matrix firstMatrix = new Matrix(matrix1);
     return firstMatrix.determinant().toString();
   }
   
-  public static String[][] getInverse(String[][] matrix1) throws MatrixDimensionsMismatchException{
+  public String[][] getInverse() throws MatrixDimensionsMismatchException{
     Matrix firstMatrix = new Matrix(matrix1);
-    return firstMatrix.inverse().toStringMatrix();
+    return properFormatted(firstMatrix.inverse());
   }
   
   /**
@@ -42,15 +65,18 @@ public class MatrixCalculator {
    * @throws MatrixDimensionsMismatchException 
    */
   public static void main(String[] args) throws MatrixDimensionsMismatchException {
-    String[][] matrixA = {{"1", "2", "-3"}, 
-                          {"1/3", "1/2", "-1/1024"},
-                          {"0.5", "0.2", "-0.3"},};
-    String[][] matrixB = {{"1", "0", "0.1"}, 
+    
+    String[][] matrixA = {{"1", "0", "0.1"}, 
                           {"5/3", "0", "-1/3"},
                           {"-3", "0.4", "-0.333"}};
+    String[][] matrixB = {{"1", "2", "-3"}, 
+                          {"1/3", "1/2", "-1/1024"},
+                          {"0.5", "0.2", "-0.3"},};
+    
+    MatrixCalculator matrixCalculator = new MatrixCalculator(matrixA, matrixB);
     
     System.out.println("matirxC = matirxA + matrixB");
-    String[][] matrixC = MatrixCalculator.add(matrixA, matrixB);
+    String[][] matrixC = matrixCalculator.add();
     
     System.out.println("Print matirx C");
     for(String[] row : matrixC) {
@@ -60,11 +86,23 @@ public class MatrixCalculator {
     }
     System.out.print("\n");
     
-    System.out.println("matirxD = inverse of matrixB");
-    String[][] matrixD = MatrixCalculator.getInverse(matrixB);
+    System.out.println("matirxD = inverse of matrixA");
+    String[][] matrixD = matrixCalculator.getInverse();
     
     System.out.println("Print matirx D");
     for(String[] row : matrixD) {
+      for(String number : row)
+        System.out.print(number + ' ');
+      System.out.print("\n");
+    }
+    System.out.print("\n");
+    
+    System.out.println("matirxE = inverse of matrixA (in decimal)");
+    matrixCalculator.mode = Mode.DECIMAL;
+    String[][] matrixE = matrixCalculator.getInverse();
+    
+    System.out.println("Print matirx E");
+    for(String[] row : matrixE) {
       for(String number : row)
         System.out.print(number + ' ');
       System.out.print("\n");

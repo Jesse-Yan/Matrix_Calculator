@@ -134,7 +134,7 @@ public class Matrix implements MatrixADT {
   
   /**
    * Return a 2D array of String to represent the matrix
-   * @return
+   * @return a 2D array of String to represent the matrix
    */
   public String[][] toStringMatrix() {
     String string[][] = new String[entry.length][];
@@ -142,6 +142,20 @@ public class Matrix implements MatrixADT {
       string[i] = new String[entry[i].length];
       for (int j = 0; j < entry[i].length; j++)
         string[i][j] = entry[i][j].toString();
+    }
+    return string;
+  }
+  
+  /**
+   * Return a 2D array of String to represent the matrix in decimal
+   * @return a 2D array of String to represent the matrix in decimal
+   */
+  public String[][] toDecimalStringMatrix() {
+    String string[][] = new String[entry.length][];
+    for (int i = 0; i < entry.length; i++) {
+      string[i] = new String[entry[i].length];
+      for (int j = 0; j < entry[i].length; j++)
+        string[i][j] = entry[i][j].castToDouble().toString();
     }
     return string;
   }

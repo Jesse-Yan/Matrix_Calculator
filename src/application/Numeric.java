@@ -61,17 +61,17 @@ public class Numeric extends Number implements Comparable<Numeric> {
     }
   }
 
-  private static boolean isDouble(String string) {
+  private static boolean theStringIsDouble(String string) {
     Pattern pattern = Pattern.compile("^-?[0-9]+\\.[0-9]+$");
     return pattern.matcher(string).matches();
   }
 
-  private static boolean isFraction(String string) {
+  private static boolean theStringIsFraction(String string) {
     Pattern pattern = Pattern.compile("^-?[0-9]+\\/[0-9]+$");
     return pattern.matcher(string).matches();
   }
 
-  private static boolean isInteger(String string) {
+  private static boolean theStringIsInteger(String string) {
     Pattern pattern = Pattern.compile("^-?[0-9]+$");
     return pattern.matcher(string).matches();
   }
@@ -84,18 +84,17 @@ public class Numeric extends Number implements Comparable<Numeric> {
   }
 
   public Numeric(String string) {
-    if (isInteger(string))
+    if (theStringIsInteger(string))
       number = Numeric.of((Long) Long.parseLong(string)).number;
-    else if (isFraction(string)) {
+    else if (theStringIsFraction(string)) {
       String part[] = string.split("\\/");
       int numerator = Integer.parseInt(part[0]);
       int denominator = Integer.parseInt(part[1]);
       number = Fraction.of(numerator, denominator);
-    } else if (isDouble(string)) {
-
+    } else if (theStringIsDouble(string)) {
       int index = string.indexOf(".");
       int decimalPlaces = string.length() - index - 1;
-      if (decimalPlaces <= 5) {
+      if (decimalPlaces <= 10) {
         String part[] = string.split("\\.");
         int integerPart = Integer.parseInt(part[0]);
         int decimalPart = Integer.parseInt(part[1]);
@@ -400,6 +399,10 @@ public class Numeric extends Number implements Comparable<Numeric> {
   public double doubleValue() {
     return number.doubleValue();
   }
+  
+  public Numeric castToDouble() {
+    return new Numeric(doubleValue());
+  }
 
   @Override
   public String toString() {
@@ -414,38 +417,4 @@ public class Numeric extends Number implements Comparable<Numeric> {
     }
     return number.toString();
   }
-
-  /**
-   * A main method, just for test and demo.
-   * 
-   * @param args args
-   */
-  public static void main(String args[]) {
-
-    Numeric n1 = new Numeric("1"); // n1 = 1
-    Numeric n2 = new Numeric("1/7"); // n2 = 1/7
-    Numeric n3 = new Numeric("1.5000"); // n3 = 0.5
-    Numeric n4 = new Numeric("2147483647"); // n4 = int_max
-    System.out.println(n1.add(n1)); // n1 + n1 = 2
-    System.out.println(n1.add(n2)); // n1 + n2 = 8/7
-    System.out.println(n1.add(n3)); // n1 + n3 = 2.5
-    System.out.println(n2.add(n3)); // n2 + n3 = 1.642857142857...
-    System.out.println(n1.subtract(n1)); // n1 - n1 = 0
-    System.out.println(n2.multiply(n2)); // 1/7 * 1/7 = 1/49
-    System.out.println(n1.add(n4)); // 1 + int_Max = 2.147483648E9
-
-    Numeric n5 = new Numeric(2); // n5 = 2
-    Numeric n6 = new Numeric(3); // n6 = 3
-    Numeric n7 = new Numeric(0); // n7 = 0
-    System.out.println(n5.dividedBy(n6)); // n5 / n6 = 2/3
-    try {
-      System.out.println(n5.dividedBy(n7));
-    } catch (Exception e) {
-      System.out.println(e.getMessage()); // "/ by zero"
-    }
-
-    System.out.println(Numeric.of(new Fraction(4, 9)).sqrt()); // sqrt(4/9) = 2/3
-    System.out.println(Numeric.of(2).sqrt()); // sqrt(2) = 1.41421...
-  }
-
 }
