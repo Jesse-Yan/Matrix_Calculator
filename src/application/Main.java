@@ -531,20 +531,20 @@ public class Main extends Application {
     // }
     // });
 
-//     mButtons.get(4).setOnMouseClicked(event -> {
-//     try {
-//     String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-//     MatrixCalculator matrix = new MatrixCalculator(dataFromMatrix);
-//     resultTrace = 
-//     BorderPane resultShower = resultBuilderTrace("Operation: Trace", "Trace",
-//     dataFromMatrix, resultInverse.get(0), resultInverse.get(1));
-//     vBoxR.getChildren().remove(2);
-//     vBoxR.getChildren().add(resultShower);
-//     } catch (MatrixDimensionsMismatchException e) {
-//     alert("MatrixDimensionError",
-//     "Sorry, the matrix you entered cannot perform trace");
-//     }
-//     });
+    // mButtons.get(4).setOnMouseClicked(event -> {
+    // try {
+    // String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+    // MatrixCalculator matrix = new MatrixCalculator(dataFromMatrix);
+    // resultTrace =
+    // BorderPane resultShower = resultBuilderTrace("Operation: Trace", "Trace",
+    // dataFromMatrix, resultInverse.get(0), resultInverse.get(1));
+    // vBoxR.getChildren().remove(2);
+    // vBoxR.getChildren().add(resultShower);
+    // } catch (MatrixDimensionsMismatchException e) {
+    // alert("MatrixDimensionError",
+    // "Sorry, the matrix you entered cannot perform trace");
+    // }
+    // });
 
     mButtons.get(5).setOnMouseClicked(event -> {
       try {
@@ -632,6 +632,25 @@ public class Main extends Application {
       }
     });
 
+    powerButton.setOnMouseClicked(event -> {
+      try {
+        String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+        Matrix matrix = new Matrix(dataFromMatrix);
+        int n = Integer.parseInt(powerInput.getText());
+        String[][] resultPw = matrix.pow(n).toStringMatrix();
+        BorderPane resultShower = resultBuilder("Operation: POWER", "PowerOf",
+            dataFromMatrix, resultPw);
+        vBoxR.getChildren().remove(2);
+        vBoxR.getChildren().add(resultShower);
+      } catch (NumberFormatException e1) {
+        alert("NumberFormatError",
+            "Sorry, the number you entered is not an Integer");
+      } catch (MatrixDimensionsMismatchException e2) {
+        alert("MatrixDimensionError",
+            "Sorry, the matrix you entered is not a square matrix\nTo compute the power of a matrix, it has to be a square matrix");
+      }
+    });
+
     // Add to the overall panel
     vBoxR.getChildren().addAll(matrixes, mOperations, mResult);
     root.setRight(vBoxR);
@@ -661,7 +680,7 @@ public class Main extends Application {
    * @return                resulted BorderPane
    */
   private BorderPane resultBuilderLUP(String string, String mathString,
-      String[][] dataFromMatrix, String[][] l, String[][] u, String[][] p) {
+      String[][] p, String[][] dataFromMatrix, String[][] l, String[][] u) {
     BorderPane resultedPane = new BorderPane();
 
     resultedPane.setStyle("-fx-background-color: lightgray;");
@@ -691,8 +710,8 @@ public class Main extends Application {
 
     HBox resultedHBox = new HBox();
     resultedHBox.getChildren()
-                .addAll(operationMath, gridSrc, equals, lResult, multiply1,
-                    uResult, multiply2, pResult);
+                .addAll(operationMath, pResult, multiply1, gridSrc, equals,
+                    lResult, multiply2, uResult);
 
     resultedPane.setCenter(resultedHBox);
 
