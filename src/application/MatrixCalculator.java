@@ -49,6 +49,7 @@ public class MatrixCalculator {
                           {"5/3", "0", "-1/3"},
                           {"-3", "0.4", "-0.333"}};
     
+    System.out.println("Print matirx C");
     String[][] matrixC = MatrixCalculator.add(matrixA, matrixB);
     for(String[] row : matrixC) {
       for(String number : row)
@@ -56,8 +57,7 @@ public class MatrixCalculator {
       System.out.print("\n");
     }
     
-    System.out.print("\n");
-    
+    System.out.println("\nPrint matirx D");
     String[][] matrixD = MatrixCalculator.getInverse(matrixB);
     for(String[] row : matrixD) {
       for(String number : row)
