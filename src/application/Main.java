@@ -549,8 +549,8 @@ public class Main extends Application {
         List<String[][]> resultInverse = Arrays.stream(matrix.LUPDecomposition())
                                                .map(Matrix::toStringMatrix)
                                                .collect(toList());
-        BorderPane resultShower = resultBuilderQR("Operation: LUP", "LUP",
-            dataFromMatrix, resultInverse.get(0), resultInverse.get(1));
+        BorderPane resultShower = resultBuilderLUP("Operation: LUP", "LUP",
+            dataFromMatrix, resultInverse.get(0), resultInverse.get(1), resultInverse.get(2));
         vBoxR.getChildren().remove(2);
         vBoxR.getChildren().add(resultShower);
       } catch (MatrixDimensionsMismatchException e) {
@@ -574,6 +574,12 @@ public class Main extends Application {
 
     }
     primaryStage.show();
+  }
+
+  private BorderPane resultBuilderLUP(String string, String string2,
+      String[][] dataFromMatrix, String[][] strings, String[][] strings2,
+      String[][] strings3) {
+    return null;
   }
 
   /**
