@@ -10,5 +10,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="fastjson-1.2.68.jar"/>
 	<classpathentry kind="lib" path="C:/Users/lonelysunshine/Desktop/program/cs400/ateam/CS400_final_project-master/CS400_final_project/json-simple-1.1.1.jar" sourcepath="json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
