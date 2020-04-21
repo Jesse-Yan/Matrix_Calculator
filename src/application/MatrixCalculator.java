@@ -49,23 +49,26 @@ public class MatrixCalculator {
                           {"5/3", "0", "-1/3"},
                           {"-3", "0.4", "-0.333"}};
     
-    System.out.println("Print matirx C");
+    System.out.println("matirxC = matirxA + matrixB");
     String[][] matrixC = MatrixCalculator.add(matrixA, matrixB);
+    
+    System.out.println("Print matirx C");
     for(String[] row : matrixC) {
       for(String number : row)
         System.out.print(number + ' ');
       System.out.print("\n");
     }
+    System.out.print("\n");
     
-    System.out.println("\nPrint matirx D");
+    System.out.println("matirxD = inverse of matrixB");
     String[][] matrixD = MatrixCalculator.getInverse(matrixB);
+    
+    System.out.println("Print matirx D");
     for(String[] row : matrixD) {
       for(String number : row)
         System.out.print(number + ' ');
       System.out.print("\n");
     }
-    
-    
   }
   
 }
