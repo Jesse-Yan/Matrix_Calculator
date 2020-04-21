@@ -35,6 +35,8 @@ public class Main extends Application {
 
   int caretPosition;
 
+  private TextField focusedTextField = null;
+
   /**
    * This is the start method of the Main class
    * 
@@ -138,21 +140,26 @@ public class Main extends Application {
     // Applying Unicode for pi = u+03c0, sqrt = U+221A
     GridPane gridPaneL = new GridPane();
     List<Button> buttons =
-        List.of("|x|", "  x!   ", "\u03c0", "   e   ", "   C   ", "  <-   ",
-            "\u221A" + "x", "  x^2  ", "   (   ", "   )   ", "  exp  ",
-            "   /   ", "y" + "\u221A" + "x", "  x^y  ", "   7   ", "   8   ",
-            "   9   ", "   *   ", " logx  ", " 10^x  ", "   4   ", "   5   ",
-            "   6   ", "   -   ", "log2(x)", "  2^x  ", "   1   ", "   2   ",
-            "   3   ", "   +   ", "logy(x)", "  ln(x)  ", "  +/-  ", "   0   ",
-            "   .   ", "   =   ").stream().map(Button::new).collect(toList());
+        List.of("\u03c0", "   e   ", "   C   ", "  <-   ", "   (   ", "   )   ",
+            "  |x|  ", "   /   ","   7   ", "   8   ", "   9   ",
+            "   *   ", "   4   ", "   5   ", "   6   ", "   -   ", "   1   ",
+            "   2   ", "   3   ", "   +   ", "  +/-  ", "   0   ", "   .   ",
+            "   =   ").stream().map(Button::new).collect(toList());
     int number = 0;
     for (int row = 0; row < 6; row++) {
-      for (int column = 0; column < 6; column++) {
+      for (int column = 0; column < 4; column++) {
         Button button = buttons.get(number++);
-        button.setMinSize(60.0, 40.0);
+        button.setMinSize(90.0, 40.0);
         gridPaneL.add(button, column, row);
       }
     }
+
+    List<Button> notNumber =
+        buttons.stream()
+               .filter(b -> !(b.getText().trim().matches("\\d")
+                   || b.getText().trim().matches("\\.")
+                   || b.getText().trim().matches("\\+\\/\\-")))
+               .collect(toList());
 
     // Set the caretPosition
     input.setOnMouseClicked(e -> {
@@ -230,6 +237,27 @@ public class Main extends Application {
 
     // Set the right scene
     VBox vBoxR = new VBox();
+
+    // Set for Right and Left Disabling
+    vBoxR.setOnMouseEntered(e -> {
+      notNumber.stream().forEach(b -> b.setDisable(true));
+    });
+    input.setOnMouseEntered(e -> {
+      notNumber.stream().forEach(b -> b.setDisable(false));
+    });
+    result.setOnMouseClicked(e -> {
+      notNumber.stream().forEach(b -> b.setDisable(false));
+    });
+
+    // Set for Sequence Actions
+    analyzeSequence.setOnMouseClicked(e -> {
+      space.setDisable(false);
+      notNumber.stream().forEach(b -> b.setDisable(true));
+      buttons.get(buttons.size() - 1).setDisable(false);
+      input.setOnMouseEntered(null);
+    });
+
+
     HBox hBoxR = new HBox();
 
     // Set the Matrix Panel
