@@ -16,6 +16,6 @@ Which team members were on same xteam together?
 *no one.
 
 Other notes or comments to the grader:
-check README.MD might be better
+check README.MD for more detailed and better explaination
 
 [place any comments or notes that will help the grader here]
