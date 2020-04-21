@@ -277,7 +277,7 @@ public class Main extends Application {
     });
 
 
-    HBox hBoxR = new HBox();
+    BorderPane matrixs = new BorderPane();
 
     // Set the Matrix Panel
     List<TextField> matrix1Data = new ArrayList<>();
@@ -321,11 +321,16 @@ public class Main extends Application {
     }
     matrixOperators.setVgap(5.5);
     operators.stream().forEach(b -> b.setDisable(true));
-    hBoxR.getChildren().addAll(matrix1, matrixOperators, matrix2);
+//    hBoxR.getChildren().addAll(matrix1, matrixOperators, matrix2);
+    matrix1.setMinWidth(400);
+    matrix2.setMinWidth(400);
+    matrixs.setLeft(matrix1);
+    matrixs.setCenter(matrixOperators);
+    matrixs.setRight(matrix2);
 
     // Set the operation panel
     GridPane mOperations = new GridPane();
-    mOperations.setHgap(76.7);
+    mOperations.setHgap(145);
     mOperations.setVgap(10);
 
     // Set the Operations of one Matrix
@@ -374,7 +379,7 @@ public class Main extends Application {
     mResult.setMinHeight(207);
 
     // Add to the overall panel
-    vBoxR.getChildren().addAll(hBoxR, mOperations, mResult);
+    vBoxR.getChildren().addAll(matrixs, mOperations, mResult);
     root.setRight(vBoxR);
 
     // Use the optimized width and height
@@ -424,7 +429,7 @@ public class Main extends Application {
 
     // The GridPane for the Matrix
     GridPane gridMatrix = new GridPane();
-    gridMatrix.setMaxWidth(300);
+    gridMatrix.setMaxWidth(400);
     inputRowMatrix.setText("5");
     inputColumnMatrix.setText("5");
 
