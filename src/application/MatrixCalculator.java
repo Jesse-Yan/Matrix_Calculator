@@ -162,6 +162,18 @@ public class MatrixCalculator {
     Matrix firstMatrix = new Matrix(matrix1);
     return properFormatted(firstMatrix.trace());
   }
+  
+  /**
+   * Return matrix1 to the power of n, where n is a given integer.
+   * 
+   * @param n a given integer
+   * @return the result of matrix1 to the power of n.
+   * @throws MatrixDimensionsMismatchException if matrix1 is not a square matrix.
+   */
+  public String[][] getPow(int n) throws MatrixDimensionsMismatchException {
+    Matrix firstMatrix = new Matrix(matrix1);
+    return properFormatted(firstMatrix.pow(n));
+  }
 
   private String[][] properFormatted(Matrix matrix) {
     if (mode == Mode.DECIMAL)
@@ -233,6 +245,14 @@ public class MatrixCalculator {
     matrixA = new String[][] {{"1/2", "1"}, {"3/2", "2"}};
     matrixCalculator = new MatrixCalculator(matrixA);
     System.out.println(matrixCalculator.getTrace() + '\n');
+    //************************ Demo for Trace *********************************
+    
+    //************************ Demo for Pow *********************************
+    System.out.println("Demo for Pow");
+    matrixA = new String[][] {{"1/2", "1"}, {"3/2", "2"}};
+    int n = 8;
+    matrixCalculator = new MatrixCalculator(matrixA);
+    System.out.println(Arrays.deepToString(matrixCalculator.getPow(n))+ '\n');
     //************************ Demo for Trace *********************************
   }
 
