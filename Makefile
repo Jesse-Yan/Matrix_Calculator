@@ -1,40 +1,33 @@
-.PHONY = make jar runjar test clean
+.PHONY = compile run jar runjar zip all clean
 
-# replace with path to your javac,java,jar,javafx installations
-JC = /usr/bin/javac     # replace with path to javac or javac.exe
-JAR = /usr/bin/jar      # replace with path to jar or jar.exe
-JAVA = /usr/bin/java    # replace with path to java or javaw.exe
-MP = --module-path javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml #-Dfile.encoding=UTF-8 
-CP = -classpath ".:application" 
+JC = /usr/lib/jvm/openjdk-11-jdk-hotspot/bin/javac
+
+JRE =  /usr/lib/jvm/openjdk-11-jdk-hotspot/bin/java
+
+MP = --module-path /usr/lib/openjfx-11.0.2_linux-x64_bin-sdk/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml -Dfile.encoding=UTF-8 
+
+CP = -classpath /usr/project/HelloFX:/usr/lib/openjfx-11.0.2_linux-x64_bin-sdk/javafx-sdk-11.0.2/lib/javafx.base.jar:/usr/lib/openjfx-11.0.2_linux-x64_bin-sdk/javafx-sdk-11.0.2/lib/javafx.controls.jar:/usr/lib/openjfx-11.0.2_linux-x64_bin-sdk/javafx-sdk-11.0.2/lib/javafx.fxml.jar:/usr/lib/openjfx-11.0.2_linux-x64_bin-sdk/javafx-sdk-11.0.2/lib/javafx.graphics.jar:/usr/lib/openjfx-11.0.2_linux-x64_bin-sdk/javafx-sdk-11.0.2/lib/javafx.media.jar:/usr/lib/openjfx-11.0.2_linux-x64_bin-sdk/javafx-sdk-11.0.2/lib/javafx.swing.jar:/usr/lib/openjfx-11.0.2_linux-x64_bin-sdk/javafx-sdk-11.0.2/lib/javafx.web.jar:/usr/lib/openjfx-11.0.2_linux-x64_bin-sdk/javafx-sdk-11.0.2/lib/javafx-swt.jar:/usr/lib/openjfx-11.0.2_linux-x64_bin-sdk/javafx-sdk-11.0.2/lib/src.zip
+
+SRC = application/*.java   
 APP = application.Main
 
-#CLASSPATH = .:junit-platform-console-standalone-1.5.2.jar:json-simple-1.1.1.jar
+ARGS =  projects# place your command line args here
 
-make: 
-	$(JC) $(MP) $(CP) -d . application/*.java
+compile:
+$(JC) $(CP) $(SRC)
 
 run:
-	$(JAVA) $(MP) $(CP) application.Main
+$(JRE) $(MP) $(CP) $(APP) $(ARGS)
 
-fx: 
-	$(JC) $(MP) $(CP) -d . application/*.java
-
-fxrun:
-	$(JAVA) $(MP) $(CP) $(APP)
-
-jar: 
-	$(JAR) cvmf manifest.txt executable.jar .
+jar:
+      jar -cvmf manifest.txt executable.jar .
 
 runjar:
-	java $(MP) -jar executable.jar
+        java -jar executable.jar
 
 zip:
-	zip team.zip application/* *
-
-test: 
-	javac $(MP) -cp $(CLASSPATH) *.java
-	java -jar junit-platform-console-standalone-1.5.2.jar --class-path $(CLASSPATH) -p ""
+        zip -r ateam.zip
 
 clean:
-	\rm application/*.class
-	\rm executable.jar
+        rm -f application/*.class
+        rm -f executable.jar

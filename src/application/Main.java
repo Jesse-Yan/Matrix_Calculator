@@ -471,10 +471,10 @@ public class Main extends Application {
       mButtons.get(0).setOnAction(event -> {
         try {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          Matrix matrix = new Matrix(dataFromMatrix);
-          double determinant = matrix.determinant().doubleValue();
+          MatrixCalculator matrix = new MatrixCalculator(dataFromMatrix);
+          String resultDeterminant = matrix.getDeterminant();
           BorderPane resultShower = resultBuilder("Operation: Det",
-              "Determinant", dataFromMatrix, determinant);
+              "Determinant", dataFromMatrix, resultDeterminant);
           scrollPane(vBoxR, resultShower);
         } catch (MatrixDimensionsMismatchException e) {
           alert("MatrixDimensionError",
@@ -539,7 +539,7 @@ public class Main extends Application {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrix = new MatrixCalculator(dataFromMatrix);
           String resultTrace = matrix.getTrace();
-          BorderPane resultShower = resultBuilderTrace("Operation: Trace",
+          BorderPane resultShower = resultBuilder("Operation: Trace",
               "Trace", dataFromMatrix, resultTrace);
           scrollPane(vBoxR, resultShower);
         } catch (MatrixDimensionsMismatchException e) {
@@ -568,9 +568,7 @@ public class Main extends Application {
       mButtons.get(6).setOnAction(event -> {
         try {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          Matrix matrix = new Matrix(dataFromMatrix);
-          matrix.simplifyAfterElimination();
-          String[][] resultGE = matrix.toStringMatrix();
+          String[][] resultGE = new MatrixCalculator(dataFromMatrix).getGuassianElimination();
           BorderPane resultShower =
               resultBuilder("Operation: GE", "GE", dataFromMatrix, resultGE);
           scrollPane(vBoxR, resultShower);
@@ -831,8 +829,8 @@ public class Main extends Application {
    * @param  resultTrace    the result
    * @return                resulted BorderPane
    */
-  private BorderPane resultBuilderTrace(String string, String mathString,
-      String[][] dataFromMatrix, String resultTrace) {
+  private BorderPane resultBuilder(String string, String mathString,
+      String[][] dataFromMatrix, String result) {
     BorderPane resultedPane = new BorderPane();
 
     resultedPane.setStyle("-fx-background-color: lightgray;");
@@ -850,7 +848,7 @@ public class Main extends Application {
 
     GridPane gridSrc = matrixGenerator(dataFromMatrix);
 
-    Label resultedLabel = new Label(resultTrace);
+    Label resultedLabel = new Label(result);
     resultedLabel.setStyle(labelStyle);
 
     HBox resultedHBox = new HBox();

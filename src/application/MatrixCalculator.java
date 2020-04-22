@@ -164,6 +164,17 @@ public class MatrixCalculator {
   }
   
   /**
+   * Return the matrix1 after Guassian-Elimination, which is represented by a String[][].
+   * 
+   * @return the the matrix1 after Guassian-Elimination, which is represented by a String[][]
+   * @throws SingularException 
+   */
+  public String[][] getGuassianElimination() throws SingularException {
+    Matrix firstMatrix = new Matrix(matrix1);
+    return properFormatted(firstMatrix.gussianElimination());
+  }
+  
+  /**
    * Return matrix1 to the power of n, where n is a given integer.
    * 
    * @param n a given integer
