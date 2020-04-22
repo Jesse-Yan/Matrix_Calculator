@@ -13,7 +13,7 @@ import org.json.simple.parser.ParseException;
 /**
  * OpeartionParser - read .json file and form calculation steps object
  * 
- * @author Archer (2020)
+ * @author Archer (2020/4)
  * 
  */
 public class OpeartionParser {
