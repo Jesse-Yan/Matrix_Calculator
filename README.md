@@ -26,6 +26,10 @@ using command line to run executable.jar for demo(see file: running_command.txt)
 program functions as a calculator that support Matrix calculations supports pirorty calculation.
 Matrixs and calculation can be read from json files for computing result.
 
+#### !Mark! to open .json file, click menu then click open.(save is not aviable now) Please see SimpleData.json for the sample format.
+
+#### Warning, If code in ateam.zip won't run, please check CS400_final_project.zip
+
 ## Code Organization
 UW-madison default setup.
 program are base on stack, 2D array, Arraylist, and other combination of data structure. 

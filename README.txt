@@ -19,3 +19,5 @@ Other notes or comments to the grader:
 check README.MD for more detailed and better explaination
 
 [place any comments or notes that will help the grader here]
+#### Warning, If code in ateam.zip won't run, please check CS400_final_project.zip
+#### Be sure to check README.md for more detailed describtion!!!
