@@ -13,6 +13,19 @@ public class CalSteps {
 
   private ArrayList<Matrix> datas;//data stores here
   
+  private Object result;
+
+  /**
+   * constructor of Calculations object
+   * 
+   * @param result - result of calculations
+   */
+  public CalSteps(Object result) {
+    this.result = result;
+    this.datas = null;
+    this.operation = null;
+  }
+  
   /**
    * constructor of Calculations object
    * 
@@ -40,6 +53,18 @@ public class CalSteps {
    */
   public ArrayList<Matrix> getDatas() {
     return datas;
+  }
+  
+  /**
+   * Getter of result 
+   * 
+   * @return result - result
+   * @throws Exception - throw exception when case not met
+   */
+  public Object getResult() throws Exception {
+    if (datas!=null||operation!=null)
+      throw new Exception("this is not a result block");
+    return result;
   }
 
 }
