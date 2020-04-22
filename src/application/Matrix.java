@@ -528,7 +528,7 @@ public class Matrix implements MatrixADT {
    * Simplify the matrix after elimination. Make sure that all elements on the
    * main diagonal is 1.
    */
-  public void simplifyAfterElimination() {
+  private void simplifyAfterElimination() {
     int N = getNumberOfRow();
     int M = getNumberOfColumn();
     for (int i = 0; i < N; i++) {
@@ -536,6 +536,20 @@ public class Matrix implements MatrixADT {
       for (int j = 0; j < M; j++)
         entry[i][j] = entry[i][j].dividedBy(f);
     }
+  }
+  
+  /**
+   * 
+   * Gaussian-Elimination.
+   * @throws SingularException 
+   * 
+   */
+  public Matrix gussianElimination() throws SingularException {
+    Matrix answerMatrix = copy();
+    answerMatrix.forwardElimination();
+    answerMatrix.backwardElimination();
+    answerMatrix.simplifyAfterElimination();
+    return answerMatrix;
   }
 
   /**

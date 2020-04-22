@@ -559,9 +559,7 @@ public class Main extends Application {
       mButtons.get(6).setOnMouseClicked(event -> {
         try {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          Matrix matrix = new Matrix(dataFromMatrix);
-          matrix.simplifyAfterElimination();
-          String[][] resultGE = matrix.toStringMatrix();
+          String[][] resultGE = new MatrixCalculator(dataFromMatrix).getGuassianElimination();
           BorderPane resultShower =
               resultBuilder("Operation: GE", "GE", dataFromMatrix, resultGE);
           scrollPane(vBoxR, resultShower);
