@@ -507,20 +507,20 @@ public class Main extends Application {
     // }
     // });
 
-    // mButtons.get(4).setOnMouseClicked(event -> {
-    // try {
-    // String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-    // MatrixCalculator matrix = new MatrixCalculator(dataFromMatrix);
-    // resultTrace =
-    // BorderPane resultShower = resultBuilderTrace("Operation: Trace", "Trace",
-    // dataFromMatrix, resultInverse.get(0), resultInverse.get(1));
-    // vBoxR.getChildren().remove(2);
-    // vBoxR.getChildren().add(resultShower);
-    // } catch (MatrixDimensionsMismatchException e) {
-    // alert("MatrixDimensionError",
-    // "Sorry, the matrix you entered cannot perform trace");
-    // }
-    // });
+    mButtons.get(4).setOnMouseClicked(event -> {
+      try {
+        String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+        MatrixCalculator matrix = new MatrixCalculator(dataFromMatrix);
+        String resultTrace = matrix.getTrace();
+        BorderPane resultShower = resultBuilderTrace("Operation: Trace",
+            "Trace", dataFromMatrix, resultTrace);
+        vBoxR.getChildren().remove(2);
+        vBoxR.getChildren().add(resultShower);
+      } catch (MatrixDimensionsMismatchException e) {
+        alert("MatrixDimensionError",
+            "Sorry, the matrix you entered cannot perform trace");
+      }
+    });
 
     mButtons.get(5).setOnMouseClicked(event -> {
       try {
@@ -670,6 +670,46 @@ public class Main extends Application {
 
     }
     primaryStage.show();
+  }
+
+  /**
+   * Method that returns a BorderPane of finished result
+   * 
+   * @param  string         operation
+   * @param  mathString     operation
+   * @param  dataFromMatrix source Matrix
+   * @param  resultTrace    the result
+   * @return                resulted BorderPane
+   */
+  private BorderPane resultBuilderTrace(String string, String mathString,
+      String[][] dataFromMatrix, String resultTrace) {
+    BorderPane resultedPane = new BorderPane();
+
+    resultedPane.setStyle("-fx-background-color: lightgray;");
+
+    // Set the title of the operation
+    Label operationName = new Label(string);
+    operationName.setStyle(labelStyle);
+    resultedPane.setTop(operationName);
+
+    Label operationMath = new Label(mathString);
+    operationMath.setStyle(labelStyle);
+
+    Label equals = new Label("=");
+    equals.setStyle(labelStyle);
+
+    GridPane gridSrc = matrixGenerator(dataFromMatrix);
+
+    Label resultedLabel = new Label(resultTrace);
+    resultedLabel.setStyle(labelStyle);
+
+    HBox resultedHBox = new HBox();
+    resultedHBox.getChildren()
+                .addAll(operationMath, gridSrc, equals, resultedLabel);
+
+    resultedPane.setCenter(resultedHBox);
+
+    return resultedPane;
   }
 
   /**
