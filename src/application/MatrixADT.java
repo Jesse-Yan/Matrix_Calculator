@@ -96,11 +96,11 @@ public interface MatrixADT {
    * 
    * @return matrix that been inverted
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
-   * @throws ArithmeticException - if the matrix is not invertible.
+   * @throws MatrixArithmeticException  - if the matrix is not invertible.
    * 
    * @see https://en.wikipedia.org/wiki/Invertible_matrix
    */
-  MatrixADT inverse() throws MatrixDimensionsMismatchException;
+  MatrixADT inverse() throws MatrixDimensionsMismatchException, MatrixArithmeticException;
   
   Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException;
 
@@ -118,10 +118,11 @@ public interface MatrixADT {
    * @param n - given n
    * @return - the matrix to the power of n
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * @throws MatrixArithmeticException  - when n is negative but the matrix is non-invertible
    * 
    * @see https://en.wikipedia.org/wiki/Matrix_multiplication#Powers_of_a_matrix
    */
-  MatrixADT pow(int n) throws MatrixDimensionsMismatchException;
+  MatrixADT pow(int n) throws MatrixDimensionsMismatchException, MatrixArithmeticException;
   
   /**
    * 

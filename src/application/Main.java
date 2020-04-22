@@ -7,7 +7,6 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.IOException;
 import javafx.application.Application;
-import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -73,7 +72,7 @@ public class Main extends Application {
     try {
       // Set the application icon
       primaryStage.getIcons()
-                  .add(new Image(getClass().getResource("/calculator.png")
+                  .add(new Image(getClass().getResource("calculator.png")
                                            .toExternalForm()));
     } catch (Exception e) {
 
@@ -476,7 +475,7 @@ public class Main extends Application {
           BorderPane resultShower = resultBuilder("Operation: Det",
               "Determinant", dataFromMatrix, resultDeterminant);
           scrollPane(vBoxR, resultShower);
-        } catch (MatrixDimensionsMismatchException e) {
+        } catch (MatrixDimensionsMismatchException e1) {
           alert("MatrixDimensionError",
               "Sorry, the matrix you entered is not a square matrix\nTo compute the determinant of a matrix, it has to be a square matrix");
         }
@@ -493,6 +492,9 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e) {
           alert("MatrixDimensionError",
               "Sorry, the matrix you entered is not a square matrix\nTo compute the inverse of a matrix, it has to be a square matrix");
+        } catch (MatrixArithmeticException e2) {
+          alert("MatriArithmeticError",
+              "Sorry, the matrix you entered is not invertible");
         }
       });
 
@@ -651,6 +653,9 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e2) {
           alert("MatrixDimensionError",
               "Sorry, the matrix you entered is not a square matrix\nTo compute the power of a matrix, it has to be a square matrix");
+        } catch (MatrixArithmeticException e2) {
+          alert("MatriArithmeticError",
+              "Sorry, the matrix you entered is non-invertible, so it does not have negative exponent");
         }
       });
     } catch (Exception e) {
