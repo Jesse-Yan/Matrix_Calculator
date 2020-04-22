@@ -7,6 +7,7 @@ import java.util.List;
 import java.io.File;
 import java.io.IOException;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -117,6 +118,23 @@ public class Main extends Application {
 
     menuBar.getMenus().addAll(menu, about);
     root.setTop(menuBar);
+
+    // Set the top scene
+    HBox selector = new HBox();
+    Button forward = new Button("<");
+    TextField pages = new TextField();
+    pages.setMaxWidth(40);
+    Label slash = new Label("/");
+    slash.setStyle(
+        "-fx-font-size: 8px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    TextField total = new TextField();
+    total.setMaxWidth(40);
+    total.setEditable(false);
+    Button backward = new Button(">");
+    Button quit = new Button("Quit");
+    selector.getChildren().addAll(forward, pages, slash, total, backward, quit);
+    selector.alignmentProperty().set(Pos.CENTER);
+    root.setTop(selector);
 
     // Set the left scene
     VBox vBoxL = new VBox();
