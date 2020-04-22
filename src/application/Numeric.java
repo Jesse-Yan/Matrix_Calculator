@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
  *
  */
 public class Numeric extends Number implements Comparable<Numeric> {
+  
 
   /**
    * Since there are float error. Two doubles are considered the same number if their first 12
@@ -122,7 +123,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
       } else
         number = Double.parseDouble(string);
     } else {
-      throw new IllegalArgumentException(string + ": Cannot convert the String to Numeric");
+      throw new NumberFormatException(string + ": Cannot convert the String to Numeric");
     }
   }
 
@@ -346,6 +347,8 @@ public class Numeric extends Number implements Comparable<Numeric> {
    * @return the rounded double
    */
   private static double roundWithSignificantFigure(double value, int significantFigure) {
+    if(Double.toString(value).contains("Inf"))
+      throw new ArithmeticException("The result is too big!");
     BigDecimal bigDecimal = new BigDecimal(Double.toString(value));
     bigDecimal = bigDecimal.round(new MathContext(significantFigure));
     return bigDecimal.doubleValue();

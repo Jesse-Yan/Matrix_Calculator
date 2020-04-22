@@ -431,7 +431,7 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e1) {
           alert("MatrixDimensionError",
               "The dimensions of the Matrixs you entered did not match");
-        } catch(Exception e1) {
+        } catch(NumberFormatException e1) {
           alert("Error", "Your input may contain invalid characters or empty");
         }
       });
@@ -449,7 +449,7 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e1) {
           alert("MatrixDimensionError",
               "The dimensions of the Matrixs you entered did not match");
-        } catch(Exception e1) {
+        } catch(NumberFormatException e1) {
           alert("Error", "Your input may contain invalid characters or empty");
         }
       });
@@ -467,7 +467,7 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e1) {
           alert("MatrixDimensionError",
               "The dimensions of the Matrixs you entered did not match");
-        } catch(Exception e1) {
+        } catch(NumberFormatException e1) {
           alert("Error", "Your input may contain invalid characters or empty");
         }
       });
@@ -484,7 +484,7 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e1) {
           alert("MatrixDimensionError",
               "Sorry, the matrix you entered is not a square matrix\nTo compute the determinant of a matrix, it has to be a square matrix");
-        } catch(Exception e1) {
+        } catch(NumberFormatException e1) {
           alert("Error", "Your input may contain invalid characters or empty");
         }
       });
@@ -503,7 +503,7 @@ public class Main extends Application {
         } catch (MatrixArithmeticException e2) {
           alert("MatriArithmeticError",
               "Sorry, the matrix you entered is not invertible");
-        } catch(Exception e1) {
+        } catch(NumberFormatException e1) {
           alert("Error", "Your input may contain invalid characters or empty");
         }
       });
@@ -520,8 +520,8 @@ public class Main extends Application {
           scrollPane(vBoxR, resultShower);
         } catch (MatrixDimensionsMismatchException e) {
           alert("MatrixDimensionError",
-              "Sorry, the matrix you entered cannot perform QR decomposition");
-        } catch(Exception e1) {
+              "Sorry,  the matrix you entered is not a square matrix\nTo do QR decomposition, it has to be a square matrix");
+        } catch(NumberFormatException e1) {
           alert("Error", "Your input may contain invalid characters or empty");
         }
       });
@@ -545,7 +545,7 @@ public class Main extends Application {
       // } catch (MatrixDimensionsMismatchException e) {
       // alert("MatrixDimensionError",
       // "Sorry, the matrix you entered cannot perform SVD decomposition");
-      // } catch(Exception e1) {
+      // } catch(NumberFormatException e1) {
       // alert("Error", "Your input may contain invalid characters or empty");
       // }
       // });
@@ -561,7 +561,7 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e) {
           alert("MatrixDimensionError",
               "Sorry, the matrix you entered cannot perform trace");
-        } catch(Exception e1) {
+        } catch(NumberFormatException e1) {
           alert("Error", "Your input may contain invalid characters or empty");
         }
       });
@@ -580,7 +580,7 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e) {
           alert("MatrixDimensionError",
               "Sorry, the matrix you entered cannot perform LUP decomposition");
-        } catch(Exception e1) {
+        } catch(NumberFormatException e1) {
           alert("Error", "Your input may contain invalid characters or empty");
         }
       });
@@ -592,7 +592,10 @@ public class Main extends Application {
           BorderPane resultShower =
               resultBuilder("Operation: GE", "GE", dataFromMatrix, resultGE);
           scrollPane(vBoxR, resultShower);
-        } catch (Exception e) {
+        } catch (SingularException e) {
+          // TODO: handle exception
+          e.printStackTrace();
+        }catch (NumberFormatException e) {
           alert("Error", "Your input may contain invalid characters or empty");
         }
       });
@@ -610,7 +613,7 @@ public class Main extends Application {
 //       sP.setMaxWidth(836);
 //       vBoxR.getChildren().remove(2);
 //       vBoxR.getChildren().add(sP);
-//       } catch(Exception e) {
+//       } catch(NumberFormatException e) {
 //         alert("Error", "Your input may contain invalid characters or empty");
 //       }
 //       });
@@ -626,7 +629,7 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e) {
           alert("MatrixDimensionError",
               "Sorry, the matrix you entered is not a square matrix\nTo compute the eigenvalue of a matrix, it has to be a square matrix");
-        } catch(Exception e1) {
+        } catch(NumberFormatException e1) {
           alert("Error", "Your input may contain invalid characters or empty");
         }
       });
@@ -644,7 +647,7 @@ public class Main extends Application {
       // sP.setMaxWidth(836);
       // vBoxR.getChildren().remove(2);
       // vBoxR.getChildren().add(sP);
-      // } catch (Exception e) {
+      // } catch (NumberFormatException e) {
       // alert("Error", "Your input may contain invalid characters or empty");
       // }
       // });
@@ -657,35 +660,41 @@ public class Main extends Application {
           BorderPane resultShower =
               resultBuilder("Operation: TS", "TS", dataFromMatrix, resultTS);
           scrollPane(vBoxR, resultShower);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
           alert("Error", "Your input may contain invalid characters or empty");
         }
       });
 
       powerButton.setOnAction(event -> {
         try {
-          String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          Matrix matrix = new Matrix(dataFromMatrix);
           int n = Integer.parseInt(powerInput.getText());
-          String[][] resultPw = matrix.pow(n).toStringMatrix();
-          BorderPane resultShower = resultBuilder("Operation: POWER",
-              "PowerOf " + n, dataFromMatrix, resultPw);
-          scrollPane(vBoxR, resultShower);
-        } catch (NumberFormatException e1) {
+          try {
+            String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+            Matrix matrix = new Matrix(dataFromMatrix);
+            String[][] resultPw = matrix.pow(n).toStringMatrix();
+            BorderPane resultShower = resultBuilder("Operation: POWER",
+                "PowerOf " + n, dataFromMatrix, resultPw);
+            scrollPane(vBoxR, resultShower);
+          } catch (MatrixDimensionsMismatchException e1) {
+            alert("MatrixDimensionError",
+                "Sorry, the matrix you entered is not a square matrix\nTo compute the power of a matrix, it has to be a square matrix");
+          } catch (MatrixArithmeticException e2) {
+            alert("MatriArithmeticError",
+                "Sorry, the matrix you entered is non-invertible, so it does not have negative exponent");
+          } catch(NumberFormatException e3) {
+            alert("Error", "Your input may contain invalid characters or empty");
+          } catch(ArithmeticException e4) {
+            alert("Error", "Sorry, Exception: " + e4.getMessage());
+          }
+        } catch (NumberFormatException e) {
           alert("NumberFormatError",
               "Sorry, the number you entered is not an Integer");
-        } catch (MatrixDimensionsMismatchException e2) {
-          alert("MatrixDimensionError",
-              "Sorry, the matrix you entered is not a square matrix\nTo compute the power of a matrix, it has to be a square matrix");
-        } catch (MatrixArithmeticException e2) {
-          alert("MatriArithmeticError",
-              "Sorry, the matrix you entered is non-invertible, so it does not have negative exponent");
-        } catch(Exception e3) {
-          alert("Error", "Your input may contain invalid characters or empty");
-        }
+          e.printStackTrace();
+        } 
       });
     } catch (Exception e) {
       alert("Error", "Your input may contain invalid characters or empty");
+      e.printStackTrace();
     }
     // Add to the overall panel
     vBoxR.getChildren().addAll(matrixes, mOperations, mResult);
