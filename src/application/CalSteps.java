@@ -11,7 +11,7 @@ public class CalSteps {
   
   private String operation;//operations stores here
 
-  private ArrayList datas;//data stores here
+  private ArrayList<Matrix> datas;//data stores here
   
   /**
    * constructor of Calculations object
@@ -19,7 +19,7 @@ public class CalSteps {
    * @param operation - operation
    * @param datas - datas
    */
-  public CalSteps(String operation, ArrayList datas) {
+  public CalSteps(String operation, ArrayList<Matrix> datas) {
     this.operation = operation;
     this.datas = datas;
   }
@@ -38,7 +38,7 @@ public class CalSteps {
    * 
    * @return datas
    */
-  public ArrayList<Object> getDatas() {
+  public ArrayList<Matrix> getDatas() {
     return datas;
   }
 

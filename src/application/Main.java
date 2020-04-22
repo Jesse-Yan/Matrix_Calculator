@@ -3,10 +3,11 @@ package application;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.IOException;
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -54,6 +55,9 @@ public class Main extends Application {
   // CSS style for label
   String labelStyle =
       "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;";
+
+  // lists storing steps
+  List<CalSteps> lists = null;
 
   /**
    * This is the start method of the Main class
@@ -118,7 +122,6 @@ public class Main extends Application {
     about.getItems().add(developer);
 
     menuBar.getMenus().addAll(menu, about);
-    root.setTop(menuBar);
 
     // Set the top scene
     HBox selector = new HBox();
@@ -132,10 +135,16 @@ public class Main extends Application {
     total.setMaxWidth(40);
     total.setEditable(false);
     Button backward = new Button(">");
+    Button confirm = new Button("\u221A");
     Button quit = new Button("Quit");
-    selector.getChildren().addAll(forward, pages, slash, total, backward, quit);
+    selector.getChildren()
+            .addAll(forward, pages, slash, total, backward, confirm, quit);
     selector.alignmentProperty().set(Pos.CENTER);
-    root.setTop(selector);
+
+    VBox vBox = new VBox();
+    vBox.getChildren().addAll(menuBar, selector);
+    root.setTop(vBox);
+    selector.setDisable(true);
 
     // Set the left scene
     VBox vBoxL = new VBox();
@@ -393,7 +402,7 @@ public class Main extends Application {
 
 
     // Add eventListener of enableSecond
-    enableSecond.setOnMouseClicked(event -> {
+    enableSecond.setOnAction(event -> {
       if (enableSecond.isSelected()) {
         mOperations.setDisable(true);
         operators.stream().forEach(b -> b.setDisable(false));
@@ -410,7 +419,7 @@ public class Main extends Application {
     mResult.setMaxWidth(836);
     try {
       // Add Operations related to MatrixCalculator
-      operators.get(1).setOnMouseClicked(event -> {
+      operators.get(1).setOnAction(event -> {
         String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
         String[][] dataFromMatrix2 = reader(matrix2Data, rowAndCol2);
         MatrixCalculator matrixCalculator =
@@ -426,7 +435,7 @@ public class Main extends Application {
         }
       });
 
-      operators.get(2).setOnMouseClicked(event -> {
+      operators.get(2).setOnAction(event -> {
         String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
         String[][] dataFromMatrix2 = reader(matrix2Data, rowAndCol2);
         MatrixCalculator matrixCalculator =
@@ -442,7 +451,7 @@ public class Main extends Application {
         }
       });
 
-      operators.get(3).setOnMouseClicked(event -> {
+      operators.get(3).setOnAction(event -> {
         String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
         String[][] dataFromMatrix2 = reader(matrix2Data, rowAndCol2);
         MatrixCalculator matrixCalculator =
@@ -459,7 +468,7 @@ public class Main extends Application {
       });
 
       // Add EventHandler to special matrix operation
-      mButtons.get(0).setOnMouseClicked(event -> {
+      mButtons.get(0).setOnAction(event -> {
         try {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           Matrix matrix = new Matrix(dataFromMatrix);
@@ -473,7 +482,7 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(1).setOnMouseClicked(event -> {
+      mButtons.get(1).setOnAction(event -> {
         try {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           Matrix matrix = new Matrix(dataFromMatrix);
@@ -487,7 +496,7 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(2).setOnMouseClicked(event -> {
+      mButtons.get(2).setOnAction(event -> {
         try {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           Matrix matrix = new Matrix(dataFromMatrix);
@@ -503,7 +512,7 @@ public class Main extends Application {
         }
       });
 
-      // mButtons.get(3).setOnMouseClicked(event -> {
+      // mButtons.get(3).setOnAction(event -> {
       // try {
       // String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
       // Matrix matrix = new Matrix(dataFromMatrix);
@@ -525,7 +534,7 @@ public class Main extends Application {
       // }
       // });
 
-      mButtons.get(4).setOnMouseClicked(event -> {
+      mButtons.get(4).setOnAction(event -> {
         try {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrix = new MatrixCalculator(dataFromMatrix);
@@ -539,7 +548,7 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(5).setOnMouseClicked(event -> {
+      mButtons.get(5).setOnAction(event -> {
         try {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           Matrix matrix = new Matrix(dataFromMatrix);
@@ -556,7 +565,7 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(6).setOnMouseClicked(event -> {
+      mButtons.get(6).setOnAction(event -> {
         try {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           Matrix matrix = new Matrix(dataFromMatrix);
@@ -570,7 +579,7 @@ public class Main extends Application {
         }
       });
 
-      // mButtons.get(7).setOnMouseClicked(event -> {
+      // mButtons.get(7).setOnAction(event -> {
       // String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
       // Matrix matrix = new Matrix(dataFromMatrix);
       // String[][] resultDI = matrix.???
@@ -584,7 +593,7 @@ public class Main extends Application {
       // vBoxR.getChildren().add(sP);
       // });
 
-      mButtons.get(8).setOnMouseClicked(event -> {
+      mButtons.get(8).setOnAction(event -> {
         try {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           Matrix matrix = new Matrix(dataFromMatrix);
@@ -598,7 +607,7 @@ public class Main extends Application {
         }
       });
 
-      // mButtons.get(9).setOnMouseClicked(event -> {
+      // mButtons.get(9).setOnAction(event -> {
       // try {
       // String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
       // Matrix matrix = new Matrix(dataFromMatrix);
@@ -616,7 +625,7 @@ public class Main extends Application {
       // }
       // });
 
-      mButtons.get(10).setOnMouseClicked(event -> {
+      mButtons.get(10).setOnAction(event -> {
         try {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           Matrix matrix = new Matrix(dataFromMatrix);
@@ -629,14 +638,14 @@ public class Main extends Application {
         }
       });
 
-      powerButton.setOnMouseClicked(event -> {
+      powerButton.setOnAction(event -> {
         try {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           Matrix matrix = new Matrix(dataFromMatrix);
           int n = Integer.parseInt(powerInput.getText());
           String[][] resultPw = matrix.pow(n).toStringMatrix();
-          BorderPane resultShower = resultBuilder("Operation: POWER", "PowerOf",
-              dataFromMatrix, resultPw);
+          BorderPane resultShower = resultBuilder("Operation: POWER",
+              "PowerOf " + n, dataFromMatrix, resultPw);
           scrollPane(vBoxR, resultShower);
         } catch (NumberFormatException e1) {
           alert("NumberFormatError",
@@ -662,11 +671,81 @@ public class Main extends Application {
       } else {
         // Invoke Parser
         try {
-          Parser parser = new Parser(file.getName());
-
-        } catch (IOException e1) {
-          e1.printStackTrace();
+          OpeartionParser parser = new OpeartionParser(file.getName());
+          lists = parser.getCalculations();
+          selector.setDisable(false);
+          total.setText(String.valueOf(lists.size()));
+          pages.setText("1");
+          confirm.fire();
+        } catch (MatrixDimensionsMismatchException e1) {
+          alert("Error", "Matrix Dimension Mismatch");
+        } catch (ParseException e2) {
+          alert("Error", "Parse fail, please check you .json file");
+        } catch (IOException e3) {
+          alert("Error", "Fatal issues during IO processing");
         }
+      }
+    });
+
+    confirm.setOnAction(event -> {
+      try {
+        int page = Integer.parseInt(pages.getText());
+        CalSteps step = lists.get(page - 1);
+        String operationOperator = step.getOperation();
+        switch (operationOperator) {
+          case "+":
+            setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
+                matrix2Data);
+            if (!enableSecond.isSelected()) {
+              enableSecond.fire();
+            }
+            operators.get(1).fire();
+            break;
+          case "-":
+            setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
+                matrix2Data);
+            if (!enableSecond.isSelected()) {
+              enableSecond.fire();
+            }
+            operators.get(2).fire();
+            break;
+          case "*":
+            setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
+                matrix2Data);
+            if (!enableSecond.isSelected()) {
+              enableSecond.fire();
+            }
+            operators.get(3).fire();
+            break;
+        }
+      } catch (Exception e) {
+        alert("Error", "The page number you entered is invalid");
+      }
+    });
+
+    forward.setOnAction(event -> {
+      try {
+        int num = Integer.parseInt(pages.getText());
+        if (num != 1) {
+          num -= 1;
+          pages.setText(String.valueOf(num));
+          confirm.fire();
+        }
+      } catch (Exception e) {
+        alert("Error", "The page number you entered is invalid");
+      }
+    });
+
+    backward.setOnAction(event -> {
+      try {
+        int num = Integer.parseInt(pages.getText());
+        if (num != lists.size()) {
+          num += 1;
+          pages.setText(String.valueOf(num));
+          confirm.fire();
+        }
+      } catch (Exception e) {
+        alert("Error", "The page number you entered is invalid");
       }
     });
 
@@ -693,6 +772,38 @@ public class Main extends Application {
 
     }
     primaryStage.show();
+  }
+
+  /**
+   * Setter for Matrix environment
+   * 
+   * @param step        information
+   * @param matrix2Data
+   * @param matrix1Data
+   * @param rowAndCol2
+   * @param rowAndCol1
+   */
+  private void setterOfTwoMatrixes(CalSteps step, List<TextField> rowAndCol1,
+      List<TextField> rowAndCol2, List<TextField> matrix1Data,
+      List<TextField> matrix2Data) {
+    Matrix matrix1 = step.getDatas().get(0);
+    Matrix matrix2 = step.getDatas().get(1);
+    rowAndCol1.get(0).setText(String.valueOf(matrix1.getNumberOfRow()));
+    rowAndCol1.get(1).setText(String.valueOf(matrix1.getNumberOfColumn()));
+    rowAndCol2.get(0).setText(String.valueOf(matrix2.getNumberOfRow()));
+    rowAndCol2.get(1).setText(String.valueOf(matrix2.getNumberOfColumn()));
+    int count = 0;
+    for (int i = 0; i < matrix1.getNumberOfRow(); i++) {
+      for (int j = 0; j < matrix1.getNumberOfColumn(); j++) {
+        matrix1Data.get(count++).setText(matrix1.getEntry(i, j).toString());
+      }
+    }
+    count = 0;
+    for (int i = 0; i < matrix2.getNumberOfRow(); i++) {
+      for (int j = 0; j < matrix2.getNumberOfColumn(); j++) {
+        matrix2Data.get(count++).setText(matrix2.getEntry(i, j).toString());
+      }
+    }
   }
 
   /**

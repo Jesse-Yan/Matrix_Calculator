@@ -80,8 +80,7 @@ public class OpeartionParser {
      *
      * @return list of matrix
      */
-    @SuppressWarnings("rawtypes")
-    public List getCalculations() {
+    public List<CalSteps> getCalculations() {
         return calSteps;
     }
 
