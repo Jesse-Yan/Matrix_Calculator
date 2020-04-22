@@ -1,11 +1,11 @@
 .PHONY = make jar runjar test clean
 
 # replace with path to your javac,java,jar,javafx installations
-JC = /usr/bin/javac     # replace with path to javac or javac.exe
-JAR = /usr/bin/jar      # replace with path to jar or jar.exe
-JAVA = /usr/bin/java    # replace with path to java or javaw.exe
-MP = --module-path javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml #-Dfile.encoding=UTF-8 
-CP = -classpath ".:application" 
+JC = "C:\Program Files\Java\jdk-11\bin\javac"     # replace with path to javac or javac.exe
+JAR = "C:\Program Files\Java\jdk-11\bin\jar"      # replace with path to jar or jar.exe
+JAVA = "C:\Program Files\Java\jdk-11\bin\java"    # replace with path to java or javaw.exe
+MP = --module-path "C:\Users\lonelysunshine\Desktop\program\javafx\javafx-sdk-11.0.2\lib" --add-modules javafx.controls,javafx.fxml #-Dfile.encoding=UTF-8 
+CP = -classpath "C:\Users\lonelysunshine\Desktop\program\cs400\ateam\CS400_final_project-master\CS400_final_project\src\application" 
 APP = application.Main
 
 #CLASSPATH = .:junit-platform-console-standalone-1.5.2.jar:json-simple-1.1.1.jar
