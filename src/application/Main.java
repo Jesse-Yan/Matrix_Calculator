@@ -7,7 +7,6 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.IOException;
 import javafx.application.Application;
-import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -73,7 +72,7 @@ public class Main extends Application {
     try {
       // Set the application icon
       primaryStage.getIcons()
-                  .add(new Image(getClass().getResource("/calculator.png")
+                  .add(new Image(getClass().getResource("calculator.png")
                                            .toExternalForm()));
     } catch (Exception e) {
 
