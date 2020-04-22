@@ -145,9 +145,10 @@ public class MatrixCalculator {
    * 
    * @return the inverse of matrix1, which is represented by a String[][].
    * @throws MatrixDimensionsMismatchException if matrix1 is not a square matrix.
+   * @throws MatrixArithmeticException 
    * @throws ArithmeticException - if matrix1 is not invertible.
    */
-  public String[][] getInverse() throws MatrixDimensionsMismatchException {
+  public String[][] getInverse() throws MatrixDimensionsMismatchException, MatrixArithmeticException {
     Matrix firstMatrix = new Matrix(matrix1);
     return properFormatted(firstMatrix.inverse());
   }
@@ -180,8 +181,9 @@ public class MatrixCalculator {
    * @param n a given integer
    * @return the result of matrix1 to the power of n.
    * @throws MatrixDimensionsMismatchException if matrix1 is not a square matrix.
+   * @throws MatrixArithmeticException - when the given n is negative but matrix does not have an inverse
    */
-  public String[][] getPow(int n) throws MatrixDimensionsMismatchException {
+  public String[][] getPow(int n) throws MatrixDimensionsMismatchException, MatrixArithmeticException {
     Matrix firstMatrix = new Matrix(matrix1);
     return properFormatted(firstMatrix.pow(n));
   }
@@ -205,8 +207,9 @@ public class MatrixCalculator {
    * 
    * @param args
    * @throws MatrixDimensionsMismatchException
+   * @throws MatrixArithmeticException 
    */
-  public static void main(String[] args) throws MatrixDimensionsMismatchException {
+  public static void main(String[] args) throws MatrixDimensionsMismatchException, MatrixArithmeticException {
 
     String[][] matrixA, matrixB, matrixC;
     MatrixCalculator matrixCalculator;

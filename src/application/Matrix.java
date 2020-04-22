@@ -395,7 +395,7 @@ public class Matrix implements MatrixADT {
   }
 
   @Override
-  public Matrix pow(int n) throws MatrixDimensionsMismatchException {
+  public Matrix pow(int n) throws MatrixDimensionsMismatchException, MatrixArithmeticException {
     int N = getSizeOfSquareMatrix();
     if (n == 0)
       return identityMatrixWithSizeOf(N);
@@ -766,10 +766,14 @@ public class Matrix implements MatrixADT {
    * Find the inverse of the matrix by using Gaussian-Elimination on a
    * augmentedMatrix.
    * 
+   * @return matrix that been inverted
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * @throws MatrixArithmeticException - if the matrix is not invertible.
+   * 
    * @see https://en.wikipedia.org/wiki/Invertible_matrix#Gaussian_elimination
    */
   @Override
-  public Matrix inverse() throws MatrixDimensionsMismatchException {
+  public Matrix inverse() throws MatrixDimensionsMismatchException, MatrixArithmeticException {
     int N = getSizeOfSquareMatrix();
     Matrix augmentedMatrix = augmentMatirx(identityMatrixWithSizeOf(N));
     try {
@@ -777,7 +781,7 @@ public class Matrix implements MatrixADT {
       augmentedMatrix.backwardElimination();
       augmentedMatrix.simplifyAfterElimination();
     } catch (SingularException singularException) {
-      throw new ArithmeticException("The matrix is not invertible!");
+      throw new MatrixArithmeticException("The matrix is not invertible!");
     }
     return augmentedMatrix.subMatrix(0, N, N, 2 * N);
   }
