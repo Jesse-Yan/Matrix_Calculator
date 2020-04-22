@@ -476,7 +476,7 @@ public class Main extends Application {
           BorderPane resultShower = resultBuilder("Operation: Det",
               "Determinant", dataFromMatrix, resultDeterminant);
           scrollPane(vBoxR, resultShower);
-        } catch (MatrixDimensionsMismatchException e) {
+        } catch (MatrixDimensionsMismatchException e1) {
           alert("MatrixDimensionError",
               "Sorry, the matrix you entered is not a square matrix\nTo compute the determinant of a matrix, it has to be a square matrix");
         }
@@ -493,6 +493,9 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e) {
           alert("MatrixDimensionError",
               "Sorry, the matrix you entered is not a square matrix\nTo compute the inverse of a matrix, it has to be a square matrix");
+        } catch (MatrixArithmeticException e2) {
+          alert("MatriArithmeticError",
+              "Sorry, the matrix you entered is not invertible");
         }
       });
 
@@ -651,6 +654,9 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e2) {
           alert("MatrixDimensionError",
               "Sorry, the matrix you entered is not a square matrix\nTo compute the power of a matrix, it has to be a square matrix");
+        } catch (MatrixArithmeticException e2) {
+          alert("MatriArithmeticError",
+              "Sorry, the matrix you entered is non-invertible, so it does not have negative exponent");
         }
       });
     } catch (Exception e) {
