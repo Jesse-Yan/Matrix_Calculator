@@ -91,7 +91,7 @@ public class OpeartionParser {
      */
     public static void main(String[] args) {
         try {
-          OpeartionParser parser = new OpeartionParser("testCal.json");
+          OpeartionParser parser = new OpeartionParser("SimpleData.json");
             System.out.println("success!!");
         } catch (Exception e) {
             System.out.println(e.toString());
