@@ -61,6 +61,7 @@ public class Writer {
       }
     } else {
       try {
+        @SuppressWarnings("unchecked")
         List<Matrix> end = (List<Matrix>) cur.getResult();
         printWriter.write("[\n");
         for (int j = 0; j < end.size(); ++j) {
