@@ -58,19 +58,25 @@ public class Main extends Application {
   // lists storing steps
   List<CalSteps> lists = null;
 
-  // State
+  // Whether has been modified
   boolean state = false;
 
-  // Correct?
+  // Correct result
   boolean correctness = true;
-
+  
+  // Able to quit?
+  boolean saved = false;
+  
+  // running for checking
+  boolean run = false;
+  
   // Recorder of buttons
   Button latestMOpera = null;
-  
+
   // Recorder of results
   String resultNum = null;
   List<String[][]> results = new ArrayList<>();
-  
+
   /**
    * This is the start method of the Main class
    * 
@@ -576,7 +582,7 @@ public class Main extends Application {
 
       // mButtons.get(3).setOnAction(event -> {
       // try {
-//      latestMOpera = mButtons.get(3);
+      // latestMOpera = mButtons.get(3);
       // String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
       // Matrix matrix = new Matrix(dataFromMatrix);
       // List<String[][]> resultSVD = Arrays.stream(matrix.???)
@@ -665,7 +671,7 @@ public class Main extends Application {
 
       // mButtons.get(7).setOnAction(event -> {
       // try {
-//      latestMOpera = mButtons.get(7);
+      // latestMOpera = mButtons.get(7);
       // String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
       // Matrix matrix = new Matrix(dataFromMatrix);
       // String[][] resultDI = matrix.???
@@ -794,6 +800,12 @@ public class Main extends Application {
           lists = parser.getCalculations();
           selector.setDisable(false);
           total.setText(String.valueOf(lists.size()));
+          run = false;
+          for(int i = 1; i <= lists.size(); i++) {
+            pages.setText(String.valueOf(i));
+            confirm.fire();
+          }
+          run = true;
           pages.setText("1");
           state = false;
           correctness = true;
@@ -808,15 +820,16 @@ public class Main extends Application {
       }
     });
 
+    pages.setOnMouseClicked(e -> {
+      if (pages.isFocused()) {
+        caretPosition = pages.getCaretPosition();
+        focusedTextField = pages;
+      }
+    });
+
     confirm.setOnAction(event -> {
       try {
-        if (state && correctness) {
-          int page = Integer.parseInt(pages.getText());
-          Matrix wMatrix1 = new Matrix(reader(matrix1Data, rowAndCol1));
-          if(enableSecond.isSelected()) {
-            
-          }
-        }
+        updater(pages, matrix1Data, rowAndCol1, enableSecond, run);
         state = false;
         correctness = true;
         int page = Integer.parseInt(pages.getText());
@@ -970,6 +983,26 @@ public class Main extends Application {
 
     }
     primaryStage.show();
+  }
+
+  /**
+   * Updater of the CalStep
+   * 
+   * @param pages
+   * @param matrix1Data
+   * @param rowAndCol1
+   * @param enableSecond
+   * @param run
+   */
+  private void updater(TextField pages, List<TextField> matrix1Data,
+      List<TextField> rowAndCol1, CheckBox enableSecond, boolean run) {
+    if (state && correctness) {
+      int page = Integer.parseInt(pages.getText());
+      Matrix wMatrix1 = new Matrix(reader(matrix1Data, rowAndCol1));
+      if (enableSecond.isSelected()) {
+        
+      }
+    }
   }
 
   /**
