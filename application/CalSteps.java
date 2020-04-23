@@ -14,6 +14,11 @@ public class CalSteps {
   private ArrayList<Matrix> datas;//data stores here
   
   private Object result;
+  
+  private int type;//type that refers: 1, normal steps; 2, result in array
+  //3, result in String
+
+  
 
   /**
    * constructor of Calculations object
@@ -24,6 +29,9 @@ public class CalSteps {
     this.result = result;
     this.datas = null;
     this.operation = null;
+    if (result instanceof String)
+      this.type = 3;
+    else this.type = 2;
   }
   
   /**
@@ -35,6 +43,8 @@ public class CalSteps {
   public CalSteps(String operation, ArrayList<Matrix> datas) {
     this.operation = operation;
     this.datas = datas;
+    this.result = null;
+    this.type = 1;
   }
   
   /**
@@ -65,6 +75,15 @@ public class CalSteps {
     if (datas!=null||operation!=null)
       throw new Exception("this is not a result block");
     return result;
+  }
+  
+  /**
+   * Getter for type
+   * 
+   * @return type in int
+   */
+  public int getType() {
+    return type;
   }
 
 }
