@@ -21,6 +21,63 @@ public class Writer {
   public Writer(List<CalSteps> results) {
     this.results = results;
   }
+  
+  /**
+   * helper method to write data and operation
+   * 
+   * @param cur
+   */
+  public void writeDataAndOperation(CalSteps cur) {
+    printWriter.write("\t\t" + "\"operations\": \"" + cur.getOperation() + "\",\n");
+    printWriter.write("\t\t" + "\"datas\": [\n");
+    for (int j = 0; j < cur.getDatas().size(); ++j) {
+      printWriter.write("\t\t\t");
+      if (j != 0)
+        printWriter.write(",");
+      printWriter.write("[\n");
+
+      printWriter.write(cur.getDatas().get(j).toJsonString());
+
+      printWriter.write("\t\t\t" + "]\n");
+    }
+    printWriter.write("\t\t" + "]\n");
+  }
+  
+  /**
+   * helper method to write result
+   * 
+   * @param cur - current object calStep;
+   */
+  public void writeResult(CalSteps cur) {
+
+    printWriter.write("\t\t" + "\"result\": ");
+    if (cur.getType() == 3) {
+      try {
+        printWriter.write("\"" + (String) cur.getResult() + "\"\n");
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    } else {
+      try {
+        List<Matrix> end = (List<Matrix>) cur.getResult();
+        printWriter.write("[\n");
+        for (int j = 0; j < end.size(); ++j) {
+          printWriter.write("\t\t\t");
+          if (j != 0)
+            printWriter.write(",");
+          printWriter.write("[\n");
+
+          printWriter.write(end.get(j).toJsonString());
+
+          printWriter.write("\t\t\t" + "]\n");
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+
+      printWriter.write("\t\t" + "]\n");
+    }
+  }
 
   /**
    * Method that create a .json file with result stores in it.
@@ -39,49 +96,14 @@ public class Writer {
           printWriter.write("\t" + ",\n");
         printWriter.write("\t" + "{\n");
         cur = results.get(i);
-        if (cur.getOperation() != null || cur.getDatas() != null) {
-          printWriter.write("\t\t" + "\"operations\": \"" + cur.getOperation() + "\",\n");
-          printWriter.write("\t\t" + "\"datas\": [\n");
-          for (int j = 0; j < cur.getDatas().size(); ++j) {
-            printWriter.write("\t\t\t");
-            if (j != 0)
-              printWriter.write(",");
-            printWriter.write("[\n");
-
-            printWriter.write(cur.getDatas().get(j).toJsonString());
-
-            printWriter.write("\t\t\t" + "]\n");
-          }
-          printWriter.write("\t\t" + "]\n");
+        if (cur.getOperation() != null && cur.getDatas() != null&&cur.getResult()==null) {
+          writeDataAndOperation(cur);
+        } else if (cur.getOperation() == null && cur.getDatas() == null&& cur.getResult()!=null){
+          writeResult(cur);
         } else {
-          printWriter.write("\t\t" + "\"result\": ");
-          if (cur.getType() == 3) {
-            try {
-              printWriter.write("\"" + (String) cur.getResult() + "\"\n");
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
-          } else {
-            try {
-              List<Matrix> end = (List<Matrix>) cur.getResult();
-              printWriter.write("[\n");
-              for (int j = 0; j < end.size(); ++j) {
-                printWriter.write("\t\t\t");
-                if (j != 0)
-                  printWriter.write(",");
-                printWriter.write("[\n");
-
-                printWriter.write(end.get(j).toJsonString());
-
-                printWriter.write("\t\t\t" + "]\n");
-              }
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
-
-            printWriter.write("\t\t" + "]\n");
-          }
-
+          writeDataAndOperation(cur);
+          printWriter.write(",\n");
+          writeResult(cur);
         }
         printWriter.write("\t" + "}\n");
       }

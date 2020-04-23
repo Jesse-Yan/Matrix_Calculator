@@ -48,6 +48,20 @@ public class CalSteps {
   }
   
   /**
+   * constructor of Calculations object
+   * 
+   * @param operation - operation
+   * @param datas - datas
+   * @param result - result whether in String or List<Matrix>
+   */
+  public CalSteps(String operation, ArrayList<Matrix> datas, Object result) {
+    this.operation = operation;
+    this.datas = datas;
+    this.result = result;
+    this.type = 1;
+  }
+  
+  /**
    * Getter of operation
    * 
    * @return operation
@@ -71,9 +85,7 @@ public class CalSteps {
    * @return result - result
    * @throws Exception - throw exception when case not met
    */
-  public Object getResult() throws Exception {
-    if (datas!=null||operation!=null)
-      throw new Exception("this is not a result block");
+  public Object getResult() {
     return result;
   }
   
