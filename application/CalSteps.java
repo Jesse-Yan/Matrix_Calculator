@@ -58,7 +58,9 @@ public class CalSteps {
     this.operation = operation;
     this.datas = datas;
     this.result = result;
-    this.type = 1;
+    if (result instanceof String)
+      this.type = 3;
+    else this.type = 2;
   }
   
   /**
