@@ -812,6 +812,7 @@ public class Main extends Application {
       try {
         if (state && correctness) {
           int page = Integer.parseInt(pages.getText());
+          Matrix wMatrix1 = new Matrix(reader(matrix1Data, rowAndCol1));
           if(enableSecond.isSelected()) {
             
           }
