@@ -41,6 +41,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class Main extends Application {
 
+  // Counting for different OS setup
   private final String lineSeparator = System.lineSeparator();
 
   // Spectating caret Position
@@ -104,8 +105,14 @@ public class Main extends Application {
 
     }
 
+    // Set the style of Matrix result shower
     resultShower.setStyle("-fx-background-color: lightgray;");
 
+
+    // Below is the setter of Top pane
+
+
+    // Set the fileChooser
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Open Resource File");
 
@@ -146,10 +153,13 @@ public class Main extends Application {
     });
     about.getItems().add(developer);
 
+    // Add all to the MenuBar
     menuBar.getMenus().addAll(menu, about);
 
-    // Set the top scene
+    // Set the top scene And Selector Pane
     HBox selector = new HBox();
+
+    // A set of inputs, including forward, page, total pages and backward
     Button forward = new Button("<");
     TextField pages = new TextField();
     pages.setMaxWidth(40);
@@ -162,16 +172,24 @@ public class Main extends Application {
     Button backward = new Button(">");
     Button confirm = new Button("\u221A");
     Button quit = new Button("Quit");
+
+    // Add to the pane of selector
     selector.getChildren()
             .addAll(forward, pages, slash, total, backward, confirm, quit);
+    // Align to the center
     selector.alignmentProperty().set(Pos.CENTER);
 
+    // Create a VBox and add to the top of root Border Pane
     VBox vBox = new VBox();
     vBox.getChildren().addAll(menuBar, selector);
     root.setTop(vBox);
     selector.setDisable(true);
 
-    // Set the left scene
+
+    // Below is the setter of Left simple calculator
+
+
+    // Set for input and output field and organize their dimensions
     VBox vBoxL = new VBox();
     TextField input = new TextField();
     input.setMaxWidth(360.0);
@@ -181,9 +199,10 @@ public class Main extends Application {
     result.setMaxWidth(360.0);
     result.setMinHeight(220.0);
 
+    // Reset focus
     focusedTextField = input;
 
-    // Set two parallel buttons
+    // Set two parallel buttons for analyze sequence
     HBox hBoxL = new HBox();
     Button analyzeSequence = new Button("Analyze Sequence");
     analyzeSequence.setMinWidth(180);
@@ -194,10 +213,12 @@ public class Main extends Application {
 
     // Activated under analyzing sequence
     space.setDisable(true);
+    // Add to the HBox for parallel visual effect
     hBoxL.getChildren().addAll(analyzeSequence, space);
 
-    // Set the gridPane
+    // Set the gridPane of simple calculator operations
     GridPane gridPaneL = new GridPane();
+    // Map from String to Buttons
     List<Button> buttons =
         List.of("\u03c0", "   e   ", "   C   ", "  <-   ", "   (   ", "   )   ",
             "  |x|  ", "   /   ", "   7   ", "   8   ", "   9   ", "   *   ",
@@ -206,6 +227,8 @@ public class Main extends Application {
             .stream()
             .map(Button::new)
             .collect(toList());
+
+    // Add these Buttons to the GridPane
     int number = 0;
     for (int row = 0; row < 6; row++) {
       for (int column = 0; column < 4; column++) {
@@ -215,6 +238,7 @@ public class Main extends Application {
       }
     }
 
+    // Special List of Non-number buttons for future use
     List<Button> notNumber =
         buttons.stream()
                .filter(b -> !(b.getText().trim().matches("\\d")
@@ -228,14 +252,18 @@ public class Main extends Application {
       focusedTextField = input;
     });
 
-    // Add event handler to the buttons
+    // Add event handler to the buttons for input and output
     buttons.stream().forEach(btn -> {
       btn.setOnAction(event -> {
+        // Set the related operation according to their inside text
         String temp = btn.getText().trim();
 
+        // Case of Clear
         if (temp.equals("C")) {
           input.clear();
           caretPosition = 0;
+
+          // Case of delete one character
         } else if (temp.equals("<-")) {
           try {
             focusedTextField.setText(
@@ -243,8 +271,10 @@ public class Main extends Application {
                     + focusedTextField.getText().substring(caretPosition));
             caretPosition--;
           } catch (Exception e) {
-
+            /* If catch, do nothing */
           }
+
+          // Case of positive or negative
         } else if (temp.equals("+/-")) {
           try {
             String fromInput = focusedTextField.getText();
@@ -252,14 +282,22 @@ public class Main extends Application {
                 fromInput.startsWith("-") ? fromInput.substring(1)
                     : "-" + fromInput);
           } catch (Exception e) {
-
+            /* If catch, do nothing */
           }
+
+          // Case for output
         } else if (temp.equals("=")) {
           try {
+
+            // '=' served for sequence and simple calculation
+
+            // Case of simple calculation
             if (!analyze) {
               result.appendText(input.getText() + "" + lineSeparator + "="
                   + Calculator.calcul("0" + input.getText()) + ""
                   + lineSeparator + "");
+
+              // Case of analyze sequence
             } else {
               result.appendText(SequenceSummary.summary(input.getText()));
               analyze = false;
@@ -269,46 +307,33 @@ public class Main extends Application {
                 notNumber.stream().forEach(b -> b.setDisable(false));
               });
             }
+
+            // Catch for wrong expression
           } catch (Exception e) {
             alert("Wrong Expression",
                 "The equation you entered cannot be calculated" + lineSeparator
                     + "Please press 'C' and try again");
           }
+
+          // Case for number and dot
         } else if (temp.matches("\\d") || temp.matches("\\.")) {
           try {
             focusedTextField.insertText(caretPosition, temp.trim());
             ++caretPosition;
           } catch (Exception e) {
-
+            /* If catch, do nothing */
           }
+
+          // Case for absolute value
         } else {
           try {
             input.insertText(caretPosition, temp.replace("x", "").trim());
             ++caretPosition;
           } catch (Exception e) {
-
+            /* If catch, do nothing */
           }
         }
       });
-    });
-
-    // Add to the root
-    vBoxL.getChildren().addAll(input, result, hBoxL, gridPaneL);
-    root.setLeft(vBoxL);
-
-    // Set the right scene
-    VBox vBoxR = new VBox();
-
-    // Set for Right and Left Disabling
-    vBoxR.setOnMouseEntered(e -> {
-      notNumber.stream().forEach(b -> b.setDisable(true));
-      buttons.get(3).setDisable(false);
-    });
-    input.setOnMouseEntered(e -> {
-      notNumber.stream().forEach(b -> b.setDisable(false));
-    });
-    result.setOnMouseClicked(e -> {
-      notNumber.stream().forEach(b -> b.setDisable(false));
     });
 
     // Set for Sequence Actions
@@ -330,7 +355,31 @@ public class Main extends Application {
       }
     });
 
+    // Add to the root and finished setting left pane
+    vBoxL.getChildren().addAll(input, result, hBoxL, gridPaneL);
+    root.setLeft(vBoxL);
 
+
+    // Below is the setter of right scene, the Matrix calculator
+
+
+    // Set the right scene
+    VBox vBoxR = new VBox();
+
+    // Set for Right and Left Disabling, switching between simple calculation
+    // and matrix calculation
+    vBoxR.setOnMouseEntered(e -> {
+      notNumber.stream().forEach(b -> b.setDisable(true));
+      buttons.get(3).setDisable(false);
+    });
+    input.setOnMouseEntered(e -> {
+      notNumber.stream().forEach(b -> b.setDisable(false));
+    });
+    result.setOnMouseClicked(e -> {
+      notNumber.stream().forEach(b -> b.setDisable(false));
+    });
+
+    // The pane for two matrixes
     BorderPane matrixes = new BorderPane();
 
     // Set the Matrix Panel
@@ -341,6 +390,7 @@ public class Main extends Application {
     VBox matrix1 = matrixGenerator(matrix1Data, rowAndCol1);
     VBox matrix2 = matrixGenerator(matrix2Data, rowAndCol2);
 
+    // Add focus function for each row and col inputField of matrixes
     rowAndCol1.stream().forEach(t -> t.setOnMouseClicked(e -> {
       if (t.isFocused()) {
         caretPosition = 1;
@@ -354,25 +404,35 @@ public class Main extends Application {
       }
     }));
 
-    // Should be enable when needed
+    // matrix2 will be enable when doing '+', '-', or '*'
     matrix2.setDisable(true);
 
-    // Set the operation of Two Matrixes
+    // Set the operation of Two Matrixes, including '+', '-', and '*'
     GridPane matrixOperators = new GridPane();
-    CheckBox enableSecond = new CheckBox("?");
 
+    // Special check box to switch the state between one matrix and two matrixes
+    CheckBox enableSecond = new CheckBox("?");
     matrixOperators.add(enableSecond, 0, 0);
+
+    // Setter of two MatrixOperators
+
+    // Add two matrixes operators to the pane
     Button c1 = new Button("c1");
     c1.setMinWidth(35);
     matrixOperators.add(c1, 0, 1);
+
+    // Map from String to Buttons
     List<Button> operators = List.of("c2", "+", "-", "*").stream().map(str -> {
       Button temp = new Button(str);
       temp.setMinWidth(35);
       return temp;
     }).collect(toList());
+    // Add to the pane
     for (int i = 0; i < 4; i++) {
       matrixOperators.add(operators.get(i), 0, i + 2);
     }
+
+    // Adjustor for the visual and arrangement of the pane
     matrixOperators.setVgap(19);
     operators.stream().forEach(b -> b.setDisable(true));
     matrix1.setMinWidth(400);
@@ -384,20 +444,26 @@ public class Main extends Application {
     cAndR.getChildren().addAll(matrixOperators, matrix2);
     matrixes.setCenter(cAndR);
 
-    // Set the EventHandler for matrixOperators
+    // Set EventHandler for stateless buttons
+
+    // Set the EventHandler for c1 matrixOperator
     c1.setOnMouseClicked(event -> {
       matrix1Data.stream().forEach(TextField::clear);
     });
+
+    // Set the EventHandler for c2 matrixOperator
     operators.get(0).setOnMouseClicked(event -> {
       matrix2Data.stream().forEach(TextField::clear);
     });
+
+    // Setter for single MatrixOperators
 
     // Set the operation panel
     GridPane mOperations = new GridPane();
     mOperations.setHgap(145);
     mOperations.setVgap(10);
 
-    // Set the Operations of one Matrix
+    // Set the Operations of one Matrix by mapping from String to Buttons
     List<Button> mButtons = List.of("Det", "Inverse", "QR", "SVD", "Trace",
         "LUP", "Gauss-Elim", "Diagonalize", "EiValue", "Rank", "Transpose")
                                 .stream()
@@ -408,7 +474,7 @@ public class Main extends Application {
                                 })
                                 .collect(toList());
 
-    // Add to the GridPane
+    // Add to the GridPane of single matrix operation
     int count = 0;
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 4; j++) {
@@ -419,7 +485,7 @@ public class Main extends Application {
       }
     }
 
-    // Add the special Power button
+    // Add the special Power button and its inputField
     HBox power = new HBox();
     Button powerButton = new Button("Power");
     TextField powerInput = new TextField();
@@ -427,8 +493,16 @@ public class Main extends Application {
     power.getChildren().addAll(powerButton, powerInput);
     mOperations.add(power, 3, 2);
 
+    // Adjust the output pane
+    resultShower.setMinHeight(207);
+    resultShower.setMaxWidth(836);
 
-    // Add eventListener of enableSecond
+
+    // Below is the section that add EventListener to Buttons
+
+
+    // Add eventListener of enableSecond, the button that change the state of
+    // one or two matrixes
     enableSecond.setOnAction(event -> {
       if (enableSecond.isSelected()) {
         mOperations.setDisable(true);
@@ -441,27 +515,37 @@ public class Main extends Application {
       }
     });
 
-
-    resultShower.setMinHeight(207);
-    resultShower.setMaxWidth(836);
     try {
+
       // Add Operations related to MatrixCalculator
+
+      // Add EventHandler to the '+' operation
       operators.get(1).setOnAction(event -> {
+        // Recorder the latest operation
         latestMOpera = operators.get(1);
+
+        // Get data from input field
         String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
         String[][] dataFromMatrix2 = reader(matrix2Data, rowAndCol2);
         MatrixCalculator matrixCalculator =
             new MatrixCalculator(dataFromMatrix1, dataFromMatrix2);
         try {
+
+          // Compute result
           String[][] resultMatrix = matrixCalculator.add();
+
+          // Add result to the recorder of result
           results.clear();
           results.add(new Matrix(resultMatrix));
+
+          // Generate the resultShower
           resultShower = resultBuilder("Operation: Add", "+", dataFromMatrix1,
               dataFromMatrix2, resultMatrix);
+          // Add ScrollPane and update the scene
           scrollPane(vBoxR, resultShower);
-          correctness = true;
-          state = true;
-          saved = false;
+
+          // Change for related states
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -472,8 +556,12 @@ public class Main extends Application {
         }
       });
 
+      // Add EventHandler to the '-' operation
       operators.get(2).setOnAction(event -> {
+        // Recorder the latest operation
         latestMOpera = operators.get(2);
+
+        // Get data from input field
         String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
         String[][] dataFromMatrix2 = reader(matrix2Data, rowAndCol2);
         MatrixCalculator matrixCalculator =
@@ -485,9 +573,7 @@ public class Main extends Application {
           resultShower = resultBuilder("Operation: Subtract", "-",
               dataFromMatrix1, dataFromMatrix2, resultMatrix);
           scrollPane(vBoxR, resultShower);
-          correctness = true;
-          state = true;
-          saved = false;
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -511,9 +597,7 @@ public class Main extends Application {
           resultShower = resultBuilder("Operation: Multiply", "*",
               dataFromMatrix1, dataFromMatrix2, resultMatrix);
           scrollPane(vBoxR, resultShower);
-          correctness = true;
-          state = true;
-          saved = false;
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -524,7 +608,7 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to special matrix operation
+      // Add EventHandler to special matrix operations
       mButtons.get(0).setOnAction(event -> {
         try {
           latestMOpera = mButtons.get(0);
@@ -536,9 +620,7 @@ public class Main extends Application {
           resultShower = resultBuilder("Operation: Det", "Determinant",
               dataFromMatrix, resultDeterminant);
           scrollPane(vBoxR, resultShower);
-          correctness = true;
-          state = true;
-          saved = false;
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -563,9 +645,7 @@ public class Main extends Application {
           resultShower = resultBuilder("Operation: Inverse", "Inverse",
               dataFromMatrix, resultInverse);
           scrollPane(vBoxR, resultShower);
-          correctness = true;
-          state = true;
-          saved = false;
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -594,9 +674,7 @@ public class Main extends Application {
           resultShower = resultBuilderQR("Operation: QR", "QR", dataFromMatrix,
               resultQR.get(0), resultQR.get(1));
           scrollPane(vBoxR, resultShower);
-          correctness = true;
-          state = true;
-          saved = false;
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -649,9 +727,7 @@ public class Main extends Application {
           resultShower = resultBuilder("Operation: Trace", "Trace",
               dataFromMatrix, resultTrace);
           scrollPane(vBoxR, resultShower);
-          correctness = true;
-          state = true;
-          saved = false;
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -680,9 +756,7 @@ public class Main extends Application {
                 dataFromMatrix, resultLUP.get(0), resultLUP.get(1));
           }
           scrollPane(vBoxR, resultShower);
-          correctness = true;
-          state = true;
-          saved = false;
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -705,9 +779,7 @@ public class Main extends Application {
           resultShower =
               resultBuilder("Operation: GE", "GE", dataFromMatrix, resultGE);
           scrollPane(vBoxR, resultShower);
-          correctness = true;
-          state = true;
-          saved = false;
+          stateModifer();
         } catch (NumberFormatException e) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
@@ -743,9 +815,7 @@ public class Main extends Application {
           resultShower =
               resultBuilder("Operation: EIV", "EIV", dataFromMatrix, resultEIV);
           scrollPane(vBoxR, resultShower);
-          correctness = true;
-          state = true;
-          saved = false;
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -771,9 +841,7 @@ public class Main extends Application {
           resultShower = resultBuilder("Operation: Rank", "Rank",
               dataFromMatrix, resultRank);
           scrollPane(vBoxR, resultShower);
-          correctness = true;
-          state = true;
-          saved = false;
+          stateModifer();
         } catch (NumberFormatException e) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
@@ -792,9 +860,7 @@ public class Main extends Application {
           resultShower =
               resultBuilder("Operation: TS", "TS", dataFromMatrix, resultTS);
           scrollPane(vBoxR, resultShower);
-          correctness = true;
-          state = true;
-          saved = false;
+          stateModifer();
         } catch (NumberFormatException e) {
           alert("Error", "Your input may contain invalid characters or empty");
         }
@@ -815,9 +881,7 @@ public class Main extends Application {
             resultShower = resultBuilder("Operation: POWER", "PowerOf " + n,
                 dataFromMatrix, resultPw);
             scrollPane(vBoxR, resultShower);
-            correctness = true;
-            state = true;
-            saved = false;
+            stateModifer();
           } catch (MatrixDimensionsMismatchException e1) {
             correctness = false;
             alert("MatrixDimensionError",
@@ -851,8 +915,14 @@ public class Main extends Application {
     vBoxR.getChildren().addAll(matrixes, mOperations, resultShower);
     root.setRight(vBoxR);
 
+
+    // Below is the section adding open-save-quit EventHandlers
+
+
     // Set the action for FileChooser-open
     open.setOnAction(event -> {
+
+      // Use the FileChooser to retrieve the file path
       File file = fileChooser.showOpenDialog(primaryStage);
       if (file == null || !file.getName().endsWith(".json")) {
         alert("Error: File name mismatch", "Please rechoose the file"
@@ -860,10 +930,16 @@ public class Main extends Application {
       } else {
         // Invoke OpeartionParser
         try {
+
+          // Invoke parser to acquire data
           OpeartionParser parser = new OpeartionParser(file);
+          // Acquire lists calculations
           lists = parser.getCalculations();
+          // Enable the selector Pane
           selector.setDisable(false);
           total.setText(String.valueOf(lists.size()));
+
+          // Compute each calculation and update the list
           for (int i = 1; i <= lists.size(); i++) {
             CalSteps step = lists.get(i - 1);
             String operationOperator = step.getOperation();
@@ -890,6 +966,7 @@ public class Main extends Application {
       }
     });
 
+    // Add focus function
     pages.setOnMouseClicked(e -> {
       if (pages.isFocused()) {
         caretPosition = pages.getCaretPosition();
@@ -897,12 +974,16 @@ public class Main extends Application {
       }
     });
 
+    // Add EventListener to confirm button
     confirm.setOnAction(event -> {
       try {
+        // Update the prevPage and save the result
         updater(prevPage, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
             enableSecond);
         state = false;
         correctness = true;
+
+        // Proceed to next page
         int page = Integer.parseInt(pages.getText());
         prevPage = page;
         if (page < 1 || page > lists.size()) {
@@ -920,13 +1001,18 @@ public class Main extends Application {
       }
     });
 
+    // Add EventListener to forward button
     forward.setOnAction(event -> {
       try {
+
+        // Update the prevPage
         int numPage = Integer.parseInt(pages.getText());
         updater(numPage, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
             enableSecond);
         state = false;
         correctness = true;
+
+        // Resetting the page number
         int num = Integer.parseInt(pages.getText());
         if (num != 1) {
           num -= 1;
@@ -938,13 +1024,18 @@ public class Main extends Application {
       }
     });
 
+    // Add EventListener to backward button
     backward.setOnAction(event -> {
       try {
+
+        // Update the prevPage
         int numPage = Integer.parseInt(pages.getText());
         updater(numPage, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
             enableSecond);
         state = false;
         correctness = true;
+
+        // Resetting the page number
         int num = Integer.parseInt(pages.getText());
         if (num != lists.size()) {
           num += 1;
@@ -958,6 +1049,8 @@ public class Main extends Application {
 
     // Set the action for FileChooser-save
     save.setOnAction(event -> {
+
+      // Acquire filePath from the file Chooser
       File file = fileChooser.showSaveDialog(primaryStage);
       if (file == null || !file.getName().endsWith(".json")) {
         alert("Error: File name mismatch", "Please rechoose the file"
@@ -976,27 +1069,42 @@ public class Main extends Application {
       }
     });
 
+    // Add EventListener to quit button
     quit.setOnAction(event -> {
+      // If the user has not saved the data, invoke the alert pane
       if (!saved) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Quit?");
         alert.setContentText(
             "Do you want to save the calculation before you leave?");
+
+        // Three types of buttons, yes, no and cancel
         ButtonType yes = new ButtonType("Yes");
         ButtonType no = new ButtonType("No");
         ButtonType cancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
         alert.getButtonTypes().setAll(yes, no, cancel);
         Optional<ButtonType> diagResult = alert.showAndWait();
+
+        // If the user chose yes, invoke save button
         if (diagResult.get() == yes) {
           save.fire();
+
+          // If save failed, re-Invoke quit button
           if (!saved) {
             quit.fire();
           } else {
+
+            // If success, clear the screen of Matrix Calculator
             clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2);
           }
+
+          // If the user chose no, then clear the screen of Matrix Calculator
         } else if (diagResult.get() == no) {
           clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2);
         }
+        // If user choose Cancel, then return to previous state
+
+        // If the user has saved, then quit directly
       } else {
         clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2);
       }
@@ -1006,7 +1114,6 @@ public class Main extends Application {
     Scene mainScene =
         new Scene(root, primaryStage.getWidth(), primaryStage.getHeight());
     primaryStage.setScene(mainScene);
-    primaryStage.setResizable(false);
     try {
       mainScene.getStylesheets()
                .add(getClass().getResource("styleSheet.css").toExternalForm());
@@ -1014,6 +1121,15 @@ public class Main extends Application {
 
     }
     primaryStage.show();
+  }
+
+  /**
+   * Modify the State
+   */
+  private void stateModifer() {
+    correctness = true;
+    state = true;
+    saved = false;
   }
 
   /**
@@ -1038,7 +1154,7 @@ public class Main extends Application {
   }
 
   /**
-   * Switcher of Operation
+   * Switcher of Operation and invoke to calculate
    * 
    * @param  matrix1Data       matrix1
    * @param  matrix2Data       matrix2
@@ -1579,8 +1695,8 @@ public class Main extends Application {
   /**
    * Matrix's TextFields Reader
    * 
-   * @param  matrix1Data
-   * @param  rowAndCol1
+   * @param  matrix1Data data from matrix1
+   * @param  rowAndCol1  data from row and col of matrix1
    * @return             String[][] representation of the data within the Matrix
    */
   private String[][] reader(List<TextField> matrixData,
@@ -1603,9 +1719,9 @@ public class Main extends Application {
   /**
    * Generate a Matrix
    * 
-   * @param  textFields
-   * @param  textFields
-   * @return            VBox of the Matrix
+   * @param  textFields   Recorder of TextField
+   * @param  rowAndColumn Recorder of TextField
+   * @return              VBox of the Matrix
    */
   private VBox matrixGenerator(List<TextField> textFields,
       List<TextField> rowAndColumn) {
@@ -1879,8 +1995,8 @@ public class Main extends Application {
   /**
    * Show alert to remind user
    * 
-   * @param title
-   * @param content
+   * @param title   title of the alert
+   * @param content content of the alert
    */
   private void alert(String title, String content) {
     Alert alert = new Alert(AlertType.ERROR);
@@ -1892,7 +2008,7 @@ public class Main extends Application {
   /**
    * Main method for this class
    * 
-   * @param args
+   * @param args args from Program Arguments
    */
   public static void main(String[] args) {
     launch(args);
