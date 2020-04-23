@@ -50,7 +50,6 @@ public class OpeartionParser {
       for (int i = 0; i < calculations.size(); i++) {
         JSONObject jsonPack = (JSONObject) calculations.get(i);
         operations = (String) jsonPack.get("operations");
-//       System.out.println("operations: "+operations);//test purpose
 
         JSONArray datas = (JSONArray) jsonPack.get("datas");
 
@@ -90,6 +89,7 @@ public class OpeartionParser {
      * 
      * @param args
      */
+    @SuppressWarnings("unused")
     public static void main(String[] args) {
         try {
           OpeartionParser parser = new OpeartionParser(new File("SimpleData.json"));

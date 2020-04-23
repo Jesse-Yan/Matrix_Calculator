@@ -2,13 +2,19 @@ package application;
 
 /**
  * 
- * The exception thrown when the the matrix is cannot do the require calculation.
+ * The exception thrown when the the matrix is cannot do the require
+ * calculation.
  * 
  * @author Houming Chen
  *
  */
 
 public class MatrixArithmeticException extends Exception {
+
+  /**
+   * Serial Version UID
+   */
+  private static final long serialVersionUID = 9017635520378487729L;
 
   /**
    * default no-arg constructor

@@ -10,6 +10,11 @@ package application;
 public class SingularException extends Exception {
 
   /**
+   * Serial Version ID
+   */
+  private static final long serialVersionUID = -1685120027128610074L;
+
+  /**
    * default no-arg constructor
    */
   public SingularException() {}

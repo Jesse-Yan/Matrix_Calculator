@@ -40,7 +40,9 @@ import java.util.List;
  */
 public class Parser {
 
+    @SuppressWarnings("rawtypes")
     private List operations;
+    @SuppressWarnings("rawtypes")
     private List matrixList;
 
     /**
@@ -73,6 +75,7 @@ public class Parser {
      * @param jsonFilepath
      * @throws FileNotFoundException
      */
+    @SuppressWarnings("rawtypes")
     public Parser(String jsonFilepath) throws IOException {
 
         // read the json file
@@ -88,6 +91,7 @@ public class Parser {
      *
      * @return list of matrix
      */
+    @SuppressWarnings("rawtypes")
     public List getMatrix() {
         return matrixList;
     }
@@ -97,10 +101,12 @@ public class Parser {
      *
      * @return list of operations
      */
+    @SuppressWarnings("rawtypes")
     public List getOperations() {
         return operations;
     }
 
+    @SuppressWarnings("unused")
     public static void main(String[] args) {
         try {
             Parser parser = new Parser("1.json");
