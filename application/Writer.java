@@ -98,7 +98,7 @@ public class Writer {
           printWriter.write("\t" + ",\n");
         printWriter.write("\t" + "{\n");
         cur = results.get(i);
-        if (cur.getOperation() != null && cur.getDatas() != null && cur.getResult() == null) {
+        if (cur.getType()==1) {
           writeDataAndOperation(cur);
         } else if (cur.getOperation() == null && cur.getDatas() == null
             && cur.getResult() != null) {
