@@ -4,6 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
 
+/**
+ * Writer - Class that generate .json file base on result
+ * @author Archer (2020)
+ * 
+ */
 public class Writer {
   private List<CalSteps> results;//list to store results in steps
   PrintWriter printWriter = null;//initialize a printWriter
