@@ -952,18 +952,10 @@ public class Main extends Application {
         if (diagResult.get() == yes) {
           save.fire();
         } else if (diagResult.get() == no) {
-          rowAndCol1.get(0).setText("3");
-          rowAndCol1.get(1).setText("3");
-          rowAndCol2.get(0).setText("3");
-          rowAndCol2.get(1).setText("3");
-          resultShower.getChildren().clear();
+          clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2);
         }
       } else {
-        rowAndCol1.get(0).setText("3");
-        rowAndCol1.get(1).setText("3");
-        rowAndCol2.get(0).setText("3");
-        rowAndCol2.get(1).setText("3");
-        resultShower.getChildren().clear();
+        clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2);
       }
     });
 
@@ -979,6 +971,27 @@ public class Main extends Application {
 
     }
     primaryStage.show();
+  }
+
+  /**
+   * Clear the data from the file
+   * 
+   * @param selector selector pane
+   * @param pages pages textField
+   * @param total total textField
+   * @param rowAndCol1 row and col of Matrix1
+   * @param rowAndCol2 row and col of Matrix2
+   */
+  private void clearerAfterQuit(HBox selector, TextField pages, TextField total,
+      List<TextField> rowAndCol1, List<TextField> rowAndCol2) {
+    rowAndCol1.get(0).setText("3");
+    rowAndCol1.get(1).setText("3");
+    rowAndCol2.get(0).setText("3");
+    rowAndCol2.get(1).setText("3");
+    resultShower.getChildren().clear();
+    pages.clear();
+    total.clear();
+    selector.setDisable(true);
   }
 
   /**
