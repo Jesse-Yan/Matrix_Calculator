@@ -3,8 +3,10 @@ package application;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import org.json.simple.parser.ParseException;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -12,6 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -63,15 +67,15 @@ public class Main extends Application {
 
   // Correct result
   boolean correctness = true;
-  
+
   // Able to quit?
   boolean saved = false;
-  
-  // running for checking
-  boolean run = false;
-  
+
   // Recorder of buttons
   Button latestMOpera = null;
+
+  // Recoder of Power
+  String power = "";
 
   // Recorder of results
   String resultNum = null;
@@ -451,6 +455,8 @@ public class Main extends Application {
               dataFromMatrix2, resultMatrix);
           scrollPane(vBoxR, resultShower);
           correctness = true;
+          state = true;
+          saved = false;
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -475,6 +481,8 @@ public class Main extends Application {
               dataFromMatrix1, dataFromMatrix2, resultMatrix);
           scrollPane(vBoxR, resultShower);
           correctness = true;
+          state = true;
+          saved = false;
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -499,6 +507,8 @@ public class Main extends Application {
               dataFromMatrix1, dataFromMatrix2, resultMatrix);
           scrollPane(vBoxR, resultShower);
           correctness = true;
+          state = true;
+          saved = false;
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -521,6 +531,8 @@ public class Main extends Application {
               dataFromMatrix, resultDeterminant);
           scrollPane(vBoxR, resultShower);
           correctness = true;
+          state = true;
+          saved = false;
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -543,6 +555,8 @@ public class Main extends Application {
               dataFromMatrix, resultInverse);
           scrollPane(vBoxR, resultShower);
           correctness = true;
+          state = true;
+          saved = false;
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -570,6 +584,8 @@ public class Main extends Application {
               resultQR.get(0), resultQR.get(1));
           scrollPane(vBoxR, resultShower);
           correctness = true;
+          state = true;
+          saved = false;
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -593,7 +609,7 @@ public class Main extends Application {
       // dataFromMatrix, resultInverse.get(0), resultInverse.get(1),
       // resultInverse.get(2));
       // scrollPane(vBoxR, resultShower);
-      // correctness = true;
+      // correctness = true; state = true; saved = false;
       // } catch (MatrixDimensionsMismatchException e) {
       // correctness = false;
       // alert("MatrixDimensionError",
@@ -614,6 +630,8 @@ public class Main extends Application {
               dataFromMatrix, resultTrace);
           scrollPane(vBoxR, resultShower);
           correctness = true;
+          state = true;
+          saved = false;
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -638,6 +656,8 @@ public class Main extends Application {
                   dataFromMatrix, resultLUP.get(0), resultLUP.get(1));
           scrollPane(vBoxR, resultShower);
           correctness = true;
+          state = true;
+          saved = false;
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -660,6 +680,8 @@ public class Main extends Application {
               resultBuilder("Operation: GE", "GE", dataFromMatrix, resultGE);
           scrollPane(vBoxR, resultShower);
           correctness = true;
+          state = true;
+          saved = false;
         } catch (SingularException e) {
           correctness = false;
           alert("Error", "The Matrix you entered is singular");
@@ -680,7 +702,7 @@ public class Main extends Application {
       // resultShower =
       // resultBuilder("Operation: DI", "DI", dataFromMatrix, resultDI);
       // scrollPane(vBoxR, resultShower);
-      // correctness = true;
+      // correctness = true; state = true; saved = false;
       // } catch(NumberFormatException e) {
       // correctness = false;
       // alert("Error", "Your input may contain invalid characters or empty");
@@ -698,6 +720,8 @@ public class Main extends Application {
               resultBuilder("Operation: EIV", "EIV", dataFromMatrix, resultEIV);
           scrollPane(vBoxR, resultShower);
           correctness = true;
+          state = true;
+          saved = false;
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -718,7 +742,7 @@ public class Main extends Application {
       // resultShower =
       // resultBuilder("Operation: Rank", "Rank", dataFromMatrix, resultRank);
       // scrollPane(vBoxR, resultShower);
-      // correctness = true;
+      // correctness = true; state = true; saved = false;
       // } catch (NumberFormatException e) {
       // correctness = false;
       // alert("Error", "Your input may contain invalid characters or empty");
@@ -737,6 +761,8 @@ public class Main extends Application {
               resultBuilder("Operation: TS", "TS", dataFromMatrix, resultTS);
           scrollPane(vBoxR, resultShower);
           correctness = true;
+          state = true;
+          saved = false;
         } catch (NumberFormatException e) {
           alert("Error", "Your input may contain invalid characters or empty");
         }
@@ -746,6 +772,7 @@ public class Main extends Application {
         try {
           latestMOpera = powerButton;
           int n = Integer.parseInt(powerInput.getText());
+          this.power = String.valueOf(n);
           try {
             String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
             Matrix matrix = new Matrix(dataFromMatrix);
@@ -756,6 +783,8 @@ public class Main extends Application {
                 dataFromMatrix, resultPw);
             scrollPane(vBoxR, resultShower);
             correctness = true;
+            state = true;
+            saved = false;
           } catch (MatrixDimensionsMismatchException e1) {
             correctness = false;
             alert("MatrixDimensionError",
@@ -794,18 +823,21 @@ public class Main extends Application {
         alert("Error: File name mismatch", "Please rechoose the file"
             + lineSeparator + "The name of the file must end with '.json'!");
       } else {
-        // Invoke Parser
+        // Invoke OpeartionParser
         try {
-          OpeartionParser parser = new OpeartionParser(file.getName());
+          OpeartionParser parser = new OpeartionParser(file);
           lists = parser.getCalculations();
           selector.setDisable(false);
           total.setText(String.valueOf(lists.size()));
-          run = false;
-          for(int i = 1; i <= lists.size(); i++) {
-            pages.setText(String.valueOf(i));
-            confirm.fire();
+          for (int i = 1; i <= lists.size(); i++) {
+            CalSteps step = lists.get(i - 1);
+            String operationOperator = step.getOperation();
+            switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
+                enableSecond, operators, mButtons, powerButton, powerInput,
+                step, operationOperator);
+            lists.set(i - 1,
+                new CalSteps(operationOperator, step.getDatas(), results));
           }
-          run = true;
           pages.setText("1");
           state = false;
           correctness = true;
@@ -816,6 +848,9 @@ public class Main extends Application {
           alert("Error", "Parse fail, please check you .json file");
         } catch (IOException e3) {
           alert("Error", "Fatal issues during IO processing");
+        } catch (Exception e4) {
+          alert("Error",
+              "Your json file contains invalid operations,\n please rechoose the file");
         }
       }
     });
@@ -829,7 +864,8 @@ public class Main extends Application {
 
     confirm.setOnAction(event -> {
       try {
-        updater(pages, matrix1Data, rowAndCol1, enableSecond, run);
+         updater(pages, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+         enableSecond);
         state = false;
         correctness = true;
         int page = Integer.parseInt(pages.getText());
@@ -838,104 +874,22 @@ public class Main extends Application {
         }
         CalSteps step = lists.get(page - 1);
         String operationOperator = step.getOperation();
-        switch (operationOperator) {
-          case "+":
-            setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
-                matrix2Data);
-            if (!enableSecond.isSelected()) {
-              enableSecond.fire();
-            }
-            operators.get(1).fire();
-            break;
-          case "-":
-            setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
-                matrix2Data);
-            if (!enableSecond.isSelected()) {
-              enableSecond.fire();
-            }
-            operators.get(2).fire();
-            break;
-          case "*":
-            setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
-                matrix2Data);
-            if (!enableSecond.isSelected()) {
-              enableSecond.fire();
-            }
-            operators.get(3).fire();
-            break;
-          case "Det":
-            cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond,
-                step);
-            mButtons.get(0).fire();
-            break;
-          case "Inverse":
-            cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond,
-                step);
-            mButtons.get(1).fire();
-            break;
-          case "QR":
-            cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond,
-                step);
-            mButtons.get(2).fire();
-            break;
-          case "SVD":
-            cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond,
-                step);
-            mButtons.get(3).fire();
-            break;
-          case "Trace":
-            cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond,
-                step);
-            mButtons.get(4).fire();
-            break;
-          case "LUP":
-            cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond,
-                step);
-            mButtons.get(5).fire();
-            break;
-          case "GE":
-            cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond,
-                step);
-            mButtons.get(6).fire();
-            break;
-          case "Diag":
-            cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond,
-                step);
-            mButtons.get(7).fire();
-            break;
-          case "EIV":
-            cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond,
-                step);
-            mButtons.get(8).fire();
-            break;
-          case "Rank":
-            cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond,
-                step);
-            mButtons.get(9).fire();
-            break;
-          case "Trans":
-            cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond,
-                step);
-            mButtons.get(10).fire();
-            break;
-          default:
-            String powerString = operationOperator.replace("PowerOf", "");
-            cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond,
-                step);
-            powerInput.setText(powerString);
-            powerButton.fire();
-            break;
-        }
+        switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2, enableSecond,
+            operators, mButtons, powerButton, powerInput, step,
+            operationOperator);
       } catch (IllegalArgumentException e1) {
         alert("Error", "The page number you entered is invalid");
       } catch (Exception e) {
-        alert("Error",
-            "Your json file contains invalid operations, please rechoose the file");
+        alert("Error", "Your input is incorrect");
       }
     });
 
     forward.setOnAction(event -> {
       try {
+         updater(pages, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+         enableSecond);
+        state = false;
+        correctness = true;
         int num = Integer.parseInt(pages.getText());
         if (num != 1) {
           num -= 1;
@@ -949,6 +903,10 @@ public class Main extends Application {
 
     backward.setOnAction(event -> {
       try {
+         updater(pages, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+         enableSecond);
+        state = false;
+        correctness = true;
         int num = Integer.parseInt(pages.getText());
         if (num != lists.size()) {
           num += 1;
@@ -967,7 +925,37 @@ public class Main extends Application {
         alert("Error: File name mismatch", "Please rechoose the file"
             + lineSeparator + "The name of the file must end with '.json'!");
       } else {
-        // Invoke Parser
+        // Invoke Writer
+        try {
+          Writer writer = new Writer(lists);
+          writer.save(file);
+          saved = true;
+        } catch (FileNotFoundException e1) {
+          /* Should not encounter */
+        } catch (Exception e) {
+          alert("Error", "Fatal issues during IO processing");
+        }
+      }
+    });
+
+    quit.setOnAction(event -> {
+      if (!saved) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Quit?");
+        alert.setContentText(
+            "Do you want to save the calculation before you leave?");
+        ButtonType yes = new ButtonType("Yes");
+        ButtonType no = new ButtonType("No");
+        ButtonType cancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(yes, no, cancel);
+        Optional<ButtonType> diagResult = alert.showAndWait();
+        if (diagResult.get() == yes) {
+          save.fire();
+        } else if (diagResult.get() == no) {
+          clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2);
+        }
+      } else {
+        clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2);
       }
     });
 
@@ -986,21 +974,168 @@ public class Main extends Application {
   }
 
   /**
+   * Clear the data from the file
+   * 
+   * @param selector selector pane
+   * @param pages pages textField
+   * @param total total textField
+   * @param rowAndCol1 row and col of Matrix1
+   * @param rowAndCol2 row and col of Matrix2
+   */
+  private void clearerAfterQuit(HBox selector, TextField pages, TextField total,
+      List<TextField> rowAndCol1, List<TextField> rowAndCol2) {
+    rowAndCol1.get(0).setText("3");
+    rowAndCol1.get(1).setText("3");
+    rowAndCol2.get(0).setText("3");
+    rowAndCol2.get(1).setText("3");
+    resultShower.getChildren().clear();
+    pages.clear();
+    total.clear();
+    selector.setDisable(true);
+  }
+
+  /**
+   * Switcher of Operation
+   * 
+   * @param matrix1Data       matrix1
+   * @param matrix2Data       matrix2
+   * @param rowAndCol1        row and col of matrix1
+   * @param rowAndCol2        row and col of matrix2
+   * @param enableSecond      a checkbox
+   * @param operators         the operators
+   * @param mButtons          matrix buttons
+   * @param powerButton       invoke for power calculation
+   * @param powerInput        input for power
+   * @param step              CalStep
+   * @param operationOperator operation
+   */
+  private void switcher(List<TextField> matrix1Data,
+      List<TextField> matrix2Data, List<TextField> rowAndCol1,
+      List<TextField> rowAndCol2, CheckBox enableSecond, List<Button> operators,
+      List<Button> mButtons, Button powerButton, TextField powerInput,
+      CalSteps step, String operationOperator) {
+    switch (operationOperator) {
+      case "+":
+        setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
+            matrix2Data);
+        if (!enableSecond.isSelected()) {
+          enableSecond.fire();
+        }
+        operators.get(1).fire();
+        break;
+      case "-":
+        setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
+            matrix2Data);
+        if (!enableSecond.isSelected()) {
+          enableSecond.fire();
+        }
+        operators.get(2).fire();
+        break;
+      case "*":
+        setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
+            matrix2Data);
+        if (!enableSecond.isSelected()) {
+          enableSecond.fire();
+        }
+        operators.get(3).fire();
+        break;
+      case "Det":
+        cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        mButtons.get(0).fire();
+        break;
+      case "Inverse":
+        cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        mButtons.get(1).fire();
+        break;
+      case "QR":
+        cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        mButtons.get(2).fire();
+        break;
+      case "SVD":
+        cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        mButtons.get(3).fire();
+        break;
+      case "Trace":
+        cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        mButtons.get(4).fire();
+        break;
+      case "LUP":
+        cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        mButtons.get(5).fire();
+        break;
+      case "GE":
+        cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        mButtons.get(6).fire();
+        break;
+      case "Diag":
+        cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        mButtons.get(7).fire();
+        break;
+      case "EIV":
+        cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        mButtons.get(8).fire();
+        break;
+      case "Rank":
+        cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        mButtons.get(9).fire();
+        break;
+      case "Trans":
+        cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        mButtons.get(10).fire();
+        break;
+      default:
+        String powerString = operationOperator.replace("PowerOf", "");
+        cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        powerInput.setText(powerString);
+        powerButton.fire();
+        break;
+    }
+  }
+
+  /**
    * Updater of the CalStep
    * 
-   * @param pages
-   * @param matrix1Data
-   * @param rowAndCol1
-   * @param enableSecond
-   * @param run
+   * @param pages        page number
+   * @param matrix1Data  data from matrix1
+   * @param rowAndCol1   row and col for matrix1
+   * @param matrix2Data  data from matrix2
+   * @param rowAndCol2   row and col for matrix2
+   * @param enableSecond a checkbox
    */
   private void updater(TextField pages, List<TextField> matrix1Data,
-      List<TextField> rowAndCol1, CheckBox enableSecond, boolean run) {
+      List<TextField> rowAndCol1, List<TextField> matrix2Data,
+      List<TextField> rowAndCol2, CheckBox enableSecond) {
     if (state && correctness) {
       int page = Integer.parseInt(pages.getText());
       Matrix wMatrix1 = new Matrix(reader(matrix1Data, rowAndCol1));
+      String operation = latestMOpera.getText();
       if (enableSecond.isSelected()) {
-        
+        Matrix wMatrix2 = new Matrix(reader(matrix2Data, rowAndCol2));
+        lists.set(page - 1, new CalSteps(operation, new ArrayList<Matrix>() {
+          private static final long serialVersionUID = 1L;
+          {
+            add(wMatrix1);
+            add(wMatrix2);
+          }
+        }, results));
+      } else {
+        if (operation.equals("Gauss-Elim")) {
+          operation = "GE";
+        } else if (operation.equals("Diagonalize")) {
+          operation = "Diag";
+        } else if (operation.equals("EiValue")) {
+          operation = "EIV";
+        } else if (operation.equals("Transpose")) {
+          operation = "Trans";
+        } else if (operation.equals("Power")) {
+          operation = "PowerOf" + this.power;
+        }
+        lists.set(page - 1, new CalSteps(operation, new ArrayList<Matrix>() {
+          private static final long serialVersionUID = 1L;
+          {
+            add(wMatrix1);
+          }
+        }, results));
       }
     }
   }
@@ -1466,6 +1601,7 @@ public class Main extends Application {
         TextField temp = new TextField();
         temp.textProperty().addListener(event -> {
           state = true;
+          saved = false;
         });
         correctness = false;
         textFields.add(temp);
@@ -1487,6 +1623,7 @@ public class Main extends Application {
 
         // change the state
         state = true;
+        saved = false;
         correctness = false;
         // Avoid to throw Exception when the TextField is empty
         if (inputRowMatrix.getText().equals("")) {
@@ -1511,6 +1648,7 @@ public class Main extends Application {
             TextField temp = new TextField();
             temp.textProperty().addListener(e -> {
               state = true;
+              saved = false;
             });
             textFields.add(temp);
             gridMatrix.add(temp, j, i);
@@ -1539,6 +1677,7 @@ public class Main extends Application {
 
         // change the state
         state = true;
+        saved = false;
         correctness = false;
         // Avoid to throw Exception when the TextField is empty
         if (inputColumnMatrix.getText().equals("")) {
@@ -1561,6 +1700,7 @@ public class Main extends Application {
             TextField temp = new TextField();
             temp.textProperty().addListener(e -> {
               state = true;
+              saved = false;
             });
             textFields.add(temp);
             gridMatrix.add(temp, j, i);
@@ -1589,6 +1729,7 @@ public class Main extends Application {
 
         // change the state
         state = true;
+        saved = false;
         correctness = false;
         // Avoid to throw Exception when the TextField is empty
         if (inputRowMatrix.getText().equals("")) {
@@ -1613,6 +1754,7 @@ public class Main extends Application {
             TextField temp = new TextField();
             temp.textProperty().addListener(e -> {
               state = true;
+              saved = false;
             });
             textFields.add(temp);
             gridMatrix.add(temp, j, i);
@@ -1641,6 +1783,7 @@ public class Main extends Application {
 
         // change the state
         state = true;
+        saved = false;
         correctness = false;
         // Avoid to throw Exception when the TextField is empty
         if (inputColumnMatrix.getText().equals("")) {
@@ -1663,6 +1806,7 @@ public class Main extends Application {
             TextField temp = new TextField();
             temp.textProperty().addListener(e -> {
               state = true;
+              saved = false;
             });
             textFields.add(temp);
             gridMatrix.add(temp, j, i);

@@ -1,5 +1,6 @@
 package application;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -85,9 +86,9 @@ public class Writer {
    * 
    * @throws FileNotFoundException - if error in files
    */
-  public void save() throws FileNotFoundException {
+  public void save(File file) throws FileNotFoundException {
     try {
-      printWriter = new PrintWriter("Result.json");
+      printWriter = new PrintWriter(file);
       printWriter.write("{" + "\n");
       printWriter.write("\t" + "\"" + "StepToResult" + "\":[\n");
 
@@ -125,11 +126,11 @@ public class Writer {
    */
   public static void main(String[] args) {
     try {
-      OpeartionParser parser = new OpeartionParser("SimpleData.json");
+      OpeartionParser parser = new OpeartionParser(new File("SimpleData.json"));
       List<CalSteps> curr = parser.getCalculations();
       curr.add(new CalSteps((Object) "Just a test"));
       Writer test = new Writer(curr);
-      test.save();
+      test.save(new File("Result.json"));
       System.out.println("success!!");
     } catch (Exception e) {
       System.out.println(e.toString());

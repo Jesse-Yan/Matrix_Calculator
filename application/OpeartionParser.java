@@ -1,5 +1,6 @@
 package application;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -29,12 +30,12 @@ public class OpeartionParser {
      * @throws FileNotFoundException - if file not found
      * @throws java.lang.ClassCastException - if input data mismatch
      */
-    public OpeartionParser(String jsonFilepath) throws IOException, ParseException, 
+    public OpeartionParser(File file) throws IOException, ParseException, 
     MatrixDimensionsMismatchException, java.lang.ClassCastException {
       
       calSteps = new ArrayList<CalSteps>();
       
-      if (jsonFilepath == null) throw new FileNotFoundException();
+      if (file == null) throw new FileNotFoundException();
       
       ArrayList <Matrix> matrixList = new ArrayList<Matrix>();
       String operations = null;
@@ -42,7 +43,7 @@ public class OpeartionParser {
       int colSize = -1;
       String[][] sumMatrix = null;
       
-      Object obj = new JSONParser().parse(new FileReader(jsonFilepath));
+      Object obj = new JSONParser().parse(new FileReader(file));
       JSONObject jo = (JSONObject) obj;
       JSONArray calculations = (JSONArray) jo.get("calculations");
 
@@ -91,7 +92,7 @@ public class OpeartionParser {
      */
     public static void main(String[] args) {
         try {
-          OpeartionParser parser = new OpeartionParser("SimpleData.json");
+          OpeartionParser parser = new OpeartionParser(new File("SimpleData.json"));
             System.out.println("success!!");
         } catch (Exception e) {
             System.out.println(e.toString());
