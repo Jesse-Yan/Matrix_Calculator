@@ -205,12 +205,12 @@ public class MatrixCalculator {
    */
   public List<String[][]> getLUPDecomposition() throws MatrixDimensionsMismatchException {
     Matrix firstMatrix = new Matrix(matrix1);
-    Matrix[] qrResult = firstMatrix.LUPDecomposition();
+    Matrix[] lupResult = firstMatrix.LUPDecomposition();
     ArrayList<String[][]> answer = new ArrayList<String[][]>();
-    answer.add(properFormatted(qrResult[0]));
-    answer.add(properFormatted(qrResult[1]));
-    if (qrResult[2] != null)
-      answer.add(properFormatted(qrResult[2]));
+    answer.add(properFormatted(lupResult[0]));
+    answer.add(properFormatted(lupResult[1]));
+    if (lupResult[2] != null)
+      answer.add(properFormatted(lupResult[2]));
     return answer;
   }
 
@@ -242,9 +242,9 @@ public class MatrixCalculator {
    * 
    * @return the rank of matrix1, which is represented by a String.
    */
-  public String getRank() {
+  public int getRank() {
     Matrix firstMatrix = new Matrix(matrix1);
-    return firstMatrix.rank() + "";
+    return firstMatrix.rank();
   }
 
   /**

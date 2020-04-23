@@ -804,7 +804,7 @@ public class Matrix implements MatrixADT {
         .augmentMatirxByExtendingColumns(leftBottom.augmentMatirx(rightBottom));
   }
 
-  public Matrix[] LUPDecomposition() throws MatrixDimensionsMismatchException {
+  public Matrix[] LUPDecompositionHelper() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
     if (N == 1)
       return new Matrix[] {identityMatrixWithSizeOf(1), this.copy(), identityMatrixWithSizeOf(1)};
@@ -821,7 +821,7 @@ public class Matrix implements MatrixADT {
 
     Matrix S22 = A_bar22.subtract(A_bar21.multiply(A_bar12).dividedBy(A_bar11.getEntry(0, 0)));
 
-    Matrix[] tmp = S22.LUPDecomposition();
+    Matrix[] tmp = S22.LUPDecompositionHelper();
     Matrix L22 = tmp[0];
     Matrix U22 = tmp[1];
     Matrix P22 = tmp[2];
@@ -842,12 +842,21 @@ public class Matrix implements MatrixADT {
     Matrix L = combineMatrix(L11, L12, L21, L22);
     Matrix U = combineMatrix(U11, U12, U21, U22);
     Matrix P = upperPartOfP.augmentMatirxByExtendingColumns(lowerPartOfP);
-    
-    if(P.mathematicallyEquals(identityMatrixWithSizeOf(N)))
-      P = null;
 
     return new Matrix[] {L, U, P};
   }
+  
+  public Matrix[] LUPDecomposition() throws MatrixDimensionsMismatchException{
+    int N = getSizeOfSquareMatrix();
+    Matrix[] tmp = this.LUPDecompositionHelper();
+    Matrix L = tmp[0];
+    Matrix U = tmp[1];
+    Matrix P = tmp[2];
+    if(P.mathematicallyEquals(identityMatrixWithSizeOf(N)))
+      P = null;
+    return new Matrix[] {L, U, P};
+  }
+  
 
   /**
    * Calculate the Frobenius norm of the matrix.

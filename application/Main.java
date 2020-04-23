@@ -524,8 +524,8 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(0);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          MatrixCalculator matrix = new MatrixCalculator(dataFromMatrix);
-          String resultDeterminant = matrix.getDeterminant();
+          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          String resultDeterminant = matrixCalculator.getDeterminant();
           resultNum = resultDeterminant;
           resultShower = resultBuilder("Operation: Det", "Determinant",
               dataFromMatrix, resultDeterminant);
@@ -547,8 +547,8 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(1);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          Matrix matrix = new Matrix(dataFromMatrix);
-          String[][] resultInverse = matrix.inverse().toStringMatrix();
+          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          String[][] resultInverse = matrixCalculator.getInverse();
           results.clear();
           results.add(resultInverse);
           resultShower = resultBuilder("Operation: Inverse", "Inverse",
@@ -575,10 +575,8 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(2);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          Matrix matrix = new Matrix(dataFromMatrix);
-          List<String[][]> resultQR = Arrays.stream(matrix.QRDecomposition())
-                                            .map(Matrix::toStringMatrix)
-                                            .collect(toList());
+          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          List<String[][]> resultQR = matrixCalculator.getQRDecomposition();
           results.addAll(resultQR);
           resultShower = resultBuilderQR("Operation: QR", "QR", dataFromMatrix,
               resultQR.get(0), resultQR.get(1));
@@ -623,8 +621,8 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(4);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          MatrixCalculator matrix = new MatrixCalculator(dataFromMatrix);
-          String resultTrace = matrix.getTrace();
+          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          String resultTrace = matrixCalculator.getTrace();
           resultNum = resultTrace;
           resultShower = resultBuilder("Operation: Trace", "Trace",
               dataFromMatrix, resultTrace);
@@ -646,14 +644,19 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(5);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          Matrix matrix = new Matrix(dataFromMatrix);
-          List<String[][]> resultLUP = Arrays.stream(matrix.LUPDecomposition())
-                                             .map(Matrix::toStringMatrix)
-                                             .collect(toList());
+          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          List<String[][]> resultLUP = matrixCalculator.getLUPDecomposition();
           results.addAll(resultLUP);
+          if(resultLUP.size() > 2) {
           resultShower =
               resultBuilderLUP("Operation: LUP", "LUP", resultLUP.get(2),
                   dataFromMatrix, resultLUP.get(0), resultLUP.get(1));
+          }
+          else {
+            resultShower =
+                resultBuilderQR("Operation: LUP", "LUP", dataFromMatrix,
+                    resultLUP.get(0), resultLUP.get(1));
+          }
           scrollPane(vBoxR, resultShower);
           correctness = true;
           state = true;
@@ -672,8 +675,8 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(6);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          String[][] resultGE =
-              new MatrixCalculator(dataFromMatrix).getGuassianElimination();
+          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          String[][] resultGE = matrixCalculator.getGuassianElimination();
           results.clear();
           results.add(resultGE);
           resultShower =
@@ -682,9 +685,6 @@ public class Main extends Application {
           correctness = true;
           state = true;
           saved = false;
-        } catch (SingularException e) {
-          correctness = false;
-          alert("Error", "The Matrix you entered is singular");
         } catch (NumberFormatException e) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
@@ -713,9 +713,8 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(8);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          Matrix matrix = new Matrix(dataFromMatrix);
-          double resultEIV = matrix.eigenValues()[0].doubleValue();
-          resultNum = String.valueOf(resultEIV);
+          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          String resultEIV = matrixCalculator.getEigenValues();
           resultShower =
               resultBuilder("Operation: EIV", "EIV", dataFromMatrix, resultEIV);
           scrollPane(vBoxR, resultShower);
@@ -732,29 +731,29 @@ public class Main extends Application {
         }
       });
 
-      // mButtons.get(9).setOnAction(event -> {
-      // try {
-      // latestMOpera = mButtons.get(9);
-      // String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-      // Matrix matrix = new Matrix(dataFromMatrix);
-      // int resultRank = matrix.???;
-      // resultNum = String.valueOf(resultRank);
-      // resultShower =
-      // resultBuilder("Operation: Rank", "Rank", dataFromMatrix, resultRank);
-      // scrollPane(vBoxR, resultShower);
-      // correctness = true; state = true; saved = false;
-      // } catch (NumberFormatException e) {
-      // correctness = false;
-      // alert("Error", "Your input may contain invalid characters or empty");
-      // }
-      // });
+       mButtons.get(9).setOnAction(event -> {
+       try {
+       latestMOpera = mButtons.get(9);
+       String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+       MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+       int resultRank = matrixCalculator.getRank();
+       resultNum = String.valueOf(resultRank);
+       resultShower =
+       resultBuilder("Operation: Rank", "Rank", dataFromMatrix, resultRank);
+       scrollPane(vBoxR, resultShower);
+      correctness = true; state = true; saved = false;
+      } catch (NumberFormatException e) {
+      correctness = false;
+      alert("Error", "Your input may contain invalid characters or empty");
+      }
+      });
 
       mButtons.get(10).setOnAction(event -> {
         try {
           latestMOpera = mButtons.get(10);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          Matrix matrix = new Matrix(dataFromMatrix);
-          String[][] resultTS = matrix.transpose().toStringMatrix();
+          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          String[][] resultTS = matrixCalculator.getTranspose();
           results.clear();
           results.add(resultTS);
           resultShower =
@@ -775,8 +774,8 @@ public class Main extends Application {
           this.power = String.valueOf(n);
           try {
             String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-            Matrix matrix = new Matrix(dataFromMatrix);
-            String[][] resultPw = matrix.pow(n).toStringMatrix();
+            MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+            String[][] resultPw = matrixCalculator.getPow(n);
             results.clear();
             results.add(resultPw);
             resultShower = resultBuilder("Operation: POWER", "PowerOf " + n,
