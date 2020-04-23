@@ -424,17 +424,16 @@ public class Matrix implements MatrixADT {
 
   /**
    * 
-   * This method receives a parameter k, and then it will find the index of the
-   * largest number on the Kth column and Lth row (L >= K)
+   * This method receives a parameter k, and then it will find the row index of the
+   * largest number on the kth column and with row number greater than l (L >= K)
    * 
    * @param  k a given k
-   * @return   the index of the largest number on the Kth column and Lth row (L
-   *             >= K)
+   * @return the index of the largest number on the kth column and with row number greater than l (L >= K)
    */
-  private int indexOfLargestPivotElement(int k) {
-    int pivotRow = k;
+  private int indexOfLargestPivotElement(int k, int l) {
+    int pivotRow = l;
     Numeric pivotElement = entry[pivotRow][k];
-    for (int i = k + 1; i < getNumberOfRow(); i++)
+    for (int i = l + 1; i < getNumberOfRow(); i++)
       if (entry[i][k].abs().compareTo(pivotElement) > 0) {
         pivotElement = entry[i][k];
         pivotRow = i;
@@ -457,7 +456,7 @@ public class Matrix implements MatrixADT {
    * @see                      https://en.wikipedia.org/wiki/Pivot_element#Partial_and_complete_pivoting
    */
   private boolean partialPivoting(int k) throws SingularException {
-    int pivotRow = indexOfLargestPivotElement(k);
+    int pivotRow = indexOfLargestPivotElement(k, k);
     Numeric pivotElement = entry[pivotRow][k];
     if (pivotElement.compareTo(new Numeric(0)) == 0)
       throw new SingularException();
@@ -481,7 +480,7 @@ public class Matrix implements MatrixADT {
    * @return                   true if there are odd number of row swaps, false
    *                             otherwise.
    */
-  private boolean forwardElimination() throws SingularException {
+  private boolean forwardEliminate() throws SingularException {
     int N = getNumberOfRow();
     int M = getNumberOfColumn();
     boolean signChanged = false;
@@ -508,7 +507,7 @@ public class Matrix implements MatrixADT {
    *                             triangle matrix with no zero element on the
    *                             main diagonal.
    */
-  private void backwardElimination() throws SingularException {
+  private void backwardEliminate() {
     int N = getNumberOfRow();
     int M = getNumberOfColumn();
     for (int k = N - 1; k >= 0; k--) {
@@ -520,7 +519,47 @@ public class Matrix implements MatrixADT {
       }
     }
   }
+  
+  private void generalPartialPivoting(int k, int l) throws SingularException {
+    int pivotRow = indexOfLargestPivotElement(k, l);
+    Numeric pivotElement = entry[pivotRow][k];
+    if (pivotElement.compareTo(new Numeric(0)) == 0)
+      throw new SingularException();
+    if (pivotRow != l)
+      swapRow(l, pivotRow);
+  }
 
+  private void gussianEliminate(){
+    int N = getNumberOfRow();
+    int M = getNumberOfColumn();
+    int dif = 0;
+    for (int l = 0; l < N; l++) {
+      boolean success = false;
+      int k = l + dif;
+      while(!success) {
+        try {
+          generalPartialPivoting(k, l);
+          success = true;
+        } catch (SingularException e) {
+          dif++;
+          k = l + dif;
+          if(k >= M)
+            return;
+        }
+      }
+      Numeric f = entry[l][k];
+      for (int j = k; j < M; j++)
+        entry[l][j] = entry[l][j].dividedBy(f);
+      for (int i = 0; i < N; i++) {
+        if(i == l)
+          continue;
+        f = entry[i][k];
+        for (int j = 0; j < M; j++)
+          entry[i][j] = entry[i][j].subtract(entry[l][j].multiply(f));
+      }
+    }
+  }
+  
   /**
    * 
    * The third step of Gaussian-Elimination.
@@ -546,9 +585,7 @@ public class Matrix implements MatrixADT {
    */
   public Matrix gussianElimination() throws SingularException {
     Matrix answerMatrix = copy();
-    answerMatrix.forwardElimination();
-    answerMatrix.backwardElimination();
-    answerMatrix.simplifyAfterElimination();
+    answerMatrix.gussianEliminate();
     return answerMatrix;
   }
 
@@ -684,7 +721,7 @@ public class Matrix implements MatrixADT {
 
     Matrix A = copy();
 
-    int i = A.indexOfLargestPivotElement(0);
+    int i = A.indexOfLargestPivotElement(0, 0);
     A.swapRow(0, i);
 
     Matrix A_bar11 = A.subMatrix(0, 1, 0, 1);
@@ -777,8 +814,8 @@ public class Matrix implements MatrixADT {
     int N = getSizeOfSquareMatrix();
     Matrix augmentedMatrix = augmentMatirx(identityMatrixWithSizeOf(N));
     try {
-      augmentedMatrix.forwardElimination();
-      augmentedMatrix.backwardElimination();
+      augmentedMatrix.forwardEliminate();
+      augmentedMatrix.backwardEliminate();
       augmentedMatrix.simplifyAfterElimination();
     } catch (SingularException singularException) {
       throw new MatrixArithmeticException("The matrix is not invertible!");
@@ -825,8 +862,8 @@ public class Matrix implements MatrixADT {
     Matrix answerMatrix = copy();
     boolean signChanged = false;
     try {
-      signChanged = answerMatrix.forwardElimination();
-      answerMatrix.backwardElimination();
+      signChanged = answerMatrix.forwardEliminate();
+      answerMatrix.backwardEliminate();
     } catch (SingularException singularException) {
       return new Numeric(0);
     }
