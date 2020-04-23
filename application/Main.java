@@ -254,8 +254,9 @@ public class Main extends Application {
         } else if (temp.equals("=")) {
           try {
             if (!analyze) {
-              result.appendText(input.getText() + "\n="
-                  + Calculator.calcul("0" + input.getText()) + "\n");
+              result.appendText(input.getText() + "" + lineSeparator + "="
+                  + Calculator.calcul("0" + input.getText()) + ""
+                  + lineSeparator + "");
             } else {
               result.appendText(SequenceSummary.summary(input.getText()));
               analyze = false;
@@ -267,7 +268,8 @@ public class Main extends Application {
             }
           } catch (Exception e) {
             alert("Wrong Expression",
-                "The equation you entered cannot be calculated\nPlease press 'C' and try again");
+                "The equation you entered cannot be calculated" + lineSeparator
+                    + "Please press 'C' and try again");
           }
         } else if (temp.matches("\\d") || temp.matches("\\.")) {
           try {
@@ -524,7 +526,8 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(0);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          MatrixCalculator matrixCalculator =
+              new MatrixCalculator(dataFromMatrix);
           String resultDeterminant = matrixCalculator.getDeterminant();
           resultNum = resultDeterminant;
           resultShower = resultBuilder("Operation: Det", "Determinant",
@@ -536,7 +539,9 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
-              "Sorry, the matrix you entered is not a square matrix\nTo compute the determinant of a matrix, it has to be a square matrix");
+              "Sorry, the matrix you entered is not a square matrix"
+                  + lineSeparator
+                  + "To compute the determinant of a matrix, it has to be a square matrix");
         } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
@@ -547,7 +552,8 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(1);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          MatrixCalculator matrixCalculator =
+              new MatrixCalculator(dataFromMatrix);
           String[][] resultInverse = matrixCalculator.getInverse();
           results.clear();
           results.add(resultInverse);
@@ -560,7 +566,9 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
-              "Sorry, the matrix you entered is not a square matrix\nTo compute the inverse of a matrix, it has to be a square matrix");
+              "Sorry, the matrix you entered is not a square matrix"
+                  + lineSeparator
+                  + "To compute the inverse of a matrix, it has to be a square matrix");
         } catch (MatrixArithmeticException e2) {
           correctness = false;
           alert("MatriArithmeticError",
@@ -575,7 +583,8 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(2);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          MatrixCalculator matrixCalculator =
+              new MatrixCalculator(dataFromMatrix);
           List<String[][]> resultQR = matrixCalculator.getQRDecomposition();
           results.addAll(resultQR);
           resultShower = resultBuilderQR("Operation: QR", "QR", dataFromMatrix,
@@ -587,13 +596,17 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
-              "Sorry,  the matrix you entered is not a square matrix\nTo do QR decomposition, it has to be a square matrix");
+              "Sorry,  the matrix you entered is not a square matrix"
+                  + lineSeparator
+                  + "To do QR decomposition, it has to be a square matrix");
         } catch (NumberFormatException e2) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
         } catch (MatrixArithmeticException e3) {
           alert("MatrixDimensionError",
-              "Sorry,  the matrix you entered is singular matrix\nTo do QR decomposition, it cannot be a singular matrix");
+              "Sorry,  the matrix you entered is singular matrix"
+                  + lineSeparator
+                  + "To do QR decomposition, it cannot be a singular matrix");
         }
       });
 
@@ -624,7 +637,8 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(4);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          MatrixCalculator matrixCalculator =
+              new MatrixCalculator(dataFromMatrix);
           String resultTrace = matrixCalculator.getTrace();
           resultNum = resultTrace;
           resultShower = resultBuilder("Operation: Trace", "Trace",
@@ -647,18 +661,17 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(5);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          MatrixCalculator matrixCalculator =
+              new MatrixCalculator(dataFromMatrix);
           List<String[][]> resultLUP = matrixCalculator.getLUPDecomposition();
           results.addAll(resultLUP);
-          if(resultLUP.size() > 2) {
-          resultShower =
-              resultBuilderLUP("Operation: LUP", "LUP", resultLUP.get(2),
-                  dataFromMatrix, resultLUP.get(0), resultLUP.get(1));
-          }
-          else {
+          if (resultLUP.size() > 2) {
             resultShower =
-                resultBuilderQR("Operation: LUP", "LUP", dataFromMatrix,
-                    resultLUP.get(0), resultLUP.get(1));
+                resultBuilderLUP("Operation: LUP", "LUP", resultLUP.get(2),
+                    dataFromMatrix, resultLUP.get(0), resultLUP.get(1));
+          } else {
+            resultShower = resultBuilderQR("Operation: LUP", "LUP",
+                dataFromMatrix, resultLUP.get(0), resultLUP.get(1));
           }
           scrollPane(vBoxR, resultShower);
           correctness = true;
@@ -678,7 +691,8 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(6);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          MatrixCalculator matrixCalculator =
+              new MatrixCalculator(dataFromMatrix);
           String[][] resultGE = matrixCalculator.getGuassianElimination();
           results.clear();
           results.add(resultGE);
@@ -716,7 +730,8 @@ public class Main extends Application {
         try {
           latestMOpera = mButtons.get(8);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          MatrixCalculator matrixCalculator =
+              new MatrixCalculator(dataFromMatrix);
           String resultEIV = matrixCalculator.getEigenValues();
           resultShower =
               resultBuilder("Operation: EIV", "EIV", dataFromMatrix, resultEIV);
@@ -727,37 +742,43 @@ public class Main extends Application {
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
-              "Sorry, the matrix you entered is not a square matrix\nTo compute the eigenvalue of a matrix, it has to be a square matrix");
+              "Sorry, the matrix you entered is not a square matrix"
+                  + lineSeparator + "To compute the eigenvalue of a matrix, "
+                  + lineSeparator + "it has to be a square matrix");
         } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
         } catch (SingularException e2) {
-          alert("Error", "我错了qwq，这抄来的算法有问题，奇异矩阵算不了，马上改。");
+          alert("Error", "Sorry, but the matrix your entered is singular");
         }
       });
 
-       mButtons.get(9).setOnAction(event -> {
-       try {
-       latestMOpera = mButtons.get(9);
-       String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-       MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
-       int resultRank = matrixCalculator.getRank();
-       resultNum = String.valueOf(resultRank);
-       resultShower =
-       resultBuilder("Operation: Rank", "Rank", dataFromMatrix, resultRank);
-       scrollPane(vBoxR, resultShower);
-      correctness = true; state = true; saved = false;
-      } catch (NumberFormatException e) {
-      correctness = false;
-      alert("Error", "Your input may contain invalid characters or empty");
-      }
+      mButtons.get(9).setOnAction(event -> {
+        try {
+          latestMOpera = mButtons.get(9);
+          String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
+          MatrixCalculator matrixCalculator =
+              new MatrixCalculator(dataFromMatrix);
+          int resultRank = matrixCalculator.getRank();
+          resultNum = String.valueOf(resultRank);
+          resultShower = resultBuilder("Operation: Rank", "Rank",
+              dataFromMatrix, resultRank);
+          scrollPane(vBoxR, resultShower);
+          correctness = true;
+          state = true;
+          saved = false;
+        } catch (NumberFormatException e) {
+          correctness = false;
+          alert("Error", "Your input may contain invalid characters or empty");
+        }
       });
 
       mButtons.get(10).setOnAction(event -> {
         try {
           latestMOpera = mButtons.get(10);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-          MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+          MatrixCalculator matrixCalculator =
+              new MatrixCalculator(dataFromMatrix);
           String[][] resultTS = matrixCalculator.getTranspose();
           results.clear();
           results.add(resultTS);
@@ -779,7 +800,8 @@ public class Main extends Application {
           this.power = String.valueOf(n);
           try {
             String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
-            MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
+            MatrixCalculator matrixCalculator =
+                new MatrixCalculator(dataFromMatrix);
             String[][] resultPw = matrixCalculator.getPow(n);
             results.clear();
             results.add(resultPw);
@@ -792,7 +814,9 @@ public class Main extends Application {
           } catch (MatrixDimensionsMismatchException e1) {
             correctness = false;
             alert("MatrixDimensionError",
-                "Sorry, the matrix you entered is not a square matrix\nTo compute the power of a matrix, it has to be a square matrix");
+                "Sorry, the matrix you entered is not a square matrix"
+                    + lineSeparator
+                    + "To compute the power of a matrix, it has to be a square matrix");
           } catch (MatrixArithmeticException e2) {
             correctness = false;
             alert("MatriArithmeticError",
@@ -853,8 +877,8 @@ public class Main extends Application {
         } catch (IOException e3) {
           alert("Error", "Fatal issues during IO processing");
         } catch (Exception e4) {
-          alert("Error",
-              "Your json file contains invalid operations,\n please rechoose the file");
+          alert("Error", "Your json file contains invalid operations,"
+              + lineSeparator + " please rechoose the file");
         }
       }
     });
@@ -868,8 +892,8 @@ public class Main extends Application {
 
     confirm.setOnAction(event -> {
       try {
-         updater(pages, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
-         enableSecond);
+        updater(pages, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+            enableSecond);
         state = false;
         correctness = true;
         int page = Integer.parseInt(pages.getText());
@@ -890,8 +914,8 @@ public class Main extends Application {
 
     forward.setOnAction(event -> {
       try {
-         updater(pages, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
-         enableSecond);
+        updater(pages, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+            enableSecond);
         state = false;
         correctness = true;
         int num = Integer.parseInt(pages.getText());
@@ -907,8 +931,8 @@ public class Main extends Application {
 
     backward.setOnAction(event -> {
       try {
-         updater(pages, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
-         enableSecond);
+        updater(pages, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+            enableSecond);
         state = false;
         correctness = true;
         int num = Integer.parseInt(pages.getText());
@@ -980,9 +1004,9 @@ public class Main extends Application {
   /**
    * Clear the data from the file
    * 
-   * @param selector selector pane
-   * @param pages pages textField
-   * @param total total textField
+   * @param selector   selector pane
+   * @param pages      pages textField
+   * @param total      total textField
    * @param rowAndCol1 row and col of Matrix1
    * @param rowAndCol2 row and col of Matrix2
    */
