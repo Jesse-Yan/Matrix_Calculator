@@ -520,93 +520,37 @@ public class Main extends Application {
       // Add Operations related to MatrixCalculator
 
       // Add EventHandler to the '+' operation
-      operators.get(1).setOnAction(event -> {
-        // Recorder the latest operation
-        latestMOpera = operators.get(1);
+      operators.get(1)
+               .setOnAction(event -> {
+                 // Recorder the latest operation
+                 latestMOpera = operators.get(1);
 
-        // Get data from input field
-        String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
-        String[][] dataFromMatrix2 = reader(matrix2Data, rowAndCol2);
-        MatrixCalculator matrixCalculator =
-            new MatrixCalculator(dataFromMatrix1, dataFromMatrix2);
-        try {
-
-          // Compute result
-          String[][] resultMatrix = matrixCalculator.add();
-
-          // Add result to the recorder of result
-          results.clear();
-          results.add(new Matrix(resultMatrix));
-
-          // Generate the resultShower
-          resultShower = resultBuilder("Operation: Add", "+", dataFromMatrix1,
-              dataFromMatrix2, resultMatrix);
-          // Add ScrollPane and update the scene
-          scrollPane(vBoxR, resultShower);
-
-          // Change for related states
-          stateModifer();
-        } catch (MatrixDimensionsMismatchException e1) {
-          correctness = false;
-          alert("MatrixDimensionError",
-              "The dimensions of the Matrixs you entered did not match");
-        } catch (NumberFormatException e1) {
-          correctness = false;
-          alert("Error", "Your input may contain invalid characters or empty");
-        }
-      });
+                 // Invoke to process and output data
+                 twoMatrixOperator(vBoxR, matrix1Data, matrix2Data, rowAndCol1,
+                     rowAndCol2, "Operation: Add", "+");
+               });
 
       // Add EventHandler to the '-' operation
-      operators.get(2).setOnAction(event -> {
-        // Recorder the latest operation
-        latestMOpera = operators.get(2);
+      operators.get(2)
+               .setOnAction(event -> {
+                 // Recorder the latest operation
+                 latestMOpera = operators.get(2);
 
-        // Get data from input field
-        String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
-        String[][] dataFromMatrix2 = reader(matrix2Data, rowAndCol2);
-        MatrixCalculator matrixCalculator =
-            new MatrixCalculator(dataFromMatrix1, dataFromMatrix2);
-        try {
-          String[][] resultMatrix = matrixCalculator.subtract();
-          results.clear();
-          results.add(new Matrix(resultMatrix));
-          resultShower = resultBuilder("Operation: Subtract", "-",
-              dataFromMatrix1, dataFromMatrix2, resultMatrix);
-          scrollPane(vBoxR, resultShower);
-          stateModifer();
-        } catch (MatrixDimensionsMismatchException e1) {
-          correctness = false;
-          alert("MatrixDimensionError",
-              "The dimensions of the Matrixs you entered did not match");
-        } catch (NumberFormatException e1) {
-          correctness = false;
-          alert("Error", "Your input may contain invalid characters or empty");
-        }
-      });
+                 // Invoke to process and output data
+                 twoMatrixOperator(vBoxR, matrix1Data, matrix2Data, rowAndCol1,
+                     rowAndCol2, "Operation: Subtract", "-");
+               });
 
-      operators.get(3).setOnAction(event -> {
-        latestMOpera = operators.get(3);
-        String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
-        String[][] dataFromMatrix2 = reader(matrix2Data, rowAndCol2);
-        MatrixCalculator matrixCalculator =
-            new MatrixCalculator(dataFromMatrix1, dataFromMatrix2);
-        try {
-          String[][] resultMatrix = matrixCalculator.multiply();
-          results.clear();
-          results.add(new Matrix(resultMatrix));
-          resultShower = resultBuilder("Operation: Multiply", "*",
-              dataFromMatrix1, dataFromMatrix2, resultMatrix);
-          scrollPane(vBoxR, resultShower);
-          stateModifer();
-        } catch (MatrixDimensionsMismatchException e1) {
-          correctness = false;
-          alert("MatrixDimensionError",
-              "The dimensions of the Matrixs you entered did not match");
-        } catch (NumberFormatException e1) {
-          correctness = false;
-          alert("Error", "Your input may contain invalid characters or empty");
-        }
-      });
+      // Add EventHandler to the '*' operation
+      operators.get(3)
+               .setOnAction(event -> {
+                 // Recorder the latest operation
+                 latestMOpera = operators.get(3);
+
+                 // Invoke to process and output data
+                 twoMatrixOperator(vBoxR, matrix1Data, matrix2Data, rowAndCol1,
+                     rowAndCol2, "Operation: Multiply", "*");
+               });
 
       // Add EventHandler to special matrix operations
       mButtons.get(0).setOnAction(event -> {
@@ -1121,6 +1065,65 @@ public class Main extends Application {
 
     }
     primaryStage.show();
+  }
+
+  /**
+   * Process result and generate the output
+   * 
+   * @param vBoxR       parent of resultShower
+   * @param matrix1Data data from matrix1
+   * @param matrix2Data data from matrix2
+   * @param rowAndCol1  row and col of matrix1
+   * @param rowAndCol2  row and col of matrix2
+   * @param string      operation String
+   * @param mathString  math operation of string
+   */
+  private void twoMatrixOperator(VBox vBoxR, List<TextField> matrix1Data,
+      List<TextField> matrix2Data, List<TextField> rowAndCol1,
+      List<TextField> rowAndCol2, String string, String mathString) {
+
+    // Get data from input field
+    String[][] dataFromMatrix1 = reader(matrix1Data, rowAndCol1);
+    String[][] dataFromMatrix2 = reader(matrix2Data, rowAndCol2);
+    MatrixCalculator matrixCalculator =
+        new MatrixCalculator(dataFromMatrix1, dataFromMatrix2);
+    try {
+
+      // Compute result
+      String[][] resultMatrix;
+
+      switch (mathString) {
+        case "+":
+          resultMatrix = matrixCalculator.add();
+          break;
+        case "-":
+          resultMatrix = matrixCalculator.subtract();
+          break;
+        default:
+          resultMatrix = matrixCalculator.multiply();
+          break;
+      }
+
+      // Add result to the recorder of result
+      results.clear();
+      results.add(new Matrix(resultMatrix));
+
+      // Generate the resultShower
+      resultShower = resultBuilder(string, mathString, dataFromMatrix1,
+          dataFromMatrix2, resultMatrix);
+      // Add ScrollPane and update the scene
+      scrollPane(vBoxR, resultShower);
+
+      // Change for related states
+      stateModifer();
+    } catch (MatrixDimensionsMismatchException e1) {
+      correctness = false;
+      alert("MatrixDimensionError",
+          "The dimensions of the Matrixs you entered did not match");
+    } catch (NumberFormatException e1) {
+      correctness = false;
+      alert("Error", "Your input may contain invalid characters or empty");
+    }
   }
 
   /**
