@@ -6,12 +6,13 @@ import java.util.List;
 
 /**
  * Writer - Class that generate .json file base on result
+ * 
  * @author Archer (2020)
  * 
  */
 public class Writer {
-  private List<CalSteps> results;//list to store results in steps
-  PrintWriter printWriter = null;//initialize a printWriter
+  private List<CalSteps> results;// list to store results in steps
+  PrintWriter printWriter = null;// initialize a printWriter
 
   /**
    * constructor of Writer object
@@ -21,7 +22,7 @@ public class Writer {
   public Writer(List<CalSteps> results) {
     this.results = results;
   }
-  
+
   /**
    * helper method to write data and operation
    * 
@@ -42,7 +43,7 @@ public class Writer {
     }
     printWriter.write("\t\t" + "]\n");
   }
-  
+
   /**
    * helper method to write result
    * 
@@ -88,7 +89,7 @@ public class Writer {
     try {
       printWriter = new PrintWriter("Result.json");
       printWriter.write("{" + "\n");
-      printWriter.write("\t" + "\""+"StepToResult"+"\":[\n");
+      printWriter.write("\t" + "\"" + "StepToResult" + "\":[\n");
 
       CalSteps cur = null;
       for (int i = 0; i < results.size(); ++i) {
@@ -96,9 +97,10 @@ public class Writer {
           printWriter.write("\t" + ",\n");
         printWriter.write("\t" + "{\n");
         cur = results.get(i);
-        if (cur.getOperation() != null && cur.getDatas() != null&&cur.getResult()==null) {
+        if (cur.getOperation() != null && cur.getDatas() != null && cur.getResult() == null) {
           writeDataAndOperation(cur);
-        } else if (cur.getOperation() == null && cur.getDatas() == null&& cur.getResult()!=null){
+        } else if (cur.getOperation() == null && cur.getDatas() == null
+            && cur.getResult() != null) {
           writeResult(cur);
         } else {
           writeDataAndOperation(cur);
@@ -125,7 +127,7 @@ public class Writer {
     try {
       OpeartionParser parser = new OpeartionParser("SimpleData.json");
       List<CalSteps> curr = parser.getCalculations();
-      curr.add(new CalSteps((Object)"Just a test"));
+      curr.add(new CalSteps((Object) "Just a test"));
       Writer test = new Writer(curr);
       test.save();
       System.out.println("success!!");
