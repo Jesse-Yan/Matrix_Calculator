@@ -60,6 +60,9 @@ public class Main extends Application {
   String labelStyle =
       "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;";
 
+  // The source list
+  List<CalSteps> src = null;
+
   // lists storing steps
   List<CalSteps> lists = null;
 
@@ -71,6 +74,12 @@ public class Main extends Application {
 
   // Able to quit?
   boolean saved = false;
+
+  // Whether the result is number
+  boolean isNum = false;
+
+  // Whether need to invoke updater
+  boolean update = true;
 
   // previous page recorder
   int prevPage = 1;
@@ -171,11 +180,19 @@ public class Main extends Application {
     total.setEditable(false);
     Button backward = new Button(">");
     Button confirm = new Button("\u221A");
+    Button add = new Button("Add Cal");
+    Button addConfirm = new Button("AddConfirm");
+    Button delete = new Button("Delete Cal");
     Button quit = new Button("Quit");
+
+    // Set the functionality of two buttons
+    addConfirm.setDisable(true);
+    add.setDisable(false);
 
     // Add to the pane of selector
     selector.getChildren()
-            .addAll(forward, pages, slash, total, backward, confirm, quit);
+            .addAll(forward, pages, slash, total, backward, confirm, add,
+                addConfirm, delete, quit);
     // Align to the center
     selector.alignmentProperty().set(Pos.CENTER);
 
@@ -887,9 +904,9 @@ public class Main extends Application {
           for (int i = 1; i <= lists.size(); i++) {
             CalSteps step = lists.get(i - 1);
             String operationOperator = step.getOperation();
-            boolean isNum = switcher(matrix1Data, matrix2Data, rowAndCol1,
-                rowAndCol2, enableSecond, operators, mButtons, powerButton,
-                powerInput, step, operationOperator);
+            isNum = switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
+                enableSecond, operators, mButtons, powerButton, powerInput,
+                step, operationOperator);
             lists.set(i - 1, new CalSteps(operationOperator, step.getDatas(),
                 isNum ? resultNum : results));
           }
@@ -923,10 +940,9 @@ public class Main extends Application {
       try {
         // Update the prevPage and save the result
         updater(prevPage, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
-            enableSecond);
+            enableSecond, isNum, false, update);
         state = false;
         correctness = true;
-
         // Proceed to next page
         int page = Integer.parseInt(pages.getText());
         prevPage = page;
@@ -935,8 +951,8 @@ public class Main extends Application {
         }
         CalSteps step = lists.get(page - 1);
         String operationOperator = step.getOperation();
-        switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2, enableSecond,
-            operators, mButtons, powerButton, powerInput, step,
+        isNum = switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
+            enableSecond, operators, mButtons, powerButton, powerInput, step,
             operationOperator);
       } catch (IllegalArgumentException e1) {
         alert("Error", "The page number you entered is invalid");
@@ -950,14 +966,13 @@ public class Main extends Application {
       try {
 
         // Update the prevPage
-        int numPage = Integer.parseInt(pages.getText());
-        updater(numPage, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
-            enableSecond);
+        int num = Integer.parseInt(pages.getText());
+        updater(num, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+            enableSecond, isNum, false, update);
         state = false;
         correctness = true;
 
         // Resetting the page number
-        int num = Integer.parseInt(pages.getText());
         if (num != 1) {
           num -= 1;
           pages.setText(String.valueOf(num));
@@ -973,14 +988,13 @@ public class Main extends Application {
       try {
 
         // Update the prevPage
-        int numPage = Integer.parseInt(pages.getText());
-        updater(numPage, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
-            enableSecond);
+        int num = Integer.parseInt(pages.getText());
+        updater(num, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+            enableSecond, isNum, false, update);
         state = false;
         correctness = true;
 
         // Resetting the page number
-        int num = Integer.parseInt(pages.getText());
         if (num != lists.size()) {
           num += 1;
           pages.setText(String.valueOf(num));
@@ -988,6 +1002,76 @@ public class Main extends Application {
         }
       } catch (Exception e) {
         alert("Error", "The page number you entered is invalid");
+      }
+    });
+
+    // Set the action for add a calculation
+    add.setOnAction(event -> {
+      int page = Integer.parseInt(pages.getText());
+      updater(page, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+          enableSecond, isNum, false, true);
+      state = false;
+      correctness = true;
+      pages.setText(String.valueOf(page + 1));
+      total.setText(String.valueOf(lists.size() + 1));
+      clearer(rowAndCol1);
+      clearer(rowAndCol2);
+      resultShower.getChildren().clear();
+      setterAfterAdd(forward, pages, backward, confirm, add, addConfirm, delete,
+          quit);
+    });
+
+    // Set the action for addConfirm
+    addConfirm.setOnAction(event -> {
+      int page = Integer.parseInt(pages.getText()) - 1;
+      if (correctness) {
+        updater(page, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+            enableSecond, isNum, true, true);
+        state = false;
+        setterAfterConfirm(forward, pages, backward, confirm, add, addConfirm,
+            delete, quit);
+      } else {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Exit add?");
+        alert.setContentText("The calculation is incomplete" + lineSeparator
+            + "Do you want to cancel addition?");
+
+        // Two types of buttons, yes, no
+        ButtonType yes = new ButtonType("Yes");
+        ButtonType no = new ButtonType("No");
+        alert.getButtonTypes().setAll(yes, no);
+        Optional<ButtonType> diagResult = alert.showAndWait();
+
+        // If the user chose yes
+        if (diagResult.get() == yes) {
+          pages.setText(String.valueOf(page));
+          total.setText(String.valueOf(Integer.parseInt(total.getText()) - 1));
+          setterAfterConfirm(forward, pages, backward, confirm, add, addConfirm,
+              delete, quit);
+          confirm.fire();
+        }
+      }
+    });
+
+    // Set the action for delete
+    delete.setOnAction(event -> {
+      if (lists.size() != 1) {
+        int page = Integer.parseInt(pages.getText());
+        if (page == lists.size()) {
+          update = false;
+          pages.setText(String.valueOf(page - 1));
+          confirm.fire();
+          update = true;
+          lists.remove(page - 1);
+        } else {
+          lists.remove(page - 1);
+          update = false;
+          confirm.fire();
+          update = true;
+        }
+        total.setText(String.valueOf(lists.size()));
+      } else {
+        alert("Attention", "You cannot delete the last calculation");
       }
     });
 
@@ -1065,6 +1149,56 @@ public class Main extends Application {
 
     }
     primaryStage.show();
+  }
+
+  /**
+   * Setter for the buttons and textField after add
+   * 
+   * @param forward    Button
+   * @param pages      TextField
+   * @param backward   Button
+   * @param confirm    Button
+   * @param add        Button
+   * @param addConfirm Button
+   * @param delete     Button
+   * @param quit       Button
+   */
+  private void setterAfterAdd(Button forward, TextField pages, Button backward,
+      Button confirm, Button add, Button addConfirm, Button delete,
+      Button quit) {
+    addConfirm.setDisable(false);
+    add.setDisable(true);
+    forward.setDisable(true);
+    backward.setDisable(true);
+    pages.setEditable(false);
+    confirm.setDisable(true);
+    quit.setDisable(true);
+    delete.setDisable(true);
+  }
+
+  /**
+   * Setter for the buttons and textField after addConfirm
+   * 
+   * @param forward    Button
+   * @param pages      TextField
+   * @param backward   Button
+   * @param confirm    Button
+   * @param add        Button
+   * @param addConfirm Button
+   * @param delete     Button
+   * @param quit       Button
+   */
+  private void setterAfterConfirm(Button forward, TextField pages,
+      Button backward, Button confirm, Button add, Button addConfirm,
+      Button delete, Button quit) {
+    addConfirm.setDisable(true);
+    add.setDisable(false);
+    forward.setDisable(false);
+    backward.setDisable(false);
+    pages.setEditable(true);
+    confirm.setDisable(false);
+    quit.setDisable(false);
+    delete.setDisable(false);
   }
 
   /**
@@ -1270,40 +1404,55 @@ public class Main extends Application {
    * @param matrix2Data  data from matrix2
    * @param rowAndCol2   row and col for matrix2
    * @param enableSecond a checkbox
+   * @param isNum        whether the operation is num or not
+   * @param isAdd        whether user want to add a new operation
    */
   private void updater(int page, List<TextField> matrix1Data,
       List<TextField> rowAndCol1, List<TextField> matrix2Data,
-      List<TextField> rowAndCol2, CheckBox enableSecond) {
-    if (state && correctness) {
-      Matrix wMatrix1 = new Matrix(reader(matrix1Data, rowAndCol1));
-      String operation = latestMOpera.getText();
-      if (enableSecond.isSelected()) {
-        Matrix wMatrix2 = new Matrix(reader(matrix2Data, rowAndCol2));
-        lists.set(page - 1, new CalSteps(operation, new ArrayList<Matrix>() {
-          private static final long serialVersionUID = 1L;
-          {
-            add(wMatrix1);
-            add(wMatrix2);
+      List<TextField> rowAndCol2, CheckBox enableSecond, boolean isNum,
+      boolean isAdd, boolean update) {
+    if (update) {
+      if (state && correctness) {
+        Matrix wMatrix1 = new Matrix(reader(matrix1Data, rowAndCol1));
+        String operation = latestMOpera.getText();
+        if (enableSecond.isSelected()) {
+          Matrix wMatrix2 = new Matrix(reader(matrix2Data, rowAndCol2));
+          lists.set(page - 1, new CalSteps(operation, new ArrayList<Matrix>() {
+            private static final long serialVersionUID = 1L;
+            {
+              add(wMatrix1);
+              add(wMatrix2);
+            }
+          }, results));
+        } else {
+          if (operation.equals("Gauss-Elim")) {
+            operation = "GE";
+          } else if (operation.equals("Diagonalize")) {
+            operation = "Diag";
+          } else if (operation.equals("EiValue")) {
+            operation = "EIV";
+          } else if (operation.equals("Transpose")) {
+            operation = "Trans";
+          } else if (operation.equals("Power")) {
+            operation = "PowerOf" + this.power;
           }
-        }, results));
-      } else {
-        if (operation.equals("Gauss-Elim")) {
-          operation = "GE";
-        } else if (operation.equals("Diagonalize")) {
-          operation = "Diag";
-        } else if (operation.equals("EiValue")) {
-          operation = "EIV";
-        } else if (operation.equals("Transpose")) {
-          operation = "Trans";
-        } else if (operation.equals("Power")) {
-          operation = "PowerOf" + this.power;
+          if (!isAdd) {
+            lists.set(page - 1,
+                new CalSteps(operation, new ArrayList<Matrix>() {
+                  private static final long serialVersionUID = 1L;
+                  {
+                    add(wMatrix1);
+                  }
+                }, isNum ? resultNum : results));
+          } else {
+            lists.add(page, new CalSteps(operation, new ArrayList<Matrix>() {
+              private static final long serialVersionUID = 1L;
+              {
+                add(wMatrix1);
+              }
+            }, isNum ? resultNum : results));
+          }
         }
-        lists.set(page - 1, new CalSteps(operation, new ArrayList<Matrix>() {
-          private static final long serialVersionUID = 1L;
-          {
-            add(wMatrix1);
-          }
-        }, results));
       }
     }
   }
@@ -1332,9 +1481,9 @@ public class Main extends Application {
    * 
    * @param rowAndCol2 row and column textfield
    */
-  private void clearer(List<TextField> rowAndCol2) {
-    rowAndCol2.get(0).setText("3");
-    rowAndCol2.get(1).setText("3");
+  private void clearer(List<TextField> rowAndCol) {
+    rowAndCol.get(0).setText("3");
+    rowAndCol.get(1).setText("3");
   }
 
   /**
