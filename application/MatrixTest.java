@@ -146,8 +146,8 @@ public class MatrixTest {
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
       try {
         matrix.pow(-2);
-        fail("The matrix is not invertible, but no ArithmeticException thrown");
-      } catch (ArithmeticException arithmeticException) {
+        fail("The matrix is not invertible, but no MatrixArithmeticException thrown");
+      } catch (MatrixArithmeticException arithmeticException) {
         // Expected
       }
 
@@ -191,25 +191,6 @@ public class MatrixTest {
     e.printStackTrace();
   }
   }
-  
-  @Test
-  public void test_LU() {
-    try {
-      Matrix matrix, expectedL, expectedU, expectedP;
-
-      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
-      expectedL = new Matrix(new Integer[][] {{1, 0, 0}, {4, 1, 0}, {7, 2, 1}});
-      expectedU = new Matrix(new Integer[][] {{1, 2, 3}, {0, -3, -6}, {0, 0, 0}});
-      assertEquals(expectedL, matrix.LUDecomposition()[0]);
-      assertEquals(expectedU, matrix.LUDecomposition()[1]);
-      
-    }catch(
-
-  Exception e)
-  {
-    e.printStackTrace();
-  }
-  }
 
   @Test
   public void test_Deteminant() {
@@ -243,8 +224,8 @@ public class MatrixTest {
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
       try {
         matrix.inverse();
-        fail("The matrix is not invertible, but no ArithmeticException thrown");
-      } catch (ArithmeticException e) {
+        fail("The matrix is not invertible, but no MatrixArithmeticException thrown");
+      } catch (MatrixArithmeticException e) {
         // Expected
       }
     } catch (Exception e) {

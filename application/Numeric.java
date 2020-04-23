@@ -30,7 +30,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
   /**
    * Number of significant figures for output.
    */
-  static int outputSignificantFigures = 5;
+  static int outputSignificantFigures = 9;
 
   /**
    * A private Object representing the number, which can only be a Integer, or a Fraction, or a

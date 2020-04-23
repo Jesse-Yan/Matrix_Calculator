@@ -102,7 +102,6 @@ public interface MatrixADT {
    */
   MatrixADT inverse() throws MatrixDimensionsMismatchException, MatrixArithmeticException;
   
-  Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException;
 
   /**
    * Get the matrix to the power of n, the given matrix must be a square matrix.
@@ -134,7 +133,7 @@ public interface MatrixADT {
    * @see https://en.wikipedia.org/wiki/QR_decomposition
    */
   
-  Matrix[] LUDecomposition() throws MatrixDimensionsMismatchException;
+  Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException;
 
   /**
    * Get the EigenValues of the matrix. The given matrix must be a square matrix.
