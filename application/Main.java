@@ -71,6 +71,9 @@ public class Main extends Application {
   // Able to quit?
   boolean saved = false;
 
+  // previous page recorder
+  int prevPage = 1;
+
   // Recorder of buttons
   Button latestMOpera = null;
 
@@ -79,7 +82,7 @@ public class Main extends Application {
 
   // Recorder of results
   String resultNum = null;
-  List<String[][]> results = new ArrayList<>();
+  List<Matrix> results = new ArrayList<>();
 
   /**
    * This is the start method of the Main class
@@ -452,7 +455,7 @@ public class Main extends Application {
         try {
           String[][] resultMatrix = matrixCalculator.add();
           results.clear();
-          results.add(resultMatrix);
+          results.add(new Matrix(resultMatrix));
           resultShower = resultBuilder("Operation: Add", "+", dataFromMatrix1,
               dataFromMatrix2, resultMatrix);
           scrollPane(vBoxR, resultShower);
@@ -478,7 +481,7 @@ public class Main extends Application {
         try {
           String[][] resultMatrix = matrixCalculator.subtract();
           results.clear();
-          results.add(resultMatrix);
+          results.add(new Matrix(resultMatrix));
           resultShower = resultBuilder("Operation: Subtract", "-",
               dataFromMatrix1, dataFromMatrix2, resultMatrix);
           scrollPane(vBoxR, resultShower);
@@ -504,7 +507,7 @@ public class Main extends Application {
         try {
           String[][] resultMatrix = matrixCalculator.multiply();
           results.clear();
-          results.add(resultMatrix);
+          results.add(new Matrix(resultMatrix));
           resultShower = resultBuilder("Operation: Multiply", "*",
               dataFromMatrix1, dataFromMatrix2, resultMatrix);
           scrollPane(vBoxR, resultShower);
@@ -556,7 +559,7 @@ public class Main extends Application {
               new MatrixCalculator(dataFromMatrix);
           String[][] resultInverse = matrixCalculator.getInverse();
           results.clear();
-          results.add(resultInverse);
+          results.add(new Matrix(resultInverse));
           resultShower = resultBuilder("Operation: Inverse", "Inverse",
               dataFromMatrix, resultInverse);
           scrollPane(vBoxR, resultShower);
@@ -586,7 +589,8 @@ public class Main extends Application {
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
           List<String[][]> resultQR = matrixCalculator.getQRDecomposition();
-          results.addAll(resultQR);
+          results.addAll(
+              resultQR.stream().map(i -> new Matrix(i)).collect(toList()));
           resultShower = resultBuilderQR("Operation: QR", "QR", dataFromMatrix,
               resultQR.get(0), resultQR.get(1));
           scrollPane(vBoxR, resultShower);
@@ -618,7 +622,8 @@ public class Main extends Application {
       // List<String[][]> resultSVD = Arrays.stream(matrix.???)
       // .map(Matrix::toStringMatrix)
       // .collect(toList());
-      // results.addAll(resultSVD);
+      // results.addAll(resultSVD.stream().map(i -> new
+      // Matrix(i)).collect(toList()));
       // resultShower = resultBuilderSVD("Operation: SVD", "SVD",
       // dataFromMatrix, resultInverse.get(0), resultInverse.get(1),
       // resultInverse.get(2));
@@ -664,7 +669,8 @@ public class Main extends Application {
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
           List<String[][]> resultLUP = matrixCalculator.getLUPDecomposition();
-          results.addAll(resultLUP);
+          results.addAll(
+              resultLUP.stream().map(i -> new Matrix(i)).collect(toList()));
           if (resultLUP.size() > 2) {
             resultShower =
                 resultBuilderLUP("Operation: LUP", "LUP", resultLUP.get(2),
@@ -695,7 +701,7 @@ public class Main extends Application {
               new MatrixCalculator(dataFromMatrix);
           String[][] resultGE = matrixCalculator.getGuassianElimination();
           results.clear();
-          results.add(resultGE);
+          results.add(new Matrix(resultGE));
           resultShower =
               resultBuilder("Operation: GE", "GE", dataFromMatrix, resultGE);
           scrollPane(vBoxR, resultShower);
@@ -715,7 +721,7 @@ public class Main extends Application {
       // Matrix matrix = new Matrix(dataFromMatrix);
       // String[][] resultDI = matrix.???
       // results.clear();
-      // results.add(resultDI);
+      // results.add(new Matrix(resultDI));
       // resultShower =
       // resultBuilder("Operation: DI", "DI", dataFromMatrix, resultDI);
       // scrollPane(vBoxR, resultShower);
@@ -733,6 +739,7 @@ public class Main extends Application {
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
           String resultEIV = matrixCalculator.getEigenValues();
+          resultNum = resultEIV;
           resultShower =
               resultBuilder("Operation: EIV", "EIV", dataFromMatrix, resultEIV);
           scrollPane(vBoxR, resultShower);
@@ -781,7 +788,7 @@ public class Main extends Application {
               new MatrixCalculator(dataFromMatrix);
           String[][] resultTS = matrixCalculator.getTranspose();
           results.clear();
-          results.add(resultTS);
+          results.add(new Matrix(resultTS));
           resultShower =
               resultBuilder("Operation: TS", "TS", dataFromMatrix, resultTS);
           scrollPane(vBoxR, resultShower);
@@ -804,7 +811,7 @@ public class Main extends Application {
                 new MatrixCalculator(dataFromMatrix);
             String[][] resultPw = matrixCalculator.getPow(n);
             results.clear();
-            results.add(resultPw);
+            results.add(new Matrix(resultPw));
             resultShower = resultBuilder("Operation: POWER", "PowerOf " + n,
                 dataFromMatrix, resultPw);
             scrollPane(vBoxR, resultShower);
@@ -860,11 +867,11 @@ public class Main extends Application {
           for (int i = 1; i <= lists.size(); i++) {
             CalSteps step = lists.get(i - 1);
             String operationOperator = step.getOperation();
-            switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
-                enableSecond, operators, mButtons, powerButton, powerInput,
-                step, operationOperator);
-            lists.set(i - 1,
-                new CalSteps(operationOperator, step.getDatas(), results));
+            boolean isNum = switcher(matrix1Data, matrix2Data, rowAndCol1,
+                rowAndCol2, enableSecond, operators, mButtons, powerButton,
+                powerInput, step, operationOperator);
+            lists.set(i - 1, new CalSteps(operationOperator, step.getDatas(),
+                isNum ? resultNum : results));
           }
           pages.setText("1");
           state = false;
@@ -892,11 +899,12 @@ public class Main extends Application {
 
     confirm.setOnAction(event -> {
       try {
-        updater(pages, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+        updater(prevPage, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
             enableSecond);
         state = false;
         correctness = true;
         int page = Integer.parseInt(pages.getText());
+        prevPage = page;
         if (page < 1 || page > lists.size()) {
           throw new IllegalArgumentException();
         }
@@ -914,7 +922,8 @@ public class Main extends Application {
 
     forward.setOnAction(event -> {
       try {
-        updater(pages, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+        int numPage = Integer.parseInt(pages.getText());
+        updater(numPage, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
             enableSecond);
         state = false;
         correctness = true;
@@ -931,7 +940,8 @@ public class Main extends Application {
 
     backward.setOnAction(event -> {
       try {
-        updater(pages, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+        int numPage = Integer.parseInt(pages.getText());
+        updater(numPage, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
             enableSecond);
         state = false;
         correctness = true;
@@ -979,6 +989,11 @@ public class Main extends Application {
         Optional<ButtonType> diagResult = alert.showAndWait();
         if (diagResult.get() == yes) {
           save.fire();
+          if (!saved) {
+            quit.fire();
+          } else {
+            clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2);
+          }
         } else if (diagResult.get() == no) {
           clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2);
         }
@@ -1025,23 +1040,25 @@ public class Main extends Application {
   /**
    * Switcher of Operation
    * 
-   * @param matrix1Data       matrix1
-   * @param matrix2Data       matrix2
-   * @param rowAndCol1        row and col of matrix1
-   * @param rowAndCol2        row and col of matrix2
-   * @param enableSecond      a checkbox
-   * @param operators         the operators
-   * @param mButtons          matrix buttons
-   * @param powerButton       invoke for power calculation
-   * @param powerInput        input for power
-   * @param step              CalStep
-   * @param operationOperator operation
+   * @param  matrix1Data       matrix1
+   * @param  matrix2Data       matrix2
+   * @param  rowAndCol1        row and col of matrix1
+   * @param  rowAndCol2        row and col of matrix2
+   * @param  enableSecond      a checkbox
+   * @param  operators         the operators
+   * @param  mButtons          matrix buttons
+   * @param  powerButton       invoke for power calculation
+   * @param  powerInput        input for power
+   * @param  step              CalStep
+   * @param  operationOperator operation
+   * @return                   isNum whether is a list matrixes of a StringNums
    */
-  private void switcher(List<TextField> matrix1Data,
+  private boolean switcher(List<TextField> matrix1Data,
       List<TextField> matrix2Data, List<TextField> rowAndCol1,
       List<TextField> rowAndCol2, CheckBox enableSecond, List<Button> operators,
       List<Button> mButtons, Button powerButton, TextField powerInput,
       CalSteps step, String operationOperator) {
+    boolean isNum = false;
     switch (operationOperator) {
       case "+":
         setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
@@ -1070,6 +1087,7 @@ public class Main extends Application {
       case "Det":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
         mButtons.get(0).fire();
+        isNum = true;
         break;
       case "Inverse":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
@@ -1086,6 +1104,7 @@ public class Main extends Application {
       case "Trace":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
         mButtons.get(4).fire();
+        isNum = true;
         break;
       case "LUP":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
@@ -1102,10 +1121,12 @@ public class Main extends Application {
       case "EIV":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
         mButtons.get(8).fire();
+        isNum = true;
         break;
       case "Rank":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
         mButtons.get(9).fire();
+        isNum = true;
         break;
       case "Trans":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
@@ -1118,23 +1139,23 @@ public class Main extends Application {
         powerButton.fire();
         break;
     }
+    return isNum;
   }
 
   /**
    * Updater of the CalStep
    * 
-   * @param pages        page number
+   * @param page         page number
    * @param matrix1Data  data from matrix1
    * @param rowAndCol1   row and col for matrix1
    * @param matrix2Data  data from matrix2
    * @param rowAndCol2   row and col for matrix2
    * @param enableSecond a checkbox
    */
-  private void updater(TextField pages, List<TextField> matrix1Data,
+  private void updater(int page, List<TextField> matrix1Data,
       List<TextField> rowAndCol1, List<TextField> matrix2Data,
       List<TextField> rowAndCol2, CheckBox enableSecond) {
     if (state && correctness) {
-      int page = Integer.parseInt(pages.getText());
       Matrix wMatrix1 = new Matrix(reader(matrix1Data, rowAndCol1));
       String operation = latestMOpera.getText();
       if (enableSecond.isSelected()) {
