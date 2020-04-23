@@ -129,20 +129,22 @@ public interface MatrixADT {
    * 
    * @return an array of length 2. The first is Q, and the second is R.
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * @throws MatrixArithmeticException - when singular
    * 
    * @see https://en.wikipedia.org/wiki/QR_decomposition
    */
   
-  Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException;
+  Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException, MatrixArithmeticException;
 
   /**
    * Get the EigenValues of the matrix. The given matrix must be a square matrix.
    * 
    * @return an array of Numeric[], which represents the eigenvalues of the matrix.
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * @throws SingularException - ??
    * 
    * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
    */
-  Numeric[] eigenValues() throws MatrixDimensionsMismatchException;
+  Numeric[] eigenValues() throws MatrixDimensionsMismatchException, SingularException;
 
 }

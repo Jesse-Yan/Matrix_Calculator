@@ -441,7 +441,7 @@ public class Matrix implements MatrixADT {
       }
     return pivotRow;
   }
-  
+
   /**
    * 
    * This method receives parameters k and l, and then it will find the row index of the largest
@@ -725,7 +725,7 @@ public class Matrix implements MatrixADT {
     }
     return M - dif;
   }
-  
+
   /**
    * 
    * Gaussian-Elimination.
@@ -845,18 +845,18 @@ public class Matrix implements MatrixADT {
 
     return new Matrix[] {L, U, P};
   }
-  
-  public Matrix[] LUPDecomposition() throws MatrixDimensionsMismatchException{
+
+  public Matrix[] LUPDecomposition() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
     Matrix[] tmp = this.LUPDecompositionHelper();
     Matrix L = tmp[0];
     Matrix U = tmp[1];
     Matrix P = tmp[2];
-    if(P.mathematicallyEquals(identityMatrixWithSizeOf(N)))
+    if (P.mathematicallyEquals(identityMatrixWithSizeOf(N)))
       P = null;
     return new Matrix[] {L, U, P};
   }
-  
+
 
   /**
    * Calculate the Frobenius norm of the matrix.
@@ -912,12 +912,18 @@ public class Matrix implements MatrixADT {
   /**
    * Do QR decomposition using Gram�Schmidt process.
    * 
+   * @throws MatrixArithmeticException When singular
+   * 
    * @see https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process
    * @see https://en.wikipedia.org/wiki/QR_decomposition#Using_the_Gram%E2%80%93Schmidt_process
    */
   @Override
-  public Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException {
+  public Matrix[] QRDecomposition()
+      throws MatrixDimensionsMismatchException, MatrixArithmeticException {
     int N = getSizeOfSquareMatrix();
+    if (determinant().equals(Numeric.of(0)))
+      throw new MatrixArithmeticException("Cannot do QR decomposition");
+
     ColumnVector[] a = toColumnVectors();
     ColumnVector[] u = new ColumnVector[N];
     ColumnVector[] e = new ColumnVector[N];
@@ -932,14 +938,14 @@ public class Matrix implements MatrixADT {
 
     Matrix Q = combineColumnVectorsToMatirx(e);
     Matrix R = Q.transpose().multiply(this);
-    
-    
+
+
     for (int i = 0; i < N; i++) {
       for (int j = 0; j < i; j++) {
         R.entry[i][j] = Numeric.of(0);
       }
     }
-    
+
     return new Matrix[] {Q, R};
   };
 
@@ -957,57 +963,64 @@ public class Matrix implements MatrixADT {
       diagnal[i] = new Numeric(entry[i][i]);
     return diagnal;
   }
-  
-  
+
+
 
   /**
    * Find the eigenvalue of the matrix by QR algorithm.
+   * @throws SingularException  - ???
+   * 
    * 
    * @see https://en.wikipedia.org/wiki/QR_algorithm
    */
   @Override
-  public Numeric[] eigenValues() throws MatrixDimensionsMismatchException {
-    int N = getSizeOfSquareMatrix();
-    Matrix A = copy(), lastA;
-    Matrix[] QRDecomposition;
-    int interateCount = 0;
-    do {
-      lastA = A.copy();
-      QRDecomposition = A.QRDecomposition();
-      A = QRDecomposition[1].multiply(QRDecomposition[0]);
-      interateCount++;
-      if(interateCount > 10000000)
-        throw new IllegalStateException("The value does converge!");
-    } while (!Arrays.equals(A.diagonal(), lastA.diagonal()));
-    for(int i = 0; i < 1000; i++) {
-      lastA = A.copy();
-      QRDecomposition = A.QRDecomposition();
-      A = QRDecomposition[1].multiply(QRDecomposition[0]);
-    }
-    Numeric[] potentialEigenValues = A.diagonal();
-    TreeSet<Numeric> eigenValues = new TreeSet<Numeric>();
-    for(Numeric eigenValue : potentialEigenValues) {
-      try {
-        Numeric castedEigenValue = eigenValue.castToNearestFraction();
-        if(this.subtract(identityMatrixWithSizeOf(N).multiply(castedEigenValue)).determinant().mathematicallyEquals(Numeric.of(0))){
-          eigenValues.add(castedEigenValue);
-        } else {
-          throw new ClassCastException("EigenValue Didn't match!");
-        }
-      } catch (ClassCastException classCastException) {
-        if(this.subtract(identityMatrixWithSizeOf(N).multiply(eigenValue)).determinant().equals(Numeric.of(0))){
-          eigenValues.add(eigenValue);
+  public Numeric[] eigenValues() throws MatrixDimensionsMismatchException, SingularException {
+    try {
+      int N = getSizeOfSquareMatrix();
+      Matrix A = copy(), lastA;
+      Matrix[] QRDecomposition;
+      int interateCount = 0;
+      do {
+        lastA = A.copy();
+        QRDecomposition = A.QRDecomposition();
+        A = QRDecomposition[1].multiply(QRDecomposition[0]);
+        interateCount++;
+        if (interateCount > 10000000)
+          throw new IllegalStateException("The value does converge!");
+      } while (!Arrays.equals(A.diagonal(), lastA.diagonal()));
+      for (int i = 0; i < 1000; i++) {
+        lastA = A.copy();
+        QRDecomposition = A.QRDecomposition();
+        A = QRDecomposition[1].multiply(QRDecomposition[0]);
+      }
+      Numeric[] potentialEigenValues = A.diagonal();
+      TreeSet<Numeric> eigenValues = new TreeSet<Numeric>();
+      for (Numeric eigenValue : potentialEigenValues) {
+        try {
+          Numeric castedEigenValue = eigenValue.castToNearestFraction();
+          if (this.subtract(identityMatrixWithSizeOf(N).multiply(castedEigenValue)).determinant()
+              .mathematicallyEquals(Numeric.of(0))) {
+            eigenValues.add(castedEigenValue);
+          } else {
+            throw new ClassCastException("EigenValue Didn't match!");
+          }
+        } catch (ClassCastException classCastException) {
+          if (this.subtract(identityMatrixWithSizeOf(N).multiply(eigenValue)).determinant()
+              .abs().compareTo(Numeric.of(0.000000000001)) < 0) {
+            eigenValues.add(eigenValue);
+          }
         }
       }
-    }
-    Numeric[] eigenValueArray = new Numeric[eigenValues.size()];
-    int n = 0;
-    for(Numeric eigenValue : eigenValues) {
-      eigenValueArray[n++] = eigenValue;
-    }
-    
-    return eigenValueArray;
-  }
+      Numeric[] eigenValueArray = new Numeric[eigenValues.size()];
+      int n = 0;
+      for (Numeric eigenValue : eigenValues) {
+        eigenValueArray[n++] = eigenValue;
+      }
 
+      return eigenValueArray;
+    } catch (MatrixArithmeticException e) {
+      throw new SingularException();
+    }
+  }
 
 }

@@ -584,13 +584,16 @@ public class Main extends Application {
           correctness = true;
           state = true;
           saved = false;
-        } catch (MatrixDimensionsMismatchException e) {
+        } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
               "Sorry,  the matrix you entered is not a square matrix\nTo do QR decomposition, it has to be a square matrix");
-        } catch (NumberFormatException e1) {
+        } catch (NumberFormatException e2) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
+        } catch (MatrixArithmeticException e3) {
+          alert("MatrixDimensionError",
+              "Sorry,  the matrix you entered is singular matrix\nTo do QR decomposition, it cannot be a singular matrix");
         }
       });
 
@@ -728,6 +731,8 @@ public class Main extends Application {
         } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
+        } catch (SingularException e2) {
+          alert("Error", "我错了qwq，这抄来的算法有问题，奇异矩阵算不了，马上改。");
         }
       });
 

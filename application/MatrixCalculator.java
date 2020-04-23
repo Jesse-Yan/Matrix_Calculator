@@ -167,8 +167,9 @@ public class MatrixCalculator {
    * 
    * @return the QR decomposition of matrix1
    * @throws MatrixDimensionsMismatchException - if not a square matrix.
+   * @throws MatrixArithmeticException - Cannot do QR decomposition
    */
-  public List<String[][]> getQRDecomposition() throws MatrixDimensionsMismatchException {
+  public List<String[][]> getQRDecomposition() throws MatrixDimensionsMismatchException, MatrixArithmeticException {
     Matrix firstMatrix = new Matrix(matrix1);
     Matrix[] qrResult = firstMatrix.QRDecomposition();
     ArrayList<String[][]> answer = new ArrayList<String[][]>();
@@ -230,8 +231,9 @@ public class MatrixCalculator {
    * 
    * @return the getEigenValues of matrix1, which is represented by a String[][]
    * @throws MatrixDimensionsMismatchException if matrix1 is not a square matrix.
+   * @throws SingularException - ???
    */
-  public String getEigenValues() throws MatrixDimensionsMismatchException {
+  public String getEigenValues() throws MatrixDimensionsMismatchException, SingularException {
     Matrix firstMatrix = new Matrix(matrix1);
     return Arrays.toString(properFormatted(firstMatrix.eigenValues()));
     // return properFormatted(firstMatrix.eigenValues()); // maybe useful in the future.
@@ -304,9 +306,10 @@ public class MatrixCalculator {
    * @param args
    * @throws MatrixDimensionsMismatchException
    * @throws MatrixArithmeticException
+   * @throws SingularException 
    */
   public static void main(String[] args)
-      throws MatrixDimensionsMismatchException, MatrixArithmeticException {
+      throws MatrixDimensionsMismatchException, MatrixArithmeticException, SingularException {
 
     String[][] matrixA, matrixB, matrixC;
     MatrixCalculator matrixCalculator;
@@ -353,7 +356,7 @@ public class MatrixCalculator {
 
     // ************************ Demo for QR *********************************
     System.out.println("Demo for Matrix QR");
-    matrixA = new String[][] {{"1/2", "1"}, {"3/2", "2"}};
+    matrixA = new String[][] {{"1", "2"}, {"2", "1"}};
     matrixCalculator = new MatrixCalculator(matrixA);
     List<String[][]> QR = matrixCalculator.getQRDecomposition();
     System.out.println(Arrays.deepToString(QR.get(0)));
@@ -388,7 +391,7 @@ public class MatrixCalculator {
 
     // ************************ Demo for EigenValue *********************************
     System.out.println("Demo for EigenValue");
-    matrixA = new String[][] {{"1", "2"}, {"3", "4"}};
+    matrixA = new String[][] {{"1", "2"}, {"2", "2"}};
     matrixCalculator = new MatrixCalculator(matrixA);
     String eigenValues = matrixCalculator.getEigenValues();
     System.out.println(eigenValues + '\n');
