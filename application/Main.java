@@ -1,13 +1,15 @@
 package application;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import org.json.simple.parser.ParseException;
+import static java.util.stream.Collectors.toList;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import org.json.simple.parser.ParseException;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -31,7 +34,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import static java.util.stream.Collectors.toList;
 
 /**
  * This class is the Main class for JavaFx application
@@ -63,6 +65,12 @@ public class Main extends Application {
   // lists storing steps
   List<CalSteps> lists = null;
 
+  // Category list
+  List<CalSteps> categoryList = new ArrayList<>();
+
+  // Existing Operatiors
+  HashSet<String> existingOperations = new HashSet<>();
+
   // Whether has been modified
   boolean state = false;
 
@@ -78,11 +86,17 @@ public class Main extends Application {
   // Whether need to invoke updater
   boolean update = true;
 
+  // Whether in filtering mode
+  boolean filtering = false;
+
   // previous page recorder
   int prevPage = 0;
 
   // Recorder of buttons
   Button latestMOpera = null;
+
+  // Recorder of operation
+  String operation = null;
 
   // Recoder of Power
   String power = "";
@@ -165,6 +179,11 @@ public class Main extends Application {
     // Set the top scene And Selector Pane
     HBox selector = new HBox();
 
+    // Set the filter pane
+    ComboBox<String> filter = new ComboBox<>();
+    filter.getItems().add("All");
+    filter.getSelectionModel().selectFirst();
+
     // A set of inputs, including forward, page, total pages and backward
     Button forward = new Button("<");
     TextField pages = new TextField();
@@ -188,8 +207,8 @@ public class Main extends Application {
 
     // Add to the pane of selector
     selector.getChildren()
-            .addAll(forward, pages, slash, total, backward, confirm, add,
-                addConfirm, delete, quit);
+            .addAll(filter, forward, pages, slash, total, backward, confirm,
+                add, addConfirm, delete, quit);
     // Align to the center
     selector.alignmentProperty().set(Pos.CENTER);
 
@@ -911,7 +930,13 @@ public class Main extends Application {
             CalSteps c = new CalSteps(operationOperator, step.getDatas(),
                 isNum ? "" + resultNum : cloneResult);
             lists.set(i - 1, c);
+            existingOperations.add(
+                operationOperator.startsWith("PowerOf") ? "Power"
+                    : operationOperator);
           }
+          filter.getItems().removeIf(i -> !i.equals("All"));
+          filter.getItems().addAll(existingOperations);
+          filter.getSelectionModel().selectFirst();
           pages.setText("1");
           state = false;
           correctness = true;
@@ -957,6 +982,7 @@ public class Main extends Application {
             enableSecond, operators, mButtons, powerButton, powerInput, step,
             operationOperator);
       } catch (IllegalArgumentException e1) {
+        e1.printStackTrace();
         alert("Error", "The page number you entered is invalid");
       } catch (Exception e) {
         alert("Error", "Your input is incorrect");
@@ -967,18 +993,31 @@ public class Main extends Application {
     forward.setOnAction(event -> {
       try {
 
-        // Update the prevPage
-        int num = Integer.parseInt(pages.getText());
-        updater(num, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
-            enableSecond, isNum, false, update);
-        state = false;
-        correctness = true;
+        if (!filtering) {
+          // Update the prevPage
+          int num = Integer.parseInt(pages.getText());
+          updater(num, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+              enableSecond, isNum, false, update);
+          state = false;
+          correctness = true;
 
-        // Resetting the page number
-        if (num != 1) {
-          num -= 1;
-          pages.setText(String.valueOf(num));
-          confirm.fire();
+          // Resetting the page number
+          if (num != 1) {
+            num -= 1;
+            pages.setText(String.valueOf(num));
+            confirm.fire();
+          }
+        } else {
+          int num = Integer.parseInt(pages.getText());
+          if (num != 1) {
+            num -= 1;
+            pages.setText(String.valueOf(num));
+            CalSteps step = categoryList.get(num - 1);
+            String operationOperator = step.getOperation();
+            switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
+                enableSecond, operators, mButtons, powerButton, powerInput,
+                step, operationOperator);
+          }
         }
       } catch (Exception e) {
         alert("Error", "The page number you entered is invalid");
@@ -989,18 +1028,31 @@ public class Main extends Application {
     backward.setOnAction(event -> {
       try {
 
-        // Update the prevPage
-        int num = Integer.parseInt(pages.getText());
-        updater(num, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
-            enableSecond, isNum, false, update);
-        state = false;
-        correctness = true;
+        if (!filtering) {
+          // Update the prevPage
+          int num = Integer.parseInt(pages.getText());
+          updater(num, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+              enableSecond, isNum, false, update);
+          state = false;
+          correctness = true;
 
-        // Resetting the page number
-        if (num != lists.size()) {
-          num += 1;
-          pages.setText(String.valueOf(num));
-          confirm.fire();
+          // Resetting the page number
+          if (num != lists.size()) {
+            num += 1;
+            pages.setText(String.valueOf(num));
+            confirm.fire();
+          }
+        } else {
+          int num = Integer.parseInt(pages.getText());
+          if (num != categoryList.size()) {
+            num += 1;
+            pages.setText(String.valueOf(num));
+            CalSteps step = categoryList.get(num - 1);
+            String operationOperator = step.getOperation();
+            switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
+                enableSecond, operators, mButtons, powerButton, powerInput,
+                step, operationOperator);
+          }
         }
       } catch (Exception e) {
         alert("Error", "The page number you entered is invalid");
@@ -1019,8 +1071,8 @@ public class Main extends Application {
       clearer(rowAndCol1);
       clearer(rowAndCol2);
       resultShower.getChildren().clear();
-      setterAfterAdd(forward, pages, backward, confirm, add, addConfirm, delete,
-          quit);
+      setterAfterAdd(filter, forward, pages, backward, confirm, add, addConfirm,
+          delete, quit);
     });
 
     // Set the action for addConfirm
@@ -1030,8 +1082,24 @@ public class Main extends Application {
         updater(page, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
             enableSecond, isNum, true, true);
         state = false;
-        setterAfterConfirm(forward, pages, backward, confirm, add, addConfirm,
-            delete, quit);
+        setterAfterConfirm(filter, forward, pages, backward, confirm, add,
+            addConfirm, delete, quit);
+        String operation = latestMOpera.getText();
+        if (operation.equals("Gauss-Elim")) {
+          operation = "GE";
+        } else if (operation.equals("Diagonalize")) {
+          operation = "Diag";
+        } else if (operation.equals("EiValue")) {
+          operation = "EIV";
+        } else if (operation.equals("Transpose")) {
+          operation = "Trans";
+        } else if (operation.equals("Power")) {
+          operation = "Power";
+        }
+        existingOperations.add(operation);
+        filter.getItems().removeIf(i -> !i.equals("All"));
+        filter.getItems().addAll(existingOperations);
+        filter.getSelectionModel().selectFirst();
       } else {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Exit add?");
@@ -1048,8 +1116,8 @@ public class Main extends Application {
         if (diagResult.get() == yes) {
           pages.setText(String.valueOf(page));
           total.setText(String.valueOf(Integer.parseInt(total.getText()) - 1));
-          setterAfterConfirm(forward, pages, backward, confirm, add, addConfirm,
-              delete, quit);
+          setterAfterConfirm(filter, forward, pages, backward, confirm, add,
+              addConfirm, delete, quit);
           confirm.fire();
         }
       }
@@ -1071,9 +1139,58 @@ public class Main extends Application {
           confirm.fire();
           update = true;
         }
-        total.setText(String.valueOf(lists.size()));
+        operation = latestMOpera.getText();
+        if (operation.equals("Gauss-Elim")) {
+          operation = "GE";
+        } else if (operation.equals("Diagonalize")) {
+          operation = "Diag";
+        } else if (operation.equals("EiValue")) {
+          operation = "EIV";
+        } else if (operation.equals("Transpose")) {
+          operation = "Trans";
+        } else if (operation.equals("Power")) {
+          operation = "Power";
+        }
+        if (!lists.stream()
+                  .anyMatch(i -> i.getOperation().contains(operation))) {
+          existingOperations.remove(operation);
+          filter.getItems().removeIf(i -> !i.equals("All"));
+          filter.getItems().addAll(existingOperations);
+          filter.getSelectionModel().selectFirst();
+          total.setText(String.valueOf(lists.size()));
+        }
       } else {
         alert("Attention", "You cannot delete the last calculation");
+      }
+    });
+
+
+    filter.valueProperty().addListener(event -> {
+      String opr = filter.getSelectionModel().getSelectedItem();
+      if (opr != null) {
+        if (filtering && opr.equals("All")) {
+          buttonsModifers(open, save, confirm, add, delete, quit, pages, false);
+          filtering = false;
+          total.setText(String.valueOf(lists.size()));
+          update = false;
+          confirm.fire();
+          update = true;
+          filter.getSelectionModel().selectFirst();
+        } else {
+          filtering = true;
+          buttonsModifers(open, save, confirm, add, delete, quit, pages, true);
+          categoryList.clear();
+          selectorInto(opr);
+          CalSteps step = categoryList.get(0);
+          String operationOperator = step.getOperation();
+          switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
+              enableSecond, operators, mButtons, powerButton, powerInput, step,
+              operationOperator);
+          pages.setText(String.valueOf(1));
+          total.setText(String.valueOf(categoryList.size()));
+          rowAndCol1.forEach(i -> i.setEditable(false));
+          rowAndCol2.forEach(i -> i.setEditable(false));
+        }
       }
     });
 
@@ -1126,18 +1243,21 @@ public class Main extends Application {
           } else {
 
             // If success, clear the screen of Matrix Calculator
-            clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2);
+            clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2,
+                filter);
           }
 
           // If the user chose no, then clear the screen of Matrix Calculator
         } else if (diagResult.get() == no) {
-          clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2);
+          clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2,
+              filter);
         }
         // If user choose Cancel, then return to previous state
 
         // If the user has saved, then quit directly
       } else {
-        clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2);
+        clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2,
+            filter);
       }
     });
 
@@ -1155,8 +1275,42 @@ public class Main extends Application {
   }
 
   /**
+   * Add into the categoryList
+   * 
+   * @param opr the operation
+   */
+  private void selectorInto(String opr) {
+    categoryList.addAll(lists.stream()
+                             .filter(i -> i.getOperation().contains(opr))
+                             .collect(toList()));
+  }
+
+  /**
+   * Modify the state of several buttons
+   * 
+   * @param open    MenuItem
+   * @param save    MenuItem
+   * @param confirm Button
+   * @param add     Button
+   * @param delete  Button
+   * @param quit    Button
+   * @param stater  boolean value
+   */
+  private void buttonsModifers(MenuItem open, MenuItem save, Button confirm,
+      Button add, Button delete, Button quit, TextField pages, boolean stater) {
+    add.setDisable(stater);
+    delete.setDisable(stater);
+    quit.setDisable(stater);
+    pages.setEditable(!stater);
+    confirm.setDisable(stater);
+    open.setDisable(stater);
+    save.setDisable(stater);
+  }
+
+  /**
    * Setter for the buttons and textField after add
    * 
+   * @param filter     ComboBox
    * @param forward    Button
    * @param pages      TextField
    * @param backward   Button
@@ -1166,9 +1320,10 @@ public class Main extends Application {
    * @param delete     Button
    * @param quit       Button
    */
-  private void setterAfterAdd(Button forward, TextField pages, Button backward,
-      Button confirm, Button add, Button addConfirm, Button delete,
-      Button quit) {
+  private void setterAfterAdd(ComboBox<String> filter, Button forward,
+      TextField pages, Button backward, Button confirm, Button add,
+      Button addConfirm, Button delete, Button quit) {
+    filter.setDisable(true);
     addConfirm.setDisable(false);
     add.setDisable(true);
     forward.setDisable(true);
@@ -1182,6 +1337,7 @@ public class Main extends Application {
   /**
    * Setter for the buttons and textField after addConfirm
    * 
+   * @param filter     ComboBox
    * @param forward    Button
    * @param pages      TextField
    * @param backward   Button
@@ -1191,9 +1347,10 @@ public class Main extends Application {
    * @param delete     Button
    * @param quit       Button
    */
-  private void setterAfterConfirm(Button forward, TextField pages,
-      Button backward, Button confirm, Button add, Button addConfirm,
-      Button delete, Button quit) {
+  private void setterAfterConfirm(ComboBox<String> filter, Button forward,
+      TextField pages, Button backward, Button confirm, Button add,
+      Button addConfirm, Button delete, Button quit) {
+    filter.setDisable(false);
     addConfirm.setDisable(true);
     add.setDisable(false);
     forward.setDisable(false);
@@ -1280,9 +1437,11 @@ public class Main extends Application {
    * @param total      total textField
    * @param rowAndCol1 row and col of Matrix1
    * @param rowAndCol2 row and col of Matrix2
+   * @param filter     ComboBox
    */
   private void clearerAfterQuit(HBox selector, TextField pages, TextField total,
-      List<TextField> rowAndCol1, List<TextField> rowAndCol2) {
+      List<TextField> rowAndCol1, List<TextField> rowAndCol2,
+      ComboBox<String> filter) {
     rowAndCol1.get(0).setText("3");
     rowAndCol1.get(1).setText("3");
     rowAndCol2.get(0).setText("3");
@@ -1292,6 +1451,8 @@ public class Main extends Application {
     total.clear();
     selector.setDisable(true);
     prevPage = 0;
+    filter.getItems().add("All");
+    filter.getSelectionModel().selectFirst();
   }
 
   /**
