@@ -60,9 +60,6 @@ public class Main extends Application {
   String labelStyle =
       "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;";
 
-  // The source list
-  List<CalSteps> src = null;
-
   // lists storing steps
   List<CalSteps> lists = null;
 
@@ -82,7 +79,7 @@ public class Main extends Application {
   boolean update = true;
 
   // previous page recorder
-  int prevPage = 1;
+  int prevPage = 0;
 
   // Recorder of buttons
   Button latestMOpera = null;
@@ -630,6 +627,7 @@ public class Main extends Application {
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
           List<String[][]> resultQR = matrixCalculator.getQRDecomposition();
+          results.clear();
           results.addAll(
               resultQR.stream().map(i -> new Matrix(i)).collect(toList()));
           resultShower = resultBuilderQR("Operation: QR", "QR", dataFromMatrix,
@@ -706,6 +704,7 @@ public class Main extends Application {
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
           List<String[][]> resultLUP = matrixCalculator.getLUPDecomposition();
+          results.clear();
           results.addAll(
               resultLUP.stream().map(i -> new Matrix(i)).collect(toList()));
           if (resultLUP.size() > 2) {
@@ -907,8 +906,11 @@ public class Main extends Application {
             isNum = switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
                 enableSecond, operators, mButtons, powerButton, powerInput,
                 step, operationOperator);
-            lists.set(i - 1, new CalSteps(operationOperator, step.getDatas(),
-                isNum ? resultNum : results));
+            List<Matrix> cloneResult = new ArrayList<>();
+            cloneResult.addAll(results);
+            CalSteps c = new CalSteps(operationOperator, step.getDatas(),
+                isNum ? "" + resultNum : cloneResult);
+            lists.set(i - 1, c);
           }
           pages.setText("1");
           state = false;
@@ -1086,6 +1088,7 @@ public class Main extends Application {
       } else {
         // Invoke Writer
         try {
+          // Compute each calculation and update the list
           Writer writer = new Writer(lists);
           writer.save(file);
           saved = true;
@@ -1288,6 +1291,7 @@ public class Main extends Application {
     pages.clear();
     total.clear();
     selector.setDisable(true);
+    prevPage = 0;
   }
 
   /**
@@ -1412,18 +1416,31 @@ public class Main extends Application {
       List<TextField> rowAndCol2, CheckBox enableSecond, boolean isNum,
       boolean isAdd, boolean update) {
     if (update) {
-      if (state && correctness) {
+      if (prevPage != 0 && state && correctness) {
+        List<Matrix> cloneResult = new ArrayList<>();
+        cloneResult.addAll(results);
         Matrix wMatrix1 = new Matrix(reader(matrix1Data, rowAndCol1));
         String operation = latestMOpera.getText();
         if (enableSecond.isSelected()) {
           Matrix wMatrix2 = new Matrix(reader(matrix2Data, rowAndCol2));
-          lists.set(page - 1, new CalSteps(operation, new ArrayList<Matrix>() {
-            private static final long serialVersionUID = 1L;
-            {
-              add(wMatrix1);
-              add(wMatrix2);
-            }
-          }, results));
+          if (!isAdd) {
+            lists.set(page - 1,
+                new CalSteps(operation, new ArrayList<Matrix>() {
+                  private static final long serialVersionUID = 1L;
+                  {
+                    add(wMatrix1);
+                    add(wMatrix2);
+                  }
+                }, isNum ? "" + resultNum : cloneResult));
+          } else {
+            lists.add(page, new CalSteps(operation, new ArrayList<Matrix>() {
+              private static final long serialVersionUID = 1L;
+              {
+                add(wMatrix1);
+                add(wMatrix2);
+              }
+            }, isNum ? "" + resultNum : cloneResult));
+          }
         } else {
           if (operation.equals("Gauss-Elim")) {
             operation = "GE";
@@ -1443,14 +1460,14 @@ public class Main extends Application {
                   {
                     add(wMatrix1);
                   }
-                }, isNum ? resultNum : results));
+                }, isNum ? "" + resultNum : cloneResult));
           } else {
             lists.add(page, new CalSteps(operation, new ArrayList<Matrix>() {
               private static final long serialVersionUID = 1L;
               {
                 add(wMatrix1);
               }
-            }, isNum ? resultNum : results));
+            }, isNum ? "" + resultNum : cloneResult));
           }
         }
       }
