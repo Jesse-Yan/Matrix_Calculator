@@ -25,7 +25,7 @@ java --module-path "Path-to-javafx-lib" --add-modules javafx.controls,javafx.fxm
 
 Program Description
 program functions as a calculator that support Matrix calculations supports pirorty calculation. Matrixs and calculation can be read from json files for computing result.
-!Mark! to open .json file, click Menu then click Open.(save is not aviable now)
+!Mark! to open .json file, click Menu then click Open.
 Please see SimpleData.json for the sample format.
 You can click '<' '>' or '√' to change from different operations that been read from the SimpleData.json.
 Warning, If code in ateam.zip won't run, please check CS400_final_project.zip
