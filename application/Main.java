@@ -1,6 +1,5 @@
 package application;
 
-import static java.util.stream.Collectors.toList;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,6 +33,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import static java.util.stream.Collectors.toList;
 
 /**
  * This class is the Main class for JavaFx application
