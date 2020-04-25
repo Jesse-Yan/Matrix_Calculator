@@ -1556,7 +1556,7 @@ public class Main extends Application {
       default:
         String powerString = operationOperator.replace("PowerOf", "");
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
-        powerInput.setText(powerString);
+        powerInput.setText(powerString.trim());
         powerButton.fire();
         break;
     }
