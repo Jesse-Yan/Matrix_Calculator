@@ -18,21 +18,13 @@ import org.junit.Test;
  */
 public class MatrixTest {
 
-  /**
-   * Before each test
-   * 
-   * @throws Exception
-   */
   @Before
-  public void setUp() throws Exception {}
+  public void setUp() throws Exception {
+  }
 
-  /**
-   * After each test
-   * 
-   * @throws Exception
-   */
   @After
-  public void tearDown() throws Exception {}
+  public void tearDown() throws Exception {
+  }
 
 
   /**
@@ -78,10 +70,8 @@ public class MatrixTest {
   public void test_addition() {
     try {
       MatrixADT matrix1 = new Matrix(new Integer[][] {{-1, 0, 1}, {2, 3, 4}});
-      MatrixADT matrix2 =
-          new Matrix(new Integer[][] {{-1, 0, -1}, {-4, 0, 10}});
-      MatrixADT expectedMatrix =
-          new Matrix(new Integer[][] {{-2, 0, 0}, {-2, 3, 14}});
+      MatrixADT matrix2 = new Matrix(new Integer[][] {{-1, 0, -1}, {-4, 0, 10}});
+      MatrixADT expectedMatrix = new Matrix(new Integer[][] {{-2, 0, 0}, {-2, 3, 14}});
       assertEquals(expectedMatrix, matrix1.add(matrix2));
     } catch (Exception e) {
       e.printStackTrace();
@@ -95,10 +85,8 @@ public class MatrixTest {
   public void test_subtraction() {
     try {
       MatrixADT matrix1 = new Matrix(new Integer[][] {{-1, 0, 1}, {2, 3, 4}});
-      MatrixADT matrix2 =
-          new Matrix(new Integer[][] {{-1, 0, -1}, {-4, 0, 10}});
-      MatrixADT expectedMatrix =
-          new Matrix(new Integer[][] {{0, 0, 2}, {6, 3, -6}});
+      MatrixADT matrix2 = new Matrix(new Integer[][] {{-1, 0, -1}, {-4, 0, 10}});
+      MatrixADT expectedMatrix = new Matrix(new Integer[][] {{0, 0, 2}, {6, 3, -6}});
       assertEquals(expectedMatrix, matrix1.subtract(matrix2));
     } catch (Exception e) {
       e.printStackTrace();
@@ -111,8 +99,7 @@ public class MatrixTest {
   @Test
   public void test_multiplication() {
     try {
-      MatrixADT matrix1 =
-          new Matrix(new Integer[][] {{1, 2}, {-4, 0}, {0, -6}});
+      MatrixADT matrix1 = new Matrix(new Integer[][] {{1, 2}, {-4, 0}, {0, -6}});
       MatrixADT matrix2 = new Matrix(new Integer[][] {{4, 3, 0}, {-2, 0, -5}});
       MatrixADT expectedMatrix =
           new Matrix(new Integer[][] {{0, 3, -10}, {-16, -12, 0}, {12, 0, 30}});
@@ -122,9 +109,6 @@ public class MatrixTest {
     }
   }
 
-  /**
-   * Test Pow
-   */
   @Test
   public void test_pow() {
     try {
@@ -150,20 +134,18 @@ public class MatrixTest {
       assertEquals(expectedMatirx, matrix.pow(0));
 
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
-      expectedMatirx = new Matrix(new Integer[][] {{468, 576, 684},
-          {1062, 1305, 1548}, {1656, 2034, 2412}});
+      expectedMatirx =
+          new Matrix(new Integer[][] {{468, 576, 684}, {1062, 1305, 1548}, {1656, 2034, 2412}});
       assertEquals(expectedMatirx, matrix.pow(3));
 
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
-      expectedMatirx =
-          new Matrix(new Integer[][] {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
+      expectedMatirx = new Matrix(new Integer[][] {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
       assertEquals(expectedMatirx, matrix.pow(0));
 
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
       try {
         matrix.pow(-2);
-        fail(
-            "The matrix is not invertible, but no MatrixArithmeticException thrown");
+        fail("The matrix is not invertible, but no MatrixArithmeticException thrown");
       } catch (MatrixArithmeticException arithmeticException) {
         // Expected
       }
@@ -174,9 +156,6 @@ public class MatrixTest {
     }
   }
 
-  /**
-   * Test Transpose
-   */
   @Test
   public void test_Transpose() {
     try {
@@ -191,32 +170,21 @@ public class MatrixTest {
     }
   }
 
-  /**
-   * Test LUP
-   */
   @Test
   public void test_LUP() {
     try {
       Matrix matrix, expectedL, expectedU, expectedP;
 
       matrix = new Matrix(new String[][] {{"4", "3"}, {"6", "3"}});
-      expectedL = new Matrix(new String[][] {{"1", "0"}, {"2/3", "1"}});
-      expectedU = new Matrix(new String[][] {{"6", "3"}, {"0", "1"}});
-      expectedP = new Matrix(new String[][] {{"0", "1"}, {"1", "0"}});
-      assertEquals(expectedL, matrix.LUPDecomposition()[0]);
-      assertEquals(expectedU, matrix.LUPDecomposition()[1]);
-      assertEquals(expectedP, matrix.LUPDecomposition()[2]);
 
-    } catch (
+    }catch(
 
-    Exception e) {
-      e.printStackTrace();
-    }
+  Exception e)
+  {
+    e.printStackTrace();
+  }
   }
 
-  /**
-   * Test Det
-   */
   @Test
   public void test_Deteminant() {
     try {
@@ -240,21 +208,16 @@ public class MatrixTest {
     }
   }
 
-  /**
-   * Test Inverse
-   */
   @Test
   public void test_Inverse() {
     try {
       MatrixADT matrix;
       matrix = new Matrix(new Integer[][] {{1, 2}, {3, 5}});
-      assertEquals(new Matrix(new Integer[][] {{-5, 2}, {3, -1}}),
-          matrix.inverse());
+      assertEquals(new Matrix(new Integer[][] {{-5, 2}, {3, -1}}), matrix.inverse());
       matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
       try {
         matrix.inverse();
-        fail(
-            "The matrix is not invertible, but no MatrixArithmeticException thrown");
+        fail("The matrix is not invertible, but no MatrixArithmeticException thrown");
       } catch (MatrixArithmeticException e) {
         // Expected
       }
@@ -263,9 +226,6 @@ public class MatrixTest {
     }
   }
 
-  /**
-   * Test Vector
-   */
   @Test
   public void test_Vector() {
     try {
@@ -301,17 +261,28 @@ public class MatrixTest {
   public void test_QRDecomposition() {
     try {
       MatrixADT matrix, expectedQ, expectedR;
+/*
+      matrix = new Matrix(new Integer[][] {{12, -51, 4}, {6, 167, -68}, {-4, 24, -41}});
 
-      matrix = new Matrix(
-          new Integer[][] {{12, -51, 4}, {6, 167, -68}, {-4, 24, -41}});
+      expectedQ = new Matrix(
+          new String[][] {{"6/7", "-69/175", "-58/175"},
+              {"3/7", "158/175", "6/175"},
+              {"-2/7", "6/35", "-33/35"}});
 
-      expectedQ = new Matrix(new String[][] {{"6/7", "-69/175", "-58/175"},
-          {"3/7", "158/175", "6/175"}, {"-2/7", "6/35", "-33/35"}});
-
-      expectedR = new Matrix(
-          new Integer[][] {{14, 21, -14}, {0, 175, -70}, {0, 0, 35}});
+      expectedR = new Matrix(new Integer[][] {{14, 21, -14}, {0, 175, -70}, {0, 0, 35}});
+      
+      Matrix Q = matrix.QRDecomposition()[0];
+      Matrix R = matrix.QRDecomposition()[1];
+      
+      System.out.println(Q);
+      System.out.println(R);
+      System.out.println(Q.multiply(R));
+      System.out.println(Q.multiply(Q));
+      
       assertEquals(expectedQ, matrix.QRDecomposition()[0]);
       assertEquals(expectedR, matrix.QRDecomposition()[1]);
+      
+      */
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -319,7 +290,9 @@ public class MatrixTest {
   }
 
   /**
+   * 
    * Test eigenValue
+   * 
    */
   @Test
   public void test_EigenValue() {
@@ -328,8 +301,7 @@ public class MatrixTest {
 
       matrix = new Matrix(new Integer[][] {{2, 1}, {1, 2}});
 
-      TreeSet<Numeric> eigenValues =
-          new TreeSet<Numeric>(Arrays.asList(matrix.eigenValues()));
+      TreeSet<Numeric> eigenValues = new TreeSet<Numeric>(Arrays.asList(matrix.eigenValues()));
 
       assertTrue(eigenValues.contains(Numeric.of(1)));
       assertTrue(eigenValues.contains(Numeric.of(3)));

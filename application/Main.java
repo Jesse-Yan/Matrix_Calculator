@@ -653,21 +653,10 @@ public class Main extends Application {
               resultQR.get(0), resultQR.get(1));
           scrollPane(vBoxR, resultShower);
           stateModifer();
-        } catch (MatrixDimensionsMismatchException e1) {
-          correctness = false;
-          alert("MatrixDimensionError",
-              "Sorry,  the matrix you entered is not a square matrix"
-                  + lineSeparator
-                  + "To do QR decomposition, it has to be a square matrix");
         } catch (NumberFormatException e2) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
-        } catch (MatrixArithmeticException e3) {
-          alert("MatrixDimensionError",
-              "Sorry,  the matrix you entered is singular matrix"
-                  + lineSeparator
-                  + "To do QR decomposition, it cannot be a singular matrix");
-        }
+        } 
       });
 
       // mButtons.get(3).setOnAction(event -> {
@@ -804,9 +793,7 @@ public class Main extends Application {
         } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
-        } catch (SingularException e2) {
-          alert("Error", "Sorry, but the matrix your entered is singular");
-        }
+        } 
       });
 
       mButtons.get(9).setOnAction(event -> {
@@ -815,10 +802,9 @@ public class Main extends Application {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
-          int resultRank = matrixCalculator.getRank();
-          resultNum = String.valueOf(resultRank);
+          resultNum = matrixCalculator.getRank();
           resultShower = resultBuilder("Operation: Rank", "Rank",
-              dataFromMatrix, resultRank);
+              dataFromMatrix, resultNum);
           scrollPane(vBoxR, resultShower);
           stateModifer();
         } catch (NumberFormatException e) {

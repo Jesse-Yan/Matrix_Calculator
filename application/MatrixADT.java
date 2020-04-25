@@ -142,9 +142,10 @@ public interface MatrixADT {
    * @return an array of Numeric[], which represents the eigenvalues of the matrix.
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
    * @throws SingularException - ??
+   * @throws MatrixArithmeticException 
    * 
    * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
    */
-  Numeric[] eigenValues() throws MatrixDimensionsMismatchException, SingularException;
+  Numeric[] eigenValues() throws MatrixDimensionsMismatchException, SingularException, MatrixArithmeticException;
 
 }

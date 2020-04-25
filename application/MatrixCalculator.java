@@ -169,7 +169,7 @@ public class MatrixCalculator {
    * @throws MatrixDimensionsMismatchException - if not a square matrix.
    * @throws MatrixArithmeticException - Cannot do QR decomposition
    */
-  public List<String[][]> getQRDecomposition() throws MatrixDimensionsMismatchException, MatrixArithmeticException {
+  public List<String[][]> getQRDecomposition(){
     Matrix firstMatrix = new Matrix(matrix1);
     Matrix[] qrResult = firstMatrix.QRDecomposition();
     ArrayList<String[][]> answer = new ArrayList<String[][]>();
@@ -233,7 +233,7 @@ public class MatrixCalculator {
    * @throws MatrixDimensionsMismatchException if matrix1 is not a square matrix.
    * @throws SingularException - ???
    */
-  public String getEigenValues() throws MatrixDimensionsMismatchException, SingularException {
+  public String getEigenValues() throws MatrixDimensionsMismatchException{
     Matrix firstMatrix = new Matrix(matrix1);
     return Arrays.toString(properFormatted(firstMatrix.eigenValues()));
     // return properFormatted(firstMatrix.eigenValues()); // maybe useful in the future.
@@ -244,9 +244,9 @@ public class MatrixCalculator {
    * 
    * @return the rank of matrix1, which is represented by a String.
    */
-  public int getRank() {
+  public String getRank() {
     Matrix firstMatrix = new Matrix(matrix1);
-    return firstMatrix.rank();
+    return firstMatrix.rank() + "";
   }
 
   /**
