@@ -1046,6 +1046,18 @@ public class Matrix implements MatrixADT {
     return ans;
   }
 
+  private static boolean sameDiagnal(Matrix A, Matrix B) throws MatrixDimensionsMismatchException {
+    Numeric array1[] = A.diagonal();
+    Numeric array2[] = B.diagonal();
+    Arrays.sort(array1);
+    Arrays.sort(array2);
+    for (int i = 0; i < array1.length; i++) {
+      if (!array1[i].equals(array2[i], lowestDigitPlace / 2))
+        return false;
+    }
+    return true;
+  }
+
   /**
    * Find the eigenvalue of the matrix by QR algorithm.
    * 
@@ -1059,37 +1071,34 @@ public class Matrix implements MatrixADT {
     int compensateDecimalDigits = lowestDigitInMatrix();
     lowestDigitPlace += compensateDecimalDigits;
     int N = getSizeOfSquareMatrix();
-    Matrix A = copy(), lastA;
+    Matrix A = copy(), lastA = identityMatrixWithSizeOf(N), lastLastA;
     A = A.hessenburgForm();
     int interateCount = 0, n = N;
     ArrayList<Numeric> potentialEigenValues = new ArrayList<Numeric>();
-    Numeric array1[];
-    Numeric array2[];
     do {
+      lastLastA = lastA;
       lastA = A;
       A = A.qrIterationWithWilkinsonShift();
       interateCount++;
 
-      if (A.entry[n - 1][n - 1].isZeroBy(lowestDigitPlace)) {
+      if (A.entry[n - 1][n - 2].isZeroBy(lowestDigitPlace / 2)) {
         potentialEigenValues.add(Numeric.of(0));
         if (n == 2) {
           potentialEigenValues.add(A.entry[n - 2][n - 2]);
           break;
         }
-        lastA = A.subMatrix(0, n - 1, 0, n - 1);
+        lastLastA = lastA = A.subMatrix(0, n - 1, 0, n - 1);
         A = lastA.qrIterationWithWilkinsonShift();
         n--;
       }
       // System.out.println(A);
       if (interateCount > 10000)
         throw new ArithmeticException("Doesn't Converge");
-      array1 = A.diagonal();
-      array2 = lastA.diagonal();
-      Arrays.sort(array1);
-      Arrays.sort(array2);
-    } while (!Arrays.equals(array1, array2));
+      if (sameDiagnal(A, lastLastA))
+        break;
+    } while (!sameDiagnal(A, lastA));
     A = A.eliminateSmallValues(lowestDigitPlace);
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 100; i++) {
       A = A.qrIterationWithWilkinsonShift();
     }
     A = A.eliminateSmallValues(lowestDigitPlace);
@@ -1129,7 +1138,9 @@ public class Matrix implements MatrixADT {
     Numeric[] eigenValueArray = new Numeric[eigenValues.size()];
     int numberOfEigenValue = 0;
     for (Numeric eigenValue : eigenValues) {
-      eigenValueArray[numberOfEigenValue++] = eigenValue;
+      if (numberOfEigenValue == 0 || !eigenValueArray[numberOfEigenValue - 1].equals(eigenValueArray,
+          Numeric.outputSignificantFigures + 1))
+        eigenValueArray[numberOfEigenValue++] = eigenValue;
     }
 
     lowestDigitPlace -= compensateDecimalDigits;
@@ -1139,9 +1150,13 @@ public class Matrix implements MatrixADT {
 
   public static void main(String[] args) throws MatrixDimensionsMismatchException {
 
-    Matrix A = new Matrix(new String[][] {{"0", "2", "3", "4", "5"}, {"9.9", "7", "8", "9", "10"},
-        {"11", "12", "13", "14", "15"}, {"16", "17", "18", "19", "20"},
-        {"21", "22", "23", "24", "25"}});
+    /*
+     * Matrix A = new Matrix(new String[][] {{"0", "2", "3", "4", "5"}, {"9.9", "7", "8", "9",
+     * "10"}, {"11", "12", "13", "14", "15"}, {"16", "17", "18", "19", "20"}, {"21", "22", "23",
+     * "24", "25"}});
+     */
+    Matrix A =
+        new Matrix(new String[][] {{"81", "8", "63"}, {"73", "87", "18"}, {"28", "9", "97"}});
     System.out.println(Arrays.deepToString(A.eigenValues()));
   }
 

@@ -2,6 +2,7 @@ package application;
 
 import static org.junit.Assert.fail;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.TreeSet;
 import static org.junit.Assert.*;
 import org.junit.After;
@@ -310,6 +311,39 @@ public class MatrixTest {
       e.printStackTrace();
     }
   }
+  
+  /**
+   * 
+   * Using random numbers to test whether Matrix class is able to compute eigenvalue.
+   * 
+   */
+  @Test
+  public void test_able_to_compute_EigenValue_using_random() {
+    try {
+      MatrixADT matrix;
+      Numeric[][] randomEntries = new Numeric[3][3];
+      Random random = new Random(1);
+      int trialTimes = 100;
+      int upperBoundOfEntries = 100;
+      for(int k = 0; k < trialTimes; k++) {
+        for(int i = 0; i < randomEntries.length; i++) {
+          for(int j = 0; j < randomEntries[i].length; j++) {
+            randomEntries[i][j] = Numeric.of(random.nextInt(upperBoundOfEntries));
+          }
+        }
+        matrix = new Matrix(randomEntries);
+        try {
+          matrix.eigenValues();
+        } catch (ArithmeticException e) {
+          System.out.println(matrix);
+        }
+        
+      }
+      
 
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
 }

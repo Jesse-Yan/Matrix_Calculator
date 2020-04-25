@@ -30,7 +30,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
   /**
    * Number of significant figures for output.
    */
-  static int outputSignificantFigures = 5;
+  public static int outputSignificantFigures = 5;
 
   /**
    * A private Object representing the number, which can only be a Integer, or a Fraction, or a
@@ -419,6 +419,16 @@ public class Numeric extends Number implements Comparable<Numeric> {
       return compareTo((String) obj) == 0;
     if (obj instanceof Numeric)
       return compareTo((Numeric) obj) == 0;
+    else if (obj instanceof Number)
+      return compareTo(new Numeric((Number) obj)) == 0;
+    return false;
+  }
+  
+  public boolean equals(Object obj, int digits) {
+    if (obj instanceof Numeric)
+      return compareTo((Numeric) obj, digits) == 0;
+    if (obj instanceof String)
+      return compareTo((String) obj) == 0;
     else if (obj instanceof Number)
       return compareTo(new Numeric((Number) obj)) == 0;
     return false;
