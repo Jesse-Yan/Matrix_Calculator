@@ -934,6 +934,8 @@ public class Main extends Application {
         } catch (IOException e3) {
           alert("Error", "Fatal issues during IO processing");
         } catch (Exception e4) {
+          clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2,
+              filter);
           alert("Error", "Your json file contains invalid operations,"
               + lineSeparator + " please rechoose the file");
         }
