@@ -404,6 +404,9 @@ public class Main extends Application {
     vBoxR.setOnMouseEntered(e -> {
       notNumber.stream().forEach(b -> b.setDisable(true));
       buttons.get(3).setDisable(false);
+      if(analyze) {
+        buttons.get(23).setDisable(false);
+      }
     });
     input.setOnMouseEntered(e -> {
       notNumber.stream().forEach(b -> b.setDisable(false));
