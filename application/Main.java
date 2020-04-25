@@ -1894,46 +1894,6 @@ public class Main extends Application {
   /**
    * Method that returns a BorderPane of finished result
    * 
-   * @param  string         operation
-   * @param  mathString     operation
-   * @param  dataFromMatrix source Matrix
-   * @param  result         the result
-   * @return                resulted BorderPane
-   */
-  private BorderPane resultBuilder(String string, String mathString,
-      String[][] dataFromMatrix, double result) {
-    BorderPane resultedPane = new BorderPane();
-
-    resultedPane.setStyle("-fx-background-color: lightgray;");
-
-    // Set the title of the operation
-    Label operationName = new Label(string);
-    operationName.setStyle(labelStyle);
-    resultedPane.setTop(operationName);
-
-    Label operationMath = new Label(mathString);
-    operationMath.setStyle(labelStyle);
-
-    Label equals = new Label("=");
-    equals.setStyle(labelStyle);
-
-    GridPane gridSrc = matrixGenerator(dataFromMatrix);
-
-    Label resultedLabel = new Label(String.valueOf(result));
-    resultedLabel.setStyle(labelStyle);
-
-    HBox resultedHBox = new HBox();
-    resultedHBox.getChildren()
-                .addAll(operationMath, gridSrc, equals, resultedLabel);
-
-    resultedPane.setCenter(resultedHBox);
-
-    return resultedPane;
-  }
-
-  /**
-   * Method that returns a BorderPane of finished result
-   * 
    * @param  string       operation
    * @param  mathString   operation
    * @param  src1         source Matrix1
