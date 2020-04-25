@@ -970,7 +970,6 @@ public class Main extends Application {
             enableSecond, operators, mButtons, powerButton, powerInput, step,
             operationOperator);
       } catch (IllegalArgumentException e1) {
-        e1.printStackTrace();
         alert("Error", "The page number you entered is invalid");
       } catch (Exception e) {
         alert("Error", "Your input is incorrect");
