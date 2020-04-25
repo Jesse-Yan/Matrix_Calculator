@@ -656,7 +656,7 @@ public class Main extends Application {
         } catch (NumberFormatException e2) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
-        } 
+        }
       });
 
       // mButtons.get(3).setOnAction(event -> {
@@ -793,7 +793,7 @@ public class Main extends Application {
         } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
-        } 
+        }
       });
 
       mButtons.get(9).setOnAction(event -> {
@@ -1156,7 +1156,8 @@ public class Main extends Application {
       String opr = filter.getSelectionModel().getSelectedItem();
       if (opr != null) {
         if (filtering && opr.equals("All")) {
-          buttonsModifers(open, save, confirm, add, delete, quit, pages, false);
+          buttonsModifers(matrix1, matrix2, matrixOperators, mOperations, open,
+              save, confirm, add, delete, quit, pages, false);
           filtering = false;
           total.setText(String.valueOf(lists.size()));
           update = false;
@@ -1165,7 +1166,6 @@ public class Main extends Application {
           filter.getSelectionModel().selectFirst();
         } else {
           filtering = true;
-          buttonsModifers(open, save, confirm, add, delete, quit, pages, true);
           categoryList.clear();
           selectorInto(opr);
           CalSteps step = categoryList.get(0);
@@ -1177,6 +1177,8 @@ public class Main extends Application {
           total.setText(String.valueOf(categoryList.size()));
           rowAndCol1.forEach(i -> i.setEditable(false));
           rowAndCol2.forEach(i -> i.setEditable(false));
+          buttonsModifers(matrix1, matrix2, matrixOperators, mOperations, open,
+              save, confirm, add, delete, quit, pages, true);
         }
       }
     });
@@ -1275,16 +1277,26 @@ public class Main extends Application {
   /**
    * Modify the state of several buttons
    * 
-   * @param open    MenuItem
-   * @param save    MenuItem
-   * @param confirm Button
-   * @param add     Button
-   * @param delete  Button
-   * @param quit    Button
-   * @param stater  boolean value
+   * @param matrix1         VBox
+   * @param matrix2         VBox
+   * @param matrixOperators GridPane
+   * @param mOperations     GridPane
+   * @param open            MenuItem
+   * @param save            MenuItem
+   * @param confirm         Button
+   * @param add             Button
+   * @param delete          Button
+   * @param quit            Button
+   * @param stater          boolean value
    */
-  private void buttonsModifers(MenuItem open, MenuItem save, Button confirm,
-      Button add, Button delete, Button quit, TextField pages, boolean stater) {
+  private void buttonsModifers(VBox matrix1, VBox matrix2,
+      GridPane matrixOperators, GridPane mOperations, MenuItem open,
+      MenuItem save, Button confirm, Button add, Button delete, Button quit,
+      TextField pages, boolean stater) {
+    matrix1.setDisable(stater);
+    matrix2.setDisable(stater);
+    mOperations.setVisible(!stater);
+    matrixOperators.setVisible(!stater);
     add.setDisable(stater);
     delete.setDisable(stater);
     quit.setDisable(stater);
