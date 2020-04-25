@@ -602,8 +602,8 @@ public class Main extends Application {
           correctness = false;
           alert("MatrixDimensionError",
               "Sorry, the matrix you entered is not a square matrix"
-                  + lineSeparator
-                  + "To compute the determinant of a matrix, it has to be a square matrix");
+                  + lineSeparator + "To compute the determinant of a matrix,"
+                  + lineSeparator + " it has to be a square matrix");
         } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
@@ -627,8 +627,8 @@ public class Main extends Application {
           correctness = false;
           alert("MatrixDimensionError",
               "Sorry, the matrix you entered is not a square matrix"
-                  + lineSeparator
-                  + "To compute the inverse of a matrix, it has to be a square matrix");
+                  + lineSeparator + "To compute the inverse of a matrix,"
+                  + lineSeparator + " it has to be a square matrix");
         } catch (MatrixArithmeticException e2) {
           correctness = false;
           alert("MatriArithmeticError",
@@ -851,12 +851,13 @@ public class Main extends Application {
             correctness = false;
             alert("MatrixDimensionError",
                 "Sorry, the matrix you entered is not a square matrix"
-                    + lineSeparator
-                    + "To compute the power of a matrix, it has to be a square matrix");
+                    + lineSeparator + "To compute the power of a matrix,"
+                    + lineSeparator + " it has to be a square matrix");
           } catch (MatrixArithmeticException e2) {
             correctness = false;
             alert("MatriArithmeticError",
-                "Sorry, the matrix you entered is non-invertible, so it does not have negative exponent");
+                "Sorry, the matrix you entered is non-invertible,"
+                    + lineSeparator + " so it does not have negative exponent");
           } catch (NumberFormatException e3) {
             correctness = false;
             alert("Error",
