@@ -174,6 +174,7 @@ public class MatrixTest {
   @Test
   public void test_LUP() {
     try {
+      @SuppressWarnings("unused")
       Matrix matrix, expectedL, expectedU, expectedP;
 
       matrix = new Matrix(new String[][] {{"4", "3"}, {"6", "3"}});
@@ -261,6 +262,7 @@ public class MatrixTest {
   @Test
   public void test_QRDecomposition() {
     try {
+      @SuppressWarnings("unused")
       MatrixADT matrix, expectedQ, expectedR;
 /*
       matrix = new Matrix(new Integer[][] {{12, -51, 4}, {6, 167, -68}, {-4, 24, -41}});

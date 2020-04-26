@@ -2,7 +2,6 @@ package application;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 /**
@@ -18,6 +17,11 @@ import java.util.regex.Pattern;
  */
 public class Numeric extends Number implements Comparable<Numeric> {
   
+
+  /**
+   * Serial ID
+   */
+  private static final long serialVersionUID = 6599360948559127720L;
 
   /**
    * Since there are float error. Two doubles are considered the same number if their first 12
