@@ -489,7 +489,7 @@ public class Main extends Application {
     mOperations.setVgap(10);
 
     // Set the Operations of one Matrix by mapping from String to Buttons
-    List<Button> mButtons = List.of("Det", "Inverse", "QR", "LUP", "Trace", "Nullity", "Gauss-Elim",
+    List<Button> mButtons = List.of("Det", "Inverse", "QR", "Nullity", "Trace", "LUP", "Gauss-Elim",
         "Cholesky", "EiValue", "Rank", "Transpose").stream().map(operator -> {
           Button temp = new Button(operator);
           temp.setMinWidth(100);
@@ -640,28 +640,16 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(3).setOnAction(event -> { // LUP
+      mButtons.get(3).setOnAction(event -> { // nullity
         try {
           latestMOpera = mButtons.get(3);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
-          List<String[][]> resultLUP = matrixCalculator.getLUPDecomposition();
-          results.clear();
-          results.addAll(resultLUP.stream().map(i -> new Matrix(i)).collect(toList()));
-          if (resultLUP.size() > 2) {
-            resultShower = resultBuilderLUP("Operation: LUP", "LUP", resultLUP.get(2),
-                dataFromMatrix, resultLUP.get(0), resultLUP.get(1));
-          } else {
-            resultShower = resultBuilderQR("Operation: LUP", "LUP", dataFromMatrix,
-                resultLUP.get(0), resultLUP.get(1));
-          }
+          resultNum = matrixCalculator.getNullity();
+          resultShower = resultBuilder("Operation: Nullity", "Nullity", dataFromMatrix, resultNum);
           scrollPane(vBoxR, resultShower);
           stateModifer();
-        } catch (MatrixDimensionsMismatchException e) {
-          correctness = false;
-          alert("MatrixDimensionError",
-              "Sorry, the matrix you entered cannot perform LUP decomposition");
-        } catch (NumberFormatException e1) {
+        } catch (NumberFormatException e) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
         }
@@ -685,17 +673,29 @@ public class Main extends Application {
           alert("Error", "Your input may contain invalid characters or empty");
         }
       });
-
-      mButtons.get(5).setOnAction(event -> { // nullity
+      
+      mButtons.get(5).setOnAction(event -> { // LUP
         try {
           latestMOpera = mButtons.get(5);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
-          resultNum = matrixCalculator.getNullity();
-          resultShower = resultBuilder("Operation: Nullity", "Nullity", dataFromMatrix, resultNum);
+          List<String[][]> resultLUP = matrixCalculator.getLUPDecomposition();
+          results.clear();
+          results.addAll(resultLUP.stream().map(i -> new Matrix(i)).collect(toList()));
+          if (resultLUP.size() > 2) {
+            resultShower = resultBuilderLUP("Operation: LUP", "LUP", resultLUP.get(2),
+                dataFromMatrix, resultLUP.get(0), resultLUP.get(1));
+          } else {
+            resultShower = resultBuilderQR("Operation: LUP", "LUP", dataFromMatrix,
+                resultLUP.get(0), resultLUP.get(1));
+          }
           scrollPane(vBoxR, resultShower);
           stateModifer();
-        } catch (NumberFormatException e) {
+        } catch (MatrixDimensionsMismatchException e) {
+          correctness = false;
+          alert("MatrixDimensionError",
+              "Sorry, the matrix you entered cannot perform LUP decomposition");
+        } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
         }
@@ -1455,7 +1455,7 @@ public class Main extends Application {
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
         mButtons.get(2).fire();
         break;
-      case "LUP":
+      case "Nullity":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
         mButtons.get(3).fire();
         break;
@@ -1464,7 +1464,7 @@ public class Main extends Application {
         mButtons.get(4).fire();
         isNum = true;
         break;
-      case "Nullity":
+      case "LUP":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
         mButtons.get(5).fire();
         break;
