@@ -632,10 +632,10 @@ public class Matrix implements MatrixADT {
     return answerMatrix;
   }
 
-  
+
   public Matrix[] choleskyDecomposition() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
-    
+
     Matrix lower = new Matrix(N, N);
 
     for (int i = 0; i < N; i++) {
@@ -645,8 +645,7 @@ public class Matrix implements MatrixADT {
           for (int k = 0; k < j; k++)
             sum = sum.add(lower.entry[j][k].multiply(lower.entry[j][k]));
           lower.entry[j][j] = entry[j][j].subtract(sum).sqrt();
-        }
-        else {
+        } else {
           for (int k = 0; k < j; k++)
             sum = sum.add(lower.entry[i][k].multiply(lower.entry[j][k]));
           lower.entry[i][j] = (entry[i][j].subtract(sum)).dividedBy(lower.entry[j][j]);
@@ -1125,7 +1124,7 @@ public class Matrix implements MatrixADT {
         A = lastA.qrIterationWithWilkinsonShift();
         n--;
       }
-      System.out.println(A);
+      //System.out.println(A);
       if (interateCount > 10000)
         throw new ArithmeticException("Doesn't Converge");
       if (sameDiagnal(A, lastLastA))
@@ -1141,7 +1140,7 @@ public class Matrix implements MatrixADT {
 
     TreeSet<Numeric> eigenValues = new TreeSet<Numeric>();
 
-    System.out.println(potentialEigenValues);
+    //System.out.println(potentialEigenValues);
 
     for (Numeric eigenValue : potentialEigenValues) {
       try {
@@ -1185,15 +1184,16 @@ public class Matrix implements MatrixADT {
   }
 
 
-  public static void main(String[] args) throws MatrixDimensionsMismatchException {
+  public static void main(String[] args) throws MatrixDimensionsMismatchException, MatrixArithmeticException {
 
-    /*
-     * Matrix A = new Matrix(new String[][] {{"0", "2", "3", "4", "5"}, {"9.9", "7", "8", "9",
-     * "10"}, {"11", "12", "13", "14", "15"}, {"16", "17", "18", "19", "20"}, {"21", "22", "23",
-     * "24", "25"}});
-     */
-    Matrix A = new Matrix(new String[][] {{"-1", "-2"}, {"-1", "-1"}});
+    Matrix A = new Matrix(new String[][] {{"0", "2", "3", "4", "5"}, {"9.9", "7", "8", "9", "10"},
+        {"11", "12", "13", "14", "15"}, {"16", "17", "18", "19", "20"},
+        {"21", "22", "23", "24", "25"}});
+
+    //Matrix A = new Matrix(new String[][] {{"-1", "-2"}, {"-1", "-1"}});
     System.out.println(Arrays.deepToString(A.eigenValues()));
+    System.out.println(A.pow(10));
+
   }
 
 }

@@ -431,8 +431,8 @@ public class MatrixCalculator {
 
     // ************************ Demo for Pow *********************************
     System.out.println("Demo for Pow");
-    matrixA = new String[][] {{"1/2", "1"}, {"3/2", "2"}};
-    int n = 8;
+    matrixA = new String[][] {{"1", "2", "3"}, {"4", "5", "6"}, {"7", "8", "9"}};
+    int n = 10;
     matrixCalculator = new MatrixCalculator(matrixA);
     System.out.println(Arrays.deepToString(matrixCalculator.getPow(n)) + '\n');
     // ************************ Demo for Pow *********************************
