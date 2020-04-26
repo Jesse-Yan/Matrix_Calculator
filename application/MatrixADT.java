@@ -115,7 +115,6 @@ public interface MatrixADT {
    * 
    * @see https://en.wikipedia.org/wiki/QR_decomposition
    */
-
   MatrixADT[] LUPDecomposition() throws MatrixDimensionsMismatchException;
 
   /**
@@ -153,7 +152,7 @@ public interface MatrixADT {
    * 
    * @return the rank of the matrix
    * 
-   * @see https://mathworld.wolfram.com/Nullity.html
+   * @see https://en.wikipedia.org/wiki/Rank_(linear_algebra)
    */
   int rank();
 
@@ -180,15 +179,23 @@ public interface MatrixADT {
 
   /**
    * 
-   * Do Cholesky-decomposition on the matrix. Return an an array of length 2 of matrix representing
-   * the result.
+   * Do Cholesky-decomposition on a symmetric matrix. That is, decomposed the matrix into the
+   * product of a lower triangular matrix and its transpose. Return an an array of length 2 of
+   * matrix representing the result, in which the first element(index 0) is the lower triangular
+   * matrix and the second element(index 1) is its transpose.
+   * 
+   * If the matrix is not symmetric, a MatrixArithmeticException with message will be thrown
+   * 
+   * Warning: this method cannot handle complex cases, so it will throw an ArithmeticException when
+   * Cholesky-decomposition cannot be done on the real field.
    * 
    * @return an array of length 2 representing the result
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * @throws MatrixArithmeticException         - if the matrix is not symmetric.
    * @throws ArithmeticException               - if Cholesky-decomposition cannot be done on the
    *                                           real field.
    */
-  MatrixADT[] choleskyDecomposition() throws MatrixDimensionsMismatchException;
+  MatrixADT[] choleskyDecomposition() throws MatrixDimensionsMismatchException, MatrixArithmeticException;
 
   /**
    * Get the matrix to the power of n, the given matrix must be a square matrix.
