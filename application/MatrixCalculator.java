@@ -242,8 +242,9 @@ public class MatrixCalculator {
    * 
    * @return a List of  length 2 of String[][] representing the result
    * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix.
+   * @throws MatrixArithmeticException - if the matrix is not symmetric.
    */
-  public List<String[][]> getCholeskyDecomposition() throws MatrixDimensionsMismatchException {
+  public List<String[][]> getCholeskyDecomposition() throws MatrixDimensionsMismatchException, MatrixArithmeticException {
     Matrix firstMatrix = new Matrix(matrix1);
     Matrix[] choleskyDecomposition = firstMatrix.choleskyDecomposition();
     ArrayList<String[][]> answer = new ArrayList<String[][]>();

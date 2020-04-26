@@ -22,15 +22,14 @@ public class Matrix implements MatrixADT {
 
   /**
    * 
-   * Zero Matrix constructor.
+   * Zero Matrix constructor, which constructs a Zero matrix with given numbers of rows and a
+   * columns.
    * 
-   * This constructor construct a Zero matrix with a given number of rows and a given number of
-   * columns. All entries of the matrix created by this constructor will be zero.
+   * All entries of the matrix created by this constructor will be zero. For example, new Matrix(2,
+   * 3) will gives {{0, 0, 0}, {0, 0, 0}}
    * 
-   * For example, new Matrix(2, 3) will gives {{0, 0, 0}, {0, 0, 0}}
-   * 
-   * @param numberOfRow    the given number of rows
-   * @param numberOfColumn the given number of columns
+   * @param numberOfRow    - the given number of rows
+   * @param numberOfColumn - the given number of columns
    */
   public Matrix(int numberOfRow, int numberOfColumn) {
     entry = new Numeric[numberOfRow][numberOfColumn];
@@ -40,11 +39,13 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * This constructor construct a matrix with a given 2D array of Number as content of the matrix.
+   * This constructor constructs a matrix with a given 2D array of {@link Number} as the content
+   * entries of the matrix.
    * 
-   * Fraction and Numeric both extends Number, and a Number can also be Integer, or Double, or ...
+   * See {@link Number} for information about this class. The defined class {@link Numeric} Numeric
+   * extends {@link Number}. Classes like Integer, Float, or Double also extends Number.
    * 
-   * @param content a 2D array of Number as content of the matrix
+   * @param - content a 2D array of Number as content of the matrix
    * 
    * @see https://docs.oracle.com/javase/8/docs/api/java/lang/Number.html
    */
@@ -59,13 +60,14 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * This constructor construct a matrix with a given 2D array of Number as content of the matrix.
+   * This constructor constructs a matrix with a given 2D array of String as the content entries of
+   * the matrix.
    * 
-   * Fraction and Numeric both extends Number, and a Number can also be Integer, or Double, or ...
+   * The constructor will automatically convert these String to Numeric. See
+   * {@link Numeric#Numeric(String)} for details about how the String is converted into Numeric.
    * 
-   * @param content a 2D array of Number as content of the matrix
+   * @param content a 2D array of String as content of the matrix
    * 
-   * @see https://docs.oracle.com/javase/8/docs/api/java/lang/Number.html
    */
   public Matrix(String[][] content) {
     entry = new Numeric[content.length][content[0].length];
@@ -75,20 +77,29 @@ public class Matrix implements MatrixADT {
   }
 
   /**
+   * A copy constructor that copies the given matrix to construct the new matrix.
    * 
-   * This is a copy constructor. This constructor copies the given matrix to construct the matrix.
-   * 
-   * @param other a given Matrix used to construct this matrix
+   * @param - other a given Matrix used to construct this matrix
    */
   public Matrix(Matrix other) {
     this(other.entry);
   }
 
   /**
-   * A private helper method that generate a n*n identity matrix
+   * Returns a deepest copy of this matrix, which is exactly the same as this matrix.
    * 
-   * @param n a given integer to represent the number of rows and colomns of the identity matirx
-   * @return a n*n identity matrix
+   * @return a copy of matrix.
+   */
+  protected Matrix copy() {
+    return new Matrix(entry);
+  }
+
+  /**
+   * A private helper method that generate a n*n identity matrix. This means it has 1 on every
+   * entries on its diagonal line and has 0 on other entries.
+   * 
+   * @param - n a given integer to represent the number of rows and colomns of the identity matirx
+   * @return a n*n identity matrix.
    * 
    * @see https://en.wikipedia.org/wiki/Identity_matrix
    */
@@ -103,24 +114,9 @@ public class Matrix implements MatrixADT {
     return new Matrix(identityMatirxEntries);
   }
 
-  @Override
-  public int getNumberOfColumn() {
-    return entry[0].length;
-  }
-
-  @Override
-  public int getNumberOfRow() {
-    return entry.length;
-  }
-
-  @Override
-  public Numeric getEntry(int row, int column) {
-    return entry[row][column];
-  }
-
   /**
-   * Convert this matrix to string. The entries are converted to string by rows. In each row,
-   * numbers are separated by a " ". Rows are separated with "\n".
+   * Convert this matrix to String. The entries are converted to string by rows. In each row,
+   * numbers are separated by a space. Rows are separated with "\n".
    */
   @Override
   public String toString() {
@@ -134,8 +130,10 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Convert this matrix to string. The entries are converted to string by rows. In each row,
-   * numbers are separated by a " ". Rows are separated with ",\n".
+   * Convert this matrix to string for Json output. The entries are converted to string by rows. In
+   * each row, numbers are separated by a " ". Rows are separated with ",\n".
+   * 
+   * @return the converted string.
    */
   public String toJsonString() {
     String string = "";
@@ -154,7 +152,9 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Return a 2D array of String to represent the matrix
+   * Return a 2D array of String to represent the matrix. The 2D array will have exactly the same
+   * dimensions with the matrix, and every Numeric values for the entries will be converted to
+   * String. See {@link Numeric#toString()} for how the numeric values are converted to String.
    * 
    * @return a 2D array of String to represent the matrix
    */
@@ -169,7 +169,13 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Return a 2D array of String to represent the matrix in decimal
+   * Return a 2D array of String to represent the matrix. The 2D array will have exactly the same
+   * dimensions with the matrix, and every Numeric values for the entries will be converted to
+   * String. Unlike the method toStringMatrix() {@link toStringMatrix()}, this method will first
+   * cast the values of Numeric into Double state and then convert it to String to make sure the
+   * output is in decimals format (not Fraction format). See {@link Numeric#castToDouble()} for how
+   * the Numeric instance is casted into Double Numeric State. See {@link Numeric#toString()} for
+   * how the numeric values are converted to String.
    * 
    * @return a 2D array of String to represent the matrix in decimal
    */
@@ -184,12 +190,28 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Get a deepest copy of the matrix. Which is exactly the same as this matrix.
-   * 
-   * @return a copy of matrix.
+   * return the number of columns.
    */
-  protected Matrix copy() {
-    return new Matrix(entry);
+  @Override
+  public int getNumberOfColumn() {
+    return entry[0].length;
+  }
+
+  /**
+   * return the number of rows.
+   */
+  @Override
+  public int getNumberOfRow() {
+    return entry.length;
+  }
+
+  /**
+   * return the value of an entry (in {@link Numeric}}) specified by a given row index and a column
+   * index.
+   */
+  @Override
+  public Numeric getEntry(int row, int column) {
+    return entry[row][column];
   }
 
   /**
@@ -199,7 +221,7 @@ public class Matrix implements MatrixADT {
    * MatrixDimensionsMismatchException.
    * 
    * @param other the given matrix
-   * @throws MatrixDimensionsMismatchException if the given matrix do not have the exactly same
+   * @throws MatrixDimensionsMismatchException - if the given matrix do not have the exactly same
    *                                           dimensions with this one.
    */
   private void sameDimensionCheck(MatrixADT other) throws MatrixDimensionsMismatchException {
@@ -215,7 +237,8 @@ public class Matrix implements MatrixADT {
    * dimension, and all entries are equal. Return false otherwise.
    * 
    * Two decided whether two decimals are equal, they will be compared according to a specific
-   * number of significant digits, which is decided by Numeric.SIGNIFICANT_FIGURE_FOR_COMPARISON.
+   * number of significant digits, which is decided by
+   * {@link Numeric#SIGNIFICANT_FIGURE_FOR_COMPARISON}.
    */
   @Override
   public boolean equals(Object obj) {
@@ -235,20 +258,22 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * This method also receives another object (which should be a matrix), and check whether the
-   * given matrix is equal to this matrix. Return true if the given object is a Matrix, and matrices
-   * have exactly same dimension, and all entries are equal. Return false otherwise.
+   * Receives another object (which should be a matrix), and check whether the given matrix is equal
+   * to this matrix mathematically. Return true if the given object is a Matrix, and matrices have
+   * exactly same dimension, and all entries are equal. Return false otherwise.
    * 
-   * Unlike the method "equals()", this method will always return false if any of the entries is a
-   * decimal number(That is, not a Fraction or integer).
+   * The word "mathematically" means that, unlike the method {@link Matrix#equals(Object)}, this
+   * method will always return false if any of the entries is a decimal number. That is, only when
+   * this matrix and the given matrix is in Fraction or Integer State, there are possibilities that
+   * the method will compare the two object and returns true if they are equal.
    * 
    * @param obj a given object which is used to compare with this matrix
    * @return true if the given object is a Matrix, and matrices have exactly same dimension, and all
    *         entries are equal, false otherwise.
    */
-  public boolean mathematicallyEquals(Matrix obj) {
+  private boolean mathematicallyEquals(Matrix obj) {
     if (obj instanceof Matrix) {
-      try { // Check whether the two matrices have exactly the same dimenstions.
+      try { // Check whether the two matrices have exactly the same dimensions.
         sameDimensionCheck(((Matrix) obj));
       } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
         return false;
@@ -262,20 +287,13 @@ public class Matrix implements MatrixADT {
     return false;
   }
 
-  /**
-   * Return the transpose of the matrix.
-   */
-  @Override
-  public Matrix transpose() {
-    Numeric[][] newEntiry = new Numeric[getNumberOfColumn()][getNumberOfRow()];
-    for (int i = 0; i < entry.length; i++)
-      for (int j = 0; j < entry[i].length; j++)
-        newEntiry[j][i] = entry[i][j];
-    return new Matrix(newEntiry);
-  }
 
   /**
-   * Add matrices
+   * Add this matrix by another matrix. The addition should be done by entries.
+   * 
+   * @param other - Matrix that is going to be added on this matrix
+   * @return The result Matrix after addition
+   * @throws MatrixDimensionsMismatchException - if the two matrix have different dimensions.
    * 
    * @see https://en.wikipedia.org/wiki/Matrix_addition#Entrywise_sum
    */
@@ -290,7 +308,12 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Subtract matrices
+   * Subtract this matrix by another matrix. The subtraction should be done by entries, just like
+   * the {@link Matrix#add(MatrixADT)}.
+   * 
+   * @param other - Matrix that is going to be subtracted from this matrix
+   * @return The result Matrix after subtraction
+   * @throws MatrixDimensionsMismatchException - if the two matrix have different dimensions.
    */
   @Override
   public Matrix subtract(MatrixADT other) throws MatrixDimensionsMismatchException {
@@ -307,9 +330,11 @@ public class Matrix implements MatrixADT {
    * matrix. If the given matrix cannot be multiplied, it will throw a
    * MatrixDimensionsMismatchException, otherwise nothing would happen.
    * 
-   * @param other the given matrix
-   * @throws MatrixDimensionsMismatchException if the given matrix cannot be multiplied on this
-   *                                           matrix.
+   * @param other - a given matrix whose dimensions are going to be compared with ones of this
+   * @throws MatrixDimensionsMismatchException - if the numbers of columns of this matrix doesn't
+   *                                           equal to the number of rows of the given matrix,
+   *                                           which means the multiplication cannot be done
+   *                                           according to the definition of Matrix multiplication.
    */
   private void multipicationCheck(MatrixADT other) throws MatrixDimensionsMismatchException {
     if (this.getNumberOfColumn() != other.getNumberOfRow())
@@ -317,7 +342,14 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Multiply matrices.
+   * Multiply this matrix by another matrix.
+   * 
+   * @param other - Matrix that is going to be multiplied with this matrix
+   * @return - The result Matrix after multiplication
+   * @throws MatrixDimensionsMismatchException - if the numbers of columns of this matrix doesn't
+   *                                           equal to the number of rows of the given matrix,
+   *                                           which means the multiplication cannot be done
+   *                                           according to the definition of Matrix multiplication.
    * 
    * @see https://en.wikipedia.org/wiki/Matrix_multiplication
    */
@@ -337,14 +369,14 @@ public class Matrix implements MatrixADT {
    * A helper method that multiply Matrix by a constant number. That is, every entries of this
    * matrix should be multiplied by this constant.
    * 
-   * The number can be any type of instances of Number, which means it can be a Integer, or a
-   * Double, or a Fraction, or a Numeric, or ...
+   * See {@link Number} for information about this class. The defined class {@link Numeric} Numeric
+   * extends {@link Number}. Classes like Integer, Float, or Double also extends Number.
    * 
    * @param constant - a constant that being multiply to the matrix
-   * @return - Result Matrix
+   * @return The result Matrix after multiplication
    * 
    */
-  public Matrix multiply(Number constant) {
+  private Matrix multiply(Number constant) {
     Matrix answer = copy();
     for (int i = 0; i < this.getNumberOfRow(); i++)
       for (int j = 0; j < this.getNumberOfColumn(); j++)
@@ -356,14 +388,13 @@ public class Matrix implements MatrixADT {
    * A helper method that divide the matrix by a constant number. That is, every entries of this
    * matrix should be divided by this constant.
    * 
-   * The number can be any type of instances of Number, which means it can be a Integer, or a
-   * Double, or a Fraction, or a Numeric, or ...
+   * See {@link Number} for information about this class. The defined class {@link Numeric} Numeric
+   * extends {@link Number}. Classes like Integer, Float, or Double also extends Number.
    * 
    * @param constant - a constant that divide the matrix
-   * @return - Result Matrix
-   * 
+   * @return The result Matrix after division
    */
-  public Matrix dividedBy(Number constant) {
+  private Matrix dividedBy(Number constant) {
     Matrix answer = copy();
     for (int i = 0; i < this.getNumberOfRow(); i++)
       for (int j = 0; j < this.getNumberOfColumn(); j++)
@@ -373,7 +404,7 @@ public class Matrix implements MatrixADT {
 
   /**
    * A private helper method that check whether the matrix is a square matrix. Nothing happens if it
-   * is a square matrix, otherwise throws a MatrixDimensionsMismatchException with message.
+   * is a square matrix, otherwise it will throw a MatrixDimensionsMismatchException with message.
    * 
    * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix.
    * 
@@ -386,7 +417,8 @@ public class Matrix implements MatrixADT {
 
   /**
    * 
-   * A private helper method to get the size of the square matrix.
+   * A private helper method to get the size of the square matrix. It will throw a
+   * MatrixDimensionsMismatchException with message if the matrix is not square.
    * 
    * For example, a n*n square matrix will return n.
    * 
@@ -402,19 +434,21 @@ public class Matrix implements MatrixADT {
 
   /**
    * 
-   * This method receives parameters k and l, and then it will find the row index of the largest
-   * number on the kth column and with row number greater than l (L >= K)
+   * A private helper method that receives parameters k and l, and then it will find the row index
+   * of the largest number in absolute value on the lth column and with row index equal to or
+   * greater than k .
    * 
-   * @param k a given k
-   * @return the index of the largest number on the kth column and with row number greater than l (L
-   *         >= K)
+   * @param k - a given k
+   * @param l - a given l
+   * @return the index of the largest number on the lth column and with row index equal to or
+   *         greater than k
    */
   private int indexOfLargestPivotElement(int k, int l) {
-    int pivotRow = l;
-    Numeric pivotElement = entry[pivotRow][k];
-    for (int i = l + 1; i < getNumberOfRow(); i++)
-      if (entry[i][k].abs().compareTo(pivotElement) > 0) {
-        pivotElement = entry[i][k];
+    int pivotRow = k;
+    Numeric pivotElement = entry[pivotRow][l];
+    for (int i = k + 1; i < getNumberOfRow(); i++)
+      if (entry[i][l].abs().compareTo(pivotElement) > 0) {
+        pivotElement = entry[i][l];
         pivotRow = i;
       }
     return pivotRow;
@@ -422,16 +456,19 @@ public class Matrix implements MatrixADT {
 
   /**
    * 
-   * This method receives parameters k and l, and then it will find the row index of the largest
-   * number on the kth column and with row number greater than l (L >= K)
+   * A private helper method that receives parameters k and l, and then it will find the row index
+   * of the first number on the lth column and with row index equal to or greater than k.
    * 
-   * @param k a given k
-   * @return the index of the largest number on the kth column and with row number greater than l (L
-   *         >= K)
+   * The "first" means it has the smallest row index among all the possible values.
+   * 
+   * @param k - a given k
+   * @param l - a given l
+   * @return the index of the first number on the lth column and with row index equal to or greater
+   *         than k
    */
   private int indexOfNextNonZeroPivotElement(int k, int l) {
-    for (int i = l; i < getNumberOfRow(); i++)
-      if (!entry[i][k].equals(Numeric.of(0)))
+    for (int i = k; i < getNumberOfRow(); i++)
+      if (!entry[i][l].equals(Numeric.of(0)))
         return i;
     return l;
   }
@@ -464,12 +501,15 @@ public class Matrix implements MatrixADT {
    * A private helper method that connect another matrix to the right of this this matrix to
    * construct a new augmented matrix.
    * 
-   * The given matrix must have the same number of rows with this matrix.
+   * The given matrix must have the same number of rows with this matrix, otherwise a
+   * MatrixDimensionsMismatchException with message will be thrown.
    * 
-   * @param other a given matrix
+   * @param other a given matrix that is going to be augmented on this matrix
    * @return the augmented matrix
    * @throws MatrixDimensionsMismatchException if the given matrix does not have the same number of
    *                                           rows with this matrix.
+   * 
+   * @see https://en.wikipedia.org/wiki/Augmented_matrix#To_find_the_inverse_of_a_matrix
    */
   private Matrix augmentMatirx(Matrix other) throws MatrixDimensionsMismatchException {
     if (this.getNumberOfRow() != other.getNumberOfRow())
@@ -490,9 +530,10 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * If the matrix is a square matrix, return the product of the diagonal.
+   * This is a private helper method. If the matrix is a square matrix, it returns the product of
+   * the diagonal, otherwise it throws a MatrixDimensionsMismatchException with message.
    * 
-   * @return the product of the diagonal
+   * @return the product of the diagonal of the matrix
    * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix.
    */
   private Numeric productOfDiagonal() throws MatrixDimensionsMismatchException {
@@ -504,11 +545,13 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * If the matrix is a square matrix, return the trace (sum of the diagonal).
+   * Return the trace of the (sum of the diagonal). The given matrix must be a square matrix,
+   * otherwise a MatrixDimensionsMismatchException with message will be thrown.
    * 
-   * @return the product of the diagonal
+   * @return the trace of the matrix
    * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix.
    */
+  @Override
   public Numeric trace() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
     Numeric ansNumeric = new Numeric(0);
@@ -534,31 +577,60 @@ public class Matrix implements MatrixADT {
 
   /**
    * 
-   * A private helper method that do partial pivoting at kth column and lth row, return whether the
-   * row is swapped.
+   * A private helper method that do partial pivoting at kth row and lth column. When the current
+   * pivot element is zero, this method will find the next row that has non-zero element on this
+   * column to swap with this row to finish the pivoting.
    * 
    * @param k the column to do partial pivoting
    * @param l the row to do partial pivoting
-   * @throws SingularException
+   * @throws SingularException - if there is not any row that can be switched with this row to do
+   *                           the pivoting
    */
-  private void generalPartialPivotingWithNextNonZeroPivot(int k, int l) throws SingularException {
+  private void partialPivotingWithNextNonZeroPivot(int k, int l) throws SingularException {
     int pivotRow = indexOfNextNonZeroPivotElement(k, l);
-    Numeric pivotElement = entry[pivotRow][k];
+    Numeric pivotElement = entry[pivotRow][l];
     if (pivotElement.compareTo(new Numeric(0)) == 0)
       throw new SingularException();
-    if (pivotRow != l)
-      swapRow(l, pivotRow);
+    if (pivotRow != k)
+      swapRow(k, pivotRow);
   }
 
-  private void generalPartialPivotingWithLargestPivot(int k, int l) throws SingularException {
+  /**
+   * 
+   * A private helper method that do partial pivoting at kth row and lth column. When the current
+   * pivot element is zero, this method will find the row that has largest element in absolute value
+   * on this column to swap with this row to finish the pivoting.
+   * 
+   * @param k the column to do partial pivoting
+   * @param l the row to do partial pivoting
+   * @throws SingularException - if there is not any row that can be switched with this row to do
+   *                           the pivoting
+   */
+  private void partialPivotingWithLargestPivot(int k, int l) throws SingularException {
     int pivotRow = indexOfLargestPivotElement(k, l);
-    Numeric pivotElement = entry[pivotRow][k];
+    Numeric pivotElement = entry[pivotRow][l];
     if (pivotElement.compareTo(new Numeric(0)) == 0)
       throw new SingularException();
-    if (pivotRow != l)
-      swapRow(l, pivotRow);
+    if (pivotRow != k)
+      swapRow(k, pivotRow);
   }
 
+  /**
+   * A private helper method to do Gausian-elimination on this matrix.
+   * 
+   * The given boolean parameter "usingNextNonZeroPivot" decides the pivoting strategy of the
+   * Gausian-elimination. If it is true, during the elimination, if the current pivot element is
+   * zero, this method will find the next row that has non-zero element on this column to swap with
+   * this row to finish the pivoting. Otherwise, this method will find the the row that has largest
+   * element in absolute value on this column to swap with this row.
+   * 
+   * Warning: this private method will change the content in the entries!
+   * 
+   * @param usingNextNonZeroPivot - a boolean parameter that decides the pivoting strategy of the
+   *                              Guassian-elimination.
+   * @return the number of pivoting times during the Guassian-elimination, that is, the rank of the
+   *         matrix.
+   */
   private int gussianEliminate(boolean usingNextNonZeroPivot) {
     int N = getNumberOfRow();
     int M = getNumberOfColumn();
@@ -571,9 +643,9 @@ public class Matrix implements MatrixADT {
       while (!success) {
         try {
           if (usingNextNonZeroPivot)
-            generalPartialPivotingWithNextNonZeroPivot(k, l);
+            partialPivotingWithNextNonZeroPivot(k, l);
           else
-            generalPartialPivotingWithLargestPivot(k, l);
+            partialPivotingWithLargestPivot(k, l);
           success = true;
         } catch (SingularException e) {
           dif++;
@@ -597,11 +669,13 @@ public class Matrix implements MatrixADT {
   }
 
   /**
+   * Return the rank of matrix, which is calculated by the rank-nullity theorem. The rank is
+   * calculated by using Guassian-elimination method.
    * 
-   * Gaussian-Elimination.
+   * @return the rank of the matrix
    * 
-   * @throws SingularException
-   * 
+   * @see https://en.wikipedia.org/wiki/Rank_(linear_algebra)
+   * @see https://en.wikipedia.org/wiki/Rank_(linear_algebra)#Computing_the_rank_of_a_matrix
    */
   public int rank() {
     Matrix answerMatrix = copy();
@@ -609,23 +683,29 @@ public class Matrix implements MatrixADT {
   }
 
   /**
+   * Return the nullity of matrix, which is calculated by the rank-nullity theorem.
    * 
-   * Use Rank¨Cnullity theorem theorem
+   * @return the nullity of the matrix
    * 
-   * @throws SingularException
-   * 
+   * @see https://mathworld.wolfram.com/Nullity.html
+   * @see https://en.wikipedia.org/wiki/Rank%E2%80%93nullity_theorem
    */
+  @Override
   public int nullity() {
     return getNumberOfColumn() - rank();
   }
 
   /**
    * 
-   * Gaussian-Elimination.
+   * Do Guassian-elimination on the matrix, and return the result matrix.
    * 
-   * @throws SingularException
+   * This method will not change the entries of the this matrix.
    * 
+   * @return the matrix after guassianElimination
+   * 
+   * @see https://en.wikipedia.org/wiki/Gaussian_elimination
    */
+  @Override
   public Matrix gussianElimination() {
     Matrix answerMatrix = copy();
     answerMatrix.gussianEliminate(true);
@@ -633,11 +713,47 @@ public class Matrix implements MatrixADT {
   }
 
 
-  public Matrix[] choleskyDecomposition() throws MatrixDimensionsMismatchException {
+  /**
+   * Return the transpose of the Matrix.
+   * 
+   * @return the transpose of the Matrix
+   * 
+   * @see https://en.wikipedia.org/wiki/Transpose
+   */
+  @Override
+  public Matrix transpose() {
+    Numeric[][] newEntiry = new Numeric[getNumberOfColumn()][getNumberOfRow()];
+    for (int i = 0; i < entry.length; i++)
+      for (int j = 0; j < entry[i].length; j++)
+        newEntiry[j][i] = entry[i][j];
+    return new Matrix(newEntiry);
+  }
+
+  /**
+   * 
+   * Do Cholesky-decomposition on a symmetric matrix. That is, decomposed the matrix into the
+   * product of a lower triangular matrix and its transpose. Return an an array of length 2 of
+   * matrix representing the result, in which the first element(index 0) is the lower triangular
+   * matrix and the second element(index 1) is its transpose.
+   * 
+   * If the matrix is not symmetric, a MatrixArithmeticException with message will be thrown
+   * 
+   * Warning: this method cannot handle complex cases, so it will throw an ArithmeticException when
+   * Cholesky-decomposition cannot be done on the real field.
+   * 
+   * @return an array of length 2 representing the result
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * @throws MatrixArithmeticException         - if the matrix is not symmetric.
+   * @throws ArithmeticException               - if Cholesky-decomposition cannot be done on the
+   *                                           real field.
+   */
+  public Matrix[] choleskyDecomposition()
+      throws MatrixDimensionsMismatchException, MatrixArithmeticException {
+    if (!this.equals(this.transpose()))
+      throw new MatrixArithmeticException(
+          "The matrix should be symmetric to do Cholesky-decomposition");
     int N = getSizeOfSquareMatrix();
-
     Matrix lower = new Matrix(N, N);
-
     for (int i = 0; i < N; i++) {
       for (int j = 0; j <= i; j++) {
         Numeric sum = Numeric.of(0);
@@ -661,8 +777,10 @@ public class Matrix implements MatrixADT {
    * construct a new augmented matrix.
    * 
    * The word "augment matrix" usually refers to connect another matrix/vector to the right of the
-   * original matrix. This method performs similar functions but it connect another matrix to the
-   * bottom of the original matrix. Therefore, it is called augmentMatirxByExtendingColumns.
+   * original matrix. While that function is provided by method
+   * {@link Matrix#augmentMatirx(Matrix)}.This method performs similar functions but it connect
+   * another matrix to the bottom of the original matrix. Therefore, it is called
+   * augmentMatirxByExtendingColumns.
    * 
    * The given matrix must have the same number of columns with this matrix.
    * 
@@ -692,7 +810,11 @@ public class Matrix implements MatrixADT {
 
   /**
    * 
-   * This is a private helper method that combines four matrices in to one matrix.
+   * This is a private helper method that combines four matrices in to one matrix. For the given
+   * four matrices, the first one will be placed on the left top, the second one will be placed on
+   * the right top, the third one will be placed on the left bottom, the fourth one will be placed
+   * on the right bottom. A MatrixDimensionsMismatchException with message will be thrown if the
+   * shape(dimensions) of the provided matrices cannot be combined in this way.
    * 
    * @param leftTop     a given matrix to be the left top part of the combined matrix
    * @param rightTop    a given matrix to be the right top part of the combined matrix
@@ -708,7 +830,14 @@ public class Matrix implements MatrixADT {
         .augmentMatirxByExtendingColumns(leftBottom.augmentMatirx(rightBottom));
   }
 
-  public Object[] LUPDecompositionHelper(boolean usingNextNonZeroPivot)
+  /**
+   * A private helper method that implements the LUP decomposition.
+   * 
+   * @param usingNextNonZeroPivot
+   * @return
+   * @throws MatrixDimensionsMismatchException
+   */
+  private Object[] LUPDecompositionHelper(boolean usingNextNonZeroPivot)
       throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
     boolean signChanged = false;
@@ -762,6 +891,22 @@ public class Matrix implements MatrixADT {
     return new Object[] {L, U, P, signChanged | previousSignChanged};
   }
 
+  /**
+   * 
+   * If it is possible to do LU decomposition, this method will do LU decomposition to the matrix.
+   * Otherwise, it would do a LUP decomposition.
+   * 
+   * This method implements Crout algorithm to find the LUP decomposition of the matirx.
+   * 
+   * @return an array of length 3. The first is L, and the second is U. If LU decomposition is done,
+   *         the third element in the array will be null, otherwise it will be the P.
+   * 
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * 
+   * @see https://en.wikipedia.org/wiki/QR_decomposition
+   * @see https://en.wikipedia.org/wiki/LU_decomposition#Crout_and_LUP_algorithms
+   */
+  @Override
   public Matrix[] LUPDecomposition() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
     Object[] tmp = this.LUPDecompositionHelper(true);
@@ -774,8 +919,15 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Find the determinant of the matrix by using LUP.
+   * Return determinant of matrix. The given matrix must be a square matrix.
    * 
+   * This method find the determinant matrix by using LUP method.
+   * 
+   * @return the determinant of the matrix
+   * @throws MatrixDimensionsMismatchException - when the given matrix is not a square matrix.
+   * 
+   * @see https://en.wikipedia.org/wiki/Determinant
+   * @see https://en.wikipedia.org/wiki/LU_decomposition#Computing_the_determinant
    */
   @Override
   public Numeric determinant() throws MatrixDimensionsMismatchException {
@@ -1120,11 +1272,12 @@ public class Matrix implements MatrixADT {
         if (n == 2) {
           break;
         }
+        potentialEigenValues.add(A.entry[n - 1][n - 1]);
         lastLastA = lastA = A.subMatrix(0, n - 1, 0, n - 1);
         A = lastA.qrIterationWithWilkinsonShift();
         n--;
       }
-      //System.out.println(A);
+      // System.out.println(A);
       if (interateCount > 10000)
         throw new ArithmeticException("Doesn't Converge");
       if (sameDiagnal(A, lastLastA))
@@ -1140,7 +1293,7 @@ public class Matrix implements MatrixADT {
 
     TreeSet<Numeric> eigenValues = new TreeSet<Numeric>();
 
-    //System.out.println(potentialEigenValues);
+    // System.out.println(potentialEigenValues);
 
     for (Numeric eigenValue : potentialEigenValues) {
       try {
@@ -1184,15 +1337,18 @@ public class Matrix implements MatrixADT {
   }
 
 
-  public static void main(String[] args) throws MatrixDimensionsMismatchException, MatrixArithmeticException {
+  public static void main(String[] args)
+      throws MatrixDimensionsMismatchException, MatrixArithmeticException {
 
-    Matrix A = new Matrix(new String[][] {{"0", "2", "3", "4", "5"}, {"9.9", "7", "8", "9", "10"},
-        {"11", "12", "13", "14", "15"}, {"16", "17", "18", "19", "20"},
-        {"21", "22", "23", "24", "25"}});
+    /*
+     * Matrix A = new Matrix(new String[][] {{"0", "2", "3", "4", "5"}, {"9.9", "7", "8", "9",
+     * "10"}, {"11", "12", "13", "14", "15"}, {"16", "17", "18", "19", "20"}, {"21", "22", "23",
+     * "24", "25"}});
+     */
 
-    //Matrix A = new Matrix(new String[][] {{"-1", "-2"}, {"-1", "-1"}});
+    Matrix A =
+        new Matrix(new String[][] {{"4", "12", "-16"}, {"12", "37", "-43"}, {"-16", "-43", "98"}});
     System.out.println(Arrays.deepToString(A.eigenValues()));
-    System.out.println(A.pow(10));
 
   }
 

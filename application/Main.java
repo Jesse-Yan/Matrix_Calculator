@@ -667,13 +667,16 @@ public class Main extends Application {
           stateModifer();
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
-          alert("MatrixDimensionError", "Sorry, the matrix you entered cannot perform trace");
+          alert("MatrixDimensionError",
+              "Sorry, the matrix you entered is not a square matrix" + lineSeparator
+                  + "To compute the trace, " + lineSeparator
+                  + "it has to be a square matrix");
         } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
         }
       });
-      
+
       mButtons.get(5).setOnAction(event -> { // LUP
         try {
           latestMOpera = mButtons.get(5);
@@ -693,8 +696,9 @@ public class Main extends Application {
           stateModifer();
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
-          alert("MatrixDimensionError",
-              "Sorry, the matrix you entered cannot perform LUP decomposition");
+          alert("MatrixDimensionError","Sorry, the matrix you entered is not a square matrix" + lineSeparator
+              + "To do the LUP decomposition, " + lineSeparator
+              + "it has to be a square matrix");
         } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
@@ -726,17 +730,23 @@ public class Main extends Application {
           List<String[][]> resultCholesky = matrixCalculator.getCholeskyDecomposition();
           results.clear();
           results.addAll(resultCholesky.stream().map(i -> new Matrix(i)).collect(toList()));
-          resultShower = resultBuilderQR("Operation: Cholesky", "Cholesky", dataFromMatrix, resultCholesky.get(0),
-              resultCholesky.get(1));
+          resultShower = resultBuilderQR("Operation: Cholesky", "Cholesky", dataFromMatrix,
+              resultCholesky.get(0), resultCholesky.get(1));
           scrollPane(vBoxR, resultShower);
           stateModifer();
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
-              "Sorry, the matrix you entered is not a square matrix" + lineSeparator
-                  + "To compute the eigenvalue of a matrix, " + lineSeparator
-                  + "it has to be a square matrix");
-        } catch (NumberFormatException e2) {
+              "Sorry, the matrix you entered is not a square symmetic matrix" + lineSeparator
+                  + "To do the Cholesky decomposition, " + lineSeparator
+                  + "it has to be a square symmetic matrix");
+        } catch (MatrixArithmeticException e2) {
+          correctness = false;
+          alert("MatriArithmeticError",
+              "Sorry, the matrix you entered is not a square symmetic matrix" + lineSeparator
+                  + "To do the Cholesky decomposition, " + lineSeparator
+                  + "it has to be a square symmetic matrix");
+        } catch (NumberFormatException e3) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
         } catch (ArithmeticException e4) {
