@@ -103,7 +103,7 @@ public class Main extends Application {
 
   // Recorder of results
   String resultNum = null;
-  List<Matrix> results = new ArrayList<>();
+  List<String[][]> results = new ArrayList<>();
 
   /**
    * This is the start method of the Main class
@@ -602,7 +602,7 @@ public class Main extends Application {
           MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
           String[][] resultInverse = matrixCalculator.getInverse();
           results.clear();
-          results.add(new Matrix(resultInverse));
+          results.add(resultInverse);
           resultShower =
               resultBuilder("Operation: Inverse", "Inverse", dataFromMatrix, resultInverse);
           scrollPane(vBoxR, resultShower);
@@ -629,7 +629,7 @@ public class Main extends Application {
           MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
           List<String[][]> resultQR = matrixCalculator.getQRDecomposition();
           results.clear();
-          results.addAll(resultQR.stream().map(i -> new Matrix(i)).collect(toList()));
+          results.addAll(resultQR.stream().collect(toList()));
           resultShower = resultBuilderQR("Operation: QR", "QR", dataFromMatrix, resultQR.get(0),
               resultQR.get(1));
           scrollPane(vBoxR, resultShower);
@@ -684,7 +684,7 @@ public class Main extends Application {
           MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
           List<String[][]> resultLUP = matrixCalculator.getLUPDecomposition();
           results.clear();
-          results.addAll(resultLUP.stream().map(i -> new Matrix(i)).collect(toList()));
+          results.addAll(resultLUP.stream().collect(toList()));
           if (resultLUP.size() > 2) {
             resultShower = resultBuilderLUP("Operation: LUP", "LUP", resultLUP.get(2),
                 dataFromMatrix, resultLUP.get(0), resultLUP.get(1));
@@ -712,7 +712,7 @@ public class Main extends Application {
           MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
           String[][] resultGE = matrixCalculator.getGuassianElimination();
           results.clear();
-          results.add(new Matrix(resultGE));
+          results.add(resultGE);
           resultShower = resultBuilder("Operation: GE", "GE", dataFromMatrix, resultGE);
           scrollPane(vBoxR, resultShower);
           stateModifer();
@@ -729,7 +729,7 @@ public class Main extends Application {
           MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
           List<String[][]> resultCholesky = matrixCalculator.getCholeskyDecomposition();
           results.clear();
-          results.addAll(resultCholesky.stream().map(i -> new Matrix(i)).collect(toList()));
+          results.addAll(resultCholesky.stream().collect(toList()));
           resultShower = resultBuilderQR("Operation: Cholesky", "Cholesky", dataFromMatrix,
               resultCholesky.get(0), resultCholesky.get(1));
           scrollPane(vBoxR, resultShower);
@@ -799,7 +799,7 @@ public class Main extends Application {
           MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
           String[][] resultTS = matrixCalculator.getTranspose();
           results.clear();
-          results.add(new Matrix(resultTS));
+          results.add(resultTS);
           resultShower = resultBuilder("Operation: TS", "TS", dataFromMatrix, resultTS);
           scrollPane(vBoxR, resultShower);
           stateModifer();
@@ -818,7 +818,7 @@ public class Main extends Application {
             MatrixCalculator matrixCalculator = new MatrixCalculator(dataFromMatrix);
             String[][] resultPw = matrixCalculator.getPow(n);
             results.clear();
-            results.add(new Matrix(resultPw));
+            results.add(resultPw);
             resultShower =
                 resultBuilder("Operation: POWER", "PowerOf " + n, dataFromMatrix, resultPw);
             scrollPane(vBoxR, resultShower);
@@ -887,7 +887,7 @@ public class Main extends Application {
             String operationOperator = step.getOperation();
             isNum = switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2, enableSecond,
                 operators, mButtons, powerButton, powerInput, step, operationOperator);
-            List<Matrix> cloneResult = new ArrayList<>();
+            List<String[][]> cloneResult = new ArrayList<>();
             cloneResult.addAll(results);
             CalSteps c = new CalSteps(operationOperator, step.getDatas(),
                 isNum ? "" + resultNum : cloneResult);
@@ -902,8 +902,6 @@ public class Main extends Application {
           state = false;
           correctness = true;
           confirm.fire();
-        } catch (MatrixDimensionsMismatchException e1) {
-          alert("Error", "Matrix Dimension Mismatch");
         } catch (ParseException e2) {
           alert("Error", "Parse fail, please check you .json file");
         } catch (IOException e3) {
@@ -1352,7 +1350,7 @@ public class Main extends Application {
 
       // Add result to the recorder of result
       results.clear();
-      results.add(new Matrix(resultMatrix));
+      results.add(resultMatrix);
 
       // Generate the resultShower
       resultShower =
@@ -1523,14 +1521,14 @@ public class Main extends Application {
       boolean isAdd, boolean update) {
     if (update) {
       if (prevPage != 0 && state && correctness) {
-        List<Matrix> cloneResult = new ArrayList<>();
+        List<String[][]> cloneResult = new ArrayList<>();
         cloneResult.addAll(results);
-        Matrix wMatrix1 = new Matrix(reader(matrix1Data, rowAndCol1));
+        String[][] wMatrix1 = reader(matrix1Data, rowAndCol1);
         String operation = latestMOpera.getText();
         if (enableSecond.isSelected()) {
-          Matrix wMatrix2 = new Matrix(reader(matrix2Data, rowAndCol2));
+          String[][] wMatrix2 = reader(matrix2Data, rowAndCol2);
           if (!isAdd) {
-            lists.set(page - 1, new CalSteps(operation, new ArrayList<Matrix>() {
+            lists.set(page - 1, new CalSteps(operation, new ArrayList<String[][]>() {
               private static final long serialVersionUID = 1L;
               {
                 add(wMatrix1);
@@ -1538,7 +1536,7 @@ public class Main extends Application {
               }
             }, isNum ? "" + resultNum : cloneResult));
           } else {
-            lists.add(page, new CalSteps(operation, new ArrayList<Matrix>() {
+            lists.add(page, new CalSteps(operation, new ArrayList<String[][]>() {
               private static final long serialVersionUID = 1L;
               {
                 add(wMatrix1);
@@ -1557,14 +1555,14 @@ public class Main extends Application {
             operation = "PowerOf" + this.power;
           }
           if (!isAdd) {
-            lists.set(page - 1, new CalSteps(operation, new ArrayList<Matrix>() {
+            lists.set(page - 1, new CalSteps(operation, new ArrayList<String[][]>() {
               private static final long serialVersionUID = 1L;
               {
                 add(wMatrix1);
               }
             }, isNum ? "" + resultNum : cloneResult));
           } else {
-            lists.add(page, new CalSteps(operation, new ArrayList<Matrix>() {
+            lists.add(page, new CalSteps(operation, new ArrayList<String[][]>() {
               private static final long serialVersionUID = 1L;
               {
                 add(wMatrix1);
@@ -1613,13 +1611,13 @@ public class Main extends Application {
    */
   private void setterOfSingleMatrix(CalSteps step, List<TextField> rowAndCol1,
       List<TextField> matrix1Data) {
-    Matrix matrix1 = step.getDatas().get(0);
-    rowAndCol1.get(0).setText(String.valueOf(matrix1.getNumberOfRow()));
-    rowAndCol1.get(1).setText(String.valueOf(matrix1.getNumberOfColumn()));
+    String[][] matrix1 = step.getDatas().get(0);
+    rowAndCol1.get(0).setText(String.valueOf(matrix1.length));
+    rowAndCol1.get(1).setText(String.valueOf(matrix1[0].length));
     int count = 0;
-    for (int i = 0; i < matrix1.getNumberOfRow(); i++) {
-      for (int j = 0; j < matrix1.getNumberOfColumn(); j++) {
-        matrix1Data.get(count++).setText(matrix1.getEntry(i, j).toString());
+    for (int i = 0; i < matrix1.length; i++) {
+      for (int j = 0; j < matrix1[i].length; j++) {
+        matrix1Data.get(count++).setText(matrix1[i][j]);
       }
     }
   }
@@ -1635,22 +1633,22 @@ public class Main extends Application {
    */
   private void setterOfTwoMatrixes(CalSteps step, List<TextField> rowAndCol1,
       List<TextField> rowAndCol2, List<TextField> matrix1Data, List<TextField> matrix2Data) {
-    Matrix matrix1 = step.getDatas().get(0);
-    Matrix matrix2 = step.getDatas().get(1);
-    rowAndCol1.get(0).setText(String.valueOf(matrix1.getNumberOfRow()));
-    rowAndCol1.get(1).setText(String.valueOf(matrix1.getNumberOfColumn()));
-    rowAndCol2.get(0).setText(String.valueOf(matrix2.getNumberOfRow()));
-    rowAndCol2.get(1).setText(String.valueOf(matrix2.getNumberOfColumn()));
+    String[][] matrix1 = step.getDatas().get(0);
+    String[][] matrix2 = step.getDatas().get(1);
+    rowAndCol1.get(0).setText(String.valueOf(matrix1.length));
+    rowAndCol1.get(1).setText(String.valueOf(matrix1[0].length));
+    rowAndCol2.get(0).setText(String.valueOf(matrix2.length));
+    rowAndCol2.get(1).setText(String.valueOf(matrix2[0].length));
     int count = 0;
-    for (int i = 0; i < matrix1.getNumberOfRow(); i++) {
-      for (int j = 0; j < matrix1.getNumberOfColumn(); j++) {
-        matrix1Data.get(count++).setText(matrix1.getEntry(i, j).toString());
+    for (int i = 0; i < matrix1.length; i++) {
+      for (int j = 0; j < matrix1[i].length; j++) {
+        matrix1Data.get(count++).setText(matrix1[i][j]);
       }
     }
     count = 0;
-    for (int i = 0; i < matrix2.getNumberOfRow(); i++) {
-      for (int j = 0; j < matrix2.getNumberOfColumn(); j++) {
-        matrix2Data.get(count++).setText(matrix2.getEntry(i, j).toString());
+    for (int i = 0; i < matrix2.length; i++) {
+      for (int j = 0; j < matrix2[i].length; j++) {
+        matrix2Data.get(count++).setText(matrix2[i][j]);
       }
     }
   }

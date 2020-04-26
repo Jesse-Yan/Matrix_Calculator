@@ -30,14 +30,13 @@ public class OpeartionParser {
      * @throws FileNotFoundException - if file not found
      * @throws java.lang.ClassCastException - if input data mismatch
      */
-    public OpeartionParser(File file) throws IOException, ParseException, 
-    MatrixDimensionsMismatchException, java.lang.ClassCastException {
+    public OpeartionParser(File file) throws IOException, ParseException, java.lang.ClassCastException {
       
       calSteps = new ArrayList<CalSteps>();
       
       if (file == null) throw new FileNotFoundException();
       
-      ArrayList <Matrix> matrixList = new ArrayList<Matrix>();
+      ArrayList <String[][]> matrixList = new ArrayList<String[][]>();
       String operations = null;
       int rowSize = -1;
       int colSize = -1;
@@ -67,10 +66,10 @@ public class OpeartionParser {
             }
             
           }
-          matrixList.add(new Matrix(sumMatrix));  
+          matrixList.add(sumMatrix);  
         }
         calSteps.add(new CalSteps(operations,matrixList));
-        matrixList = new ArrayList<Matrix>();
+        matrixList = new ArrayList<String[][]>();
         operations = null;
       }
     }

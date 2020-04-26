@@ -38,13 +38,38 @@ public class Writer {
         printWriter.write(",");
       printWriter.write("[\n");
 
-      printWriter.write(cur.getDatas().get(j).toJsonString());
+      printWriter.write(writeMatrixToJsonString(cur.getDatas().get(j)));
 
       printWriter.write("\t\t\t" + "]\n");
     }
     printWriter.write("\t\t" + "]\n");
   }
 
+  /**
+   * 
+   * Helper method to change a matrix which is represented by String[][] to a String for Json output.
+   * 
+   * @param matrix a given String[][] to represent a matrix
+   * @return a string for the Json output to represent a matrix.
+   * 
+   * @author Houming Chen
+   */
+  public static String writeMatrixToJsonString(String matrix[][]) {
+      String string = "";
+      for (int i = 0; i < matrix.length; i++) {
+        if (i != 0)
+          string += ",\n";
+        string += "[";
+        for (int j = 0; j < matrix[0].length; j++) {
+          if (j != 0)
+            string += ", ";
+          string += "\"" + matrix[i][j] + "\"";
+        }
+        string += "]";
+      }
+      return string;
+  }
+  
   /**
    * helper method to write result
    * 
@@ -62,7 +87,7 @@ public class Writer {
     } else {
       try {
         @SuppressWarnings("unchecked")
-        List<Matrix> end = (List<Matrix>) cur.getResult();
+        List<String[][]> end = (List<String[][]>) cur.getResult();
         printWriter.write("[\n");
         for (int j = 0; j < end.size(); ++j) {
           printWriter.write("\t\t\t");
@@ -70,7 +95,7 @@ public class Writer {
             printWriter.write(",");
           printWriter.write("[\n");
 
-          printWriter.write(end.get(j).toJsonString());
+          printWriter.write(writeMatrixToJsonString(end.get(j)));
 
           printWriter.write("\t\t\t" + "]\n");
         }
