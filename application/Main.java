@@ -30,6 +30,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -1058,7 +1059,7 @@ public class Main extends Application {
         alert.setTitle("Exit add?");
         alert.setContentText(
             "The calculation is incomplete" + lineSeparator + "Do you want to cancel addition?");
-
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         // Two types of buttons, yes, no
         ButtonType yes = new ButtonType("Yes");
         ButtonType no = new ButtonType("No");
@@ -1175,7 +1176,7 @@ public class Main extends Application {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Quit?");
         alert.setContentText("Do you want to save the calculation before you leave?");
-
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         // Three types of buttons, yes, no and cancel
         ButtonType yes = new ButtonType("Yes");
         ButtonType no = new ButtonType("No");
@@ -2216,6 +2217,7 @@ public class Main extends Application {
   private void alert(String title, String content) {
     Alert alert = new Alert(AlertType.ERROR);
     alert.setTitle(title);
+    alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
     alert.setContentText(content);
     alert.showAndWait();
   }
