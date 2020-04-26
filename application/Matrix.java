@@ -1200,7 +1200,8 @@ public class Matrix implements MatrixADT {
     return QRDecomposition[1].multiply(QRDecomposition[0]).add(muMatrix);
   }
 
-  private static int lowestDigitPlace = 6;
+  private static final int LOWEST_DIGITE_PLACE_STARTING_VALUE = 6;
+  private static int lowestDigitPlace = LOWEST_DIGITE_PLACE_STARTING_VALUE;
 
   private int lowestDigitInMatrix() {
     int ans = 0;
@@ -1242,9 +1243,11 @@ public class Matrix implements MatrixADT {
    */
   @Override
   public Numeric[] eigenValues() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
+    if(N == 1)
+      return new Numeric[] {new Numeric(entry[0][0])};
     int compensateDecimalDigits = lowestDigitInMatrix();
     lowestDigitPlace += compensateDecimalDigits;
-    int N = getSizeOfSquareMatrix();
     Matrix A = copy(), lastA = identityMatrixWithSizeOf(N), lastLastA;
     A = A.hessenburgForm();
     int interateCount = 0, n = N;
@@ -1320,7 +1323,7 @@ public class Matrix implements MatrixADT {
         eigenValueArray[numberOfEigenValue++] = eigenValue;
     }
 
-    lowestDigitPlace -= compensateDecimalDigits;
+    lowestDigitPlace = LOWEST_DIGITE_PLACE_STARTING_VALUE;
     return eigenValueArray;
   }
 
