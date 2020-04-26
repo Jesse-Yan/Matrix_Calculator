@@ -159,8 +159,18 @@ public class Main extends Application {
     // Set About Tag with alert
     Menu about = new Menu("About");
     MenuItem developer = new MenuItem("Developer");
+    MenuItem instruction = new MenuItem("Instruction");
+    instruction.setOnAction(event -> {
+      Alert alert = new Alert(AlertType.WARNING);
+      alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+      alert.setTitle("Instruction to use");
+      alert.setHeaderText("Please Read");
+      alert.setContentText("To do"); // To add to the user guide
+      alert.showAndWait();
+    });
     developer.setOnAction(event -> {
       Alert alert = new Alert(AlertType.WARNING);
+      alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
       alert.setTitle("About Developer");
       alert.setHeaderText("Matrix-Calculator");
       alert.setContentText(
@@ -171,7 +181,7 @@ public class Main extends Application {
               + "    Chengxu Bian - cbian4@wisc.edu");
       alert.showAndWait();
     });
-    about.getItems().add(developer);
+    about.getItems().addAll(instruction, developer);
 
     // Add all to the MenuBar
     menuBar.getMenus().addAll(menu, about);
