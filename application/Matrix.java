@@ -610,6 +610,17 @@ public class Matrix implements MatrixADT {
 
   /**
    * 
+   * Use Rank¨Cnullity theorem theorem
+   * 
+   * @throws SingularException
+   * 
+   */
+  public int nullity() {
+    return getNumberOfColumn() - rank();
+  }
+
+  /**
+   * 
    * Gaussian-Elimination.
    * 
    * @throws SingularException
@@ -619,6 +630,30 @@ public class Matrix implements MatrixADT {
     Matrix answerMatrix = copy();
     answerMatrix.gussianEliminate(true);
     return answerMatrix;
+  }
+
+  
+  public Matrix[] choleskyDecomposition() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
+    
+    Matrix lower = new Matrix(N, N);
+
+    for (int i = 0; i < N; i++) {
+      for (int j = 0; j <= i; j++) {
+        Numeric sum = Numeric.of(0);
+        if (j == i) {
+          for (int k = 0; k < j; k++)
+            sum = sum.add(lower.entry[j][k].multiply(lower.entry[j][k]));
+          lower.entry[j][j] = entry[j][j].subtract(sum).sqrt();
+        }
+        else {
+          for (int k = 0; k < j; k++)
+            sum = sum.add(lower.entry[i][k].multiply(lower.entry[j][k]));
+          lower.entry[i][j] = (entry[i][j].subtract(sum)).dividedBy(lower.entry[j][j]);
+        }
+      }
+    }
+    return new Matrix[] {lower, lower.transpose()};
   }
 
 
@@ -1084,14 +1119,13 @@ public class Matrix implements MatrixADT {
       if (A.entry[n - 1][n - 2].isZeroBy(lowestDigitPlace / 2)) {
         potentialEigenValues.add(Numeric.of(0));
         if (n == 2) {
-          potentialEigenValues.add(A.entry[n - 2][n - 2]);
           break;
         }
         lastLastA = lastA = A.subMatrix(0, n - 1, 0, n - 1);
         A = lastA.qrIterationWithWilkinsonShift();
         n--;
       }
-      // System.out.println(A);
+      System.out.println(A);
       if (interateCount > 10000)
         throw new ArithmeticException("Doesn't Converge");
       if (sameDiagnal(A, lastLastA))
@@ -1106,6 +1140,9 @@ public class Matrix implements MatrixADT {
     Collections.addAll(potentialEigenValues, A.diagonal());
 
     TreeSet<Numeric> eigenValues = new TreeSet<Numeric>();
+
+    System.out.println(potentialEigenValues);
+
     for (Numeric eigenValue : potentialEigenValues) {
       try {
         if (eigenValue.isZeroBy(lowestDigitPlace))
@@ -1126,7 +1163,7 @@ public class Matrix implements MatrixADT {
         // System.out.println("*" + A);
         // System.out.println("Error" + M.determinant().abs());
 
-        for (int i = 1; i < N; i++) {
+        for (int i = 0; i < N; i++) {
           if (U.entry[i][i].isZeroBy(lowestDigitPlace / 2)) {
             eigenValues.add(eigenValue);
             break;
@@ -1138,8 +1175,8 @@ public class Matrix implements MatrixADT {
     Numeric[] eigenValueArray = new Numeric[eigenValues.size()];
     int numberOfEigenValue = 0;
     for (Numeric eigenValue : eigenValues) {
-      if (numberOfEigenValue == 0 || !eigenValueArray[numberOfEigenValue - 1].equals(eigenValueArray,
-          Numeric.outputSignificantFigures + 1))
+      if (numberOfEigenValue == 0 || !eigenValueArray[numberOfEigenValue - 1]
+          .equals(eigenValueArray, Numeric.outputSignificantFigures + 1))
         eigenValueArray[numberOfEigenValue++] = eigenValue;
     }
 
@@ -1155,8 +1192,7 @@ public class Matrix implements MatrixADT {
      * "10"}, {"11", "12", "13", "14", "15"}, {"16", "17", "18", "19", "20"}, {"21", "22", "23",
      * "24", "25"}});
      */
-    Matrix A =
-        new Matrix(new String[][] {{"81", "8", "63"}, {"73", "87", "18"}, {"28", "9", "97"}});
+    Matrix A = new Matrix(new String[][] {{"-1", "-2"}, {"-1", "-1"}});
     System.out.println(Arrays.deepToString(A.eigenValues()));
   }
 
