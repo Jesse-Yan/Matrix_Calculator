@@ -167,26 +167,15 @@ public class MatrixCalculator {
    * 
    * @return the QR decomposition of matrix1
    * @throws MatrixDimensionsMismatchException - if not a square matrix.
-   * @throws MatrixArithmeticException - Cannot do QR decomposition
+   * @throws MatrixArithmeticException         - Cannot do QR decomposition
    */
-  public List<String[][]> getQRDecomposition() throws MatrixDimensionsMismatchException, MatrixArithmeticException {
+  public List<String[][]> getQRDecomposition() {
     Matrix firstMatrix = new Matrix(matrix1);
     Matrix[] qrResult = firstMatrix.QRDecomposition();
     ArrayList<String[][]> answer = new ArrayList<String[][]>();
     answer.add(properFormatted(qrResult[0]));
     answer.add(properFormatted(qrResult[1]));
     return answer;
-  }
-
-  /**
-   * Return the trace of matrix1, which is represented by a String.
-   * 
-   * @return the trace of matrix1, which is represented by a String.
-   * @throws MatrixDimensionsMismatchException if matrix1 is not a square matrix.
-   */
-  public String getTrace() throws MatrixDimensionsMismatchException {
-    Matrix firstMatrix = new Matrix(matrix1);
-    return properFormatted(firstMatrix.trace());
   }
 
   /**
@@ -216,10 +205,30 @@ public class MatrixCalculator {
   }
 
   /**
+   * Return the trace of matrix1, which is represented by a String.
+   * 
+   * @return the trace of matrix1, which is represented by a String.
+   * @throws MatrixDimensionsMismatchException if matrix1 is not a square matrix.
+   */
+  public String getTrace() throws MatrixDimensionsMismatchException {
+    Matrix firstMatrix = new Matrix(matrix1);
+    return properFormatted(firstMatrix.trace());
+  }
+
+  /**
+   * Return the nullity of matrix1.
+   * 
+   * @return the nullity of matrix1, which is represented by a String.
+   */
+  public String getNullity() {
+    Matrix firstMatrix = new Matrix(matrix1);
+    return firstMatrix.nullity() + "";
+  }
+
+  /**
    * Return the matrix1 after Guassian-Elimination, which is represented by a String[][].
    * 
    * @return the the matrix1 after Guassian-Elimination, which is represented by a String[][]
-   * @throws SingularException
    */
   public String[][] getGuassianElimination() {
     Matrix firstMatrix = new Matrix(matrix1);
@@ -227,13 +236,29 @@ public class MatrixCalculator {
   }
 
   /**
+   * 
+   * Get the Cholesky Decomposition of the matrix. The result will be represented by a List of
+   * length 2 of String[][].
+   * 
+   * @return a List of  length 2 of String[][] representing the result
+   * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix.
+   */
+  public List<String[][]> getCholeskyDecomposition() throws MatrixDimensionsMismatchException {
+    Matrix firstMatrix = new Matrix(matrix1);
+    Matrix[] choleskyDecomposition = firstMatrix.choleskyDecomposition();
+    ArrayList<String[][]> answer = new ArrayList<String[][]>();
+    answer.add(properFormatted(choleskyDecomposition[0]));
+    answer.add(properFormatted(choleskyDecomposition[1]));
+    return answer;
+  }
+
+  /**
    * Return the getEigenValues of matrix1.
    * 
    * @return the getEigenValues of matrix1, which is represented by a String[][]
    * @throws MatrixDimensionsMismatchException if matrix1 is not a square matrix.
-   * @throws SingularException - ???
    */
-  public String getEigenValues() throws MatrixDimensionsMismatchException, SingularException {
+  public String getEigenValues() throws MatrixDimensionsMismatchException {
     Matrix firstMatrix = new Matrix(matrix1);
     return Arrays.toString(properFormatted(firstMatrix.eigenValues()));
     // return properFormatted(firstMatrix.eigenValues()); // maybe useful in the future.
@@ -244,9 +269,9 @@ public class MatrixCalculator {
    * 
    * @return the rank of matrix1, which is represented by a String.
    */
-  public int getRank() {
+  public String getRank() {
     Matrix firstMatrix = new Matrix(matrix1);
-    return firstMatrix.rank();
+    return firstMatrix.rank() + "";
   }
 
   /**
@@ -306,7 +331,7 @@ public class MatrixCalculator {
    * @param args
    * @throws MatrixDimensionsMismatchException
    * @throws MatrixArithmeticException
-   * @throws SingularException 
+   * @throws SingularException
    */
   public static void main(String[] args)
       throws MatrixDimensionsMismatchException, MatrixArithmeticException, SingularException {
@@ -406,8 +431,8 @@ public class MatrixCalculator {
 
     // ************************ Demo for Pow *********************************
     System.out.println("Demo for Pow");
-    matrixA = new String[][] {{"1/2", "1"}, {"3/2", "2"}};
-    int n = 8;
+    matrixA = new String[][] {{"1", "2", "3"}, {"4", "5", "6"}, {"7", "8", "9"}};
+    int n = 10;
     matrixCalculator = new MatrixCalculator(matrixA);
     System.out.println(Arrays.deepToString(matrixCalculator.getPow(n)) + '\n');
     // ************************ Demo for Pow *********************************

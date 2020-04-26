@@ -1,6 +1,8 @@
 package application;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.TreeSet;
 
 /**
@@ -74,9 +76,7 @@ public class Matrix implements MatrixADT {
 
   /**
    * 
-   * A copy constructor
-   * 
-   * This constructor copies the given matrix to construct the matrix.
+   * This is a copy constructor. This constructor copies the given matrix to construct the matrix.
    * 
    * @param other a given Matrix used to construct this matrix
    */
@@ -132,21 +132,21 @@ public class Matrix implements MatrixADT {
     }
     return string;
   }
-  
+
   /**
-   * Convert this matrix to string. The entries are converted to string by rows.
-   * In each row, numbers are separated by a " ". Rows are separated with ",\n".
+   * Convert this matrix to string. The entries are converted to string by rows. In each row,
+   * numbers are separated by a " ". Rows are separated with ",\n".
    */
   public String toJsonString() {
     String string = "";
     for (int i = 0; i < entry.length; i++) {
-      if (i!=0)
+      if (i != 0)
         string += ",\n";
       string += "[";
       for (int j = 0; j < entry[0].length; j++) {
-        if (j!=0)
-          string +=", ";
-        string += "\""+entry[i][j].toString() + "\"";
+        if (j != 0)
+          string += ", ";
+        string += "\"" + entry[i][j].toString() + "\"";
       }
       string += "]";
     }
@@ -213,6 +213,9 @@ public class Matrix implements MatrixADT {
    * Receives another object (which should be a matrix), and check whether the given matrix is equal
    * to this matrix. Return true if the given object is a Matrix, and matrices have exactly same
    * dimension, and all entries are equal. Return false otherwise.
+   * 
+   * Two decided whether two decimals are equal, they will be compared according to a specific
+   * number of significant digits, which is decided by Numeric.SIGNIFICANT_FIGURE_FOR_COMPARISON.
    */
   @Override
   public boolean equals(Object obj) {
@@ -231,10 +234,17 @@ public class Matrix implements MatrixADT {
     return false;
   }
 
-  /*
-   * Receives another object (which should be a matrix), and check whether the given matrix is
-   * mathematically equal to this matrix. Return true if the given object is a Matrix, and matrices
+  /**
+   * This method also receives another object (which should be a matrix), and check whether the
+   * given matrix is equal to this matrix. Return true if the given object is a Matrix, and matrices
    * have exactly same dimension, and all entries are equal. Return false otherwise.
+   * 
+   * Unlike the method "equals()", this method will always return false if any of the entries is a
+   * decimal number(That is, not a Fraction or integer).
+   * 
+   * @param obj a given object which is used to compare with this matrix
+   * @return true if the given object is a Matrix, and matrices have exactly same dimension, and all
+   *         entries are equal, false otherwise.
    */
   public boolean mathematicallyEquals(Matrix obj) {
     if (obj instanceof Matrix) {
@@ -306,6 +316,11 @@ public class Matrix implements MatrixADT {
       throw new MatrixDimensionsMismatchException("Cannot support multiplication");
   }
 
+  /**
+   * Multiply matrices.
+   * 
+   * @see https://en.wikipedia.org/wiki/Matrix_multiplication
+   */
   @Override
   public Matrix multiply(MatrixADT other) throws MatrixDimensionsMismatchException {
     multipicationCheck(other);
@@ -384,63 +399,6 @@ public class Matrix implements MatrixADT {
     return getNumberOfRow();
   }
 
-  /**
-   * 
-   * A private helper method that helps to calculate the matrix to the power of n when n is a
-   * positive integer.
-   * 
-   * The algorithm used is exponentiation by squaring.
-   * 
-   * @param n given n, which must be a positive integer
-   * @return the matrix to the power of n
-   * 
-   * @see https://en.wikipedia.org/wiki/Exponentiation_by_squaring
-   */
-  private Matrix helperpow(int n) {
-    if (n < 0)
-      throw new IllegalArgumentException("Parameter must be greater than 0.");
-    if (n == 1)
-      return copy();
-    try {
-      Matrix matrixPowHalfN = helperpow(n / 2);
-      if (n % 2 == 0)
-        return matrixPowHalfN.multiply(matrixPowHalfN);
-      if (n % 2 == 1)
-        return this.multiply(matrixPowHalfN.multiply(matrixPowHalfN));
-    } catch (MatrixDimensionsMismatchException e) {
-      // Unexpected, since it must be a square matrix. Only the pow() method of this class used this
-      // method, and the pow() method would make sure that the given matrix is a square matrix.
-      e.printStackTrace();
-    }
-    return null;
-  }
-
-  @Override
-  public Matrix pow(int n) throws MatrixDimensionsMismatchException, MatrixArithmeticException {
-    int N = getSizeOfSquareMatrix();
-    if (n == 0)
-      return identityMatrixWithSizeOf(N);
-    else if (n > 0)
-      return helperpow(n);
-    else if (n < 0)
-      return inverse().helperpow(-n);
-    return null;
-  }
-
-  /**
-   * A private helper method that swap two rows of the matrix. That is, swap rowX and rowY.
-   * 
-   * @param rowX the index of the first row
-   * @param rowY the index of the second row
-   */
-  private void swapRow(int rowX, int rowY) {
-    int M = getNumberOfColumn();
-    for (int i = 0; i < M; i++) {
-      Numeric tmp = entry[rowX][i];
-      entry[rowX][i] = entry[rowY][i];
-      entry[rowY][i] = tmp;
-    }
-  }
 
   /**
    * 
@@ -476,96 +434,6 @@ public class Matrix implements MatrixADT {
       if (!entry[i][k].equals(Numeric.of(0)))
         return i;
     return l;
-  }
-
-  /**
-   * 
-   * A private helper method that do partial pivoting at kth column and kth row, return whether the
-   * row is swapped.
-   * 
-   * @param k the column and the row to do partial pivoting
-   * @return true if rows are swapped during the partial pivoting
-   * @throws SingularException if the pivot of this row is 0 and no rows have non-zero pivot can be
-   *                           swapped with this row to make the pivot a non-zero number.
-   * 
-   * @see https://en.wikipedia.org/wiki/Pivot_element#Partial_and_complete_pivoting
-   */
-  private boolean partialPivoting(int k) throws SingularException {
-    int pivotRow = indexOfLargestPivotElement(k, k);
-    Numeric pivotElement = entry[pivotRow][k];
-    if (pivotElement.compareTo(new Numeric(0)) == 0)
-      throw new SingularException();
-    if (pivotRow != k) {
-      swapRow(k, pivotRow);
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * 
-   * The first step of Gaussian-Elimination.
-   * 
-   * A private helper method that do the forward elimination of the Gaussian Elimination. That is,
-   * eliminate the matrix to an Echelon form.
-   * 
-   * @throws SingularException if the matrix cannot be eliminate into a upper triangle matrix with
-   *                           no zero element on the main diagonal.
-   * @return true if there are odd number of row swaps, false otherwise.
-   */
-  private boolean forwardEliminate() throws SingularException {
-    int N = getNumberOfRow();
-    int M = getNumberOfColumn();
-    boolean signChanged = false;
-    for (int k = 0; k < N; k++) {
-      signChanged = signChanged | partialPivoting(k);
-      for (int i = k + 1; i < N; i++) {
-        Numeric f = entry[i][k].dividedBy(entry[k][k]);
-        for (int j = k + 1; j < M; j++)
-          entry[i][j] = entry[i][j].subtract(entry[k][j].multiply(f));
-        entry[i][k] = new Numeric(0);
-      }
-    }
-    return signChanged;
-  }
-
-  /**
-   * 
-   * The second step of Gaussian-Elimination.
-   * 
-   * A private helper method that do the backward elimination of the Gaussian Elimination. That is,
-   * eliminate the Echelon form.
-   * 
-   * @throws SingularException if the matrix cannot be eliminate into a diagnal triangle matrix with
-   *                           no zero element on the main diagonal.
-   */
-  private void backwardEliminate() {
-    int N = getNumberOfRow();
-    int M = getNumberOfColumn();
-    for (int k = N - 1; k >= 0; k--) {
-      for (int i = 0; i < k; i++) {
-        Numeric f = entry[i][k].dividedBy(entry[k][k]);
-        for (int j = k + 1; j < M; j++)
-          entry[i][j] = entry[i][j].subtract(entry[k][j].multiply(f));
-        entry[i][k] = new Numeric(0);
-      }
-    }
-  }
-
-  /**
-   * 
-   * The third step of Gaussian-Elimination.
-   * 
-   * Simplify the matrix after elimination. Make sure that all elements on the main diagonal is 1.
-   */
-  private void simplifyAfterElimination() {
-    int N = getNumberOfRow();
-    int M = getNumberOfColumn();
-    for (int i = 0; i < N; i++) {
-      Numeric f = entry[i][i];
-      for (int j = 0; j < M; j++)
-        entry[i][j] = entry[i][j].dividedBy(f);
-    }
   }
 
   /**
@@ -621,30 +489,6 @@ public class Matrix implements MatrixADT {
     return new Matrix(augmentedMatrixEntries);
   }
 
-
-  /**
-   * Find the inverse of the matrix by using Gaussian-Elimination on a augmentedMatrix.
-   * 
-   * @return matrix that been inverted
-   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
-   * @throws MatrixArithmeticException         - if the matrix is not invertible.
-   * 
-   * @see https://en.wikipedia.org/wiki/Invertible_matrix#Gaussian_elimination
-   */
-  @Override
-  public Matrix inverse() throws MatrixDimensionsMismatchException, MatrixArithmeticException {
-    int N = getSizeOfSquareMatrix();
-    Matrix augmentedMatrix = augmentMatirx(identityMatrixWithSizeOf(N));
-    try {
-      augmentedMatrix.forwardEliminate();
-    } catch (SingularException singularException) {
-      throw new MatrixArithmeticException("The matrix is not invertible!");
-    }
-    augmentedMatrix.backwardEliminate();
-    augmentedMatrix.simplifyAfterElimination();
-    return augmentedMatrix.subMatrix(0, N, N, 2 * N);
-  }
-
   /**
    * If the matrix is a square matrix, return the product of the diagonal.
    * 
@@ -674,24 +518,18 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * Find the determinant of the matrix by using Gaussian-Elimination method.
+   * A private helper method that swap two rows of the matrix. That is, swap rowX and rowY.
    * 
+   * @param rowX the index of the first row
+   * @param rowY the index of the second row
    */
-  @Override
-  public Numeric determinant() throws MatrixDimensionsMismatchException {
-    checkSquare();
-    Matrix answerMatrix = copy();
-    boolean signChanged = false;
-    try {
-      signChanged = answerMatrix.forwardEliminate();
-      answerMatrix.backwardEliminate();
-    } catch (SingularException singularException) {
-      return new Numeric(0);
+  private void swapRow(int rowX, int rowY) {
+    int M = getNumberOfColumn();
+    for (int i = 0; i < M; i++) {
+      Numeric tmp = entry[rowX][i];
+      entry[rowX][i] = entry[rowY][i];
+      entry[rowY][i] = tmp;
     }
-    Numeric ansNumeric = answerMatrix.productOfDiagonal();
-    if (signChanged)
-      ansNumeric = new Numeric(0).subtract(ansNumeric);
-    return ansNumeric;
   }
 
   /**
@@ -712,7 +550,16 @@ public class Matrix implements MatrixADT {
       swapRow(l, pivotRow);
   }
 
-  private int gussianEliminate() {
+  private void generalPartialPivotingWithLargestPivot(int k, int l) throws SingularException {
+    int pivotRow = indexOfLargestPivotElement(k, l);
+    Numeric pivotElement = entry[pivotRow][k];
+    if (pivotElement.compareTo(new Numeric(0)) == 0)
+      throw new SingularException();
+    if (pivotRow != l)
+      swapRow(l, pivotRow);
+  }
+
+  private int gussianEliminate(boolean usingNextNonZeroPivot) {
     int N = getNumberOfRow();
     int M = getNumberOfColumn();
     int dif = 0;
@@ -723,7 +570,10 @@ public class Matrix implements MatrixADT {
         return M - dif;
       while (!success) {
         try {
-          generalPartialPivotingWithNextNonZeroPivot(k, l);
+          if (usingNextNonZeroPivot)
+            generalPartialPivotingWithNextNonZeroPivot(k, l);
+          else
+            generalPartialPivotingWithLargestPivot(k, l);
           success = true;
         } catch (SingularException e) {
           dif++;
@@ -755,7 +605,18 @@ public class Matrix implements MatrixADT {
    */
   public int rank() {
     Matrix answerMatrix = copy();
-    return answerMatrix.gussianEliminate();
+    return answerMatrix.gussianEliminate(false);
+  }
+
+  /**
+   * 
+   * Use Rank¨Cnullity theorem theorem
+   * 
+   * @throws SingularException
+   * 
+   */
+  public int nullity() {
+    return getNumberOfColumn() - rank();
   }
 
   /**
@@ -767,8 +628,31 @@ public class Matrix implements MatrixADT {
    */
   public Matrix gussianElimination() {
     Matrix answerMatrix = copy();
-    answerMatrix.gussianEliminate();
+    answerMatrix.gussianEliminate(true);
     return answerMatrix;
+  }
+
+
+  public Matrix[] choleskyDecomposition() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
+
+    Matrix lower = new Matrix(N, N);
+
+    for (int i = 0; i < N; i++) {
+      for (int j = 0; j <= i; j++) {
+        Numeric sum = Numeric.of(0);
+        if (j == i) {
+          for (int k = 0; k < j; k++)
+            sum = sum.add(lower.entry[j][k].multiply(lower.entry[j][k]));
+          lower.entry[j][j] = entry[j][j].subtract(sum).sqrt();
+        } else {
+          for (int k = 0; k < j; k++)
+            sum = sum.add(lower.entry[i][k].multiply(lower.entry[j][k]));
+          lower.entry[i][j] = (entry[i][j].subtract(sum)).dividedBy(lower.entry[j][j]);
+        }
+      }
+    }
+    return new Matrix[] {lower, lower.transpose()};
   }
 
 
@@ -824,15 +708,26 @@ public class Matrix implements MatrixADT {
         .augmentMatirxByExtendingColumns(leftBottom.augmentMatirx(rightBottom));
   }
 
-  public Matrix[] LUPDecompositionHelper() throws MatrixDimensionsMismatchException {
+  public Object[] LUPDecompositionHelper(boolean usingNextNonZeroPivot)
+      throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
+    boolean signChanged = false;
     if (N == 1)
-      return new Matrix[] {identityMatrixWithSizeOf(1), this.copy(), identityMatrixWithSizeOf(1)};
+      return new Object[] {identityMatrixWithSizeOf(1), this.copy(), identityMatrixWithSizeOf(1),
+          false};
 
     Matrix A = copy();
 
-    int i = A.indexOfNextNonZeroPivotElement(0, 0);
-    A.swapRow(0, i);
+    int i;
+    if (usingNextNonZeroPivot) {
+      i = A.indexOfNextNonZeroPivotElement(0, 0);
+    } else {
+      i = A.indexOfLargestPivotElement(0, 0);
+    }
+    if (i != 0) {
+      A.swapRow(0, i);
+      signChanged = true;
+    }
 
     Matrix A_bar11 = A.subMatrix(0, 1, 0, 1);
     Matrix A_bar12 = A.subMatrix(0, 1, 1, N);
@@ -841,10 +736,11 @@ public class Matrix implements MatrixADT {
 
     Matrix S22 = A_bar22.subtract(A_bar21.multiply(A_bar12).dividedBy(A_bar11.getEntry(0, 0)));
 
-    Matrix[] tmp = S22.LUPDecompositionHelper();
-    Matrix L22 = tmp[0];
-    Matrix U22 = tmp[1];
-    Matrix P22 = tmp[2];
+    Object[] tmp = S22.LUPDecompositionHelper(usingNextNonZeroPivot);
+    Matrix L22 = (Matrix) tmp[0];
+    Matrix U22 = (Matrix) tmp[1];
+    Matrix P22 = (Matrix) tmp[2];
+    boolean previousSignChanged = (boolean) tmp[3];
 
     Matrix L11 = identityMatrixWithSizeOf(1);
     Matrix U11 = A_bar11.copy();
@@ -863,18 +759,97 @@ public class Matrix implements MatrixADT {
     Matrix U = combineMatrix(U11, U12, U21, U22);
     Matrix P = upperPartOfP.augmentMatirxByExtendingColumns(lowerPartOfP);
 
-    return new Matrix[] {L, U, P};
+    return new Object[] {L, U, P, signChanged | previousSignChanged};
   }
 
   public Matrix[] LUPDecomposition() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
-    Matrix[] tmp = this.LUPDecompositionHelper();
-    Matrix L = tmp[0];
-    Matrix U = tmp[1];
-    Matrix P = tmp[2];
+    Object[] tmp = this.LUPDecompositionHelper(true);
+    Matrix L = (Matrix) tmp[0];
+    Matrix U = (Matrix) tmp[1];
+    Matrix P = (Matrix) tmp[2];
     if (P.mathematicallyEquals(identityMatrixWithSizeOf(N)))
       P = null;
     return new Matrix[] {L, U, P};
+  }
+
+  /**
+   * Find the determinant of the matrix by using LUP.
+   * 
+   */
+  @Override
+  public Numeric determinant() throws MatrixDimensionsMismatchException {
+    checkSquare();
+    Object[] LUPDecomposition = LUPDecompositionHelper(false);
+    Matrix U = (Matrix) LUPDecomposition[1];
+    boolean signChanged = (boolean) LUPDecomposition[3];
+    Numeric ansNumeric = U.productOfDiagonal();
+    if (signChanged)
+      ansNumeric = ansNumeric.opposite();
+    return ansNumeric;
+  }
+
+  /**
+   * Find the inverse of the matrix by using Gaussian-Elimination on a augmentedMatrix.
+   * 
+   * @return matrix that been inverted
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * @throws MatrixArithmeticException         - if the matrix is not invertible.
+   * 
+   * @see https://en.wikipedia.org/wiki/Invertible_matrix#Gaussian_elimination
+   */
+  @Override
+  public Matrix inverse() throws MatrixDimensionsMismatchException, MatrixArithmeticException {
+    int N = getSizeOfSquareMatrix();
+    if (determinant().equals(Numeric.of(0))) {
+      throw new MatrixArithmeticException("The matrix is not invertible!");
+    }
+    Matrix augmentedMatrix = augmentMatirx(identityMatrixWithSizeOf(N));
+    augmentedMatrix.gussianEliminate(false);
+    return augmentedMatrix.subMatrix(0, N, N, 2 * N);
+  }
+
+  /**
+   * 
+   * A private helper method that helps to calculate the matrix to the power of n when n is a
+   * positive integer.
+   * 
+   * The algorithm used is exponentiation by squaring.
+   * 
+   * @param n given n, which must be a positive integer
+   * @return the matrix to the power of n
+   * 
+   * @see https://en.wikipedia.org/wiki/Exponentiation_by_squaring
+   */
+  private Matrix helperpow(int n) {
+    if (n < 0)
+      throw new IllegalArgumentException("Parameter must be greater than 0.");
+    if (n == 1)
+      return copy();
+    try {
+      Matrix matrixPowHalfN = helperpow(n / 2);
+      if (n % 2 == 0)
+        return matrixPowHalfN.multiply(matrixPowHalfN);
+      if (n % 2 == 1)
+        return this.multiply(matrixPowHalfN.multiply(matrixPowHalfN));
+    } catch (MatrixDimensionsMismatchException e) {
+      // Unexpected, since it must be a square matrix. Only the pow() method of this class used this
+      // method, and the pow() method would make sure that the given matrix is a square matrix.
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  @Override
+  public Matrix pow(int n) throws MatrixDimensionsMismatchException, MatrixArithmeticException {
+    int N = getSizeOfSquareMatrix();
+    if (n == 0)
+      return identityMatrixWithSizeOf(N);
+    else if (n > 0)
+      return helperpow(n);
+    else if (n < 0)
+      return inverse().helperpow(-n);
+    return null;
   }
 
 
@@ -929,51 +904,60 @@ public class Matrix implements MatrixADT {
     return new Matrix(entry);
   }
 
-  /**
-   * Do QR decomposition using Gramï¿½Schmidt process.
-   * 
-   * @throws MatrixArithmeticException When singular
-   * 
-   * @see https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process
-   * @see https://en.wikipedia.org/wiki/QR_decomposition#Using_the_Gram%E2%80%93Schmidt_process
-   */
+  // Householder
   @Override
-  public Matrix[] QRDecomposition()
-      throws MatrixDimensionsMismatchException, MatrixArithmeticException {
-    int N = getSizeOfSquareMatrix();
-    if (determinant().equals(Numeric.of(0)))
-      throw new MatrixArithmeticException("Cannot do QR decomposition");
+  public Matrix[] QRDecomposition() {
+    Matrix A = copy();
+    int N = getNumberOfRow();
+    Matrix R = A;
+    Matrix Q = identityMatrixWithSizeOf(N);
 
-    ColumnVector[] a = toColumnVectors();
-    ColumnVector[] u = new ColumnVector[N];
-    ColumnVector[] e = new ColumnVector[N];
+    try {
+      for (int k = 0; k < N - 1; k++) {
 
-    for (int i = 0; i < N; i++) {
-      u[i] = a[i].copy();
-      for (int j = 0; j < i; j++) {
-        u[i] = new ColumnVector(u[i].subtract(e[j].multiply(a[i].innerProduct(e[j]))));
+        // x=zeros(m,1);
+        Matrix X = new Matrix(N, 1);
+
+        // x(k:m,1)=R(k:m,k);
+        Matrix tmp = R.subMatrix(k, N, k, k + 1);
+        X = X.substitueWith(tmp, k, N, 0, 1);
+
+        // g=norm(x);
+        Numeric g = X.norm();
+
+        // v=x; v(k)=x(k)+g;
+        Matrix V = X;
+        V.entry[k][0] = X.entry[k][0].add(g);
+
+        // s=norm(v);
+        Numeric s = V.norm();
+
+        // if s~=0, w=v/s;
+        Matrix W = V.dividedBy(s);
+
+        // u=2*R'*w;
+        Matrix U = R.transpose().multiply(W).multiply(Numeric.of(2));
+
+        // R=R-w*u'; %Product HR
+        R = R.subtract(W.multiply(U.transpose()));
+
+
+        // Q=Q-2*Q*w*w'; %Product QR
+        Q = Q.subtract(Q.multiply(W).multiply(W.transpose()).multiply(2));
+
       }
-      e[i] = new ColumnVector(u[i].dividedBy(u[i].norm()));
+    } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
+      // Unexpected
+      matrixDimensionsMismatchException.printStackTrace();
     }
-
-    Matrix Q = combineColumnVectorsToMatirx(e);
-    Matrix R = Q.transpose().multiply(this);
-
-
-    for (int i = 0; i < N; i++) {
-      for (int j = 0; j < i; j++) {
-        R.entry[i][j] = Numeric.of(0);
-      }
-    }
-
     return new Matrix[] {Q, R};
-  };
+  }
 
   /**
    * A private helper method that get an array of Numeric which are the entries on the diagonal
    * line. The matrix must be square matrix.
    * 
-   * @return an array of Numeric which is the enties on the diagonal line of the square matrix
+   * @return an array of Numeric which is the entries on the diagonal line of the square matrix
    * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix
    */
   private Numeric[] diagonal() throws MatrixDimensionsMismatchException {
@@ -986,61 +970,230 @@ public class Matrix implements MatrixADT {
 
 
 
+  private Matrix substitueWith(Matrix givenMatrix, int startRow, int endRow, int startColumn,
+      int endColumn) throws MatrixDimensionsMismatchException {
+    Matrix A = copy();
+    if (givenMatrix.getNumberOfRow() != endRow - startRow
+        || givenMatrix.getNumberOfColumn() != endColumn - startColumn)
+      throw new MatrixDimensionsMismatchException("Ah!");
+    for (int i = 0; i < endRow - startRow; i++)
+      for (int j = 0; j < endColumn - startColumn; j++)
+        A.entry[startRow + i][startColumn + j] = givenMatrix.getEntry(i, j);
+    return A;
+  }
+
+  private Matrix eliminateSmallValues(int digits) {
+    Matrix A = copy();
+    for (int i = 0; i < A.entry.length; i++) {
+      for (int j = 0; j < A.entry[i].length; j++) {
+        if (A.entry[i][j].isZeroBy(digits)) {
+          A.entry[i][j] = Numeric.of(0);
+        }
+      }
+    }
+    return A;
+  }
+
+  private Matrix hessenburgForm() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
+    Matrix A = copy();
+    for (int k = 0; k < N - 2; k++) {
+
+      // v = Q2D(k+1:n,k); alpha = -norm(v);
+      Matrix v = A.subMatrix(k + 1, N, k, k + 1);
+      Numeric alpha = v.norm().opposite(); // ???
+
+      // if (v(1) < 0) alpha = -alpha; end
+      if (v.entry[0][0].compareTo(Numeric.of(0)) < 0) {
+        alpha = alpha.opposite();
+      }
+
+      // v(1) = v(1) - alpha; v = v / norm(v);
+      v.entry[0][0] = v.entry[0][0].subtract(alpha);
+      v = v.dividedBy(v.norm());
+
+      // Q2D(k+1:n,k+1:n) = Q2D(k+1:n,k+1:n) - 2 * v * (v.' * Q2D(k+1:n,k+1:n));
+      Matrix A_22 = A.subMatrix(k + 1, N, k + 1, N);
+      Matrix A_22_ =
+          A_22.subtract(v.multiply(v.transpose().multiply(A_22)).multiply(Numeric.of(2)));
+      A = A.substitueWith(A_22_, k + 1, N, k + 1, N);
+
+      // Q2D(k+1,k) = alpha;
+      A.entry[k + 1][k] = alpha;
+
+      // Q2D(k+2:n,k) = 0;
+      for (int i = k + 2; i < N; i++) {
+        A.entry[i][k] = Numeric.of(0);
+      }
+
+
+      // Q2D(1:n,k+1:n) = Q2D(1:n,k+1:n) - 2 * (Q2D(1:n,k+1:n) * v) * v.';
+      Matrix A_2 = A.subMatrix(0, N, k + 1, N);
+      Matrix A_2_ = A_2.subtract(A_2.multiply(v).multiply(Numeric.of(2)).multiply(v.transpose()));
+      A = A.substitueWith(A_2_, 0, N, k + 1, N);
+
+    }
+
+    return A;
+
+  }
+
+  // @see http://web.stanford.edu/class/cme335/lecture5
+  private Numeric WilkinsonShiftHelper(Numeric a, Numeric b, Numeric c) {
+    Numeric delta = a.subtract(c).dividedBy(2);
+    Numeric bSquare = b.multiply(b);
+    Numeric deltaSquare = delta.multiply(delta);
+    // return c.subtract(x.dividedBy(y));
+    return c.add(delta).subtract(delta.sign().multiply(deltaSquare.add(bSquare).sqrt()));
+  }
+
+  private Numeric WilkinsonShift() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
+    return WilkinsonShiftHelper(entry[N - 2][N - 2], entry[N - 2][N - 1], entry[N - 1][N - 1]);
+  }
+
+  private Matrix qrIterationWithWilkinsonShift() throws MatrixDimensionsMismatchException {
+    int N = entry.length; // Already checked square
+    Numeric mu = WilkinsonShift();
+    Matrix muMatrix = identityMatrixWithSizeOf(N).multiply(mu);
+    Matrix[] QRDecomposition = this.subtract(muMatrix).QRDecomposition();
+    return QRDecomposition[1].multiply(QRDecomposition[0]).add(muMatrix);
+  }
+
+  private static int lowestDigitPlace = 6;
+
+  private int lowestDigitInMatrix() {
+    int ans = 0;
+    for (int i = 0; i < entry.length; i++)
+      for (int j = 0; j < entry[i].length; j++) {
+        double value = entry[i][j].doubleValue();
+        value = value - Math.floor(value);
+        int digits = 0;
+        int maxDigit = 2;
+        for (int k = 0; k < maxDigit && Math.abs(value) > 0.0000000000001; k++) {
+          value *= 10;
+          value = value - Math.floor(value);
+          digits++;
+        }
+        ans = Integer.max(ans, digits);
+      }
+    return ans;
+  }
+
+  private static boolean sameDiagnal(Matrix A, Matrix B) throws MatrixDimensionsMismatchException {
+    Numeric array1[] = A.diagonal();
+    Numeric array2[] = B.diagonal();
+    Arrays.sort(array1);
+    Arrays.sort(array2);
+    for (int i = 0; i < array1.length; i++) {
+      if (!array1[i].equals(array2[i], lowestDigitPlace / 2))
+        return false;
+    }
+    return true;
+  }
+
   /**
    * Find the eigenvalue of the matrix by QR algorithm.
-   * @throws SingularException  - ???
+   * 
+   * @throws SingularException - ???
    * 
    * 
    * @see https://en.wikipedia.org/wiki/QR_algorithm
    */
   @Override
-  public Numeric[] eigenValues() throws MatrixDimensionsMismatchException, SingularException {
-    try {
-      int N = getSizeOfSquareMatrix();
-      Matrix A = copy(), lastA;
-      Matrix[] QRDecomposition;
-      int interateCount = 0;
-      do {
-        lastA = A.copy();
-        QRDecomposition = A.QRDecomposition();
-        A = QRDecomposition[1].multiply(QRDecomposition[0]);
-        interateCount++;
-        if (interateCount > 10000000)
-          throw new IllegalStateException("The value does converge!");
-      } while (!Arrays.equals(A.diagonal(), lastA.diagonal()));
-      for (int i = 0; i < 1000; i++) {
-        lastA = A.copy();
-        QRDecomposition = A.QRDecomposition();
-        A = QRDecomposition[1].multiply(QRDecomposition[0]);
+  public Numeric[] eigenValues() throws MatrixDimensionsMismatchException {
+    int compensateDecimalDigits = lowestDigitInMatrix();
+    lowestDigitPlace += compensateDecimalDigits;
+    int N = getSizeOfSquareMatrix();
+    Matrix A = copy(), lastA = identityMatrixWithSizeOf(N), lastLastA;
+    A = A.hessenburgForm();
+    int interateCount = 0, n = N;
+    ArrayList<Numeric> potentialEigenValues = new ArrayList<Numeric>();
+    do {
+      lastLastA = lastA;
+      lastA = A;
+      A = A.qrIterationWithWilkinsonShift();
+      interateCount++;
+
+      if (A.entry[n - 1][n - 2].isZeroBy(lowestDigitPlace / 2)) {
+        potentialEigenValues.add(Numeric.of(0));
+        if (n == 2) {
+          break;
+        }
+        lastLastA = lastA = A.subMatrix(0, n - 1, 0, n - 1);
+        A = lastA.qrIterationWithWilkinsonShift();
+        n--;
       }
-      Numeric[] potentialEigenValues = A.diagonal();
-      TreeSet<Numeric> eigenValues = new TreeSet<Numeric>();
-      for (Numeric eigenValue : potentialEigenValues) {
-        try {
-          Numeric castedEigenValue = eigenValue.castToNearestFraction();
-          if (this.subtract(identityMatrixWithSizeOf(N).multiply(castedEigenValue)).determinant()
-              .mathematicallyEquals(Numeric.of(0))) {
-            eigenValues.add(castedEigenValue);
-          } else {
-            throw new ClassCastException("EigenValue Didn't match!");
-          }
-        } catch (ClassCastException classCastException) {
-          if (this.subtract(identityMatrixWithSizeOf(N).multiply(eigenValue)).determinant()
-              .abs().compareTo(Numeric.of(0.000000000001)) < 0) {
+      //System.out.println(A);
+      if (interateCount > 10000)
+        throw new ArithmeticException("Doesn't Converge");
+      if (sameDiagnal(A, lastLastA))
+        break;
+    } while (!sameDiagnal(A, lastA));
+    A = A.eliminateSmallValues(lowestDigitPlace);
+    for (int i = 0; i < 100; i++) {
+      A = A.qrIterationWithWilkinsonShift();
+    }
+    A = A.eliminateSmallValues(lowestDigitPlace);
+
+    Collections.addAll(potentialEigenValues, A.diagonal());
+
+    TreeSet<Numeric> eigenValues = new TreeSet<Numeric>();
+
+    //System.out.println(potentialEigenValues);
+
+    for (Numeric eigenValue : potentialEigenValues) {
+      try {
+        if (eigenValue.isZeroBy(lowestDigitPlace))
+          eigenValue = Numeric.of(0);
+        // System.out.println("eigenValue:" + eigenValue);
+        Numeric castedEigenValue = eigenValue.castToNearestFraction();
+        // System.out.println("Casted:" + castedEigenValue);
+        if (this.subtract(identityMatrixWithSizeOf(N).multiply(castedEigenValue)).determinant()
+            .mathematicallyEquals(Numeric.of(0))) {
+          eigenValues.add(castedEigenValue);
+        } else {
+          throw new ClassCastException("EigenValue Didn't match!");
+        }
+      } catch (ClassCastException classCastException) {
+
+        Matrix M = this.subtract(identityMatrixWithSizeOf(N).multiply(eigenValue));
+        Matrix U = M.LUPDecomposition()[1];
+        // System.out.println("*" + A);
+        // System.out.println("Error" + M.determinant().abs());
+
+        for (int i = 0; i < N; i++) {
+          if (U.entry[i][i].isZeroBy(lowestDigitPlace / 2)) {
             eigenValues.add(eigenValue);
+            break;
           }
         }
-      }
-      Numeric[] eigenValueArray = new Numeric[eigenValues.size()];
-      int n = 0;
-      for (Numeric eigenValue : eigenValues) {
-        eigenValueArray[n++] = eigenValue;
-      }
 
-      return eigenValueArray;
-    } catch (MatrixArithmeticException e) {
-      throw new SingularException();
+      }
     }
+    Numeric[] eigenValueArray = new Numeric[eigenValues.size()];
+    int numberOfEigenValue = 0;
+    for (Numeric eigenValue : eigenValues) {
+      if (numberOfEigenValue == 0 || !eigenValueArray[numberOfEigenValue - 1]
+          .equals(eigenValueArray, Numeric.outputSignificantFigures + 1))
+        eigenValueArray[numberOfEigenValue++] = eigenValue;
+    }
+
+    lowestDigitPlace -= compensateDecimalDigits;
+    return eigenValueArray;
+  }
+
+
+  public static void main(String[] args) throws MatrixDimensionsMismatchException, MatrixArithmeticException {
+
+    Matrix A = new Matrix(new String[][] {{"0", "2", "3", "4", "5"}, {"9.9", "7", "8", "9", "10"},
+        {"11", "12", "13", "14", "15"}, {"16", "17", "18", "19", "20"},
+        {"21", "22", "23", "24", "25"}});
+
+    //Matrix A = new Matrix(new String[][] {{"-1", "-2"}, {"-1", "-1"}});
+    System.out.println(Arrays.deepToString(A.eigenValues()));
+    System.out.println(A.pow(10));
+
   }
 
 }

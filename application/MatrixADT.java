@@ -25,22 +25,11 @@ public interface MatrixADT {
   /**
    * Getter of Matrix entry in certain position
    * 
-   * @param row - row number where entry is
+   * @param row    - row number where entry is
    * @param column - column where entry is
    * @return - a Numeric Object that represent entry
    */
   Numeric getEntry(int row, int column);
-
-  /**
-   * Return the transpose of the Matrix.
-   * 
-   * For example, transpose of {{1, 2, 3}, {4, 5, 6}} will be {{1, 4}, {2, 5}, {3, 6}}
-   * 
-   * @return the transpose of the Matrix
-   * 
-   * @see https://en.wikipedia.org/wiki/Transpose
-   */
-  MatrixADT transpose();
 
   /**
    * Add this matrix by another matrix. The addition should be done by entries.
@@ -73,9 +62,9 @@ public interface MatrixADT {
    * @see https://en.wikipedia.org/wiki/Matrix_multiplication
    */
   MatrixADT multiply(MatrixADT other) throws MatrixDimensionsMismatchException;
-  
+
   /**
-   * get determinant of matrix. The given matrix must be a square matrix.
+   * Get determinant of matrix. The given matrix must be a square matrix.
    * 
    * @return the determinant of the matrix
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
@@ -83,7 +72,7 @@ public interface MatrixADT {
    * @see https://en.wikipedia.org/wiki/Determinant
    */
   Numeric determinant() throws MatrixDimensionsMismatchException;
-  
+
   /**
    * Get the inverse of a square matrix. The given matrix must be a square matrix.
    * 
@@ -96,12 +85,110 @@ public interface MatrixADT {
    * 
    * @return matrix that been inverted
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
-   * @throws MatrixArithmeticException  - if the matrix is not invertible.
+   * @throws MatrixArithmeticException         - if the matrix is not invertible.
    * 
    * @see https://en.wikipedia.org/wiki/Invertible_matrix
    */
   MatrixADT inverse() throws MatrixDimensionsMismatchException, MatrixArithmeticException;
-  
+
+
+  /**
+   * 
+   * QR decomposition.
+   * 
+   * @return an array of length 2. The first is Q, and the second is R.
+   * 
+   * @see https://en.wikipedia.org/wiki/QR_decomposition
+   */
+
+  MatrixADT[] QRDecomposition();
+
+  /**
+   * 
+   * If it is possible to do LU decomposition, this method will do LU decomposition to the matrix.
+   * Otherwise, it would do a LUP decomposition.
+   * 
+   * @return an array of length 3. The first is L, and the second is U. If LU decomposition is done,
+   *         the third element in the array will be null, otherwise it will be the P.
+   * 
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * 
+   * @see https://en.wikipedia.org/wiki/QR_decomposition
+   */
+
+  MatrixADT[] LUPDecomposition() throws MatrixDimensionsMismatchException;
+
+  /**
+   * Get the trace of matrix. The given matrix must be a square matrix.
+   * 
+   * @return the trace of the matrix
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * 
+   * @see https://en.wikipedia.org/wiki/Trace_(linear_algebra)
+   */
+  Numeric trace() throws MatrixDimensionsMismatchException;
+
+  /**
+   * Get the nullity of matrix.
+   * 
+   * @return the nullity of the matrix
+   * 
+   * @see https://mathworld.wolfram.com/Nullity.html
+   */
+  int nullity();
+
+
+  /**
+   * Get the EigenValues of the matrix. The given matrix must be a square matrix.
+   * 
+   * @return an array of Numeric[], which represents the eigenvalues of the matrix.
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * 
+   * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
+   */
+  Numeric[] eigenValues() throws MatrixDimensionsMismatchException;
+
+  /**
+   * Get the rank of matrix.
+   * 
+   * @return the rank of the matrix
+   * 
+   * @see https://mathworld.wolfram.com/Nullity.html
+   */
+  int rank();
+
+  /**
+   * Return the transpose of the Matrix.
+   * 
+   * For example, transpose of {{1, 2, 3}, {4, 5, 6}} will be {{1, 4}, {2, 5}, {3, 6}}
+   * 
+   * @return the transpose of the Matrix
+   * 
+   * @see https://en.wikipedia.org/wiki/Transpose
+   */
+  MatrixADT transpose();
+
+  /**
+   * 
+   * Do Guassian-elimination on the matrix, and return the result matrix.
+   * 
+   * @return the matrix after guassianElimination
+   * 
+   * @see https://en.wikipedia.org/wiki/Gaussian_elimination
+   */
+  MatrixADT gussianElimination();
+
+  /**
+   * 
+   * Do Cholesky-decomposition on the matrix. Return an an array of length 2 of matrix representing
+   * the result.
+   * 
+   * @return an array of length 2 representing the result
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * @throws ArithmeticException               - if Cholesky-decomposition cannot be done on the
+   *                                           real field.
+   */
+  MatrixADT[] choleskyDecomposition() throws MatrixDimensionsMismatchException;
 
   /**
    * Get the matrix to the power of n, the given matrix must be a square matrix.
@@ -117,34 +204,9 @@ public interface MatrixADT {
    * @param n - given n
    * @return - the matrix to the power of n
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
-   * @throws MatrixArithmeticException  - when n is negative but the matrix is non-invertible
+   * @throws MatrixArithmeticException         - when n is negative but the matrix is non-invertible
    * 
    * @see https://en.wikipedia.org/wiki/Matrix_multiplication#Powers_of_a_matrix
    */
   MatrixADT pow(int n) throws MatrixDimensionsMismatchException, MatrixArithmeticException;
-  
-  /**
-   * 
-   * QR decomposition. The given matrix must be a square matrix.
-   * 
-   * @return an array of length 2. The first is Q, and the second is R.
-   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
-   * @throws MatrixArithmeticException - when singular
-   * 
-   * @see https://en.wikipedia.org/wiki/QR_decomposition
-   */
-  
-  Matrix[] QRDecomposition() throws MatrixDimensionsMismatchException, MatrixArithmeticException;
-
-  /**
-   * Get the EigenValues of the matrix. The given matrix must be a square matrix.
-   * 
-   * @return an array of Numeric[], which represents the eigenvalues of the matrix.
-   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
-   * @throws SingularException - ??
-   * 
-   * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
-   */
-  Numeric[] eigenValues() throws MatrixDimensionsMismatchException, SingularException;
-
 }
