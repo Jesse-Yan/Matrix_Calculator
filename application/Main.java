@@ -726,7 +726,7 @@ public class Main extends Application {
           List<String[][]> resultCholesky = matrixCalculator.getCholeskyDecomposition();
           results.clear();
           results.addAll(resultCholesky.stream().map(i -> new Matrix(i)).collect(toList()));
-          resultShower = resultBuilderQR("Operation: QR", "QR", dataFromMatrix, resultCholesky.get(0),
+          resultShower = resultBuilderQR("Operation: Cholesky", "Cholesky", dataFromMatrix, resultCholesky.get(0),
               resultCholesky.get(1));
           scrollPane(vBoxR, resultShower);
           stateModifer();
@@ -1034,8 +1034,6 @@ public class Main extends Application {
         String operation = latestMOpera.getText();
         if (operation.equals("Gauss-Elim")) {
           operation = "GE";
-        } else if (operation.equals("Diagonalize")) {
-          operation = "Diag";
         } else if (operation.equals("EiValue")) {
           operation = "EIV";
         } else if (operation.equals("Transpose")) {
@@ -1089,8 +1087,6 @@ public class Main extends Application {
         operation = latestMOpera.getText();
         if (operation.equals("Gauss-Elim")) {
           operation = "GE";
-        } else if (operation.equals("Diagonalize")) {
-          operation = "Diag";
         } else if (operation.equals("EiValue")) {
           operation = "EIV";
         } else if (operation.equals("Transpose")) {
@@ -1455,7 +1451,7 @@ public class Main extends Application {
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
         mButtons.get(2).fire();
         break;
-      case "Nullity":
+      case "LUP":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
         mButtons.get(3).fire();
         break;
@@ -1464,7 +1460,7 @@ public class Main extends Application {
         mButtons.get(4).fire();
         isNum = true;
         break;
-      case "LUP":
+      case "Nullity":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
         mButtons.get(5).fire();
         break;
@@ -1543,8 +1539,6 @@ public class Main extends Application {
         } else {
           if (operation.equals("Gauss-Elim")) {
             operation = "GE";
-          } else if (operation.equals("Diagonalize")) {
-            operation = "Diag";
           } else if (operation.equals("EiValue")) {
             operation = "EIV";
           } else if (operation.equals("Transpose")) {
