@@ -57,16 +57,22 @@ public class OpeartionParser {
           rowSize = matrixs.size();
           for (int row = 0; row<matrixs.size();++row) {
             JSONArray rows = (JSONArray)matrixs.get(row);
+            String ttteeemmmppp;
             if (colSize == -1) {             
               colSize = rows.size();
               sumMatrix = new String[rowSize][colSize];
             } 
-            for (int col = 0; col < rows.size();++col) {
-              sumMatrix[row][col] = (String) rows.get(col);
-            }
             
+            for (int col = 0; col < rows.size();++col) {
+              ttteeemmmppp = ((String) rows.get(col));
+              sumMatrix[row][col] = new String(ttteeemmmppp);
+            }
           }
-          matrixList.add(sumMatrix);  
+          String [][] realMatrix = new String[sumMatrix.length][];
+          for (int wtf=0; wtf<sumMatrix.length;wtf++) {
+            realMatrix[wtf] = sumMatrix[wtf].clone();
+          }
+          matrixList.add(realMatrix.clone());  
         }
         calSteps.add(new CalSteps(operations,matrixList));
         matrixList = new ArrayList<String[][]>();
