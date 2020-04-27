@@ -161,26 +161,38 @@ public class Main extends Application {
     Menu about = new Menu("About");
     MenuItem developer = new MenuItem("Developer");
     MenuItem instruction = new MenuItem("Instruction");
+
+    // Add the EventHandler when clicking instruction
     instruction.setOnAction(event -> {
-      Alert alert = new Alert(AlertType.WARNING);
-      alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-      alert.setTitle("Instruction to use");
-      alert.setHeaderText("Please Read");
-      alert.setContentText("To do"); // To add to the user guide
-      alert.showAndWait();
+      try {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setTitle("Instruction to use");
+        alert.setHeaderText("Please Read");
+        alert.setContentText("To do"); // To add to the user guide
+        alert.showAndWait();
+      } catch (Exception e) {
+        /* If caught, do nothing */
+      }
     });
+
+    // Add the EventHandler when clicking the developer
     developer.setOnAction(event -> {
-      Alert alert = new Alert(AlertType.WARNING);
-      alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-      alert.setTitle("About Developer");
-      alert.setHeaderText("Matrix-Calculator");
-      alert.setContentText("Developedby:        " + lineSeparator
-          + "    Chengpo Yan - cyan46@wisc.edu" + lineSeparator
-          + "    Jinming Zhang - jzhang2279@wisc.edu" + lineSeparator
-          + "    Zexin Li - zli885@wisc.edu" + lineSeparator
-          + "    Houming Chen - hchen634@wisc.edu" + lineSeparator
-          + "    Chengxu Bian - cbian4@wisc.edu");
-      alert.showAndWait();
+      try {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setTitle("About Developer");
+        alert.setHeaderText("Matrix-Calculator");
+        alert.setContentText("Developedby:        " + lineSeparator
+            + "    Chengpo Yan - cyan46@wisc.edu" + lineSeparator
+            + "    Jinming Zhang - jzhang2279@wisc.edu" + lineSeparator
+            + "    Zexin Li - zli885@wisc.edu" + lineSeparator
+            + "    Houming Chen - hchen634@wisc.edu" + lineSeparator
+            + "    Chengxu Bian - cbian4@wisc.edu");
+        alert.showAndWait();
+      } catch (Exception e) {
+        /* If caught, do nothing */
+      }
     });
     about.getItems().addAll(instruction, developer);
 
@@ -292,105 +304,121 @@ public class Main extends Application {
 
     // Set the caretPosition
     input.setOnMouseClicked(e -> {
-      caretPosition = input.getCaretPosition();
-      focusedTextField = input;
+      try {
+        caretPosition = input.getCaretPosition();
+        focusedTextField = input;
+      } catch (Exception e1) {
+        /* If caught, do nothing */
+      }
     });
 
     // Add event handler to the buttons for input and output
     buttons.stream().forEach(btn -> {
-      btn.setOnAction(event -> {
-        // Set the related operation according to their inside text
-        String temp = btn.getText().trim();
-
-        // Case of Clear
-        if (temp.equals("C")) {
-          input.clear();
-          caretPosition = 0;
-
-          // Case of delete one character
-        } else if (temp.equals("<-")) {
+      try {
+        btn.setOnAction(event -> {
           try {
-            focusedTextField.setText(
-                focusedTextField.getText().substring(0, caretPosition - 1)
-                    + focusedTextField.getText().substring(caretPosition));
-            caretPosition--;
-          } catch (Exception e) {
-            /* If catch, do nothing */
-          }
+            // Set the related operation according to their inside text
+            String temp = btn.getText().trim();
 
-          // Case of positive or negative
-        } else if (temp.equals("+/-")) {
-          try {
-            String fromInput = focusedTextField.getText();
-            focusedTextField.setText(
-                fromInput.startsWith("-") ? fromInput.substring(1)
-                    : "-" + fromInput);
-          } catch (Exception e) {
-            /* If catch, do nothing */
-          }
+            // Case of Clear
+            if (temp.equals("C")) {
+              input.clear();
+              caretPosition = 0;
 
-          // Case for output
-        } else if (temp.equals("=")) {
-          try {
+              // Case of delete one character
+            } else if (temp.equals("<-")) {
+              try {
+                focusedTextField.setText(
+                    focusedTextField.getText().substring(0, caretPosition - 1)
+                        + focusedTextField.getText().substring(caretPosition));
+                caretPosition--;
+              } catch (Exception e) {
+                /* If catch, do nothing */
+              }
 
-            // '=' served for sequence and simple calculation
+              // Case of positive or negative
+            } else if (temp.equals("+/-")) {
+              try {
+                String fromInput = focusedTextField.getText();
+                focusedTextField.setText(
+                    fromInput.startsWith("-") ? fromInput.substring(1)
+                        : "-" + fromInput);
+              } catch (Exception e) {
+                /* If catch, do nothing */
+              }
 
-            // Case of simple calculation
-            if (!analyze) {
-              result.appendText(input.getText() + "" + lineSeparator + "="
-                  + Calculator.calcul("0" + input.getText()) + ""
-                  + lineSeparator + "");
+              // Case for output
+            } else if (temp.equals("=")) {
+              try {
 
-              // Case of analyze sequence
+                // '=' served for sequence and simple calculation
+
+                // Case of simple calculation
+                if (!analyze) {
+                  result.appendText(input.getText() + "" + lineSeparator + "="
+                      + Calculator.calcul("0" + input.getText()) + ""
+                      + lineSeparator + "");
+
+                  // Case of analyze sequence
+                } else {
+                  result.appendText(SequenceSummary.summary(input.getText()));
+                  analyze = false;
+                  space.setDisable(true);
+                  notNumber.stream().forEach(b -> b.setDisable(false));
+                  input.setOnMouseEntered(e -> {
+                    notNumber.stream().forEach(b -> b.setDisable(false));
+                  });
+                }
+
+                // Catch for wrong expression
+              } catch (Exception e) {
+                alert("Wrong Expression",
+                    "The equation you entered cannot be calculated"
+                        + lineSeparator + "Please press 'C' and try again");
+              }
+
+              // Case for number and dot
+            } else if (temp.matches("\\d") || temp.matches("\\.")) {
+              try {
+                focusedTextField.insertText(caretPosition, temp.trim());
+                ++caretPosition;
+              } catch (Exception e) {
+                /* If catch, do nothing */
+              }
+
+              // Case for absolute value
             } else {
-              result.appendText(SequenceSummary.summary(input.getText()));
-              analyze = false;
-              space.setDisable(true);
-              notNumber.stream().forEach(b -> b.setDisable(false));
-              input.setOnMouseEntered(e -> {
-                notNumber.stream().forEach(b -> b.setDisable(false));
-              });
+              try {
+                input.insertText(caretPosition, temp.replace("x", "").trim());
+                ++caretPosition;
+              } catch (Exception e) {
+                /* If catch, do nothing */
+              }
             }
-
-            // Catch for wrong expression
-          } catch (Exception e) {
-            alert("Wrong Expression",
-                "The equation you entered cannot be calculated" + lineSeparator
-                    + "Please press 'C' and try again");
+          } catch (Exception e1) {
+            /* If caught, do nothing */
           }
-
-          // Case for number and dot
-        } else if (temp.matches("\\d") || temp.matches("\\.")) {
-          try {
-            focusedTextField.insertText(caretPosition, temp.trim());
-            ++caretPosition;
-          } catch (Exception e) {
-            /* If catch, do nothing */
-          }
-
-          // Case for absolute value
-        } else {
-          try {
-            input.insertText(caretPosition, temp.replace("x", "").trim());
-            ++caretPosition;
-          } catch (Exception e) {
-            /* If catch, do nothing */
-          }
-        }
-      });
+        });
+      } catch (Exception e1) {
+        /* If caught, do nothing */
+      }
     });
 
     // Set for Sequence Actions
     analyzeSequence.setOnMouseClicked(e -> {
-      analyze = true;
-      space.setDisable(false);
+      try {
+        analyze = true;
+        space.setDisable(false);
 
-      // Disabling related buttons
-      notNumber.stream().forEach(b -> b.setDisable(true));
-      buttons.get(buttons.size() - 1).setDisable(false);
-      input.setOnMouseEntered(event -> {
+        // Disabling related buttons
+        notNumber.stream().forEach(b -> b.setDisable(true));
         buttons.get(buttons.size() - 1).setDisable(false);
-      });
+        input.setOnMouseEntered(event -> {
+          buttons.get(buttons.size() - 1).setDisable(false);
+        });
+      } catch (Exception e1) {
+        /* If caught, do nothing */
+      }
     });
 
     // Set for the EventHandler of button space
@@ -417,10 +445,14 @@ public class Main extends Application {
     // Set for Right and Left Disabling, switching between simple calculation
     // and matrix calculation
     vBoxR.setOnMouseEntered(e -> {
-      notNumber.stream().forEach(b -> b.setDisable(true));
-      buttons.get(3).setDisable(false);
-      if (analyze) {
-        buttons.get(23).setDisable(false);
+      try {
+        notNumber.stream().forEach(b -> b.setDisable(true));
+        buttons.get(3).setDisable(false);
+        if (analyze) {
+          buttons.get(23).setDisable(false);
+        }
+      } catch (Exception e1) {
+        /* If caught, do nothing */
       }
     });
 
@@ -501,12 +533,20 @@ public class Main extends Application {
 
     // Set the EventHandler for c1 matrixOperator
     c1.setOnMouseClicked(event -> {
-      matrix1Data.stream().forEach(TextField::clear);
+      try {
+        matrix1Data.stream().forEach(TextField::clear);
+      } catch (Exception e1) {
+        /* If caught, do nothing */
+      }
     });
 
     // Set the EventHandler for c2 matrixOperator
     operators.get(0).setOnMouseClicked(event -> {
-      matrix2Data.stream().forEach(TextField::clear);
+      try {
+        matrix2Data.stream().forEach(TextField::clear);
+      } catch (Exception e1) {
+        /* If caught, do nothing */
+      }
     });
 
     // Setter for single MatrixOperators
@@ -558,14 +598,18 @@ public class Main extends Application {
     // Add eventListener of enableSecond, the button that change the state of
     // one or two matrixes
     enableSecond.setOnAction(event -> {
-      if (enableSecond.isSelected()) {
-        singleOperationPanel.setDisable(true);
-        operators.stream().forEach(b -> b.setDisable(false));
-        matrix2.setDisable(false);
-      } else {
-        singleOperationPanel.setDisable(false);
-        operators.stream().forEach(b -> b.setDisable(true));
-        matrix2.setDisable(true);
+      try {
+        if (enableSecond.isSelected()) {
+          singleOperationPanel.setDisable(true);
+          operators.stream().forEach(b -> b.setDisable(false));
+          matrix2.setDisable(false);
+        } else {
+          singleOperationPanel.setDisable(false);
+          operators.stream().forEach(b -> b.setDisable(true));
+          matrix2.setDisable(true);
+        }
+      } catch (Exception e1) {
+        /* If caught, do nothing */
       }
     });
 
@@ -574,37 +618,46 @@ public class Main extends Application {
       // Add Operations related to MatrixCalculator
 
       // Add EventHandler to the '+' operation
-      operators.get(1)
-               .setOnAction(event -> {
-                 // Recorder the latest operation
-                 latestMOpera = operators.get(1);
+      operators.get(1).setOnAction(event -> {
+        try {
+          // Recorder the latest operation
+          latestMOpera = operators.get(1);
 
-                 // Invoke to process and output data
-                 twoMatrixOperator(vBoxR, matrix1Data, matrix2Data, rowAndCol1,
-                     rowAndCol2, "Operation: Add", "+");
-               });
+          // Invoke to process and output data
+          twoMatrixOperator(vBoxR, matrix1Data, matrix2Data, rowAndCol1,
+              rowAndCol2, "Operation: Add", "+");
+        } catch (Exception e1) {
+          /* If caught, do nothing */
+        }
+      });
 
       // Add EventHandler to the '-' operation
-      operators.get(2)
-               .setOnAction(event -> {
-                 // Recorder the latest operation
-                 latestMOpera = operators.get(2);
+      operators.get(2).setOnAction(event -> {
+        try {
+          // Recorder the latest operation
+          latestMOpera = operators.get(2);
 
-                 // Invoke to process and output data
-                 twoMatrixOperator(vBoxR, matrix1Data, matrix2Data, rowAndCol1,
-                     rowAndCol2, "Operation: Subtract", "-");
-               });
+          // Invoke to process and output data
+          twoMatrixOperator(vBoxR, matrix1Data, matrix2Data, rowAndCol1,
+              rowAndCol2, "Operation: Subtract", "-");
+        } catch (Exception e1) {
+          /* If caught, do nothing */
+        }
+      });
 
       // Add EventHandler to the '*' operation
-      operators.get(3)
-               .setOnAction(event -> {
-                 // Recorder the latest operation
-                 latestMOpera = operators.get(3);
+      operators.get(3).setOnAction(event -> {
+        try {
+          // Recorder the latest operation
+          latestMOpera = operators.get(3);
 
-                 // Invoke to process and output data
-                 twoMatrixOperator(vBoxR, matrix1Data, matrix2Data, rowAndCol1,
-                     rowAndCol2, "Operation: Multiply", "*");
-               });
+          // Invoke to process and output data
+          twoMatrixOperator(vBoxR, matrix1Data, matrix2Data, rowAndCol1,
+              rowAndCol2, "Operation: Multiply", "*");
+        } catch (Exception e1) {
+          /* If caught, do nothing */
+        }
+      });
 
       // Add EventHandler to special matrix operations
       singleMatrixOperations.get(0).setOnAction(event -> { // determinant
@@ -628,6 +681,8 @@ public class Main extends Application {
         } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
+        } catch (Exception e2) {
+          /* If caught, do nothing */
         }
       });
 
@@ -657,6 +712,8 @@ public class Main extends Application {
         } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
+        } catch (Exception e2) {
+          /* If caught, do nothing */
         }
       });
 
@@ -676,6 +733,8 @@ public class Main extends Application {
         } catch (NumberFormatException e2) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
+        } catch (Exception e3) {
+          /* If caught, do nothing */
         }
       });
 
@@ -693,6 +752,8 @@ public class Main extends Application {
         } catch (NumberFormatException e) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
+        } catch (Exception e1) {
+          /* If caught, do nothing */
         }
       });
 
@@ -717,6 +778,8 @@ public class Main extends Application {
         } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
+        } catch (Exception e2) {
+          /* If caught, do nothing */
         }
       });
 
@@ -748,6 +811,8 @@ public class Main extends Application {
         } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
+        } catch (Exception e1) {
+          /* If caught, do nothing */
         }
       });
 
@@ -768,6 +833,8 @@ public class Main extends Application {
         } catch (NumberFormatException e) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
+        } catch (Exception e1) {
+          /* If caught, do nothing */
         }
       });
 
@@ -803,6 +870,8 @@ public class Main extends Application {
         } catch (ArithmeticException e4) {
           correctness = false;
           alert("Error", "Sorry, Exception: " + e4.getMessage());
+        } catch (Exception e5) {
+          /* If caught, do nothing */
         }
       });
 
@@ -827,6 +896,8 @@ public class Main extends Application {
         } catch (NumberFormatException e1) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
+        } catch (Exception e2) {
+          /* If caught, do nothing */
         }
       });
 
@@ -844,6 +915,8 @@ public class Main extends Application {
         } catch (NumberFormatException e) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
+        } catch (Exception e1) {
+          /* If caught, do nothing */
         }
       });
 
@@ -862,6 +935,8 @@ public class Main extends Application {
           stateModifer();
         } catch (NumberFormatException e) {
           alert("Error", "Your input may contain invalid characters or empty");
+        } catch (Exception e1) {
+          /* If caught, do nothing */
         }
       });
 
@@ -899,17 +974,21 @@ public class Main extends Application {
           } catch (ArithmeticException e4) {
             correctness = false;
             alert("Error", "Sorry, Exception: " + e4.getMessage());
+          } catch (Exception e5) {
+            /* If caught, do nothing */
           }
         } catch (NumberFormatException e) {
           correctness = false;
           alert("NumberFormatError",
               "Sorry, the number you entered is not an Integer");
+        } catch (Exception e1) {
+          /* If caught, do nothing */
         }
       });
     } catch (RuntimeException e) {
       correctness = false;
       alert("Error", "" + e.getMessage());
-    } catch (Exception e) {
+    } catch (Exception e1) {
       correctness = false;
       alert("Error", "Your input may contain invalid characters or empty");
     }
@@ -925,71 +1004,79 @@ public class Main extends Application {
     // Set the action for FileChooser-open
     open.setOnAction(event -> {
 
-      // Use the FileChooser to retrieve the file path
-      File file = fileChooser.showOpenDialog(primaryStage);
-      if (file == null || !file.getName().endsWith(".json")) {
-        alert("Error: File name mismatch", "Please rechoose the file"
-            + lineSeparator + "The name of the file must end with '.json'!");
-      } else {
-        // Invoke OpeartionParser
-        try {
+      try {
+        // Use the FileChooser to retrieve the file path
+        File file = fileChooser.showOpenDialog(primaryStage);
+        if (file == null || !file.getName().endsWith(".json")) {
+          alert("Error: File name mismatch", "Please rechoose the file"
+              + lineSeparator + "The name of the file must end with '.json'!");
+        } else {
+          // Invoke OpeartionParser
+          try {
 
-          // Invoke parser to acquire data
-          OpeartionParser parser = new OpeartionParser(file);
-          // Acquire lists calculations
-          lists = parser.getCalculations();
-          // Enable the selector Pane
-          selector.setDisable(false);
-          total.setText(String.valueOf(lists.size()));
+            // Invoke parser to acquire data
+            OpeartionParser parser = new OpeartionParser(file);
+            // Acquire lists calculations
+            lists = parser.getCalculations();
+            // Enable the selector Pane
+            selector.setDisable(false);
+            total.setText(String.valueOf(lists.size()));
 
-          // Compute each calculation and update the list
-          for (int i = 1; i <= lists.size(); i++) {
-            CalSteps step = lists.get(i - 1);
-            String operationOperator = step.getOperation();
-            isNum = switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
-                enableSecond, operators, singleMatrixOperations, powerButton,
-                powerInput, step, operationOperator);
-            ArrayList<String[][]> cloneData = new ArrayList<>();
-            step.getDatas().forEach(el -> cloneData.add(el));
-            if (!correctness) {
-              clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2,
-                  filter);
-              return;
+            // Compute each calculation and update the list
+            for (int i = 1; i <= lists.size(); i++) {
+              CalSteps step = lists.get(i - 1);
+              String operationOperator = step.getOperation();
+              isNum = switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
+                  enableSecond, operators, singleMatrixOperations, powerButton,
+                  powerInput, step, operationOperator);
+              ArrayList<String[][]> cloneData = new ArrayList<>();
+              step.getDatas().forEach(el -> cloneData.add(el));
+              if (!correctness) {
+                clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2,
+                    filter);
+                return;
+              }
+              ArrayList<String[][]> cloneResult = new ArrayList<>();
+              cloneResult.addAll(results);
+              CalSteps c = new CalSteps("" + operationOperator, cloneData,
+                  isNum ? "" + resultNum : cloneResult);
+              lists.set(i - 1, c);
+              existingOperations.add(
+                  operationOperator.startsWith("PowerOf") ? "Power"
+                      : operationOperator);
             }
-            ArrayList<String[][]> cloneResult = new ArrayList<>();
-            cloneResult.addAll(results);
-            CalSteps c = new CalSteps("" + operationOperator, cloneData,
-                isNum ? "" + resultNum : cloneResult);
-            lists.set(i - 1, c);
-            existingOperations.add(
-                operationOperator.startsWith("PowerOf") ? "Power"
-                    : operationOperator);
+            filter.getItems().removeIf(i -> !i.equals("All"));
+            filter.getItems().addAll(existingOperations);
+            filter.getSelectionModel().selectFirst();
+            pages.setText("1");
+            state = false;
+            correctness = true;
+            confirm.fire();
+          } catch (ParseException e2) {
+            alert("Error", "Parse fail, please check you .json file");
+          } catch (IOException e3) {
+            alert("Error", "Fatal issues during IO processing");
+          } catch (Exception e4) {
+            clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2,
+                filter);
+            alert("Error", "Your json file contains invalid operations,"
+                + lineSeparator + " please rechoose the file");
           }
-          filter.getItems().removeIf(i -> !i.equals("All"));
-          filter.getItems().addAll(existingOperations);
-          filter.getSelectionModel().selectFirst();
-          pages.setText("1");
-          state = false;
-          correctness = true;
-          confirm.fire();
-        } catch (ParseException e2) {
-          alert("Error", "Parse fail, please check you .json file");
-        } catch (IOException e3) {
-          alert("Error", "Fatal issues during IO processing");
-        } catch (Exception e4) {
-          clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2,
-              filter);
-          alert("Error", "Your json file contains invalid operations,"
-              + lineSeparator + " please rechoose the file");
         }
+      } catch (Exception e1) {
+        /* If caught, do nothing */
       }
     });
 
     // Add focus function
     pages.setOnMouseClicked(e -> {
-      if (pages.isFocused()) {
-        caretPosition = pages.getCaretPosition();
-        focusedTextField = pages;
+      try {
+        if (pages.isFocused()) {
+          caretPosition = pages.getCaretPosition();
+          focusedTextField = pages;
+        }
+      } catch (Exception e1) {
+        /* If caught, do nothing */
       }
     });
 
@@ -1091,129 +1178,146 @@ public class Main extends Application {
 
     // Set the action for add a calculation
     add.setOnAction(event -> {
-      int page = Integer.parseInt(pages.getText());
-      updater(page, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
-          enableSecond, isNum, false, true);
-      state = false;
-      correctness = true;
-      pages.setText(String.valueOf(page + 1));
-      total.setText(String.valueOf(lists.size() + 1));
-      clearer(rowAndCol1);
-      clearer(rowAndCol2);
-      resultShower.getChildren().clear();
-      addVisualModifer(filter, forward, pages, backward, confirm, add,
-          addConfirm, delete, quit, true);
+      try {
+        int page = Integer.parseInt(pages.getText());
+        updater(page, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+            enableSecond, isNum, false, true);
+        state = false;
+        correctness = true;
+        pages.setText(String.valueOf(page + 1));
+        total.setText(String.valueOf(lists.size() + 1));
+        clearer(rowAndCol1);
+        clearer(rowAndCol2);
+        resultShower.getChildren().clear();
+        addVisualModifer(filter, forward, pages, backward, confirm, add,
+            addConfirm, delete, quit, true);
+      } catch (Exception e1) {
+        
+      }
     });
 
     // Set the action for addConfirm
     addConfirm.setOnAction(event -> {
-      int page = Integer.parseInt(pages.getText()) - 1;
-      if (correctness) {
-        updater(page, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
-            enableSecond, isNum, true, true);
-        state = false;
-        addVisualModifer(filter, forward, pages, backward, confirm, add,
-            addConfirm, delete, quit, false);
-        String operation = latestMOpera.getText();
-        if (operation.equals("Gauss-Elim")) {
-          operation = "GE";
-        } else if (operation.equals("EiValue")) {
-          operation = "EIV";
-        } else if (operation.equals("Transpose")) {
-          operation = "Trans";
-        } else if (operation.equals("Power")) {
-          operation = "Power";
-        }
-        existingOperations.add(operation);
-        filter.getItems().removeIf(i -> !i.equals("All"));
-        filter.getItems().addAll(existingOperations);
-        filter.getSelectionModel().selectFirst();
-      } else {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Exit add?");
-        alert.setContentText("The calculation is incomplete" + lineSeparator
-            + "Do you want to cancel addition?");
-        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-        // Two types of buttons, yes, no
-        ButtonType yes = new ButtonType("Yes");
-        ButtonType no = new ButtonType("No");
-        alert.getButtonTypes().setAll(yes, no);
-        Optional<ButtonType> diagResult = alert.showAndWait();
-
-        // If the user chose yes
-        if (diagResult.get() == yes) {
-          pages.setText(String.valueOf(page));
-          total.setText(String.valueOf(Integer.parseInt(total.getText()) - 1));
+      try {
+        int page = Integer.parseInt(pages.getText()) - 1;
+        if (correctness) {
+          updater(page, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
+              enableSecond, isNum, true, true);
+          state = false;
           addVisualModifer(filter, forward, pages, backward, confirm, add,
               addConfirm, delete, quit, false);
-          confirm.fire();
+          String operation = latestMOpera.getText();
+          if (operation.equals("Gauss-Elim")) {
+            operation = "GE";
+          } else if (operation.equals("EiValue")) {
+            operation = "EIV";
+          } else if (operation.equals("Transpose")) {
+            operation = "Trans";
+          } else if (operation.equals("Power")) {
+            operation = "Power";
+          }
+          existingOperations.add(operation);
+          filter.getItems().removeIf(i -> !i.equals("All"));
+          filter.getItems().addAll(existingOperations);
+          filter.getSelectionModel().selectFirst();
+        } else {
+          Alert alert = new Alert(AlertType.CONFIRMATION);
+          alert.setTitle("Exit add?");
+          alert.setContentText("The calculation is incomplete" + lineSeparator
+              + "Do you want to cancel addition?");
+          alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+          // Two types of buttons, yes, no
+          ButtonType yes = new ButtonType("Yes");
+          ButtonType no = new ButtonType("No");
+          alert.getButtonTypes().setAll(yes, no);
+          Optional<ButtonType> diagResult = alert.showAndWait();
+
+          // If the user chose yes
+          if (diagResult.get() == yes) {
+            pages.setText(String.valueOf(page));
+            total.setText(String.valueOf(Integer.parseInt(total.getText()) - 1));
+            addVisualModifer(filter, forward, pages, backward, confirm, add,
+                addConfirm, delete, quit, false);
+            confirm.fire();
+          }
         }
+      } catch (Exception e1) {
+        /* If caught, do nothing */
       }
     });
 
     // Set the action for delete
     delete.setOnAction(event -> {
-      if (lists.size() != 1) {
-        int page = Integer.parseInt(pages.getText());
-        operation = lists.get(page - 1).getOperation();
-        if (page == lists.size()) {
-          update = false;
-          pages.setText(String.valueOf(page - 1));
-          confirm.fire();
-          update = true;
-          lists.remove(page - 1);
+      try {
+        if (lists.size() != 1) {
+          int page = Integer.parseInt(pages.getText());
+          operation = lists.get(page - 1).getOperation();
+          if (page == lists.size()) {
+            update = false;
+            pages.setText(String.valueOf(page - 1));
+            confirm.fire();
+            update = true;
+            lists.remove(page - 1);
+          } else {
+            lists.remove(page - 1);
+            update = false;
+            confirm.fire();
+            update = true;
+          }
+          if (!lists.stream()
+                    .anyMatch(i -> i.getOperation().contains(operation))) {
+            existingOperations.remove(operation);
+            filter.getItems().removeIf(i -> !i.equals("All"));
+            filter.getItems().addAll(existingOperations);
+            filter.getSelectionModel().selectFirst();
+          }
+          total.setText(String.valueOf(lists.size()));
         } else {
-          lists.remove(page - 1);
-          update = false;
-          confirm.fire();
-          update = true;
+          alert("Attention", "You cannot delete the last calculation");
         }
-        if (!lists.stream()
-                  .anyMatch(i -> i.getOperation().contains(operation))) {
-          existingOperations.remove(operation);
-          filter.getItems().removeIf(i -> !i.equals("All"));
-          filter.getItems().addAll(existingOperations);
-          filter.getSelectionModel().selectFirst();
-        }
-        total.setText(String.valueOf(lists.size()));
-      } else {
-        alert("Attention", "You cannot delete the last calculation");
+      } catch (Exception e1) {
+        /* If caught, do nothing */
       }
     });
 
 
     filter.valueProperty().addListener(event -> {
-      String opr = filter.getSelectionModel().getSelectedItem();
-      if (opr != null) {
-        if (filtering && opr.equals("All")) {
-          buttonsModifers(matrix1, matrix2, matrixOperators,
-              singleOperationPanel, open, save, confirm, add, delete, quit,
-              pages, false);
-          rowAndCol1.forEach(i -> i.setEditable(true));
-          rowAndCol2.forEach(i -> i.setEditable(true));
-          filtering = false;
-          total.setText(String.valueOf(lists.size()));
-          update = false;
-          confirm.fire();
-          update = true;
-          filter.getSelectionModel().selectFirst();
-        } else {
-          filtering = true;
-          categoryList.clear();
-          selectorInto(opr);
-          CalSteps step = categoryList.get(0);
-          String operationOperator = step.getOperation();
-          switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
-              enableSecond, operators, singleMatrixOperations, powerButton,
-              powerInput, step, operationOperator);
-          buttonsModifers(matrix1, matrix2, matrixOperators,
-              singleOperationPanel, open, save, confirm, add, delete, quit,
-              pages, true);
-          pages.setText(String.valueOf(1));
-          total.setText(String.valueOf(categoryList.size()));
-          rowAndCol1.forEach(i -> i.setEditable(false));
-          rowAndCol2.forEach(i -> i.setEditable(false));
+      try {
+        String opr = filter.getSelectionModel().getSelectedItem();
+        if (opr != null) {
+          if (filtering && opr.equals("All")) {
+            buttonsModifers(matrix1, matrix2, matrixOperators,
+                singleOperationPanel, open, save, confirm, add, delete, quit,
+                pages, false);
+            rowAndCol1.forEach(i -> i.setEditable(true));
+            rowAndCol2.forEach(i -> i.setEditable(true));
+            filtering = false;
+            total.setText(String.valueOf(lists.size()));
+            update = false;
+            confirm.fire();
+            update = true;
+            filter.getSelectionModel().selectFirst();
+          } else {
+            filtering = true;
+            categoryList.clear();
+            selectorInto(opr);
+            CalSteps step = categoryList.get(0);
+            String operationOperator = step.getOperation();
+            switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
+                enableSecond, operators, singleMatrixOperations, powerButton,
+                powerInput, step, operationOperator);
+            buttonsModifers(matrix1, matrix2, matrixOperators,
+                singleOperationPanel, open, save, confirm, add, delete, quit,
+                pages, true);
+            pages.setText(String.valueOf(1));
+            total.setText(String.valueOf(categoryList.size()));
+            rowAndCol1.forEach(i -> i.setEditable(false));
+            rowAndCol2.forEach(i -> i.setEditable(false));
+          }
         }
+      } catch (Exception e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
       }
     });
 
