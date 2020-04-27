@@ -169,7 +169,7 @@ public class Main extends Application {
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.setTitle("Instruction to use");
         alert.setHeaderText("Please Read");
-        alert.setContentText("To do"); // To add to the user guide
+        alert.setContentText("To do"); // To add to the user guide!!!
         alert.showAndWait();
       } catch (Exception e) {
         /* If caught, do nothing */
