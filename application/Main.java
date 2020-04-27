@@ -900,7 +900,8 @@ public class Main extends Application {
                 operators, mButtons, powerButton, powerInput, step, operationOperator);
             ArrayList<String[][]> cloneData = new ArrayList<>();
             step.getDatas().forEach(el -> cloneData.add(el));
-            ArrayList<String[][]> cloneResult = new ArrayList<>(results);
+            ArrayList<String[][]> cloneResult = new ArrayList<>();
+            cloneResult.addAll(results);
             CalSteps c = new CalSteps("" + operationOperator, cloneData,
                 isNum ? "" + resultNum : cloneResult);
             lists.set(i - 1, c);
