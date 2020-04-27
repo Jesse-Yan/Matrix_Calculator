@@ -39,6 +39,6 @@ Check design.pdf to learn more.
 PROGRAM IS FOR COMPUTER, NOT FOR HUMAN. PLEASE DON'T TAKE POINTS OFF BY THIS LINE AND THIS FILE.author@archer
 
 ## Known Issue (BUG Report)
-*Cholesky will always produce wrong result(working)\n
-*Might cause stackoverflow when giving a Huge Odd number (vary base on PC set up)\n
-*Grammer issue in readme.md and .txt (So Sorry about that)\n
+#### *Cholesky will always produce wrong result(working)
+#### *Might cause stackoverflow when giving a Huge Odd number (vary base on PC set up)
+#### *Grammer issue in readme.md and .txt (So Sorry about that)
