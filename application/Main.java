@@ -72,25 +72,25 @@ public class Main extends Application {
   // Existing Operatiors
   HashSet<String> existingOperations = new HashSet<>();
 
-  // Whether has been modified
+  // Whether user has modify the content
   boolean state = false;
 
-  // Correct result
+  // Whether the user's input can be computed
   boolean correctness = true;
 
-  // Able to quit?
+  // Whether the user has save the file
   boolean saved = false;
 
   // Whether the result is number
   boolean isNum = false;
 
-  // Whether need to invoke updater
+  // Whether need to invoke updater to update the result
   boolean update = true;
 
   // Whether in filtering mode
   boolean filtering = false;
 
-  // previous page recorder
+  // Previous page recorder
   int prevPage = 0;
 
   // Recorder of buttons
@@ -99,7 +99,7 @@ public class Main extends Application {
   // Recorder of operation
   String operation = null;
 
-  // Recoder of Power
+  // Recorder of Power
   String power = "";
 
   // Recorder of results
@@ -282,7 +282,7 @@ public class Main extends Application {
       }
     }
 
-    // Special List of Non-number buttons for future use
+    // Special List of Non-number buttons for analyze sequence
     List<Button> notNumber =
         buttons.stream()
                .filter(b -> !(b.getText().trim().matches("\\d")
@@ -384,18 +384,22 @@ public class Main extends Application {
     analyzeSequence.setOnMouseClicked(e -> {
       analyze = true;
       space.setDisable(false);
+
+      // Disabling related buttons
       notNumber.stream().forEach(b -> b.setDisable(true));
       buttons.get(buttons.size() - 1).setDisable(false);
       input.setOnMouseEntered(event -> {
         buttons.get(buttons.size() - 1).setDisable(false);
       });
     });
+
+    // Set for the EventHandler of button space
     space.setOnAction(event -> {
       try {
-        input.insertText(caretPosition, " ");;
+        input.insertText(caretPosition, " ");
         ++caretPosition;
       } catch (Exception e) {
-
+        /* If catch, do nothing */
       }
     });
 
@@ -419,6 +423,8 @@ public class Main extends Application {
         buttons.get(23).setDisable(false);
       }
     });
+
+    // Set the event handler when user mouse is switching between right and left
     input.setOnMouseEntered(e -> {
       notNumber.stream().forEach(b -> b.setDisable(false));
     });
@@ -429,7 +435,7 @@ public class Main extends Application {
     // The pane for two matrixes
     BorderPane matrixes = new BorderPane();
 
-    // Set the Matrix Panel
+    // Set the Matrix Panel and generate related panel
     List<TextField> matrix1Data = new ArrayList<>();
     List<TextField> matrix2Data = new ArrayList<>();
     List<TextField> rowAndCol1 = new ArrayList<>();
@@ -474,7 +480,7 @@ public class Main extends Application {
       temp.setMinWidth(35);
       return temp;
     }).collect(toList());
-    // Add to the pane
+    // Add to the panel
     for (int i = 0; i < 4; i++) {
       matrixOperators.add(operators.get(i), 0, i + 2);
     }
@@ -506,26 +512,27 @@ public class Main extends Application {
     // Setter for single MatrixOperators
 
     // Set the operation panel
-    GridPane mOperations = new GridPane();
-    mOperations.setHgap(145);
-    mOperations.setVgap(10);
+    GridPane singleOperationPanel = new GridPane();
+    singleOperationPanel.setHgap(145);
+    singleOperationPanel.setVgap(10);
 
     // Set the Operations of one Matrix by mapping from String to Buttons
-    List<Button> mButtons = List.of("Det", "Inverse", "QR", "Nullity", "Trace",
-        "LUP", "Gauss-Elim", "Cholesky", "EiValue", "Rank", "Transpose")
-                                .stream()
-                                .map(operator -> {
-                                  Button temp = new Button(operator);
-                                  temp.setMinWidth(100);
-                                  return temp;
-                                })
-                                .collect(toList());
+    List<Button> singleMatrixOperations =
+        List.of("Det", "Inverse", "QR", "Nullity", "Trace", "LUP", "Gauss-Elim",
+            "Cholesky", "EiValue", "Rank", "Transpose")
+            .stream()
+            .map(operator -> {
+              Button temp = new Button(operator);
+              temp.setMinWidth(100);
+              return temp;
+            })
+            .collect(toList());
 
     // Add to the GridPane of single matrix operation
     int count = 0;
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 4; j++) {
-        mOperations.add(mButtons.get(count++), j, i);
+        singleOperationPanel.add(singleMatrixOperations.get(count++), j, i);
         if (count == 11) {
           break;
         }
@@ -538,7 +545,7 @@ public class Main extends Application {
     TextField powerInput = new TextField();
     powerInput.setMaxWidth(55);
     power.getChildren().addAll(powerButton, powerInput);
-    mOperations.add(power, 3, 2);
+    singleOperationPanel.add(power, 3, 2);
 
     // Adjust the output pane
     resultShower.setMinHeight(207);
@@ -552,11 +559,11 @@ public class Main extends Application {
     // one or two matrixes
     enableSecond.setOnAction(event -> {
       if (enableSecond.isSelected()) {
-        mOperations.setDisable(true);
+        singleOperationPanel.setDisable(true);
         operators.stream().forEach(b -> b.setDisable(false));
         matrix2.setDisable(false);
       } else {
-        mOperations.setDisable(false);
+        singleOperationPanel.setDisable(false);
         operators.stream().forEach(b -> b.setDisable(true));
         matrix2.setDisable(true);
       }
@@ -600,9 +607,9 @@ public class Main extends Application {
                });
 
       // Add EventHandler to special matrix operations
-      mButtons.get(0).setOnAction(event -> { // determinant
+      singleMatrixOperations.get(0).setOnAction(event -> { // determinant
         try {
-          latestMOpera = mButtons.get(0);
+          latestMOpera = singleMatrixOperations.get(0);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
@@ -624,9 +631,9 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(1).setOnAction(event -> { // inverse
+      singleMatrixOperations.get(1).setOnAction(event -> { // inverse
         try {
-          latestMOpera = mButtons.get(1);
+          latestMOpera = singleMatrixOperations.get(1);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
@@ -653,9 +660,9 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(2).setOnAction(event -> { // QR
+      singleMatrixOperations.get(2).setOnAction(event -> { // QR
         try {
-          latestMOpera = mButtons.get(2);
+          latestMOpera = singleMatrixOperations.get(2);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
@@ -672,9 +679,9 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(3).setOnAction(event -> { // nullity
+      singleMatrixOperations.get(3).setOnAction(event -> { // nullity
         try {
-          latestMOpera = mButtons.get(3);
+          latestMOpera = singleMatrixOperations.get(3);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
@@ -689,9 +696,9 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(4).setOnAction(event -> {
+      singleMatrixOperations.get(4).setOnAction(event -> {
         try {
-          latestMOpera = mButtons.get(4);
+          latestMOpera = singleMatrixOperations.get(4);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
@@ -713,9 +720,9 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(5).setOnAction(event -> { // LUP
+      singleMatrixOperations.get(5).setOnAction(event -> { // LUP
         try {
-          latestMOpera = mButtons.get(5);
+          latestMOpera = singleMatrixOperations.get(5);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
@@ -744,9 +751,10 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(6).setOnAction(event -> { // guassian - elimination
+      singleMatrixOperations.get(6).setOnAction(event -> { // guassian -
+                                                           // elimination
         try {
-          latestMOpera = mButtons.get(6);
+          latestMOpera = singleMatrixOperations.get(6);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
@@ -763,9 +771,9 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(7).setOnAction(event -> { // Cholesky
+      singleMatrixOperations.get(7).setOnAction(event -> { // Cholesky
         try {
-          latestMOpera = mButtons.get(7);
+          latestMOpera = singleMatrixOperations.get(7);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
@@ -798,9 +806,9 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(8).setOnAction(event -> { // eigenvalue
+      singleMatrixOperations.get(8).setOnAction(event -> { // eigenvalue
         try {
-          latestMOpera = mButtons.get(8);
+          latestMOpera = singleMatrixOperations.get(8);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
@@ -822,9 +830,9 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(9).setOnAction(event -> { // rank
+      singleMatrixOperations.get(9).setOnAction(event -> { // rank
         try {
-          latestMOpera = mButtons.get(9);
+          latestMOpera = singleMatrixOperations.get(9);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
@@ -839,9 +847,9 @@ public class Main extends Application {
         }
       });
 
-      mButtons.get(10).setOnAction(event -> { // transpose
+      singleMatrixOperations.get(10).setOnAction(event -> { // transpose
         try {
-          latestMOpera = mButtons.get(10);
+          latestMOpera = singleMatrixOperations.get(10);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
@@ -907,7 +915,7 @@ public class Main extends Application {
     }
 
     // Add to the overall panel
-    vBoxR.getChildren().addAll(matrixes, mOperations, resultShower);
+    vBoxR.getChildren().addAll(matrixes, singleOperationPanel, resultShower);
     root.setRight(vBoxR);
 
 
@@ -939,8 +947,8 @@ public class Main extends Application {
             CalSteps step = lists.get(i - 1);
             String operationOperator = step.getOperation();
             isNum = switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
-                enableSecond, operators, mButtons, powerButton, powerInput,
-                step, operationOperator);
+                enableSecond, operators, singleMatrixOperations, powerButton,
+                powerInput, step, operationOperator);
             ArrayList<String[][]> cloneData = new ArrayList<>();
             step.getDatas().forEach(el -> cloneData.add(el));
             if (!correctness) {
@@ -1002,8 +1010,8 @@ public class Main extends Application {
         CalSteps step = lists.get(page - 1);
         String operationOperator = step.getOperation();
         isNum = switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
-            enableSecond, operators, mButtons, powerButton, powerInput, step,
-            operationOperator);
+            enableSecond, operators, singleMatrixOperations, powerButton,
+            powerInput, step, operationOperator);
       } catch (IllegalArgumentException e1) {
         alert("Error", "The page number you entered is invalid");
       } catch (Exception e) {
@@ -1037,8 +1045,8 @@ public class Main extends Application {
             CalSteps step = categoryList.get(num - 1);
             String operationOperator = step.getOperation();
             switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
-                enableSecond, operators, mButtons, powerButton, powerInput,
-                step, operationOperator);
+                enableSecond, operators, singleMatrixOperations, powerButton,
+                powerInput, step, operationOperator);
           }
         }
       } catch (Exception e) {
@@ -1072,8 +1080,8 @@ public class Main extends Application {
             CalSteps step = categoryList.get(num - 1);
             String operationOperator = step.getOperation();
             switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
-                enableSecond, operators, mButtons, powerButton, powerInput,
-                step, operationOperator);
+                enableSecond, operators, singleMatrixOperations, powerButton,
+                powerInput, step, operationOperator);
           }
         }
       } catch (Exception e) {
@@ -1093,8 +1101,8 @@ public class Main extends Application {
       clearer(rowAndCol1);
       clearer(rowAndCol2);
       resultShower.getChildren().clear();
-      setterAfterAdd(filter, forward, pages, backward, confirm, add, addConfirm,
-          delete, quit);
+      addVisualModifer(filter, forward, pages, backward, confirm, add,
+          addConfirm, delete, quit, true);
     });
 
     // Set the action for addConfirm
@@ -1104,8 +1112,8 @@ public class Main extends Application {
         updater(page, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
             enableSecond, isNum, true, true);
         state = false;
-        setterAfterConfirm(filter, forward, pages, backward, confirm, add,
-            addConfirm, delete, quit);
+        addVisualModifer(filter, forward, pages, backward, confirm, add,
+            addConfirm, delete, quit, false);
         String operation = latestMOpera.getText();
         if (operation.equals("Gauss-Elim")) {
           operation = "GE";
@@ -1136,8 +1144,8 @@ public class Main extends Application {
         if (diagResult.get() == yes) {
           pages.setText(String.valueOf(page));
           total.setText(String.valueOf(Integer.parseInt(total.getText()) - 1));
-          setterAfterConfirm(filter, forward, pages, backward, confirm, add,
-              addConfirm, delete, quit);
+          addVisualModifer(filter, forward, pages, backward, confirm, add,
+              addConfirm, delete, quit, false);
           confirm.fire();
         }
       }
@@ -1178,8 +1186,9 @@ public class Main extends Application {
       String opr = filter.getSelectionModel().getSelectedItem();
       if (opr != null) {
         if (filtering && opr.equals("All")) {
-          buttonsModifers(matrix1, matrix2, matrixOperators, mOperations, open,
-              save, confirm, add, delete, quit, pages, false);
+          buttonsModifers(matrix1, matrix2, matrixOperators,
+              singleOperationPanel, open, save, confirm, add, delete, quit,
+              pages, false);
           rowAndCol1.forEach(i -> i.setEditable(true));
           rowAndCol2.forEach(i -> i.setEditable(true));
           filtering = false;
@@ -1195,10 +1204,11 @@ public class Main extends Application {
           CalSteps step = categoryList.get(0);
           String operationOperator = step.getOperation();
           switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
-              enableSecond, operators, mButtons, powerButton, powerInput, step,
-              operationOperator);
-          buttonsModifers(matrix1, matrix2, matrixOperators, mOperations, open,
-              save, confirm, add, delete, quit, pages, true);
+              enableSecond, operators, singleMatrixOperations, powerButton,
+              powerInput, step, operationOperator);
+          buttonsModifers(matrix1, matrix2, matrixOperators,
+              singleOperationPanel, open, save, confirm, add, delete, quit,
+              pages, true);
           pages.setText(String.valueOf(1));
           total.setText(String.valueOf(categoryList.size()));
           rowAndCol1.forEach(i -> i.setEditable(false));
@@ -1301,37 +1311,37 @@ public class Main extends Application {
   /**
    * Modify the state of several buttons
    * 
-   * @param matrix1         VBox
-   * @param matrix2         VBox
-   * @param matrixOperators GridPane
-   * @param mOperations     GridPane
-   * @param open            MenuItem
-   * @param save            MenuItem
-   * @param confirm         Button
-   * @param add             Button
-   * @param delete          Button
-   * @param quit            Button
-   * @param stater          boolean value
+   * @param matrix1              VBox
+   * @param matrix2              VBox
+   * @param matrixOperators      GridPane
+   * @param singleOperationPanel GridPane
+   * @param open                 MenuItem
+   * @param save                 MenuItem
+   * @param confirm              Button
+   * @param add                  Button
+   * @param delete               Button
+   * @param quit                 Button
+   * @param disabled             boolean value
    */
   private void buttonsModifers(VBox matrix1, VBox matrix2,
-      GridPane matrixOperators, GridPane mOperations, MenuItem open,
+      GridPane matrixOperators, GridPane singleOperationPanel, MenuItem open,
       MenuItem save, Button confirm, Button add, Button delete, Button quit,
-      TextField pages, boolean stater) {
-    matrix1.setDisable(stater);
-    matrix2.setDisable(stater);
-    mOperations.setVisible(!stater);
-    matrixOperators.setVisible(!stater);
-    add.setDisable(stater);
-    delete.setDisable(stater);
-    quit.setDisable(stater);
-    pages.setEditable(!stater);
-    confirm.setDisable(stater);
-    open.setDisable(stater);
-    save.setDisable(stater);
+      TextField pages, boolean disabled) {
+    matrix1.setDisable(disabled);
+    matrix2.setDisable(disabled);
+    singleOperationPanel.setVisible(!disabled);
+    matrixOperators.setVisible(!disabled);
+    add.setDisable(disabled);
+    delete.setDisable(disabled);
+    quit.setDisable(disabled);
+    pages.setEditable(!disabled);
+    confirm.setDisable(disabled);
+    open.setDisable(disabled);
+    save.setDisable(disabled);
   }
 
   /**
-   * Setter for the buttons and textField after add
+   * Setter for the buttons and textField related to add
    * 
    * @param filter     ComboBox
    * @param forward    Button
@@ -1342,46 +1352,20 @@ public class Main extends Application {
    * @param addConfirm Button
    * @param delete     Button
    * @param quit       Button
+   * @param disabled   boolean value
    */
-  private void setterAfterAdd(ComboBox<String> filter, Button forward,
+  private void addVisualModifer(ComboBox<String> filter, Button forward,
       TextField pages, Button backward, Button confirm, Button add,
-      Button addConfirm, Button delete, Button quit) {
-    filter.setDisable(true);
-    addConfirm.setDisable(false);
-    add.setDisable(true);
-    forward.setDisable(true);
-    backward.setDisable(true);
-    pages.setEditable(false);
-    confirm.setDisable(true);
-    quit.setDisable(true);
-    delete.setDisable(true);
-  }
-
-  /**
-   * Setter for the buttons and textField after addConfirm
-   * 
-   * @param filter     ComboBox
-   * @param forward    Button
-   * @param pages      TextField
-   * @param backward   Button
-   * @param confirm    Button
-   * @param add        Button
-   * @param addConfirm Button
-   * @param delete     Button
-   * @param quit       Button
-   */
-  private void setterAfterConfirm(ComboBox<String> filter, Button forward,
-      TextField pages, Button backward, Button confirm, Button add,
-      Button addConfirm, Button delete, Button quit) {
-    filter.setDisable(false);
-    addConfirm.setDisable(true);
-    add.setDisable(false);
-    forward.setDisable(false);
-    backward.setDisable(false);
-    pages.setEditable(true);
-    confirm.setDisable(false);
-    quit.setDisable(false);
-    delete.setDisable(false);
+      Button addConfirm, Button delete, Button quit, boolean disabled) {
+    filter.setDisable(disabled);
+    addConfirm.setDisable(!disabled);
+    add.setDisable(disabled);
+    forward.setDisable(disabled);
+    backward.setDisable(disabled);
+    pages.setEditable(!disabled);
+    confirm.setDisable(disabled);
+    quit.setDisable(disabled);
+    delete.setDisable(disabled);
   }
 
   /**
@@ -1481,24 +1465,25 @@ public class Main extends Application {
   /**
    * Switcher of Operation and invoke to calculate
    * 
-   * @param  matrix1Data       matrix1
-   * @param  matrix2Data       matrix2
-   * @param  rowAndCol1        row and col of matrix1
-   * @param  rowAndCol2        row and col of matrix2
-   * @param  enableSecond      a checkbox
-   * @param  operators         the operators
-   * @param  mButtons          matrix buttons
-   * @param  powerButton       invoke for power calculation
-   * @param  powerInput        input for power
-   * @param  step              CalStep
-   * @param  operationOperator operation
-   * @return                   isNum whether is a list matrixes of a StringNums
+   * @param  matrix1Data            matrix1
+   * @param  matrix2Data            matrix2
+   * @param  rowAndCol1             row and col of matrix1
+   * @param  rowAndCol2             row and col of matrix2
+   * @param  enableSecond           a checkbox
+   * @param  operators              the operators
+   * @param  singleMatrixOperations matrix buttons
+   * @param  powerButton            invoke for power calculation
+   * @param  powerInput             input for power
+   * @param  step                   CalStep
+   * @param  operationOperator      operation
+   * @return                        isNum whether is a list matrixes of a
+   *                                  StringNums
    */
   private boolean switcher(List<TextField> matrix1Data,
       List<TextField> matrix2Data, List<TextField> rowAndCol1,
       List<TextField> rowAndCol2, CheckBox enableSecond, List<Button> operators,
-      List<Button> mButtons, Button powerButton, TextField powerInput,
-      CalSteps step, String operationOperator) {
+      List<Button> singleMatrixOperations, Button powerButton,
+      TextField powerInput, CalSteps step, String operationOperator) {
     boolean isNum = false;
     switch (operationOperator) {
       case "+":
@@ -1527,51 +1512,51 @@ public class Main extends Application {
         break;
       case "Det":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
-        mButtons.get(0).fire();
+        singleMatrixOperations.get(0).fire();
         isNum = true;
         break;
       case "Inverse":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
-        mButtons.get(1).fire();
+        singleMatrixOperations.get(1).fire();
         break;
       case "QR":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
-        mButtons.get(2).fire();
+        singleMatrixOperations.get(2).fire();
         break;
       case "Nullity":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
-        mButtons.get(3).fire();
+        singleMatrixOperations.get(3).fire();
         break;
       case "Trace":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
-        mButtons.get(4).fire();
+        singleMatrixOperations.get(4).fire();
         isNum = true;
         break;
       case "LUP":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
-        mButtons.get(5).fire();
+        singleMatrixOperations.get(5).fire();
         break;
       case "GE":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
-        mButtons.get(6).fire();
+        singleMatrixOperations.get(6).fire();
         break;
       case "Cholesky":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
-        mButtons.get(7).fire();
+        singleMatrixOperations.get(7).fire();
         break;
       case "EIV":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
-        mButtons.get(8).fire();
+        singleMatrixOperations.get(8).fire();
         isNum = true;
         break;
       case "Rank":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
-        mButtons.get(9).fire();
+        singleMatrixOperations.get(9).fire();
         isNum = true;
         break;
       case "Trans":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
-        mButtons.get(10).fire();
+        singleMatrixOperations.get(10).fire();
         break;
       default:
         String powerString = operationOperator.replace("PowerOf", "");
