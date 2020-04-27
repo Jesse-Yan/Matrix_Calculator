@@ -22,6 +22,7 @@ public class SequenceSummary {
 
     sequence = sequence.trim();
 
+    // Generate DoubleSummaryStatistics based on given sequence
     DoubleSummaryStatistics statistics = Arrays.stream(sequence.split(" +"))
                                                .mapToDouble(Double::parseDouble)
                                                .summaryStatistics();

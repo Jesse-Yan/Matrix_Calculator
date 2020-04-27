@@ -115,6 +115,11 @@ public class Fraction extends Number implements Comparable<Fraction> {
     return denominator == 1 ? numerator + "" : numerator + "/" + denominator;
   }
 
+  /**
+   * Return the int value
+   * 
+   * @return value the int representation of the Fraction
+   */
   @Override
   public int intValue() {
     if (numerator % denominator != 0)
@@ -122,16 +127,31 @@ public class Fraction extends Number implements Comparable<Fraction> {
     return numerator / denominator;
   }
 
+  /**
+   * Return the long value
+   * 
+   * @return value the long representation of the Fraction
+   */
   @Override
   public long longValue() {
     return numerator / denominator;
   }
 
+  /**
+   * Return the float value
+   * 
+   * @return value the float representation of the Fraction
+   */
   @Override
   public float floatValue() {
     return (float) numerator / (float) denominator;
   }
 
+  /**
+   * Return the double value
+   * 
+   * @return value the double representation of the Fraction
+   */
   @Override
   public double doubleValue() {
     return (double) numerator / (double) denominator;
