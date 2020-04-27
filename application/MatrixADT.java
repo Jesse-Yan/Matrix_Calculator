@@ -100,7 +100,6 @@ public interface MatrixADT {
    * 
    * @see https://en.wikipedia.org/wiki/QR_decomposition
    */
-
   MatrixADT[] QRDecomposition();
 
   /**

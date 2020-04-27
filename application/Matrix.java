@@ -1083,7 +1083,7 @@ public class Matrix implements MatrixADT {
       // method, and the pow() method would make sure that the given matrix is a square matrix.
       e.printStackTrace();
     }
-    return null;
+    return null; // TODO handel this situation
   }
 
   /**
@@ -1113,7 +1113,7 @@ public class Matrix implements MatrixADT {
       return helperpow(n);
     else if (n < 0)
       return inverse().helperpow(-n);
-    return null;
+    return null; // TODO handel this situation
   }
 
 
@@ -1133,7 +1133,17 @@ public class Matrix implements MatrixADT {
     return ans.sqrt();
   }
 
-  // Householder
+  /**
+   * 
+   * QR decomposition.
+   * 
+   * This method implement the QR decomposition by using the Household relection.
+   * 
+   * @return an array of length 2. The first is Q, and the second is R.
+   * 
+   * @see https://en.wikipedia.org/wiki/QR_decomposition
+   * @see https://en.wikipedia.org/wiki/QR_decomposition#Using_Householder_reflections
+   */
   @Override
   public Matrix[] QRDecomposition() {
     Matrix A = copy();
@@ -1143,36 +1153,19 @@ public class Matrix implements MatrixADT {
 
     try {
       for (int k = 0; k < N - 1; k++) {
-
-        // x=zeros(m,1);
-        Matrix X = new Matrix(N, 1);
+        Matrix X = new Matrix(N, 1); // zero vector of length N
 
         // x(k:m,1)=R(k:m,k);
         Matrix tmp = R.subMatrix(k, N, k, k + 1);
-        X = X.substitueWith(tmp, k, N, 0, 1);
-
-        // g=norm(x);
-        Numeric g = X.norm();
-
-        // v=x; v(k)=x(k)+g;
-        Matrix V = X;
-        V.entry[k][0] = X.entry[k][0].add(g);
-
-        // s=norm(v);
-        Numeric s = V.norm();
-
-        // if s~=0, w=v/s;
-        Matrix W = V.dividedBy(s);
-
-        // u=2*R'*w;
-        Matrix U = R.transpose().multiply(W).multiply(Numeric.of(2));
-
-        // R=R-w*u'; %Product HR
-        R = R.subtract(W.multiply(U.transpose()));
-
-
-        // Q=Q-2*Q*w*w'; %Product QR
-        Q = Q.subtract(Q.multiply(W).multiply(W.transpose()).multiply(2));
+        X = X.substitueWith(tmp, k, N, 0, 1); 
+        Numeric g = X.norm();// g=norm(x);
+        Matrix V = X.copy();
+        V.entry[k][0] = X.entry[k][0].add(g); // v=x; v(k)=x(k)+g;
+        Numeric s = V.norm(); // s=norm(v);
+        Matrix W = V.dividedBy(s); // w=v/s
+        Matrix U = R.transpose().multiply(W).multiply(Numeric.of(2));// u=2*R'*w;
+        R = R.subtract(W.multiply(U.transpose()));// R=R-w*u'; %Product HR
+        Q = Q.subtract(Q.multiply(W).multiply(W.transpose()).multiply(2));// Q=Q-2*Q*w*w'; %Product QR
 
       }
     } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
