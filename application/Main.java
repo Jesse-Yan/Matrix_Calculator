@@ -1316,75 +1316,82 @@ public class Main extends Application {
           }
         }
       } catch (Exception e1) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
+        /* If caught, do nothing */
       }
     });
 
     // Set the action for FileChooser-save
     save.setOnAction(event -> {
 
-      // Acquire filePath from the file Chooser
-      File file = fileChooser.showSaveDialog(primaryStage);
-      if (file == null || !file.getName().endsWith(".json")) {
-        alert("Error: File name mismatch", "Please rechoose the file"
-            + lineSeparator + "The name of the file must end with '.json'!");
-      } else {
-        // Invoke Writer
-        try {
-          // Compute each calculation and update the list
-          Writer writer = new Writer(lists);
-          writer.save(file);
-          saved = true;
-        } catch (FileNotFoundException e1) {
-          /* Should not encounter */
-        } catch (Exception e) {
-          alert("Error", "Fatal issues during IO processing");
+      try {
+        // Acquire filePath from the file Chooser
+        File file = fileChooser.showSaveDialog(primaryStage);
+        if (file == null || !file.getName().endsWith(".json")) {
+          alert("Error: File name mismatch", "Please rechoose the file"
+              + lineSeparator + "The name of the file must end with '.json'!");
+        } else {
+          // Invoke Writer
+          try {
+            // Compute each calculation and update the list
+            Writer writer = new Writer(lists);
+            writer.save(file);
+            saved = true;
+          } catch (FileNotFoundException e1) {
+            /* Should not encounter */
+          } catch (Exception e) {
+            alert("Error", "Fatal issues during IO processing");
+          }
         }
+      } catch (Exception e1) {
+        /* If caught, do nothing */
       }
     });
 
     // Add EventListener to quit button
     quit.setOnAction(event -> {
-      // If the user has not saved the data, invoke the alert pane
-      if (!saved) {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Quit?");
-        alert.setContentText(
-            "Do you want to save the calculation before you leave?");
-        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-        // Three types of buttons, yes, no and cancel
-        ButtonType yes = new ButtonType("Yes");
-        ButtonType no = new ButtonType("No");
-        ButtonType cancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(yes, no, cancel);
-        Optional<ButtonType> diagResult = alert.showAndWait();
+      try {
+        // If the user has not saved the data, invoke the alert pane
+        if (!saved) {
+          Alert alert = new Alert(AlertType.CONFIRMATION);
+          alert.setTitle("Quit?");
+          alert.setContentText(
+              "Do you want to save the calculation before you leave?");
+          alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+          // Three types of buttons, yes, no and cancel
+          ButtonType yes = new ButtonType("Yes");
+          ButtonType no = new ButtonType("No");
+          ButtonType cancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+          alert.getButtonTypes().setAll(yes, no, cancel);
+          Optional<ButtonType> diagResult = alert.showAndWait();
 
-        // If the user chose yes, invoke save button
-        if (diagResult.get() == yes) {
-          save.fire();
+          // If the user chose yes, invoke save button
+          if (diagResult.get() == yes) {
+            save.fire();
 
-          // If save failed, re-Invoke quit button
-          if (!saved) {
-            quit.fire();
-          } else {
+            // If save failed, re-Invoke quit button
+            if (!saved) {
+              quit.fire();
+            } else {
 
-            // If success, clear the screen of Matrix Calculator
+              // If success, clear the screen of Matrix Calculator
+              clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2,
+                  filter);
+            }
+
+            // If the user chose no, then clear the screen of Matrix Calculator
+          } else if (diagResult.get() == no) {
             clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2,
                 filter);
           }
+          // If user choose Cancel, then return to previous state
 
-          // If the user chose no, then clear the screen of Matrix Calculator
-        } else if (diagResult.get() == no) {
+          // If the user has saved, then quit directly
+        } else {
           clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2,
               filter);
         }
-        // If user choose Cancel, then return to previous state
-
-        // If the user has saved, then quit directly
-      } else {
-        clearerAfterQuit(selector, pages, total, rowAndCol1, rowAndCol2,
-            filter);
+      } catch (Exception e1) {
+        /* If caught, do nothing */
       }
     });
 
@@ -1521,13 +1528,15 @@ public class Main extends Application {
 
       // Change for related states
       stateModifer();
-    } catch (MatrixDimensionsMismatchException e1) {
+    } catch (MatrixDimensionsMismatchException e) {
       correctness = false;
       alert("MatrixDimensionError",
           "The dimensions of the Matrixs you entered did not match");
     } catch (NumberFormatException e1) {
       correctness = false;
       alert("Error", "Your input may contain invalid characters or empty");
+    } catch (Exception e2) {
+      /* If caught, do nothing */
     }
   }
 
