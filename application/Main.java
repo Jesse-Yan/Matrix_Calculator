@@ -1189,10 +1189,6 @@ public class Main extends Application {
           update = true;
           filter.getSelectionModel().selectFirst();
         } else {
-          buttonsModifers(matrix1, matrix2, matrixOperators, mOperations, open,
-              save, confirm, add, delete, quit, pages, true);
-          rowAndCol1.forEach(i -> i.setEditable(false));
-          rowAndCol2.forEach(i -> i.setEditable(false));
           filtering = true;
           categoryList.clear();
           selectorInto(opr);
@@ -1201,8 +1197,12 @@ public class Main extends Application {
           switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2,
               enableSecond, operators, mButtons, powerButton, powerInput, step,
               operationOperator);
+          buttonsModifers(matrix1, matrix2, matrixOperators, mOperations, open,
+              save, confirm, add, delete, quit, pages, true);
           pages.setText(String.valueOf(1));
           total.setText(String.valueOf(categoryList.size()));
+          rowAndCol1.forEach(i -> i.setEditable(false));
+          rowAndCol2.forEach(i -> i.setEditable(false));
         }
       }
     });
