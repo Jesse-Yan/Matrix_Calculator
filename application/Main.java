@@ -898,9 +898,10 @@ public class Main extends Application {
             String operationOperator = step.getOperation();
             isNum = switcher(matrix1Data, matrix2Data, rowAndCol1, rowAndCol2, enableSecond,
                 operators, mButtons, powerButton, powerInput, step, operationOperator);
-            List<String[][]> cloneResult = new ArrayList<>();
-            cloneResult.addAll(results);
-            CalSteps c = new CalSteps(operationOperator, step.getDatas(),
+            ArrayList<String[][]> cloneData = new ArrayList<>();
+            step.getDatas().forEach(el -> cloneData.add(el));
+            ArrayList<String[][]> cloneResult = new ArrayList<>(results);
+            CalSteps c = new CalSteps("" + operationOperator, cloneData,
                 isNum ? "" + resultNum : cloneResult);
             lists.set(i - 1, c);
             existingOperations
