@@ -129,15 +129,15 @@ public class Matrix implements MatrixADT {
     return string;
   }
 
-  
+
   /**
    * Convert this matrix to string for Json output. The entries are converted to string by rows. In
    * each row, numbers are separated by a " ". Rows are separated with ",\n".
    * 
    * @return the converted string.
-   
-  
-  */
+   * 
+   * 
+   */
 
   /**
    * Return a 2D array of String to represent the matrix. The 2D array will have exactly the same
@@ -458,7 +458,7 @@ public class Matrix implements MatrixADT {
     for (int i = k; i < getNumberOfRow(); i++)
       if (!entry[i][l].equals(Numeric.of(0)))
         return i;
-    return l;
+    return k;
   }
 
   /**
@@ -549,111 +549,209 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * A private helper method that swap two rows of the matrix. That is, swap rowX and rowY.
+   * A private helper method that swap two rows of the matrix, That is, swap rowX and rowY.
    * 
-   * @param rowX the index of the first row
-   * @param rowY the index of the second row
+   * Warning: this private method might change the content in the entries!
+   * 
+   * @param rowX the index of the first row that is going to be swapped with the second row
+   * @param rowY the index of the second row that is going to be swapped with the first row
    */
   private void swapRow(int rowX, int rowY) {
-    int M = getNumberOfColumn();
-    for (int i = 0; i < M; i++) {
-      Numeric tmp = entry[rowX][i];
-      entry[rowX][i] = entry[rowY][i];
-      entry[rowY][i] = tmp;
+    if (rowX != rowY) {
+      for (int i = 0; i < getNumberOfColumn(); i++) {
+        Numeric tmp = entry[rowX][i];
+        entry[rowX][i] = entry[rowY][i];
+        entry[rowY][i] = tmp;
+      }
     }
   }
 
   /**
    * 
-   * A private helper method that do partial pivoting at kth row and lth column. When the current
-   * pivot element is zero, this method will find the next row that has non-zero element on this
-   * column to swap with this row to finish the pivoting.
+   * A private helper method that do row swapping to try to make that the element at the given place
+   * (specified by a given row and a given column) is a non-zero element.
    * 
-   * @param k the column to do partial pivoting
-   * @param l the row to do partial pivoting
-   * @throws SingularException - if there is not any row that can be switched with this row to do
-   *                           the pivoting
+   * If the current element is a non-zero element, nothing will happen, otherwise, this method will
+   * find the next row that has non-zero element on this column to swap with this row to finish the
+   * pivoting.
+   * 
+   * This method cannot promise the given row must become a non-zero element, if it cannot become a
+   * non-zero element through row swapping, nothing will happen.
+   * 
+   * @param row    - a given row
+   * @param column - a given column
    */
-  private void partialPivotingWithNextNonZeroPivot(int k, int l) throws SingularException {
-    int pivotRow = indexOfNextNonZeroPivotElement(k, l);
-    Numeric pivotElement = entry[pivotRow][l];
-    if (pivotElement.compareTo(new Numeric(0)) == 0)
-      throw new SingularException();
-    if (pivotRow != k)
-      swapRow(k, pivotRow);
+  private void swapRowWithNextNonZeroPivotRow(int row, int column) {
+    int nextNonZeroPivotRow = indexOfNextNonZeroPivotElement(row, column);
+    swapRow(row, nextNonZeroPivotRow);
   }
 
   /**
    * 
-   * A private helper method that do partial pivoting at kth row and lth column. When the current
-   * pivot element is zero, this method will find the row that has largest element in absolute value
-   * on this column to swap with this row to finish the pivoting.
+   * A private helper method that do row swapping to try to make that the element at the given place
+   * (specified by a given row and a given column) is a non-zero element.
    * 
-   * @param k the column to do partial pivoting
-   * @param l the row to do partial pivoting
-   * @throws SingularException - if there is not any row that can be switched with this row to do
-   *                           the pivoting
+   * No matter whether the current element is a non-zero element, this method will always find the
+   * row that has largest element in absolute value on this column to swap with this row.
+   * 
+   * This method cannot promise the given row must become a non-zero element, if it cannot become a
+   * non-zero element through row swapping, nothing will happen.
+   * 
+   * @param row    - the given row
+   * @param column - the given column
    */
-  private void partialPivotingWithLargestPivot(int k, int l) throws SingularException {
-    int pivotRow = indexOfLargestPivotElement(k, l);
-    Numeric pivotElement = entry[pivotRow][l];
-    if (pivotElement.compareTo(new Numeric(0)) == 0)
-      throw new SingularException();
-    if (pivotRow != k)
-      swapRow(k, pivotRow);
+  private void swapRowWithLargestPivotRow(int row, int column) {
+    int largestPivotRow = indexOfLargestPivotElement(row, column);
+    swapRow(row, largestPivotRow);
   }
 
   /**
-   * A private helper method to do Gausian-elimination on this matrix.
    * 
-   * The given boolean parameter "usingNextNonZeroPivot" decides the pivoting strategy of the
-   * Gausian-elimination. If it is true, during the elimination, if the current pivot element is
-   * zero, this method will find the next row that has non-zero element on this column to swap with
-   * this row to finish the pivoting. Otherwise, this method will find the the row that has largest
-   * element in absolute value on this column to swap with this row.
+   * This enum defines the row swapping strategies for elimination. During the Guassian-elimination
+   * and LUP decomposition, each pivot used for elimination should be a non-zero element. Therefore,
+   * if the row used for current elimination has a zero element on its pivot place, a row swap must
+   * happen to make sure that the current row have a non-zero pivot. Therefore, there can be two
+   * strategies, the first is swapping row with the next row that has a non-zero pivot whenever the
+   * current row has a zero element on its pivot place (see
+   * {@link Matrix#partialPivotingWithNextNonZeroPivot(int, int)}), the second is always swapping
+   * row with the row that has greatest pivot in absolute value (see
+   * {@link Matrix#indexOfLargestPivotElement(int, int)}). While the first strategy usually provides
+   * a more understandable result for users (because there are less row swaps), the second strategy
+   * usually provides a more precise result with less floating error.
+   * 
+   * @author Houming Chen
+   * 
+   * @see https://en.wikipedia.org/wiki/Gaussian_elimination
+   *
+   */
+  private enum RowSwappingStrategy {
+    USE_NEXT_NON_ZERO_PIVOT, USE_LARGEST_PIVOT
+  }
+
+
+  /**
+   * 
+   * A private helper method that do row swapping to try to make that the element at the given place
+   * (specified by a given row and a given column) is a non-zero element. It will do row exchanges
+   * with the given {@link Matrix.RowSwappingStrategy} to achieve this goal.
+   * 
+   * This method cannot promise the given row must become a non-zero element, if it cannot become a
+   * non-zero element through row swapping, nothing will happen.
+   * 
+   * @param row    - the given row
+   * @param column - the given column
+   */
+  private void swapRowWithStrategy(int rowIndex, int columnIndex,
+      RowSwappingStrategy rowSwappingStrategy) {
+    if (rowSwappingStrategy == RowSwappingStrategy.USE_NEXT_NON_ZERO_PIVOT)
+      swapRowWithNextNonZeroPivotRow(rowIndex, columnIndex);
+    else
+      swapRowWithLargestPivotRow(rowIndex, columnIndex);
+  }
+
+  /**
+   * 
+   * 
+   * A private helper method that helps to do row swapping by trying to make that the element at the
+   * given place (specified by a given row and a given column) is a non-zero element. It will do row
+   * exchanges with the given {@link Matrix.RowSwappingStrategy} to achieve this goal. If the given
+   * place cannot become a non-zero element through row swapping, a SingularException will be
+   * thrown.
+   * 
+   * Warning: this private method might change the content in the entries!
+   * 
+   * @param rowIndex            - the row to do partial pivoting
+   * @param columnIndex         - the column to do partial pivoting
+   * @param rowSwappingStrategy - a given RowSwappingStrategy for the row swapping strategy. see
+   *                            {@link Matrix.RowSwappingStrategy} for details.
+   * @throws SingularException - if there is not any row that can be swapped with this row to do the
+   *                           pivoting
+   */
+  private void partialPivotingWithStrategy(int rowIndex, int columnIndex,
+      RowSwappingStrategy rowSwappingStrategy) throws SingularException {
+    swapRowWithStrategy(rowIndex, columnIndex, rowSwappingStrategy);
+    if (entry[rowIndex][columnIndex].compareTo(new Numeric(0)) == 0)
+      throw new SingularException();
+  }
+
+  /**
+   * 
+   * A private helper method that divides the entire row by a given element on it (which should be
+   * the pivot). The row is specified by the first parameter "rowIndex", and the given element
+   * (which should be the pivot) is specified by the second parameter "columnIndexOfPivotElement".
    * 
    * Warning: this private method will change the content in the entries!
    * 
-   * @param usingNextNonZeroPivot - a boolean parameter that decides the pivoting strategy of the
-   *                              Guassian-elimination.
+   * @param rowIndex                  the given row to do the division.
+   * @param columnIndexOfPivotElement the element in the row that this entire row is divided by
+   */
+  private void divideTheRowByPivotElement(int rowIndex, int columnIndexOfPivotElement) {
+    Numeric f = entry[rowIndex][columnIndexOfPivotElement];
+    entry[rowIndex][columnIndexOfPivotElement] = Numeric.of(1);
+    for (int i = columnIndexOfPivotElement + 1; i < getNumberOfColumn(); i++)
+      entry[rowIndex][i] = entry[rowIndex][i].dividedBy(f);
+  }
+
+  /**
+   * 
+   * A private helper that subtract constant times of a given row from other rows to make sure that
+   * all the rows except the given row is 0 on the given column, which should be the column of the
+   * index of the given row's pivot. The row is specified by the first parameter "rowIndex", and the
+   * column is specified by the second parameter "columnIndexOfPivotElement".
+   * 
+   * Warning: this private method will change the content in the entries!
+   * 
+   * @param rowIndex                  the given row
+   * @param columnIndexOfPivotElement the column of the index of the given row's pivot
+   */
+  private void eliminateOtherRowsBy(int rowIndex, int columnIndexOfPivotElement) {
+    for (int i = 0; i < getNumberOfRow(); i++) {
+      if (i == rowIndex)
+        continue;
+      Numeric f = entry[i][columnIndexOfPivotElement];
+      for (int j = 0; j < getNumberOfColumn(); j++) {
+        if (j == columnIndexOfPivotElement)
+          entry[i][j] = Numeric.of(0);
+        else
+          entry[i][j] = entry[i][j].subtract(entry[rowIndex][j].multiply(f));
+      }
+    }
+  }
+
+
+  /**
+   * A private helper method to do Gausian-elimination on this matrix. When needed, it will do row
+   * exchanges with the given row swapping strategy. See {@link Matrix.RowSwappingStrategy}.
+   * 
+   * Warning: this private method will change the content in the entries!
+   * 
+   * @param rowSwappingStrategy - a given RowSwappingStrategy for the row swapping strategy. see
+   *                            {@link Matrix.RowSwappingStrategy} for details.
    * @return the number of pivoting times during the Guassian-elimination, that is, the rank of the
    *         matrix.
    */
-  private int gussianEliminate(boolean usingNextNonZeroPivot) {
-    int N = getNumberOfRow();
-    int M = getNumberOfColumn();
+  private int gussianEliminate(RowSwappingStrategy rowSwappingStrategy) {
     int dif = 0;
-    for (int l = 0; l < N; l++) {
+    for (int k = 0; k < getNumberOfRow(); k++) {
       boolean success = false;
-      int k = l + dif;
-      if (k >= M)
-        return M - dif;
+      int l = k + dif;
+      if (l >= getNumberOfColumn())
+        return getNumberOfColumn() - dif;
       while (!success) {
         try {
-          if (usingNextNonZeroPivot)
-            partialPivotingWithNextNonZeroPivot(k, l);
-          else
-            partialPivotingWithLargestPivot(k, l);
+          partialPivotingWithStrategy(k, l, rowSwappingStrategy);
           success = true;
         } catch (SingularException e) {
           dif++;
-          k = l + dif;
-          if (k >= M)
-            return M - dif;
+          l = l + dif;
+          if (l >= getNumberOfColumn())
+            return getNumberOfColumn() - dif;
         }
       }
-      Numeric f = entry[l][k];
-      for (int j = k; j < M; j++)
-        entry[l][j] = entry[l][j].dividedBy(f);
-      for (int i = 0; i < N; i++) {
-        if (i == l)
-          continue;
-        f = entry[i][k];
-        for (int j = 0; j < M; j++)
-          entry[i][j] = entry[i][j].subtract(entry[l][j].multiply(f));
-      }
+      divideTheRowByPivotElement(k, l);
+      eliminateOtherRowsBy(k, l);
     }
-    return M - dif;
+    return getNumberOfColumn() - dif;
   }
 
   /**
@@ -667,7 +765,7 @@ public class Matrix implements MatrixADT {
    */
   public int rank() {
     Matrix answerMatrix = copy();
-    return answerMatrix.gussianEliminate(false);
+    return answerMatrix.gussianEliminate(RowSwappingStrategy.USE_LARGEST_PIVOT);
   }
 
   /**
@@ -696,7 +794,7 @@ public class Matrix implements MatrixADT {
   @Override
   public Matrix gussianElimination() {
     Matrix answerMatrix = copy();
-    answerMatrix.gussianEliminate(true);
+    answerMatrix.gussianEliminate(RowSwappingStrategy.USE_NEXT_NON_ZERO_PIVOT);
     return answerMatrix;
   }
 
@@ -735,6 +833,7 @@ public class Matrix implements MatrixADT {
    * @throws ArithmeticException               - if Cholesky-decomposition cannot be done on the
    *                                           real field.
    */
+  @Override
   public Matrix[] choleskyDecomposition()
       throws MatrixDimensionsMismatchException, MatrixArithmeticException {
     if (!this.equals(this.transpose()))
@@ -772,7 +871,7 @@ public class Matrix implements MatrixADT {
    * 
    * The given matrix must have the same number of columns with this matrix.
    * 
-   * @param other a given matrix
+   * @param other - a given matrix
    * @return the augmented matrix
    * @throws MatrixDimensionsMismatchException if the given matrix does not have the same number of
    *                                           columns with this matrix.
@@ -819,16 +918,22 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * A private helper method that implements the LUP decomposition.
+   * A private helper method that implements the LUP decomposition. It calculate the LUP
+   * decomposition recursively by using the Crout algorithm. When needed, it will do row exchanges
+   * with the given row swapping strategy. See {@link Matrix.RowSwappingStrategy}.
    * 
-   * @param usingNextNonZeroPivot
-   * @return
-   * @throws MatrixDimensionsMismatchException
+   * @param rowSwappingStrategy - a given RowSwappingStrategy for the row swapping strategy. see
+   *                            {@link Matrix.RowSwappingStrategy} for details.
+   * @return An Object array of length 4. The first tree are Matrix type representing the L matrix,
+   *         U matrix, and P matrix respectively, the fourth element represents whether there are
+   *         odd times of row swaps (which is used in {@link Matrix#determinant}).
+   * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix
+   * 
+   * @see https://en.wikipedia.org/wiki/LU_decomposition#Crout_and_LUP_algorithms
    */
-  private Object[] LUPDecompositionHelper(boolean usingNextNonZeroPivot)
+  private Object[] LUPDecompositionHelper(RowSwappingStrategy rowSwappingStrategy)
       throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
-    boolean signChanged = false;
     if (N == 1)
       return new Object[] {identityMatrixWithSizeOf(1), this.copy(), identityMatrixWithSizeOf(1),
           false};
@@ -836,7 +941,8 @@ public class Matrix implements MatrixADT {
     Matrix A = copy();
 
     int i;
-    if (usingNextNonZeroPivot) {
+    boolean signChanged = false;
+    if (rowSwappingStrategy == RowSwappingStrategy.USE_NEXT_NON_ZERO_PIVOT) {
       i = A.indexOfNextNonZeroPivotElement(0, 0);
     } else {
       i = A.indexOfLargestPivotElement(0, 0);
@@ -853,7 +959,7 @@ public class Matrix implements MatrixADT {
 
     Matrix S22 = A_bar22.subtract(A_bar21.multiply(A_bar12).dividedBy(A_bar11.getEntry(0, 0)));
 
-    Object[] tmp = S22.LUPDecompositionHelper(usingNextNonZeroPivot);
+    Object[] tmp = S22.LUPDecompositionHelper(rowSwappingStrategy);
     Matrix L22 = (Matrix) tmp[0];
     Matrix U22 = (Matrix) tmp[1];
     Matrix P22 = (Matrix) tmp[2];
@@ -884,7 +990,7 @@ public class Matrix implements MatrixADT {
    * If it is possible to do LU decomposition, this method will do LU decomposition to the matrix.
    * Otherwise, it would do a LUP decomposition.
    * 
-   * This method implements Crout algorithm to find the LUP decomposition of the matirx.
+   * This method implements Crout algorithm to find the LUP decomposition of the matrix.
    * 
    * @return an array of length 3. The first is L, and the second is U. If LU decomposition is done,
    *         the third element in the array will be null, otherwise it will be the P.
@@ -897,7 +1003,7 @@ public class Matrix implements MatrixADT {
   @Override
   public Matrix[] LUPDecomposition() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
-    Object[] tmp = this.LUPDecompositionHelper(true);
+    Object[] tmp = this.LUPDecompositionHelper(RowSwappingStrategy.USE_NEXT_NON_ZERO_PIVOT);
     Matrix L = (Matrix) tmp[0];
     Matrix U = (Matrix) tmp[1];
     Matrix P = (Matrix) tmp[2];
@@ -920,7 +1026,7 @@ public class Matrix implements MatrixADT {
   @Override
   public Numeric determinant() throws MatrixDimensionsMismatchException {
     checkSquare();
-    Object[] LUPDecomposition = LUPDecompositionHelper(false);
+    Object[] LUPDecomposition = LUPDecompositionHelper(RowSwappingStrategy.USE_LARGEST_PIVOT);
     Matrix U = (Matrix) LUPDecomposition[1];
     boolean signChanged = (boolean) LUPDecomposition[3];
     Numeric ansNumeric = U.productOfDiagonal();
@@ -945,7 +1051,7 @@ public class Matrix implements MatrixADT {
       throw new MatrixArithmeticException("The matrix is not invertible!");
     }
     Matrix augmentedMatrix = augmentMatirx(identityMatrixWithSizeOf(N));
-    augmentedMatrix.gussianEliminate(false);
+    augmentedMatrix.gussianEliminate(RowSwappingStrategy.USE_LARGEST_PIVOT);
     return augmentedMatrix.subMatrix(0, N, N, 2 * N);
   }
 
@@ -980,6 +1086,24 @@ public class Matrix implements MatrixADT {
     return null;
   }
 
+  /**
+   * Get the matrix to the power of n, the given matrix must be a square matrix.
+   * 
+   * If n is a positive integer, return the result of this matrix multiplies itself by n times.
+   * 
+   * IF n is 0, return a square diagonal matrix that has same dimensions with the given square
+   * matrix.
+   * 
+   * If n is a negative integer, return the result of this matrix's transpose multiplies itself by n
+   * times.
+   * 
+   * @param n - given n
+   * @return - the matrix to the power of n
+   * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
+   * @throws MatrixArithmeticException         - when n is negative but the matrix is non-invertible
+   * 
+   * @see https://en.wikipedia.org/wiki/Matrix_multiplication#Powers_of_a_matrix
+   */
   @Override
   public Matrix pow(int n) throws MatrixDimensionsMismatchException, MatrixArithmeticException {
     int N = getSizeOfSquareMatrix();
@@ -994,9 +1118,8 @@ public class Matrix implements MatrixADT {
 
 
   /**
-   * Calculate the Frobenius norm of the matrix.
-   * 
-   * That is, find the square root of the sum of the square of all entries.
+   * Calculate the Frobenius norm of the matrix. That is, find the square root of the sum of the
+   * square of all entries.
    * 
    * @see https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm
    */
@@ -1008,40 +1131,6 @@ public class Matrix implements MatrixADT {
       }
     }
     return ans.sqrt();
-  }
-
-  /**
-   * 
-   * A private helper method that separate the matrix into column vectors.
-   * 
-   * @return an array of column vectors representing the separated column vectors.
-   * 
-   */
-  public ColumnVector[] toColumnVectors() {
-    ColumnVector[] columnVectors = new ColumnVector[getNumberOfColumn()];
-    for (int j = 0; j < getNumberOfColumn(); j++) {
-      Numeric[] columnContent = new Numeric[getNumberOfRow()];
-      for (int i = 0; i < getNumberOfRow(); i++) {
-        columnContent[i] = entry[i][j];
-      }
-      columnVectors[j] = new ColumnVector(columnContent);
-    }
-    return columnVectors;
-  }
-
-  /**
-   * 
-   * A private static helper method that combine an array of ColumnVector back to a matrix.
-   * 
-   * @param columnVectors an array of ColumnVector
-   * @return a matrix which is generated by combineing the column vectors.
-   */
-  public static Matrix combineColumnVectorsToMatirx(ColumnVector[] columnVectors) {
-    Numeric[][] entry = new Numeric[columnVectors[0].getNumberOfRow()][columnVectors.length];
-    for (int i = 0; i < entry.length; i++)
-      for (int j = 0; j < entry[0].length; j++)
-        entry[i][j] = columnVectors[j].getEntry(i, 0);
-    return new Matrix(entry);
   }
 
   // Householder
@@ -1244,7 +1333,7 @@ public class Matrix implements MatrixADT {
   @Override
   public Numeric[] eigenValues() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
-    if(N == 1)
+    if (N == 1)
       return new Numeric[] {new Numeric(entry[0][0])};
     int compensateDecimalDigits = lowestDigitInMatrix();
     lowestDigitPlace += compensateDecimalDigits;

@@ -228,28 +228,6 @@ public class MatrixTest {
     }
   }
 
-  @Test
-  public void test_Vector() {
-    try {
-      MatrixADT rowVector1, rowVector2, rowVector3;
-      rowVector1 = new RowVector(new Integer[] {1, 2, 3, 4});
-      rowVector2 = new RowVector(new Integer[] {-1, 0, 1, -2});
-      rowVector3 = new RowVector(new Integer[] {0, 2, 4, 2});
-      assertEquals(rowVector3, rowVector1.add(rowVector2));
-      assertEquals(((Vector) rowVector1).innerProduct((Vector) rowVector2), -6);
-
-
-      rowVector1 = new ColumnVector(new Integer[] {1, 2, 3, 4});
-      rowVector2 = new ColumnVector(new Integer[] {-1, 0, 1, -2});
-      rowVector3 = new ColumnVector(new Integer[] {0, 2, 4, 2});
-      assertEquals(rowVector3, rowVector1.add(rowVector2));
-      assertEquals(((Vector) rowVector2).innerProduct((Vector) rowVector3), 0);
-
-
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
 
 
   /**
