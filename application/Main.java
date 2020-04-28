@@ -673,12 +673,15 @@ public class Main extends Application {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
+          
+          // get the determinant of the matrix and change to border pane
           String resultDeterminant = matrixCalculator.getDeterminant();
           resultNum = resultDeterminant;
           resultShower = resultBuilder("Operation: Det", "Determinant",
               dataFromMatrix, resultDeterminant);
           scrollPane(vBoxR, resultShower);
           stateModifer();
+          
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -693,19 +696,22 @@ public class Main extends Application {
         }
       });
 
+      // Add EventHandler to special matrix operations
       singleMatrixOperations.get(1).setOnAction(event -> { // inverse
         try {
           latestMOpera = singleMatrixOperations.get(1);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
+          
+          // get the inverse matrix and change to boreder pane
           String[][] resultInverse = matrixCalculator.getInverse();
           results.clear();
           results.add(resultInverse);
           resultShower = resultBuilder("Operation: Inverse", "Inverse",
               dataFromMatrix, resultInverse);
           scrollPane(vBoxR, resultShower);
-          stateModifer();
+          stateModifer();      
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -724,19 +730,22 @@ public class Main extends Application {
         }
       });
 
+      // Add EventHandler to special matrix operations 
       singleMatrixOperations.get(2).setOnAction(event -> { // QR
         try {
           latestMOpera = singleMatrixOperations.get(2);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
+          
+          // get the QR decomposition of the matrix and change to border pane
           List<String[][]> resultQR = matrixCalculator.getQRDecomposition();
           results.clear();
           results.addAll(resultQR.stream().collect(toList()));
           resultShower = resultBuilderQR("Operation: QR", "QR", dataFromMatrix,
               resultQR.get(0), resultQR.get(1));
           scrollPane(vBoxR, resultShower);
-          stateModifer();
+          stateModifer();         
         } catch (NumberFormatException e2) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
@@ -745,17 +754,20 @@ public class Main extends Application {
         }
       });
 
+      // Add EventHandler to special matrix operations 
       singleMatrixOperations.get(3).setOnAction(event -> { // nullity
         try {
           latestMOpera = singleMatrixOperations.get(3);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
+          
+          // get the nullity of the matrix and change to border pane
           resultNum = matrixCalculator.getNullity();
           resultShower = resultBuilder("Operation: Nullity", "Nullity",
               dataFromMatrix, resultNum);
           scrollPane(vBoxR, resultShower);
-          stateModifer();
+          stateModifer();          
         } catch (NumberFormatException e) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
@@ -764,18 +776,21 @@ public class Main extends Application {
         }
       });
 
-      singleMatrixOperations.get(4).setOnAction(event -> {
+      // Add EventHandler to special matrix operations
+      singleMatrixOperations.get(4).setOnAction(event -> { //trace
         try {
           latestMOpera = singleMatrixOperations.get(4);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
+          
+          // get the trace of the matrix and change to border pane
           String resultTrace = matrixCalculator.getTrace();
           resultNum = resultTrace;
           resultShower = resultBuilder("Operation: Trace", "Trace",
               dataFromMatrix, resultTrace);
           scrollPane(vBoxR, resultShower);
-          stateModifer();
+          stateModifer();         
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -790,12 +805,15 @@ public class Main extends Application {
         }
       });
 
+      // Add EventHandler to special matrix operations
       singleMatrixOperations.get(5).setOnAction(event -> { // LUP
         try {
           latestMOpera = singleMatrixOperations.get(5);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
+          
+          // get the LUP decomposition of the matrix and change to border pane
           List<String[][]> resultLUP = matrixCalculator.getLUPDecomposition();
           results.clear();
           results.addAll(resultLUP.stream().collect(toList()));
@@ -808,7 +826,7 @@ public class Main extends Application {
                 dataFromMatrix, resultLUP.get(0), resultLUP.get(1));
           }
           scrollPane(vBoxR, resultShower);
-          stateModifer();
+          stateModifer();     
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -823,6 +841,7 @@ public class Main extends Application {
         }
       });
 
+      // Add EventHandler to special matrix operations
       singleMatrixOperations.get(6).setOnAction(event -> { // guassian -
                                                            // elimination
         try {
@@ -830,13 +849,15 @@ public class Main extends Application {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
+          
+          // get the guassianelimination of the matrix
           String[][] resultGE = matrixCalculator.getGuassianElimination();
           results.clear();
           results.add(resultGE);
           resultShower =
               resultBuilder("Operation: GE", "GE", dataFromMatrix, resultGE);
           scrollPane(vBoxR, resultShower);
-          stateModifer();
+          stateModifer();        
         } catch (NumberFormatException e) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
@@ -845,12 +866,15 @@ public class Main extends Application {
         }
       });
 
+      // Add EventHandler to special matrix operations
       singleMatrixOperations.get(7).setOnAction(event -> { // Cholesky
         try {
           latestMOpera = singleMatrixOperations.get(7);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
+          
+          // get the cholesky decomposition of the matrix
           List<String[][]> resultCholesky =
               matrixCalculator.getCholeskyDecomposition();
           results.clear();
@@ -858,7 +882,7 @@ public class Main extends Application {
           resultShower = resultBuilderQR("Operation: Cholesky", "Cholesky",
               dataFromMatrix, resultCholesky.get(0), resultCholesky.get(1));
           scrollPane(vBoxR, resultShower);
-          stateModifer();
+          stateModifer();       
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -882,18 +906,21 @@ public class Main extends Application {
         }
       });
 
+      // Add EventHandler to special matrix operations
       singleMatrixOperations.get(8).setOnAction(event -> { // eigenvalue
         try {
           latestMOpera = singleMatrixOperations.get(8);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
+          
+          // get the eigenvalue of the matrix
           String resultEIV = matrixCalculator.getEigenValues();
           resultNum = resultEIV;
           resultShower =
               resultBuilder("Operation: EIV", "EIV", dataFromMatrix, resultEIV);
           scrollPane(vBoxR, resultShower);
-          stateModifer();
+          stateModifer();          
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -908,17 +935,20 @@ public class Main extends Application {
         }
       });
 
+      // Add EventHandler to special matrix operations
       singleMatrixOperations.get(9).setOnAction(event -> { // rank
         try {
           latestMOpera = singleMatrixOperations.get(9);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
+          
+          // get the rank of the matrix
           resultNum = matrixCalculator.getRank();
           resultShower = resultBuilder("Operation: Rank", "Rank",
               dataFromMatrix, resultNum);
           scrollPane(vBoxR, resultShower);
-          stateModifer();
+          stateModifer();          
         } catch (NumberFormatException e) {
           correctness = false;
           alert("Error", "Your input may contain invalid characters or empty");
@@ -927,19 +957,22 @@ public class Main extends Application {
         }
       });
 
+      // Add EventHandler to special matrix operations
       singleMatrixOperations.get(10).setOnAction(event -> { // transpose
         try {
           latestMOpera = singleMatrixOperations.get(10);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
+          
+          // get the transpose matrix
           String[][] resultTS = matrixCalculator.getTranspose();
           results.clear();
           results.add(resultTS);
           resultShower =
               resultBuilder("Operation: TS", "TS", dataFromMatrix, resultTS);
           scrollPane(vBoxR, resultShower);
-          stateModifer();
+          stateModifer();        
         } catch (NumberFormatException e) {
           alert("Error", "Your input may contain invalid characters or empty");
         } catch (Exception e1) {
@@ -947,6 +980,7 @@ public class Main extends Application {
         }
       });
 
+      // Add EventHandler to special matrix operations
       powerButton.setOnAction(event -> { // power
         try {
           latestMOpera = powerButton;
@@ -956,6 +990,8 @@ public class Main extends Application {
             String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
             MatrixCalculator matrixCalculator =
                 new MatrixCalculator(dataFromMatrix);
+            
+            // get the matrix of n power
             String[][] resultPw = matrixCalculator.getPow(n);
             results.clear();
             results.add(resultPw);
@@ -963,6 +999,7 @@ public class Main extends Application {
                 dataFromMatrix, resultPw);
             scrollPane(vBoxR, resultShower);
             stateModifer();
+            
           } catch (MatrixDimensionsMismatchException e1) {
             correctness = false;
             alert("MatrixDimensionError",
