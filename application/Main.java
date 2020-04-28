@@ -169,7 +169,12 @@ public class Main extends Application {
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.setTitle("Instruction to use");
         alert.setHeaderText("Please Read");
-        alert.setContentText("To do"); // To add to the user guide!!!
+        alert.setContentText("1.Determin your matrix size"+lineSeparator
+          +"2.Enter numbers"+lineSeparator
+          +"3.Change matrix by click func buttons like 'inverse'"
+          +"4.Choose oprations"+lineSeparator
+          +"5.Enjoy your result!"
+        );
         alert.showAndWait();
       } catch (Exception e) {
         /* If caught, do nothing */
@@ -188,7 +193,7 @@ public class Main extends Application {
             + "    Jinming Zhang - jzhang2279@wisc.edu" + lineSeparator
             + "    Zexin Li - zli885@wisc.edu" + lineSeparator
             + "    Houming Chen - hchen634@wisc.edu" + lineSeparator
-            + "    Chengxu Bian - cbian4@wisc.edu");
+            + "    Chengxu Bian - cbian7@wisc.edu");
         alert.showAndWait();
       } catch (Exception e) {
         /* If caught, do nothing */
