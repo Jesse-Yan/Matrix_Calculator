@@ -173,7 +173,9 @@ public class Main extends Application {
           +"2.Enter numbers"+lineSeparator
           +"3.Change matrix by click func buttons like 'inverse'"
           +"4.Choose oprations"+lineSeparator
-          +"5.Enjoy your result!"
+          +"5.Enjoy your result!"+lineSeparator
+                +"Tips: C1 and C2 are used to clear matrix 1 and 2"
+
         );
         alert.showAndWait();
       } catch (Exception e) {
