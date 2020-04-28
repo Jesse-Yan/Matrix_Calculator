@@ -29,10 +29,13 @@ import java.util.regex.Pattern;
  * to store numbers that can be either be an integer, or a fraction, or a double value.
  * 
  * Therefore, a instance of this class is always in one of the tree states: Integer states, Fraction
- * states, and Double states. This is implemented by having a {@link Number} instance in its field.
- * Since the {@link Number} is an abstract class. The instance can be either an instance of Integer,
- * or Fraction, or Double. Methods in this class will have different behaviors when this instance is
- * in different types.
+ * states, and Double states. In Integer state, the values are stored in Integer, which means the
+ * value of the numeric is an integer. In Fraction state, the values are stored in Integer, which
+ * means the value of the numeric is a fraction number. In Double state, the values are stored in
+ * Integer, which means the value of the numeric is a decimal number. This is implemented by having
+ * a {@link Number} instance in its field. Since the {@link Number} is an abstract class. The
+ * instance can be either an instance of Integer, or Fraction, or Double. Methods in this class will
+ * have different behaviors when this instance is in different types.
  * 
  * To do calculations, Integer can be cast to Fraction, and both Integer and Fraction can be cast to
  * Double. (Integer -> Fraction -> Double)
@@ -49,11 +52,15 @@ public class Numeric extends Number implements Comparable<Numeric> {
   private static final long serialVersionUID = 6599360948559127720L;
 
   /**
-   * Since there are float error. Two doubles are considered the same number if their first 12
-   * significant digits are same and have same exponent number.
+   * Since there are float error. Two decimal numbers are considered the same number if their first
+   * 12 significant digits are same and have same exponent number.
    */
   final static int SIGNIFICANT_FIGURE_FOR_COMPARISON = 12;
 
+  /**
+   * For a inputed decimal number, if it has less than 12 digits, it will be turned into a fraction
+   * for computation.
+   */
   final static int SIGNIFICANT_FIGURE_FOR_INPUT_PARSE_FRACTION = 12;
 
   /**
@@ -68,7 +75,9 @@ public class Numeric extends Number implements Comparable<Numeric> {
   private Number number;
 
   /**
-   * The constructor to construct this Numeric instance with an given number
+   * The constructor to construct this Numeric instance with an given {@link Number}, the Numeric
+   * will be casted into 1 of the 3 states Integer states, Fraction states, or Double states depend
+   * on the type of the given {@link Number}.
    * 
    * @param integerNumber the given number
    */
@@ -94,33 +103,63 @@ public class Numeric extends Number implements Comparable<Numeric> {
     }
   }
 
+  /**
+   * Return whether this Numeric is in the Integer state.
+   * 
+   * @return true if this Numeric is in the Integer state, and false otherwise.
+   */
   public boolean isInteger() {
     return number instanceof Integer;
   }
 
+  /**
+   * Return whether this Numeric is in the Fraction state.
+   * 
+   * @return true if this Numeric is in the Fraction state, and false otherwise.
+   */
   public boolean isFraction() {
     return number instanceof Fraction;
   }
 
+  /**
+   * Return whether this Numeric is in the Double state.
+   * 
+   * @return true if this Numeric is in the Double state, and false otherwise.
+   */
   public boolean isDouble() {
     return number instanceof Double;
   }
 
+  /**
+   * 
+   * Using regular expression to detect whether a given string is a decimal number.
+   * 
+   * @param string a given string.
+   * @return true if the given string is a decimal number.
+   */
   private static boolean theStringIsDouble(String string) {
     Pattern pattern = Pattern.compile("^-?[0-9]+\\.[0-9]+$");
     return pattern.matcher(string).matches();
   }
 
-  private static boolean theStringIsFraction(String string) {
-    Pattern pattern = Pattern.compile("^-?[0-9]+\\/[0-9]+$");
-    return pattern.matcher(string).matches();
-  }
-
+  /**
+   * 
+   * Using regular expression to detect whether a given string is a integer number.
+   * 
+   * @param string a given string.
+   * @return true if the given string is a integer number.
+   */
   private static boolean theStringIsInteger(String string) {
     Pattern pattern = Pattern.compile("^-?[0-9]+$");
     return pattern.matcher(string).matches();
   }
 
+  /**
+   * A private helper method that calculates ten to the power of n.
+   * 
+   * @param n - a given number
+   * @return ten to the power of n.
+   */
   private int tenPow(int n) {
     int ans = 1;
     for (int i = 0; i < n; i++)
@@ -129,14 +168,10 @@ public class Numeric extends Number implements Comparable<Numeric> {
   }
 
   public Numeric(String string) {
-    if (theStringIsInteger(string))
+    if (theStringIsInteger(string)) {
       number = Numeric.of((Long) Long.parseLong(string)).number;
-    else if (theStringIsFraction(string)) {
-      String part[] = string.split("\\/");
-      int numerator = Integer.parseInt(part[0]);
-      int denominator = Integer.parseInt(part[1]);
-      number = Fraction.of(numerator, denominator);
-    } else if (theStringIsDouble(string)) {
+    }
+    else if (theStringIsDouble(string)) {
       int index = string.indexOf(".");
       int decimalPlaces = string.length() - index - 1;
       if (string.length() - 1 <= SIGNIFICANT_FIGURE_FOR_INPUT_PARSE_FRACTION) {
@@ -166,6 +201,12 @@ public class Numeric extends Number implements Comparable<Numeric> {
     return new Numeric(number);
   }
 
+  /**
+   * Generate a Numeric object with a given string
+   * 
+   * @param number a given number
+   * @return a constructed Numeric object
+   */
   public static Numeric of(String string) {
     return new Numeric(string);
   }
