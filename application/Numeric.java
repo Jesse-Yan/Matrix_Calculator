@@ -40,6 +40,9 @@ import java.util.regex.Pattern;
  * To do calculations, Integer can be cast to Fraction, and both Integer and Fraction can be cast to
  * Double. (Integer -> Fraction -> Double)
  * 
+ * This Numeric class is an immutable class. That is, all public methods won't change the the state
+ * or content of a Numeric instance. (However some private methods might change)
+ * 
  * @author Houming Chen
  *
  */
@@ -64,7 +67,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
   final static int SIGNIFICANT_FIGURE_FOR_INPUT_PARSE_FRACTION = 12;
 
   /**
-   * Number of significant figures for output.
+   * Number of significant figures for dicimal number output.
    */
   public static int outputSignificantFigures = 5;
 
@@ -82,24 +85,25 @@ public class Numeric extends Number implements Comparable<Numeric> {
    * @param integerNumber the given number
    */
   public Numeric(Number number) {
-    if (number instanceof Numeric) {
+    if (number instanceof Numeric) { // This situation servers as a copy constructor
       this.number = ((Numeric) number).number;
     } else if (number instanceof Fraction) {
       try { // Try to turn fraction back to integer
         this.number = number.intValue();
       } catch (ClassCastException e) {
-        this.number = number;
+        this.number = number; // Failed
       }
     } else if (number instanceof Long) {
       if (Integer.MIN_VALUE <= number.longValue() && number.longValue() <= Integer.MAX_VALUE) {
+        // Try to turn the Long type in to Integer type
         this.number = number.intValue();
-      } else {
+      } else { // Failed
         this.number = number.doubleValue();
       }
     } else if (number instanceof Integer || number instanceof Short) {
-      this.number = number.intValue();
+      this.number = number.intValue(); // Integer state
     } else {
-      this.number = number.doubleValue();
+      this.number = number.doubleValue(); // Double state
     }
   }
 
@@ -167,11 +171,17 @@ public class Numeric extends Number implements Comparable<Numeric> {
     return ans;
   }
 
+  /**
+   * The constructor to construct this Numeric instance with an given String, the Numeric will be
+   * casted into 1 of the 3 states Integer states, Fraction states, or Double states depend on the
+   * format of the given String.
+   * 
+   * @param string the given String
+   */
   public Numeric(String string) {
     if (theStringIsInteger(string)) {
       number = Numeric.of((Long) Long.parseLong(string)).number;
-    }
-    else if (theStringIsDouble(string)) {
+    } else if (theStringIsDouble(string)) {
       int index = string.indexOf(".");
       int decimalPlaces = string.length() - index - 1;
       if (string.length() - 1 <= SIGNIFICANT_FIGURE_FOR_INPUT_PARSE_FRACTION) {
@@ -214,6 +224,12 @@ public class Numeric extends Number implements Comparable<Numeric> {
   /**
    * Get the sum of this Numeric Instance and another given Number Instance.
    * 
+   * In this method, the given Number instance will be convert to Numeric, and the addition will
+   * depends on the states of the two Numerics. Numerics can only do calculations if they are in the
+   * same state. Therefore, one of the Numeric might be casted down in the order (Integer ->
+   * Fraction -> Double) to finish the calculation. However, both of the this instance and the given
+   * instance won't be changed during this method. The cast process are doing on the copies of them.
+   * 
    * @param other other the other given Numeric Instance
    * @return the sum
    */
@@ -248,12 +264,14 @@ public class Numeric extends Number implements Comparable<Numeric> {
     return this.add(new Numeric(other));
   }
 
-  public Numeric add(String other) {
-    return add(new Numeric(other));
-  }
-
   /**
    * Get the difference of this Numeric Instance and another given Number Instance.
+   * 
+   * In this method, the given Number instance will be convert to Numeric, and the subtraction will
+   * depends on the states of the two Numerics. Numerics can only do calculations if they are in the
+   * same state. Therefore, one of the Numeric might be casted down in the order (Integer ->
+   * Fraction -> Double) to finish the calculation. However, both of the this instance and the given
+   * instance won't be changed during this method. The cast process are doing on the copies of them.
    * 
    * @param other other the other given Numeric Instance
    * @return the difference
@@ -287,12 +305,14 @@ public class Numeric extends Number implements Comparable<Numeric> {
     return this.subtract(new Numeric(other));
   }
 
-  public Numeric subtract(String other) {
-    return subtract(new Numeric(other));
-  }
-
   /**
    * Get the product of this Numeric Instance and another given Number Instance.
+   * 
+   * In this method, the given Number instance will be convert to Numeric, and the multiplication
+   * will depends on the states of the two Numerics. Numerics can only do calculations if they are
+   * in the same state. Therefore, one of the Numeric might be casted down in the order (Integer ->
+   * Fraction -> Double) to finish the calculation. However, both of the this instance and the given
+   * instance won't be changed during this method. The cast process are doing on the copies of them.
    * 
    * @param other other the other given Numeric Instance
    * @return the product
@@ -330,12 +350,15 @@ public class Numeric extends Number implements Comparable<Numeric> {
     return this.multiply(new Numeric(other));
   }
 
-  public Numeric multiply(String other) {
-    return multiply(new Numeric(other));
-  }
 
   /**
    * Get the quotient of this Numeric Instance and another given Number Instance.
+   * 
+   * In this method, the given Number instance will be convert to Numeric, and the division will
+   * depends on the states of the two Numerics. Numerics can only do calculations if they are in the
+   * same state. Therefore, one of the Numeric might be casted down in the order (Integer ->
+   * Fraction -> Double) to finish the calculation. However, both of the this instance and the given
+   * instance won't be changed during this method. The cast process are doing on the copies of them.
    * 
    * @param other other the other given Numeric Instance
    * @return the quotient
@@ -367,10 +390,6 @@ public class Numeric extends Number implements Comparable<Numeric> {
       throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
     }
     return this.dividedBy(new Numeric(other));
-  }
-
-  public Numeric dividedBy(String other) {
-    return dividedBy(new Numeric(other));
   }
 
   /**

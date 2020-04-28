@@ -35,6 +35,9 @@ import java.util.TreeSet;
  * to store numbers that can be either be an integer, or a fraction, or a double value. Therefore,
  * This matrix class used a 2D array of Numeric to store its entries.
  * 
+ * This matrix class is an immutable class. That is, all public methods won't change the content of
+ * a Matrix instance. (However some private methods might change)
+ * 
  * @author Houming Chen
  *
  */

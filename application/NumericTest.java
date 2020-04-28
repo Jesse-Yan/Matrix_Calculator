@@ -29,18 +29,18 @@ public class NumericTest {
   @Test
   public void test_integer_addition() {
     try {
-      assertEquals(Numeric.of("0").add("0"), "0");
-      assertEquals(Numeric.of("1").add("1"), "2");
-      assertEquals(Numeric.of("8").add("7"), "15");
-      assertEquals(Numeric.of("0").add("1"), "1");
-      assertEquals(Numeric.of("0").add("-1"), "-1");
-      assertEquals(Numeric.of("-1").add("0"), "-1");
-      assertEquals(Numeric.of("-17").add("0"), "-17");
-      assertEquals(Numeric.of("-3").add("3"), "0");
-      assertEquals(Numeric.of("3").add("-3"), "0");
-      assertEquals(Numeric.of("-1").add("-3"), "-4");
-      assertEquals(Numeric.of("1023").add("1"), "1024");
-      assertEquals(Numeric.of("1").add("1023"), "1024");
+      assertEquals(Numeric.of(0).add(0), 0);
+      assertEquals(Numeric.of(1).add(1), 2);
+      assertEquals(Numeric.of(8).add(7), 15);
+      assertEquals(Numeric.of(0).add(1), 1);
+      assertEquals(Numeric.of(0).add(-1), -1);
+      assertEquals(Numeric.of(-1).add(0), -1);
+      assertEquals(Numeric.of(-17).add(0), -17);
+      assertEquals(Numeric.of(-3).add(3), 0);
+      assertEquals(Numeric.of(3).add(-3), 0);
+      assertEquals(Numeric.of(-1).add(-3), -4);
+      assertEquals(Numeric.of(1023).add(1), 1024);
+      assertEquals(Numeric.of(1).add(1023), 1024);
       // TODO add more tests
     } catch (Exception e) {
       e.printStackTrace();
@@ -53,11 +53,11 @@ public class NumericTest {
   @Test
   public void test_integer_addition_with_overflow() {
     try {
-      assertEquals(Numeric.of("2147483647").add("1"), "2147483648");
-      assertEquals(Numeric.of("2147483648").add("-1"), "2147483647");
-      assertEquals(Numeric.of("2147483647").add("-2147483647"), "0");
-      assertEquals(Numeric.of("0").add("-2147483649"), "-2147483649");
-      assertEquals(Numeric.of("-2147483648").add("2147483648"), "0");
+      assertEquals(Numeric.of(2147483647).add(1), 2147483648L);
+      assertEquals(Numeric.of(2147483648L).add(-1), 2147483647);
+      assertEquals(Numeric.of(2147483647).add(-2147483647), 0);
+      assertEquals(Numeric.of(0).add(-2147483649L), -2147483649L);
+      assertEquals(Numeric.of(-2147483648).add(2147483648L), 0);
       // TODO add more tests
     } catch (Exception e) {
       e.printStackTrace();
