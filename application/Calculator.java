@@ -3,7 +3,8 @@ package application;
 import java.util.ArrayList;
 
 /**
- * This class computes the result of the given complex expression
+ * This class arranges the expression and formulates it into the expression that
+ * the SimpleCalculator can calculate
  * 
  * @author Jesse, Archer
  *
