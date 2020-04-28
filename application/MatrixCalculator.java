@@ -1,3 +1,16 @@
+//////////////////////////////// CS 400 HEADER ////////////////////////////////
+//
+// Title: Ateam project - Matrix Calculator
+// Course: COMP SCI 400, Spring 2020
+//
+///////////////////////////////// DESCRIPTION /////////////////////////////////
+//
+//
+//
+//////////////////////////////////// CREDITS //////////////////////////////////
+//
+/////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
+
 package application;
 
 import java.util.ArrayList;
@@ -261,8 +274,8 @@ public class MatrixCalculator {
    */
   public String getEigenValues() throws MatrixDimensionsMismatchException {
     Matrix firstMatrix = new Matrix(matrix1);
-    return Arrays.toString(properFormatted(firstMatrix.eigenValues()));
-    // return properFormatted(firstMatrix.eigenValues()); // maybe useful in the future.
+    return Arrays.toString(properFormatted(firstMatrix.eigenvalues()));
+    // return properFormatted(firstMatrix.eigenvalues()); // maybe useful in the future.
   }
 
   /**
@@ -419,8 +432,8 @@ public class MatrixCalculator {
     System.out.println("Demo for EigenValue");
     matrixA = new String[][] {{"1", "2"}, {"2", "2"}};
     matrixCalculator = new MatrixCalculator(matrixA);
-    String eigenValues = matrixCalculator.getEigenValues();
-    System.out.println(eigenValues + '\n');
+    String eigenvalues = matrixCalculator.getEigenValues();
+    System.out.println(eigenvalues + '\n');
     // ************************ Demo for EigenValue *********************************
 
     // ************************ Demo for Rank *********************************

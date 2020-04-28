@@ -1,7 +1,26 @@
+//////////////////////////////// CS 400 HEADER ////////////////////////////////
+//
+// Title: Ateam project - Matrix Calculator
+// Course: COMP SCI 400, Spring 2020
+//
+///////////////////////////////// DESCRIPTION /////////////////////////////////
+//
+//
+//
+//////////////////////////////////// CREDITS //////////////////////////////////
+//
+/////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
+
 package application;
 
 /**
- * The ADT for matrix.
+ * This is an ADT for the class {@link Matrix}. In this program only Matrix class implemented this
+ * ADT. The meaning of this ADT is to make the codes more clearer, and make it easier for people to
+ * understand the main function of the class {@link Matrix}. All public method in {@link Matrix}
+ * except the constructors are declared here.
+ * 
+ * This class also divides the implementation work form the test work to make a test-driven
+ * development easier.
  * 
  * @author Houming Chen, Archer Li
  *
@@ -144,7 +163,7 @@ public interface MatrixADT {
    * 
    * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
    */
-  Numeric[] eigenValues() throws MatrixDimensionsMismatchException;
+  Numeric[] eigenvalues() throws MatrixDimensionsMismatchException;
 
   /**
    * Get the rank of matrix.
@@ -194,7 +213,8 @@ public interface MatrixADT {
    * @throws ArithmeticException               - if Cholesky-decomposition cannot be done on the
    *                                           real field.
    */
-  MatrixADT[] choleskyDecomposition() throws MatrixDimensionsMismatchException, MatrixArithmeticException;
+  MatrixADT[] choleskyDecomposition()
+      throws MatrixDimensionsMismatchException, MatrixArithmeticException;
 
   /**
    * Get the matrix to the power of n, the given matrix must be a square matrix.

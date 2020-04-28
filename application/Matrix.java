@@ -1,3 +1,20 @@
+//////////////////////////////// CS 400 HEADER ////////////////////////////////
+//
+// Title: Ateam project - Matrix Calculator
+// Course: COMP SCI 400, Spring 2020
+//
+///////////////////////////////// DESCRIPTION /////////////////////////////////
+//
+//
+//
+//////////////////////////////////// CREDITS //////////////////////////////////
+//
+// Method to reduce a matrix to Hessenberg-form:
+// https://math.stackexchange.com/questions/732924/reducing-a-matrix-to-upper-
+// hessenberg-form-using-householder-transformations-in
+//
+/////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
+
 package application;
 
 import java.util.ArrayList;
@@ -6,11 +23,19 @@ import java.util.Collections;
 import java.util.TreeSet;
 
 /**
- * This class represents a Matrix and defines operations needed for a Matrix.
+ * An object of this class represents a Matrix and implements calculations operations needed for a
+ * Matrix. For the stability of the program, this class is only used in MatrixCalculator which
+ * connects the front-end and the back-end. The field of this class only contains an 2D array of
+ * {@link Numeric} that stores the entries of this Matrix.
  * 
- * The field of this class only contains an 2D array that stores the entries of this Matrix.
+ * Since the main goal for this program is to help students learning linear algebra to understand
+ * linear algebra better. The matrix supports calculations and outputs in Fractions, which will be
+ * easier and more convenient for students to understand. However, not all calculations of matrix
+ * can be done in fractions. Therefore, a {@link Numeric} class is written to provide a flexible way
+ * to store numbers that can be either be an integer, or a fraction, or a double value. Therefore,
+ * This matrix class used a 2D array of Numeric to store its entries.
  * 
- * @author Jesse, Houming Chen
+ * @author Houming Chen
  *
  */
 public class Matrix implements MatrixADT {
@@ -95,8 +120,8 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * A private helper method that generate a n*n identity matrix. This means it has 1 on every
-   * entries on its diagonal line and has 0 on other entries.
+   * A private static helper method that returns generate a n*n identity matrix. This means it has 1
+   * on every entries on its diagonal line and has 0 on other entries.
    * 
    * @param - n a given integer to represent the number of rows and colomns of the identity matirx
    * @return a n*n identity matrix.
@@ -434,11 +459,13 @@ public class Matrix implements MatrixADT {
   private int indexOfLargestPivotElement(int k, int l) {
     int pivotRow = k;
     Numeric pivotElement = entry[pivotRow][l];
-    for (int i = k + 1; i < getNumberOfRow(); i++)
-      if (entry[i][l].abs().compareTo(pivotElement) > 0) {
+    for (int i = k + 1; i < getNumberOfRow(); i++) {
+
+      if (entry[i][l].abs().compareTo(pivotElement.abs()) > 0) {
         pivotElement = entry[i][l];
         pivotRow = i;
       }
+    }
     return pivotRow;
   }
 
@@ -470,10 +497,10 @@ public class Matrix implements MatrixADT {
    * The startRow and the startColumn will be included, but the endRow and endColumn will not be
    * included
    * 
-   * @param startRow    the given start row of the matrix to get the submatirx
-   * @param endRow      the given end row of the matrix to get the submatirx
-   * @param startColumn the given start column of the matrix to get the submatirx
-   * @param endColumn   the given end column of the matrix to get the submatirx
+   * @param startRow    - the given start row of the matrix to get the submatirx
+   * @param endRow      - the given end row of the matrix to get the submatirx
+   * @param startColumn - the given start column of the matrix to get the submatirx
+   * @param endColumn   - the given end column of the matrix to get the submatirx
    * @return a Matrix object which is the submatrix constructed by the given parameters.
    */
   private Matrix subMatrix(int startRow, int endRow, int startColumn, int endColumn) {
@@ -492,7 +519,7 @@ public class Matrix implements MatrixADT {
    * The given matrix must have the same number of rows with this matrix, otherwise a
    * MatrixDimensionsMismatchException with message will be thrown.
    * 
-   * @param other a given matrix that is going to be augmented on this matrix
+   * @param other - a given matrix that is going to be augmented on this matrix
    * @return the augmented matrix
    * @throws MatrixDimensionsMismatchException if the given matrix does not have the same number of
    *                                           rows with this matrix.
@@ -553,8 +580,8 @@ public class Matrix implements MatrixADT {
    * 
    * Warning: this private method might change the content in the entries!
    * 
-   * @param rowX the index of the first row that is going to be swapped with the second row
-   * @param rowY the index of the second row that is going to be swapped with the first row
+   * @param rowX - the index of the first row that is going to be swapped with the second row
+   * @param rowY - the index of the second row that is going to be swapped with the first row
    */
   private void swapRow(int rowX, int rowY) {
     if (rowX != rowY) {
@@ -701,7 +728,7 @@ public class Matrix implements MatrixADT {
    * 
    * Warning: this private method will change the content in the entries!
    * 
-   * @param rowIndex                  the given row
+   * @param rowIndex                  - the given row
    * @param columnIndexOfPivotElement the column of the index of the given row's pivot
    */
   private void eliminateOtherRowsBy(int rowIndex, int columnIndexOfPivotElement) {
@@ -788,7 +815,6 @@ public class Matrix implements MatrixADT {
    * This method will not change the entries of the this matrix.
    * 
    * @return the matrix after guassianElimination
-   * 
    * @see https://en.wikipedia.org/wiki/Gaussian_elimination
    */
   @Override
@@ -803,7 +829,6 @@ public class Matrix implements MatrixADT {
    * Return the transpose of the Matrix.
    * 
    * @return the transpose of the Matrix
-   * 
    * @see https://en.wikipedia.org/wiki/Transpose
    */
   @Override
@@ -873,8 +898,8 @@ public class Matrix implements MatrixADT {
    * 
    * @param other - a given matrix
    * @return the augmented matrix
-   * @throws MatrixDimensionsMismatchException if the given matrix does not have the same number of
-   *                                           columns with this matrix.
+   * @throws MatrixDimensionsMismatchException - if the given matrix does not have the same number
+   *                                           of columns with this matrix.
    */
   private Matrix augmentMatirxByExtendingColumns(Matrix other)
       throws MatrixDimensionsMismatchException {
@@ -903,10 +928,10 @@ public class Matrix implements MatrixADT {
    * on the right bottom. A MatrixDimensionsMismatchException with message will be thrown if the
    * shape(dimensions) of the provided matrices cannot be combined in this way.
    * 
-   * @param leftTop     a given matrix to be the left top part of the combined matrix
-   * @param rightTop    a given matrix to be the right top part of the combined matrix
-   * @param leftBottom  a given matrix to be the left bottom part of the combined matrix
-   * @param rightBottom a given matrix to be the right bottom part of the combined matrix
+   * @param leftTop     - a given matrix to be the left top part of the combined matrix
+   * @param rightTop    - a given matrix to be the right top part of the combined matrix
+   * @param leftBottom  - a given matrix to be the left bottom part of the combined matrix
+   * @param rightBottom - a given matrix to be the right bottom part of the combined matrix
    * @return the combined matrix
    * @throws MatrixDimensionsMismatchException - if cannot combine due to number of rows or columns
    *                                           mismatches.
@@ -1133,11 +1158,33 @@ public class Matrix implements MatrixADT {
     return ans.sqrt();
   }
 
+
+  /**
+   * This method will copy a matrix which is smaller than this matrix to this matrix. The copied
+   * matrix will be place in this matrix from the given start row and the given start column of this
+   * matrix, and the previous entries will be covered. The method will return the result, and this
+   * original matrix won't change. The returned matrix will have exactly same number of columns and
+   * rows with this original matrix.
+   * 
+   * @param givenMatrix - a given matrix that is going to be copied to this matrix
+   * @param startRow    - the start row of this matrix where the covering starts
+   * @param startColumn - the start column of this matrix there the covering starts
+   * @return the result matrix after copying.
+   * @throws MatrixDimensionsMismatchException
+   */
+  private Matrix substitueWith(Matrix givenMatrix, int startRow, int startColumn) {
+    Matrix A = copy();
+    for (int i = 0; i < givenMatrix.getNumberOfRow(); i++)
+      for (int j = 0; j < givenMatrix.getNumberOfColumn(); j++)
+        A.entry[startRow + i][startColumn + j] = givenMatrix.getEntry(i, j);
+    return A;
+  }
+
   /**
    * 
    * QR decomposition.
    * 
-   * This method implement the QR decomposition by using the Household relection.
+   * This method implement the QR decomposition by using the Household reflection.
    * 
    * @return an array of length 2. The first is Q, and the second is R.
    * 
@@ -1150,29 +1197,64 @@ public class Matrix implements MatrixADT {
     int N = getNumberOfRow();
     Matrix R = A;
     Matrix Q = identityMatrixWithSizeOf(N);
-
     try {
       for (int k = 0; k < N - 1; k++) {
-        Matrix X = new Matrix(N, 1); // zero vector of length N
-
-        // x(k:m,1)=R(k:m,k);
-        Matrix tmp = R.subMatrix(k, N, k, k + 1);
-        X = X.substitueWith(tmp, k, N, 0, 1); 
-        Numeric g = X.norm();// g=norm(x);
-        Matrix V = X.copy();
-        V.entry[k][0] = X.entry[k][0].add(g); // v=x; v(k)=x(k)+g;
-        Numeric s = V.norm(); // s=norm(v);
-        Matrix W = V.dividedBy(s); // w=v/s
-        Matrix U = R.transpose().multiply(W).multiply(Numeric.of(2));// u=2*R'*w;
-        R = R.subtract(W.multiply(U.transpose()));// R=R-w*u'; %Product HR
-        Q = Q.subtract(Q.multiply(W).multiply(W.transpose()).multiply(2));// Q=Q-2*Q*w*w'; %Product QR
-
+        Matrix X = new Matrix(N, 1);
+        X = X.substitueWith(R.subMatrix(k, N, k, k + 1), k, 0);
+        X.entry[k][0] = X.entry[k][0].add(X.norm());
+        X = X.dividedBy(X.norm());
+        Matrix U = R.transpose().multiply(X).multiply(Numeric.of(2));
+        R = R.subtract(X.multiply(U.transpose()));// Product HR
+        Q = Q.subtract(Q.multiply(X).multiply(X.transpose()).multiply(2));// Product QR Q=Q-2*Q*x*x'
       }
     } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
       // Unexpected
       matrixDimensionsMismatchException.printStackTrace();
     }
     return new Matrix[] {Q, R};
+  }
+
+  /**
+   * A private helper method that reduce the given matrix to Hessenburg form and return the answer.
+   * 
+   * @return the matrix that has been reduced to a Hessenburg-from
+   * 
+   * @see https://en.wikipedia.org/wiki/Hessenberg_matrix
+   * @see https://www.ams.org/journals/mcom/1969-23-108/S0025-5718-1969-0258255-3/S0025-5718-1969-0258255-3.pdf
+   */
+  private Matrix hessenburgForm() {
+    int N = getNumberOfRow();
+    Matrix A = copy();
+    try {
+      for (int k = 0; k < N - 2; k++) {
+
+        Matrix v = A.subMatrix(k + 1, N, k, k + 1);
+        Numeric alpha = v.norm();
+
+        if (v.entry[0][0].compareTo(Numeric.of(0)) >= 0)
+          alpha = alpha.opposite();
+        v.entry[0][0] = v.entry[0][0].subtract(alpha);
+        v = v.dividedBy(v.norm());;
+        Matrix A_22 = A.subMatrix(k + 1, N, k + 1, N);
+        Matrix A_22_ =
+            A_22.subtract(v.multiply(v.transpose().multiply(A_22)).multiply(Numeric.of(2)));
+        A = A.substitueWith(A_22_, k + 1, k + 1);
+
+        A.entry[k + 1][k] = alpha;
+
+        for (int i = k + 2; i < N; i++) {
+          A.entry[i][k] = Numeric.of(0);
+        }
+        Matrix A_2 = A.subMatrix(0, N, k + 1, N);
+        Matrix A_2_ = A_2.subtract(A_2.multiply(v).multiply(Numeric.of(2)).multiply(v.transpose()));
+        A = A.substitueWith(A_2_, 0, k + 1);
+
+      }
+    } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
+      // Unexpected
+    }
+    return A;
+
   }
 
   /**
@@ -1190,20 +1272,178 @@ public class Matrix implements MatrixADT {
     return diagnal;
   }
 
-
-
-  private Matrix substitueWith(Matrix givenMatrix, int startRow, int endRow, int startColumn,
-      int endColumn) throws MatrixDimensionsMismatchException {
-    Matrix A = copy();
-    if (givenMatrix.getNumberOfRow() != endRow - startRow
-        || givenMatrix.getNumberOfColumn() != endColumn - startColumn)
-      throw new MatrixDimensionsMismatchException("Ah!");
-    for (int i = 0; i < endRow - startRow; i++)
-      for (int j = 0; j < endColumn - startColumn; j++)
-        A.entry[startRow + i][startColumn + j] = givenMatrix.getEntry(i, j);
-    return A;
+  //
+  /**
+   * A helper method that helps to do Wilkinson-Shift according its formula.
+   * 
+   * @param a - the a parameter in Wilkinon-Shift's formula, which should be the entry[N - 2][N - 2]
+   * @param b - the b parameter in Wilkinon-Shift's formula, which should be the entry[N - 2][N - 1]
+   * @param c - the c parameter in Wilkinon-Shift's formula, which should be the entry[N - 1][N - 1]
+   * @return the shift value (mu value) calculated by Wilkinson-Shift's formula
+   * @see http://web.stanford.edu/class/cme335/lecture5
+   */
+  private Numeric WilkinsonShiftHelper(Numeric a, Numeric b, Numeric c) {
+    Numeric delta = a.subtract(c).dividedBy(2);
+    Numeric bSquare = b.multiply(b);
+    Numeric deltaSquare = delta.multiply(delta);;
+    return c.add(delta).subtract(delta.sign().multiply(deltaSquare.add(bSquare).sqrt()));
   }
 
+  /**
+   * Use the Wilkinson-Shift formula implemented in
+   * {@link Matrix#WilkinsonShiftHelper(Numeric, Numeric, Numeric)} to calculate the shift value (mu
+   * value) of this matrix.
+   * 
+   * @return the calculated shift value (mu value) of this matrix.
+   */
+  private Numeric WilkinsonShift() {
+    int N = entry.length; // Already checked square
+    return WilkinsonShiftHelper(entry[N - 2][N - 2], entry[N - 2][N - 1], entry[N - 1][N - 1]);
+  }
+
+  /**
+   * 
+   * A private helper method for QR algorithm. It do a step of QR iteration with Wilkinon-Shift and
+   * return the result matrix.
+   * 
+   * @return the result matrix after the QR iteration with Wiklinon-Shift
+   * @throws MatrixDimensionsMismatchException
+   * @see https://en.wikipedia.org/wiki/QR_algorithm
+   */
+  private Matrix qrIterationWithWilkinsonShift() {
+    int N = entry.length; // Already checked square
+    Numeric mu = WilkinsonShift();
+    Matrix muMatrix = identityMatrixWithSizeOf(N).multiply(mu);
+    try {
+      Matrix[] QRDecomposition = this.subtract(muMatrix).QRDecomposition();
+      return QRDecomposition[1].multiply(QRDecomposition[0]).add(muMatrix);
+    } catch (MatrixDimensionsMismatchException e) {
+      throw new RuntimeException("?????????");
+    }
+  }
+
+  /**
+   * 
+   * A private helper method for QR algorithm. It do a step of QR iteration with a normal shift that
+   * use the entry[N - 1][N - 1] for the shift value (mu value).
+   * 
+   * This is strange. Theoretically Wilkinon-Shift is enough for QR algorithm to converge. However,
+   * in this program, there are still some matrix cannot converge. Therefore some normal shift are
+   * introduced when Wilkinon-Shift QR iterations doesn't converge, but that is still not enough.
+   * See known bugs in Readme for details.
+   * 
+   * @return the result matrix after the QR iteration with normal shift.
+   * @throws MatrixDimensionsMismatchException - if the given matrix is not a square matrix.
+   * @see https://en.wikipedia.org/wiki/QR_algorithm
+   */
+  private Matrix qrIterationWithNormalShift() throws MatrixDimensionsMismatchException {
+    int N = entry.length; // Already checked square
+    Numeric mu = entry[N - 1][N - 1];
+    Matrix muMatrix = identityMatrixWithSizeOf(N).multiply(mu);
+    Matrix[] QRDecomposition = this.subtract(muMatrix).QRDecomposition();
+    return QRDecomposition[1].multiply(QRDecomposition[0]).add(muMatrix);
+  }
+
+  /**
+   * The float calculations may cause floating error. Therefore, in order to decide whether a number
+   * is zero, only a given number of decimal digits are used to decide whether a number is zero.
+   * which is the {@link Matrix#lowestDigitPlace}.
+   * 
+   * However, this {@link Matrix#lowestDigitPlace} cannot be the same value all the time. Sometimes
+   * if the matrix inputed by the user has many decimal digits, then this value can be adjust.
+   * 
+   * Therefore, this static final int value LOWEST_DIGITE_PLACE_STARTING_VALUE provides a starting
+   * for the {@link Matrix#lowestDigitPlace}.
+   */
+  private static final int LOWEST_DIGITE_PLACE_STARTING_VALUE = 6;
+
+  /**
+   * The float calculations may cause floating error. Therefore, in order to decide whether a number
+   * is zero, only a given number of decimal digits are used to decide whether a number is zero. And
+   * this number will be specified by this lowestDigitPlace.
+   */
+  private static int lowestDigitPlace = LOWEST_DIGITE_PLACE_STARTING_VALUE;
+
+  /**
+   * A private helper method that checks the number of decimal digits of the inputs to help to
+   * determine the adjustment of the {@link Matrix#lowestDigitPlace}. However, this value can at
+   * most be 3, because due to the float error, this program cannot do computations for too many
+   * decimal digits. If the number has more than 3 decimal digits, it will also return 3.
+   * 
+   * @return the numberOfDecimalDigits the number of decimal digits, but if it is greater than 3,
+   *         return 3.
+   */
+  private int numberOfDecimalDigits() {
+    int ans = 0;
+    for (int i = 0; i < entry.length; i++)
+      for (int j = 0; j < entry[i].length; j++) {
+        double value = entry[i][j].doubleValue();
+        value = value - Math.floor(value);
+        int digits = 0;
+        int maxDigit = 3;
+        for (int k = 0; k < maxDigit && Math.abs(value) > 0.0000000000001; k++) {
+          value *= 10;
+          value = value - Math.floor(value);
+          digits++;
+        }
+        ans = Integer.max(ans, digits);
+      }
+    return ans;
+  }
+
+  /**
+   * A private helper method helps to adjust {@link Matrix#lowestDigitPlace}. It adds the number of
+   * decimal digits returned by the {@link Matrix#numberOfDecimalDigits()}} to the original
+   * {@link Matrix#lowestDigitPlace}.
+   */
+  private void adjustLowestDigitPlace() {
+    lowestDigitPlace += numberOfDecimalDigits();
+  }
+
+  /**
+   * A private helper method that turn the {@link Matrix#lowestDigitPlace} back to
+   * {@link Matrix#LOWEST_DIGITE_PLACE_STARTING_VALUE}
+   */
+  private void setLowestDigitPlaceBack() {
+    lowestDigitPlace = LOWEST_DIGITE_PLACE_STARTING_VALUE;
+  }
+
+  /**
+   * 
+   * A private helper method that check whether the two given matrix have same elements on their
+   * diagonal lines (regardless of order).
+   * 
+   * @param A - the first given matrix
+   * @param B - the second given matrix
+   * @return true if the two two given matrix have same elements on their diagonal lines (regardless
+   *         of order), and false otherwise.
+   */
+  private static boolean sameDiagnal(Matrix A, Matrix B) {
+    try {
+      Numeric array1[] = A.diagonal();
+      Numeric array2[] = B.diagonal();
+      Arrays.sort(array1);
+      Arrays.sort(array2);
+      for (int i = 0; i < array1.length; i++) {
+        if (!array1[i].equals(array2[i], lowestDigitPlace / 2))
+          return false;
+      }
+      return true;
+    } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
+      // TODO: Unexpected
+      throw new RuntimeException("!!!");
+    }
+  }
+
+  /**
+   * 
+   * A private helper method that makes tiny values (which can be regard as zeros) to zero. This
+   * method is used for cleaning entries in the result matrix. The number of decimal digits used in
+   * deciding whether a number can be regard as zero is specified by the parameter digits.
+   * 
+   * @param digits - the number of decimal digits used in deciding whether a number is zero
+   * @return the result matrix after the elimination.
+   */
   private Matrix eliminateSmallValues(int digits) {
     Matrix A = copy();
     for (int i = 0; i < A.entry.length; i++) {
@@ -1216,120 +1456,37 @@ public class Matrix implements MatrixADT {
     return A;
   }
 
-  private Matrix hessenburgForm() throws MatrixDimensionsMismatchException {
-    int N = getSizeOfSquareMatrix();
-    Matrix A = copy();
-    for (int k = 0; k < N - 2; k++) {
 
-      // v = Q2D(k+1:n,k); alpha = -norm(v);
-      Matrix v = A.subMatrix(k + 1, N, k, k + 1);
-      Numeric alpha = v.norm().opposite(); // ???
-
-      // if (v(1) < 0) alpha = -alpha; end
-      if (v.entry[0][0].compareTo(Numeric.of(0)) < 0) {
-        alpha = alpha.opposite();
-      }
-
-      // v(1) = v(1) - alpha; v = v / norm(v);
-      v.entry[0][0] = v.entry[0][0].subtract(alpha);
-      v = v.dividedBy(v.norm());
-
-      // Q2D(k+1:n,k+1:n) = Q2D(k+1:n,k+1:n) - 2 * v * (v.' * Q2D(k+1:n,k+1:n));
-      Matrix A_22 = A.subMatrix(k + 1, N, k + 1, N);
-      Matrix A_22_ =
-          A_22.subtract(v.multiply(v.transpose().multiply(A_22)).multiply(Numeric.of(2)));
-      A = A.substitueWith(A_22_, k + 1, N, k + 1, N);
-
-      // Q2D(k+1,k) = alpha;
-      A.entry[k + 1][k] = alpha;
-
-      // Q2D(k+2:n,k) = 0;
-      for (int i = k + 2; i < N; i++) {
-        A.entry[i][k] = Numeric.of(0);
-      }
-
-
-      // Q2D(1:n,k+1:n) = Q2D(1:n,k+1:n) - 2 * (Q2D(1:n,k+1:n) * v) * v.';
-      Matrix A_2 = A.subMatrix(0, N, k + 1, N);
-      Matrix A_2_ = A_2.subtract(A_2.multiply(v).multiply(Numeric.of(2)).multiply(v.transpose()));
-      A = A.substitueWith(A_2_, 0, N, k + 1, N);
-
-    }
-
-    return A;
-
-  }
-
-  // @see http://web.stanford.edu/class/cme335/lecture5
-  private Numeric WilkinsonShiftHelper(Numeric a, Numeric b, Numeric c) {
-    Numeric delta = a.subtract(c).dividedBy(2);
-    Numeric bSquare = b.multiply(b);
-    Numeric deltaSquare = delta.multiply(delta);
-    // return c.subtract(x.dividedBy(y));
-    return c.add(delta).subtract(delta.sign().multiply(deltaSquare.add(bSquare).sqrt()));
-  }
-
-  private Numeric WilkinsonShift() throws MatrixDimensionsMismatchException {
-    int N = getSizeOfSquareMatrix();
-    return WilkinsonShiftHelper(entry[N - 2][N - 2], entry[N - 2][N - 1], entry[N - 1][N - 1]);
-  }
-
-  private Matrix qrIterationWithWilkinsonShift() throws MatrixDimensionsMismatchException {
-    int N = entry.length; // Already checked square
-    Numeric mu = WilkinsonShift();
-    Matrix muMatrix = identityMatrixWithSizeOf(N).multiply(mu);
-    Matrix[] QRDecomposition = this.subtract(muMatrix).QRDecomposition();
-    return QRDecomposition[1].multiply(QRDecomposition[0]).add(muMatrix);
-  }
-
-  private static final int LOWEST_DIGITE_PLACE_STARTING_VALUE = 6;
-  private static int lowestDigitPlace = LOWEST_DIGITE_PLACE_STARTING_VALUE;
-
-  private int lowestDigitInMatrix() {
-    int ans = 0;
-    for (int i = 0; i < entry.length; i++)
-      for (int j = 0; j < entry[i].length; j++) {
-        double value = entry[i][j].doubleValue();
-        value = value - Math.floor(value);
-        int digits = 0;
-        int maxDigit = 2;
-        for (int k = 0; k < maxDigit && Math.abs(value) > 0.0000000000001; k++) {
-          value *= 10;
-          value = value - Math.floor(value);
-          digits++;
-        }
-        ans = Integer.max(ans, digits);
-      }
-    return ans;
-  }
-
-  private static boolean sameDiagnal(Matrix A, Matrix B) throws MatrixDimensionsMismatchException {
-    Numeric array1[] = A.diagonal();
-    Numeric array2[] = B.diagonal();
-    Arrays.sort(array1);
-    Arrays.sort(array2);
-    for (int i = 0; i < array1.length; i++) {
-      if (!array1[i].equals(array2[i], lowestDigitPlace / 2))
-        return false;
-    }
-    return true;
-  }
 
   /**
-   * Find the eigenvalue of the matrix by QR algorithm.
+   * A private helper method that helps to make the result matrix of the QR algorithm more easier
+   * for next step to improve the stability of this program.
    * 
-   * @throws SingularException - ???
-   * 
-   * 
-   * @see https://en.wikipedia.org/wiki/QR_algorithm
+   * @return the matrix after the cleaning.
    */
-  @Override
-  public Numeric[] eigenValues() throws MatrixDimensionsMismatchException {
+  private Matrix cleanTheResultMatrix() {
+    Matrix A = copy();
+    A = A.eliminateSmallValues(lowestDigitPlace);
+    for (int i = 0; i < 50; i++) {
+      A = A.qrIterationWithWilkinsonShift();
+    }
+    A = A.eliminateSmallValues(lowestDigitPlace);
+    return A;
+  }
+
+  public static boolean floatErrorWarning = false;
+
+  /**
+   * 
+   * A helper method for computing eigenvalues that do QR algorithm. It will do QR algorithms on the
+   * matrix and return the diagonal of the result matrix in an ArrayList to be potential
+   * eigenvalues.
+   * 
+   * @return an ArrayList that contains the diagonal of the result matrix
+   * @throws MatrixDimensionsMismatchException
+   */
+  public ArrayList<Numeric> eigenvaluesHelper() throws MatrixDimensionsMismatchException {
     int N = getSizeOfSquareMatrix();
-    if (N == 1)
-      return new Numeric[] {new Numeric(entry[0][0])};
-    int compensateDecimalDigits = lowestDigitInMatrix();
-    lowestDigitPlace += compensateDecimalDigits;
     Matrix A = copy(), lastA = identityMatrixWithSizeOf(N), lastLastA;
     A = A.hessenburgForm();
     int interateCount = 0, n = N;
@@ -1339,7 +1496,6 @@ public class Matrix implements MatrixADT {
       lastA = A;
       A = A.qrIterationWithWilkinsonShift();
       interateCount++;
-
       if (A.entry[n - 1][n - 2].isZeroBy(lowestDigitPlace / 2)) {
         potentialEigenValues.add(Numeric.of(0));
         if (n == 2) {
@@ -1351,78 +1507,116 @@ public class Matrix implements MatrixADT {
         n--;
       }
       // System.out.println(A);
-      if (interateCount > 10000)
-        throw new ArithmeticException("Doesn't Converge");
-      if (sameDiagnal(A, lastLastA))
+      if (interateCount % 1000 == 0) {
+        for (int i = 0; i < 100; i++) {
+          A = A.qrIterationWithNormalShift();
+        }
+      }
+      if (interateCount > 4000) {
+        floatErrorWarning = true;
         break;
-    } while (!sameDiagnal(A, lastA));
-    A = A.eliminateSmallValues(lowestDigitPlace);
-    for (int i = 0; i < 100; i++) {
-      A = A.qrIterationWithWilkinsonShift();
-    }
-    A = A.eliminateSmallValues(lowestDigitPlace);
-
+      }
+    } while (!sameDiagnal(A, lastLastA) && !sameDiagnal(A, lastA));
+    A = A.cleanTheResultMatrix();
     Collections.addAll(potentialEigenValues, A.diagonal());
+    return potentialEigenValues;
+  }
 
-    TreeSet<Numeric> eigenValues = new TreeSet<Numeric>();
+  /**
+   * 
+   * A private helper method that try to convert the potential eigenvalue into fraction and check
+   * whether the conversion is possible. If it is possible, returns the converted Numeric,
+   * otherwise, throws a ClassCastException with messages.
+   * 
+   * @param potentialEigenvalue - a given potential eigenvalue
+   * @return the converted Numeric in fraction state, if possible.
+   */
+  private Numeric tryToGetMathematicallyPreciseEigenvalue(Numeric potentialEigenvalue) {
+    int N = getNumberOfRow(); // Already checked square;
+    if (potentialEigenvalue.isZeroBy(lowestDigitPlace))
+      potentialEigenvalue = Numeric.of(0);
+    Numeric castedEigenValue = potentialEigenvalue.castToNearestFraction();
+    try {
+      if (this.subtract(identityMatrixWithSizeOf(N).multiply(castedEigenValue)).determinant()
+          .mathematicallyEquals(Numeric.of(0))) {
+        return castedEigenValue;
+      }
+    } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
+      // Unexpected;
+    }
+    throw new ClassCastException("EigenValue Didn't match!");
+  }
 
-    // System.out.println(potentialEigenValues);
+  /**
+   * 
+   * A private helper method that checks whether the potential eigenvalue is the true eigenvalue.
+   * According to the QR algorithm with matrix reduction to Hessenberg form, the numbers on the
+   * Diagonal lines might not be the true eigenvalue of the matrix because of the existence of
+   * complex eigenvalues. Therefore, this method checks whether the result matrix is really a
+   * eigenvalue by checking the characteristic equation equals to zero.
+   * 
+   * @param potentialEigenvalue - a given potential eigenvalue
+   * @return true if the potential eigenvalue is a real eigenvalue.
+   */
+  private boolean checkEigenvalue(Numeric potentialEigenvalue) {
+    int N = getNumberOfRow(); // Already checked square;
+    try {
+      Matrix M = this.subtract(identityMatrixWithSizeOf(N).multiply(potentialEigenvalue));
+      Matrix U = M.LUPDecomposition()[1];
+      for (int i = 0; i < N; i++) {
+        if (U.entry[i][i].isZeroBy(lowestDigitPlace / 2)) {
+          return true;
+        }
+      }
+    } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
+      // Unexpected;
+    }
+    return false;
+  }
 
-    for (Numeric eigenValue : potentialEigenValues) {
+  /**
+   * 
+   * A private helper method that convert a TreeSet of Numeric values to an array of Numeric values,
+   * and during the conversion, similar values will be combined into one value. (keeping the smaller
+   * one).
+   * 
+   * @param eigenvalues - a TreeSet of Numeric values representing the calculated eigenvalues.
+   * @return an array of Numeric value that is converted by the TreeSet.
+   */
+  private Numeric[] convertTreeSetToNumericArray(TreeSet<Numeric> eigenvalues) {
+    Numeric[] eigenvalueArray = new Numeric[eigenvalues.size()];
+    int numberOfEigenValue = 0;
+    for (Numeric eigenvalue : eigenvalues) {
+      if (numberOfEigenValue == 0 || !eigenvalueArray[numberOfEigenValue - 1]
+          .equals(eigenvalueArray, Numeric.outputSignificantFigures + 1))
+        eigenvalueArray[numberOfEigenValue++] = eigenvalue;
+    }
+    return eigenvalueArray;
+  }
+
+  /**
+   * This method find the eigenvalues of the matrix by QR algorithm.
+   * 
+   * @see https://en.wikipedia.org/wiki/QR_algorithm
+   */
+  public Numeric[] eigenvalues() throws MatrixDimensionsMismatchException {
+    int N = getSizeOfSquareMatrix();
+    if (N == 1)
+      return new Numeric[] {new Numeric(entry[0][0])};
+    adjustLowestDigitPlace();
+    ArrayList<Numeric> potentialEigenvalues = eigenvaluesHelper();
+    TreeSet<Numeric> eigenvalues = new TreeSet<Numeric>();
+    for (Numeric eigenvalue : potentialEigenvalues) {
       try {
-        if (eigenValue.isZeroBy(lowestDigitPlace))
-          eigenValue = Numeric.of(0);
-        // System.out.println("eigenValue:" + eigenValue);
-        Numeric castedEigenValue = eigenValue.castToNearestFraction();
-        // System.out.println("Casted:" + castedEigenValue);
-        if (this.subtract(identityMatrixWithSizeOf(N).multiply(castedEigenValue)).determinant()
-            .mathematicallyEquals(Numeric.of(0))) {
-          eigenValues.add(castedEigenValue);
-        } else {
-          throw new ClassCastException("EigenValue Didn't match!");
-        }
+        Numeric castedEigenValue = tryToGetMathematicallyPreciseEigenvalue(eigenvalue);
+        eigenvalues.add(castedEigenValue);
       } catch (ClassCastException classCastException) {
-
-        Matrix M = this.subtract(identityMatrixWithSizeOf(N).multiply(eigenValue));
-        Matrix U = M.LUPDecomposition()[1];
-        // System.out.println("*" + A);
-        // System.out.println("Error" + M.determinant().abs());
-
-        for (int i = 0; i < N; i++) {
-          if (U.entry[i][i].isZeroBy(lowestDigitPlace / 2)) {
-            eigenValues.add(eigenValue);
-            break;
-          }
+        if (checkEigenvalue(eigenvalue)) {
+          eigenvalues.add(eigenvalue);
         }
-
       }
     }
-    Numeric[] eigenValueArray = new Numeric[eigenValues.size()];
-    int numberOfEigenValue = 0;
-    for (Numeric eigenValue : eigenValues) {
-      if (numberOfEigenValue == 0 || !eigenValueArray[numberOfEigenValue - 1]
-          .equals(eigenValueArray, Numeric.outputSignificantFigures + 1))
-        eigenValueArray[numberOfEigenValue++] = eigenValue;
-    }
-
-    lowestDigitPlace = LOWEST_DIGITE_PLACE_STARTING_VALUE;
-    return eigenValueArray;
+    setLowestDigitPlaceBack();
+    return convertTreeSetToNumericArray(eigenvalues);
   }
-
-
-  public static void main(String[] args)
-      throws MatrixDimensionsMismatchException, MatrixArithmeticException {
-
-    /*
-     * Matrix A = new Matrix(new String[][] {{"0", "2", "3", "4", "5"}, {"9.9", "7", "8", "9",
-     * "10"}, {"11", "12", "13", "14", "15"}, {"16", "17", "18", "19", "20"}, {"21", "22", "23",
-     * "24", "25"}});
-     */
-
-    Matrix A =
-        new Matrix(new String[][] {{"4", "12", "-16"}, {"12", "37", "-43"}, {"-16", "-43", "98"}});
-    System.out.println(Arrays.deepToString(A.eigenValues()));
-
-  }
-
 }

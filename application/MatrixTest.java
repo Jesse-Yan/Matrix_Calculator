@@ -1,3 +1,16 @@
+//////////////////////////////// CS 400 HEADER ////////////////////////////////
+//
+// Title: Ateam project - Matrix Calculator
+// Course: COMP SCI 400, Spring 2020
+//
+///////////////////////////////// DESCRIPTION /////////////////////////////////
+//
+//
+//
+//////////////////////////////////// CREDITS //////////////////////////////////
+//
+/////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
+
 package application;
 
 import static org.junit.Assert.fail;
@@ -10,26 +23,75 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-
 /**
- * This class tests the Matrix
+ * This class uses junit test to test the matrix.
  * 
  * @author Houming Chen
  *
  */
 public class MatrixTest {
 
+  /**
+   * Basic structure of the junit test.
+   * 
+   * @throws Exception - UNEXPECTED
+   */
   @Before
   public void setUp() throws Exception {
   }
 
+  /**
+   * Basic structure of the junit test.
+   * 
+   * @throws Exception - UNEXPECTED
+   */
   @After
   public void tearDown() throws Exception {
   }
 
 
+  private final int RANDOM_MATRIX_ENTRIES_UPPERBOUND = 100;
+
   /**
-   * Test the constructor and getEntry
+   * This private helper method generate a random matrix by given number of rows and columns and a
+   * Random instance.
+   * 
+   * @param numberOfRows
+   * @param numberOfColumns
+   * @param random
+   * @return
+   */
+  private MatrixADT randomMatrix(int numberOfRows, int numberOfColumns, Random random) {
+    Numeric[][] randomEntries = new Numeric[numberOfRows][numberOfColumns];
+    for (int i = 0; i < randomEntries.length; i++) {
+      for (int j = 0; j < randomEntries[i].length; j++) {
+        randomEntries[i][j] = Numeric.of(random.nextInt(RANDOM_MATRIX_ENTRIES_UPPERBOUND));
+      }
+    }
+    return new Matrix(randomEntries);
+  }
+
+  /**
+   * 
+   * This private helper method checks whether a given matrix is an identity matrix.
+   * 
+   * @param matrix
+   * @return
+   */
+  private boolean isIdentityMatrix(MatrixADT matrix) {
+    for (int i = 0; i < matrix.getNumberOfRow(); i++) {
+      for (int j = 0; j < matrix.getNumberOfColumn(); j++) {
+        if (i != j && !matrix.getEntry(i, j).isZeroBy(8))
+          return false;
+        if (i == j && !matrix.getEntry(i, j).equals(Numeric.of(1)))
+          return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Test the constructor and getEntry method of the Matrix.
    */
   @Test
   public void test_constructor_and_getEntry() {
@@ -47,7 +109,7 @@ public class MatrixTest {
   }
 
   /**
-   * Test equal to
+   * Test equal to method of the matrix.
    */
   @Test
   public void test_equal_to() {
@@ -65,7 +127,7 @@ public class MatrixTest {
   }
 
   /**
-   * Test addition
+   * Test addition method of the matrix.
    */
   @Test
   public void test_addition() {
@@ -80,7 +142,7 @@ public class MatrixTest {
   }
 
   /**
-   * Test subtraction
+   * Test subtraction method of the matrix.
    */
   @Test
   public void test_subtraction() {
@@ -95,7 +157,7 @@ public class MatrixTest {
   }
 
   /**
-   * Test multiplication
+   * Test multiplication method of the matrix.
    */
   @Test
   public void test_multiplication() {
@@ -110,6 +172,117 @@ public class MatrixTest {
     }
   }
 
+  /**
+   * Test the determinant of the matrix.
+   */
+  @Test
+  public void test_Deteminant() {
+    try {
+      MatrixADT matrix;
+      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+      assertEquals(0, matrix.determinant().intValue());
+      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {1, 2, 4}, {1, 3, 5}});
+      assertEquals(-1, matrix.determinant().intValue());
+      matrix = new Matrix(new Integer[][] {{1, 2}, {3, 4}});
+      assertEquals(-2, matrix.determinant().intValue());
+      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}});
+      try {
+        matrix.determinant();
+        fail(
+            "The matrix isn't a square matrix, but MatrixDimensionsMismatchException is not thrown");
+      } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
+        // Expected
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Test the inverse of the matrix.
+   */
+  @Test
+  public void test_Inverse() {
+    try {
+      MatrixADT matrix;
+      matrix = new Matrix(new Integer[][] {{1, 2}, {3, 5}});
+      assertEquals(new Matrix(new Integer[][] {{-5, 2}, {3, -1}}), matrix.inverse());
+      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+      try {
+        matrix.inverse();
+        fail("The matrix is not invertible, but no MatrixArithmeticException thrown");
+      } catch (MatrixArithmeticException e) {
+        // Expected
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Test the inverse of the matrix by random. Some matrices will be generated randomly by Random
+   * (using seed 1). This method will check whether the result of multiplying the matrix to its
+   * inverse will result in identity matrix.
+   */
+  @Test
+  public void test_Inverse_by_random() {
+    try {
+      int matrixSize = 6;
+      MatrixADT matrix;
+      Random random = new Random(1);
+      int trialTimes = 100;
+      for (int k = 0; k < trialTimes; k++) {
+        matrix = randomMatrix(matrixSize, matrixSize, random);
+        if (!isIdentityMatrix(matrix.multiply(matrix.inverse()))) {
+          fail("the result of multiplying the matrix to its inverse is not identiy matrix"
+              + "\n Matrix: \n" + matrix);
+        }
+      }
+    } catch (
+
+    Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * 
+   * Test QR Decomposition by random. Some matrices will be generated randomly by Random (using seed
+   * 1). This method will check whether the result of multiplying decomposed Q matrix to the
+   * decompose R matrix will become the original matrix, and whether the Q matrix is orthonormal.
+   * 
+   * 
+   * @see https://en.wikipedia.org/wiki/QR_decomposition#Example
+   */
+  @Test
+  public void test_QRDecomposition_by_random() {
+    try {
+      int matrixSize = 6;
+      MatrixADT matrix;
+      MatrixADT[] QRdecomposition = new MatrixADT[2];
+      Random random = new Random(1);
+      int trialTimes = 100;
+      for (int k = 0; k < trialTimes; k++) {
+        matrix = randomMatrix(matrixSize, matrixSize, random);
+        QRdecomposition = matrix.QRDecomposition();
+        MatrixADT Q = QRdecomposition[0];
+        MatrixADT R = QRdecomposition[1];
+        if (!isIdentityMatrix(Q.multiply(Q.transpose()))) {
+          System.out.println(Q.multiply(Q.transpose()));
+          fail("Q is not orthonormal!" + "\n Matrix: \n" + matrix);
+        }
+        if (!Q.multiply(R).equals(matrix)) {
+          fail("Q times R doesn't equal to the original matrix" + "\n Matrix: \n" + matrix);
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Test the pow method of Matrix.
+   */
   @Test
   public void test_pow() {
     try {
@@ -157,6 +330,9 @@ public class MatrixTest {
     }
   }
 
+  /**
+   * Test the transpose of the matrix.
+   */
   @Test
   public void test_Transpose() {
     try {
@@ -179,51 +355,9 @@ public class MatrixTest {
 
       matrix = new Matrix(new String[][] {{"4", "3"}, {"6", "3"}});
 
-    }catch(
+    } catch (
 
-  Exception e)
-  {
-    e.printStackTrace();
-  }
-  }
-
-  @Test
-  public void test_Deteminant() {
-    try {
-      MatrixADT matrix;
-      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
-      assertEquals(0, matrix.determinant().intValue());
-      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {1, 2, 4}, {1, 3, 5}});
-      assertEquals(-1, matrix.determinant().intValue());
-      matrix = new Matrix(new Integer[][] {{1, 2}, {3, 4}});
-      assertEquals(-2, matrix.determinant().intValue());
-      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}});
-      try {
-        matrix.determinant();
-        fail(
-            "The matrix is not a square matrix, but MatrixDimensionsMismatchException is not thrown");
-      } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
-        // Expected
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  @Test
-  public void test_Inverse() {
-    try {
-      MatrixADT matrix;
-      matrix = new Matrix(new Integer[][] {{1, 2}, {3, 5}});
-      assertEquals(new Matrix(new Integer[][] {{-5, 2}, {3, -1}}), matrix.inverse());
-      matrix = new Matrix(new Integer[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
-      try {
-        matrix.inverse();
-        fail("The matrix is not invertible, but no MatrixArithmeticException thrown");
-      } catch (MatrixArithmeticException e) {
-        // Expected
-      }
-    } catch (Exception e) {
+    Exception e) {
       e.printStackTrace();
     }
   }
@@ -231,58 +365,16 @@ public class MatrixTest {
 
 
   /**
-   * 
-   * Test QR Decomposition
-   * 
-   * 
-   * @see https://en.wikipedia.org/wiki/QR_decomposition#Example
+   * Test the eigenvalue of the matrix.
    */
   @Test
-  public void test_QRDecomposition() {
-    try {
-      @SuppressWarnings("unused")
-      MatrixADT matrix, expectedQ, expectedR;
-/*
-      matrix = new Matrix(new Integer[][] {{12, -51, 4}, {6, 167, -68}, {-4, 24, -41}});
-
-      expectedQ = new Matrix(
-          new String[][] {{"6/7", "-69/175", "-58/175"},
-              {"3/7", "158/175", "6/175"},
-              {"-2/7", "6/35", "-33/35"}});
-
-      expectedR = new Matrix(new Integer[][] {{14, 21, -14}, {0, 175, -70}, {0, 0, 35}});
-      
-      Matrix Q = matrix.QRDecomposition()[0];
-      Matrix R = matrix.QRDecomposition()[1];
-      
-      System.out.println(Q);
-      System.out.println(R);
-      System.out.println(Q.multiply(R));
-      System.out.println(Q.multiply(Q));
-      
-      assertEquals(expectedQ, matrix.QRDecomposition()[0]);
-      assertEquals(expectedR, matrix.QRDecomposition()[1]);
-      
-      */
-
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  /**
-   * 
-   * Test eigenValue
-   * 
-   */
-  @Test
-  public void test_EigenValue() {
+  public void test_Eigenvalue() {
     try {
       MatrixADT matrix;
 
       matrix = new Matrix(new Integer[][] {{2, 1}, {1, 2}});
 
-      TreeSet<Numeric> eigenValues = new TreeSet<Numeric>(Arrays.asList(matrix.eigenValues()));
+      TreeSet<Numeric> eigenValues = new TreeSet<Numeric>(Arrays.asList(matrix.eigenvalues()));
 
       assertTrue(eigenValues.contains(Numeric.of(1)));
       assertTrue(eigenValues.contains(Numeric.of(3)));
@@ -291,35 +383,27 @@ public class MatrixTest {
       e.printStackTrace();
     }
   }
-  
+
   /**
    * 
    * Using random numbers to test whether Matrix class is able to compute eigenvalue.
    * 
    */
   @Test
-  public void test_able_to_compute_EigenValue_using_random() {
+  public void test_able_to_compute_Eigenbalue_using_random() {
     try {
       MatrixADT matrix;
-      Numeric[][] randomEntries = new Numeric[3][3];
       Random random = new Random(1);
-      int trialTimes = 100;
-      int upperBoundOfEntries = 100;
-      for(int k = 0; k < trialTimes; k++) {
-        for(int i = 0; i < randomEntries.length; i++) {
-          for(int j = 0; j < randomEntries[i].length; j++) {
-            randomEntries[i][j] = Numeric.of(random.nextInt(upperBoundOfEntries));
-          }
-        }
-        matrix = new Matrix(randomEntries);
+      int trialTimes = 5;
+      for (int k = 0; k < trialTimes; k++) {
+        matrix = randomMatrix(3, 3, random);
         try {
-          matrix.eigenValues();
+          matrix.eigenvalues();
         } catch (ArithmeticException e) {
           System.out.println(matrix);
         }
-        
       }
-      
+
 
     } catch (Exception e) {
       e.printStackTrace();
