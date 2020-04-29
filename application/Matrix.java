@@ -1247,7 +1247,7 @@ public class Matrix implements MatrixADT {
         if (v.entry[0][0].compareTo(Numeric.of(0)) >= 0)
           alpha = alpha.opposite();
         v.entry[0][0] = v.entry[0][0].subtract(alpha);
-        v = v.dividedBy(v.norm());;
+        v = v.dividedBy(v.norm());
         Matrix A_22 = A.subMatrix(k + 1, N, k + 1, N);
         Matrix A_22_ =
             A_22.subtract(v.multiply(v.transpose().multiply(A_22)).multiply(Numeric.of(2)));
@@ -1289,17 +1289,20 @@ public class Matrix implements MatrixADT {
   /**
    * A helper method that helps to do Wilkinson-Shift according its formula.
    * 
-   * @param a - the a parameter in Wilkinon-Shift's formula, which should be the entry[N - 2][N - 2]
-   * @param b - the b parameter in Wilkinon-Shift's formula, which should be the entry[N - 2][N - 1]
-   * @param c - the c parameter in Wilkinon-Shift's formula, which should be the entry[N - 1][N - 1]
+   * @param numA - the a parameter in Wilkinon-Shift's formula, which should be the entry[N - 2][N -
+   *             2]
+   * @param numB - the b parameter in Wilkinon-Shift's formula, which should be the entry[N - 2][N -
+   *             1]
+   * @param numC - the c parameter in Wilkinon-Shift's formula, which should be the entry[N - 1][N -
+   *             1]
    * @return the shift value (mu value) calculated by Wilkinson-Shift's formula
    * @see http://web.stanford.edu/class/cme335/lecture5
    */
-  private Numeric WilkinsonShiftHelper(Numeric a, Numeric b, Numeric c) {
-    Numeric delta = a.subtract(c).dividedBy(2);
-    Numeric bSquare = b.multiply(b);
+  private Numeric WilkinsonShiftHelper(Numeric numA, Numeric numB, Numeric numC) {
+    Numeric delta = numA.subtract(numB).dividedBy(2);
+    Numeric bSquare = numB.multiply(numB);
     Numeric deltaSquare = delta.multiply(delta);;
-    return c.add(delta).subtract(delta.sign().multiply(deltaSquare.add(bSquare).sqrt()));
+    return numB.add(delta).subtract(delta.sign().multiply(deltaSquare.add(bSquare).sqrt()));
   }
 
   /**
