@@ -24,7 +24,7 @@ REMEMBER TO CHANGE "Path-to-javafx-lib" TO YOUR OWN PATH
 java --module-path "Path-to-javafx-lib" --add-modules javafx.controls,javafx.fxml -jar executable.jar
 
 Program Description
-program functions as a calculator that support Matrix calculations supports pirorty calculation. Matrixs and calculation can be read from json files for computing result.
+program functions as a calculator that support max 9*9 Matrix calculations supports pirorty calculation. Matrixs and calculation can be read from json files for computing result.
 !Mark! to open .json file, click Menu then click Open.
 Please see SimpleData.json for the sample format. (other json file is design for testing purpose, each is built base on its name. Result.json is sample result output.) 
 You can click '<' '>' or '√' to change from different operations that been read from the correct .json files.
