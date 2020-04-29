@@ -69,8 +69,8 @@ public class OpeartionParser {
             }
           }
           String [][] realMatrix = new String[sumMatrix.length][];
-          for (int wtf=0; wtf<sumMatrix.length;wtf++) {
-            realMatrix[wtf] = sumMatrix[wtf].clone();
+          for (int a=0; a<sumMatrix.length;a++) {
+            realMatrix[a] = sumMatrix[wtf].clone();
           }
           matrixList.add(realMatrix.clone());  
         }
