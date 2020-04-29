@@ -69,7 +69,7 @@ public class Main extends Application {
   // Category list
   List<CalSteps> categoryList = new ArrayList<>();
 
-  // Existing Operatiors
+  // Existing Operators
   HashSet<String> existingOperations = new HashSet<>();
 
   // Whether user has modify the content
