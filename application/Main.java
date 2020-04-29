@@ -169,14 +169,18 @@ public class Main extends Application {
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.setTitle("Instruction to use");
         alert.setHeaderText("Please Read");
-        alert.setContentText("1.Determin your matrix size"+lineSeparator
-          +"2.Enter numbers"+lineSeparator
-          +"3.Change matrix by click func buttons like 'inverse'"
-          +"4.Choose oprations"+lineSeparator
-          +"5.Enjoy your result!"+lineSeparator
-                +"Tips: C1 and C2 are used to clear matrix 1 and 2"
-
-        );
+        
+        TextArea area = new TextArea();
+        area.setWrapText(true);
+        area.setEditable(false);
+        area.setText("1.Determin your matrix size"+lineSeparator
+            +"2.Enter numbers"+lineSeparator
+            +"3.Change matrix by click func buttons like 'inverse'"
+            +"4.Choose oprations"+lineSeparator
+            +"5.Enjoy your result!"+lineSeparator
+                  +"Tips: C1 and C2 are used to clear matrix 1 and 2");
+        alert.getDialogPane().setContent(area);
+        alert.setResizable(true);
         alert.showAndWait();
       } catch (Exception e) {
         /* If caught, do nothing */
