@@ -266,7 +266,7 @@ public class Matrix implements MatrixADT {
       }
       for (int i = 0; i < entry.length; i++)
         for (int j = 0; j < entry[0].length; j++)
-          if (!entry[i][j].equals(((Matrix) obj).entry[i][j]))
+          if (!entry[i][j].equals(((Matrix) obj).entry[i][j])) // Compare Numerics
             return false;
       return true;
     }
@@ -296,7 +296,7 @@ public class Matrix implements MatrixADT {
       }
       for (int i = 0; i < entry.length; i++)
         for (int j = 0; j < entry[0].length; j++)
-          if (!entry[i][j].mathematicallyEquals(((Matrix) obj).entry[i][j]))
+          if (!entry[i][j].mathematicallyEquals(((Matrix) obj).entry[i][j])) // Compare Numerics
             return false;
       return true;
     }

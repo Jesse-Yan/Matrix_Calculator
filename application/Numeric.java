@@ -394,7 +394,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
 
   /**
    * 
-   * Check whether the given integer x is a perfect square number
+   * A private helper method that checks whether the given integer x is a perfect square number
    * 
    * @param x a given integer
    * @return true if x is a perfect square number, false otherwise.
@@ -407,7 +407,8 @@ public class Numeric extends Number implements Comparable<Numeric> {
 
   /**
    * 
-   * If x is a perfect square number, get its square root.
+   * A private helper method that get the square root of a perfect square number. The parameter
+   * should be a perfect square root number.
    * 
    * @param x a given integer
    * @return a integer which is the square root of x.
@@ -420,7 +421,8 @@ public class Numeric extends Number implements Comparable<Numeric> {
 
   /**
    * 
-   * Get the square root of this Numeric instance.
+   * Get the square root of this Numeric instance. This method will try to gives the answer with a
+   * Numeric in Integer state or Fraction state. However, not all square roots can be represented in
    * 
    * @return the square root of this Numeric instance.
    */
@@ -442,11 +444,11 @@ public class Numeric extends Number implements Comparable<Numeric> {
   }
 
   /**
-   * Round a given double to the given significant figures.
+   * Round a given decimal number to let it having the given significant figures.
    * 
-   * @param value            a given double
-   * @param significatFigure a given int representing the significant figures
-   * @return the rounded double
+   * @param value            - a given double representing the decimal number
+   * @param significatFigure - a given int representing the significant figures
+   * @return the rounded decimal number in double
    */
   private static double roundWithSignificantFigure(double value, int significantFigure) {
     if (Double.toString(value).contains("Inf"))
@@ -457,7 +459,8 @@ public class Numeric extends Number implements Comparable<Numeric> {
   }
 
   /**
-   * Round a given double to having at most MAXIMUM_SIGNIFICANT_FIGURE significant figures.
+   * Round a given double to having at most {@link Numeric#SIGNIFICANT_FIGURE_FOR_COMPARISON}}
+   * significant figures.
    * 
    * @param value a given double
    * @return the rounded double
@@ -466,6 +469,18 @@ public class Numeric extends Number implements Comparable<Numeric> {
     return roundWithSignificantFigure(value, SIGNIFICANT_FIGURE_FOR_COMPARISON);
   }
 
+  /**
+   * Compare this instance to another Numeric instance to implement Comparable<Numeric>. Since there
+   * might be floating error during the calculations, two Double state Numeric instances are
+   * considered equal if they are the same after rounding to having
+   * {@link Numeric#SIGNIFICANT_FIGURE_FOR_COMPARISON}} number of significant digits.
+   * 
+   * @param other - a given Numeric instance that is going to be compared with this Numeric
+   *              instance.
+   * @return a negative integer, zero, or a positive integer as this Numeric instance is less than,
+   *         equal to, or greater than the given Numeric instance, when comparing
+   *         {@link Numeric#SIGNIFICANT_FIGURE_FOR_COMPARISON}} number of significant digits
+   */
   @Override
   public int compareTo(Numeric other) {
     other = new Numeric(other);
@@ -484,6 +499,19 @@ public class Numeric extends Number implements Comparable<Numeric> {
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
 
+  /**
+   * Compare this instance to another Numeric instance to implement Comparable<Numeric>. Since there
+   * might be floating error during the calculations, two Double state Numeric instances are
+   * considered equal if they are the same after rounding to having a given number of significant
+   * digits specified by the parameter digits.
+   * 
+   * @param other  - a given Numeric instance that is going to be compared with this Numeric
+   *               instance
+   * @param digits - the number of significant digits that is used for comparison
+   * @return a negative integer, zero, or a positive integer as this Numeric instance is less than,
+   *         equal to, or greater than the given Numeric instance when comparing a given number of
+   *         significant digits
+   */
   public int compareTo(Numeric other, int digits) {
     other = new Numeric(other);
     Numeric thisNum = new Numeric(this);
@@ -502,14 +530,19 @@ public class Numeric extends Number implements Comparable<Numeric> {
     throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
   }
 
-  public int compareTo(String other) {
-    return compareTo(new Numeric(other));
-  }
-
+  /**
+   * Check whether this instance is equal to another Numeric instance. Since there might be floating
+   * error during the calculations, two Double state Numeric instances are considered equal if they
+   * are the same after rounding to having {@link Numeric#SIGNIFICANT_FIGURE_FOR_COMPARISON}} number
+   * of significant digits.
+   * 
+   * @param other - a given Numeric instance that is going to be compared with this Numeric
+   *              instance.
+   * @return true if the given Numeric instance is equal to this Numeric instance in comparing
+   *         {@link Numeric#SIGNIFICANT_FIGURE_FOR_COMPARISON}} number of significant digits
+   */
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof String)
-      return compareTo((String) obj) == 0;
     if (obj instanceof Numeric)
       return compareTo((Numeric) obj) == 0;
     else if (obj instanceof Number)
@@ -517,11 +550,21 @@ public class Numeric extends Number implements Comparable<Numeric> {
     return false;
   }
 
+  /**
+   * Check whether this instance is equal to another Numeric instance. Since there might be floating
+   * error during the calculations, two Double state Numeric instances are considered equal if they
+   * are the same after rounding to having a given number of significant digits specified by the
+   * parameter digits.
+   * 
+   * @param other  - a given Numeric instance that is going to be compared with this Numeric
+   *               instance.
+   * @param digits - the number of significant digits that is used for comparison
+   * @return true if the given Numeric instance is equal to this Numeric instance in comparing a
+   *         given number of significant digits
+   */
   public boolean equals(Object obj, int digits) {
     if (obj instanceof Numeric)
       return compareTo((Numeric) obj, digits) == 0;
-    if (obj instanceof String)
-      return compareTo((String) obj) == 0;
     else if (obj instanceof Number)
       return compareTo(new Numeric((Number) obj)) == 0;
     return false;
@@ -541,6 +584,12 @@ public class Numeric extends Number implements Comparable<Numeric> {
     return false;
   }
 
+  /**
+   * Returns the value of the Numeric as an {@code int}.
+   *
+   * @return  the numeric value represented by this object after conversion
+   *          to type {@code int}.
+   */
   @Override
   public int intValue() {
     if (number instanceof Integer) {
@@ -549,6 +598,12 @@ public class Numeric extends Number implements Comparable<Numeric> {
     throw new ClassCastException("Cannot cast to an Integer");
   }
 
+  /**
+   * Returns the value of the Numeric number as a {@code long}.
+   *
+   * @return  the numeric value represented by this object after conversion
+   *          to type {@code long}.
+   */
   @Override
   public long longValue() {
     if (number instanceof Integer) {
@@ -557,11 +612,23 @@ public class Numeric extends Number implements Comparable<Numeric> {
     throw new ClassCastException("Cannot cast to an Long");
   }
 
+  /**
+   * Returns the value of the Numeric number as a {@code float}.
+   *
+   * @return  the numeric value represented by this object after conversion
+   *          to type {@code float}.
+   */
   @Override
   public float floatValue() {
     return (float) number.doubleValue();
   }
 
+  /**
+   * Returns the value of the Numeric number as a {@code double}.
+   *
+   * @return  the numeric value represented by this object after conversion
+   *          to type {@code double}.
+   */
   @Override
   public double doubleValue() {
     return number.doubleValue();
