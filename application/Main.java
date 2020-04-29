@@ -670,8 +670,8 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to special matrix operations
-      singleMatrixOperations.get(0).setOnAction(event -> { // determinant
+      // Add EventHandler to matrix operations get determinant
+      singleMatrixOperations.get(0).setOnAction(event -> { 
         try {
           latestMOpera = singleMatrixOperations.get(0);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
@@ -700,8 +700,8 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to special matrix operations
-      singleMatrixOperations.get(1).setOnAction(event -> { // inverse
+      // Add EventHandler to matrix operations get inverse matrix
+      singleMatrixOperations.get(1).setOnAction(event -> { 
         try {
           latestMOpera = singleMatrixOperations.get(1);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
@@ -734,8 +734,8 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to special matrix operations 
-      singleMatrixOperations.get(2).setOnAction(event -> { // QR
+      // Add EventHandler to matrix operations get QR decomposition 
+      singleMatrixOperations.get(2).setOnAction(event -> { 
         try {
           latestMOpera = singleMatrixOperations.get(2);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
@@ -758,8 +758,8 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to special matrix operations 
-      singleMatrixOperations.get(3).setOnAction(event -> { // nullity
+      // Add EventHandler to matrix operations get nullity 
+      singleMatrixOperations.get(3).setOnAction(event -> { 
         try {
           latestMOpera = singleMatrixOperations.get(3);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
@@ -780,8 +780,8 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to special matrix operations
-      singleMatrixOperations.get(4).setOnAction(event -> { //trace
+      // Add EventHandler to matrix operations get the trace
+      singleMatrixOperations.get(4).setOnAction(event -> { 
         try {
           latestMOpera = singleMatrixOperations.get(4);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
@@ -809,8 +809,8 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to special matrix operations
-      singleMatrixOperations.get(5).setOnAction(event -> { // LUP
+      // Add EventHandler to matrix operations get LUP decomposition
+      singleMatrixOperations.get(5).setOnAction(event -> { 
         try {
           latestMOpera = singleMatrixOperations.get(5);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
@@ -845,9 +845,8 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to special matrix operations
-      singleMatrixOperations.get(6).setOnAction(event -> { // guassian -
-                                                           // elimination
+      // Add EventHandler to matrix operations get gaussian elimination
+      singleMatrixOperations.get(6).setOnAction(event -> {                                                          
         try {
           latestMOpera = singleMatrixOperations.get(6);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
@@ -870,8 +869,8 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to special matrix operations
-      singleMatrixOperations.get(7).setOnAction(event -> { // Cholesky
+      // Add EventHandler to matrix operations get Cholesky decomposition
+      singleMatrixOperations.get(7).setOnAction(event -> {
         try {
           latestMOpera = singleMatrixOperations.get(7);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
@@ -910,8 +909,8 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to special matrix operations
-      singleMatrixOperations.get(8).setOnAction(event -> { // eigenvalue
+      // Add EventHandler to matrix operations get eigenvalue
+      singleMatrixOperations.get(8).setOnAction(event -> { 
         try {
           latestMOpera = singleMatrixOperations.get(8);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
@@ -939,8 +938,8 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to special matrix operations
-      singleMatrixOperations.get(9).setOnAction(event -> { // rank
+      // Add EventHandler to matrix operations get the rank
+      singleMatrixOperations.get(9).setOnAction(event -> { 
         try {
           latestMOpera = singleMatrixOperations.get(9);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
@@ -961,8 +960,8 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to special matrix operations
-      singleMatrixOperations.get(10).setOnAction(event -> { // transpose
+      // Add EventHandler to matrix operations get transpose matrix
+      singleMatrixOperations.get(10).setOnAction(event -> { 
         try {
           latestMOpera = singleMatrixOperations.get(10);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
@@ -984,8 +983,8 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to special matrix operations
-      powerButton.setOnAction(event -> { // power
+      // Add EventHandler to matrix operations get the power matrix
+      powerButton.setOnAction(event -> { 
         try {
           latestMOpera = powerButton;
           int n = Integer.parseInt(powerInput.getText());
@@ -1084,6 +1083,8 @@ public class Main extends Application {
                     filter);
                 return;
               }
+              
+              // get the clone result the and update
               ArrayList<String[][]> cloneResult = new ArrayList<>();
               cloneResult.addAll(results);
               CalSteps c = new CalSteps("" + operationOperator, cloneData,
@@ -1249,6 +1250,8 @@ public class Main extends Application {
       try {
         int page = Integer.parseInt(pages.getText()) - 1;
         if (correctness) {
+        	
+          // update the calstep
           updater(page, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
               enableSecond, isNum, true, true);
           state = false;
@@ -1328,12 +1331,14 @@ public class Main extends Application {
       }
     });
 
-
+    // add Eventlistener to the filter button 
     filter.valueProperty().addListener(event -> {
       try {
         String opr = filter.getSelectionModel().getSelectedItem();
         if (opr != null) {
           if (filtering && opr.equals("All")) {
+        	  
+        	// modify the button and update
             buttonsModifers(matrix1, matrix2, matrixOperators,
                 singleOperationPanel, open, save, confirm, add, delete, quit,
                 pages, false);
@@ -1614,6 +1619,8 @@ public class Main extends Application {
     rowAndCol1.get(1).setText("3");
     rowAndCol2.get(0).setText("3");
     rowAndCol2.get(1).setText("3");
+    
+    // clear the result
     resultShower.getChildren().clear();
     pages.clear();
     total.clear();
@@ -1646,6 +1653,8 @@ public class Main extends Application {
       List<Button> singleMatrixOperations, Button powerButton,
       TextField powerInput, CalSteps step, String operationOperator) {
     boolean isNum = false;
+    
+    // choose different matrix operation
     switch (operationOperator) {
       case "+":
         setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
@@ -1747,12 +1756,18 @@ public class Main extends Application {
       boolean isAdd, boolean update) {
     if (update) {
       if (prevPage != 0 && state && correctness) {
+    	  
+    	// clone the result and update
         List<String[][]> cloneResult = new ArrayList<>();
         cloneResult.addAll(results);
         String[][] wMatrix1 = reader(matrix1Data, rowAndCol1);
         String operation = latestMOpera.getText();
+        
+        // if check box checked, basic calstep
         if (enableSecond.isSelected()) {
           String[][] wMatrix2 = reader(matrix2Data, rowAndCol2);
+          
+          // check if new operation added
           if (!isAdd) {
             lists.set(page - 1,
                 new CalSteps(operation, new ArrayList<String[][]>() {
@@ -1772,6 +1787,8 @@ public class Main extends Application {
                   }
                 }, isNum ? "" + resultNum : cloneResult));
           }
+          
+          // if check box not selected, matrix calstep
         } else {
           if (operation.equals("Gauss-Elim")) {
             operation = "GE";
@@ -1842,6 +1859,8 @@ public class Main extends Application {
    */
   private void setterOfSingleMatrix(CalSteps step, List<TextField> rowAndCol1,
       List<TextField> matrix1Data) {
+	 
+	// perform calstep and generate matrix
     String[][] matrix1 = step.getDatas().get(0);
     rowAndCol1.get(0).setText(String.valueOf(matrix1.length));
     rowAndCol1.get(1).setText(String.valueOf(matrix1[0].length));
@@ -1865,12 +1884,16 @@ public class Main extends Application {
   private void setterOfTwoMatrixes(CalSteps step, List<TextField> rowAndCol1,
       List<TextField> rowAndCol2, List<TextField> matrix1Data,
       List<TextField> matrix2Data) {
+	  
+	// perform different calstep
     String[][] matrix1 = step.getDatas().get(0);
     String[][] matrix2 = step.getDatas().get(1);
     rowAndCol1.get(0).setText(String.valueOf(matrix1.length));
     rowAndCol1.get(1).setText(String.valueOf(matrix1[0].length));
     rowAndCol2.get(0).setText(String.valueOf(matrix2.length));
     rowAndCol2.get(1).setText(String.valueOf(matrix2[0].length));
+    
+    // generate two matrix setting
     int count = 0;
     for (int i = 0; i < matrix1.length; i++) {
       for (int j = 0; j < matrix1[i].length; j++) {
@@ -1927,6 +1950,7 @@ public class Main extends Application {
     Label equals = new Label("=");
     equals.setStyle(labelStyle);
 
+    // generate the result to the border pane
     GridPane gridSrc = matrixGenerator(dataFromMatrix);
 
     Label resultedLabel = new Label(result);
@@ -1976,6 +2000,7 @@ public class Main extends Application {
     Label multiply2 = new Label("*");
     equals.setStyle(labelStyle);
 
+    // generate the result to the border pane
     GridPane gridSrc = matrixGenerator(dataFromMatrix);
     GridPane lResult = matrixGenerator(l);
     GridPane uResult = matrixGenerator(u);
@@ -2021,6 +2046,7 @@ public class Main extends Application {
     Label multiply = new Label("*");
     equals.setStyle(labelStyle);
 
+    // generate the result to the border pane
     GridPane gridSrc = matrixGenerator(dataFromMatrix);
     GridPane qResult = matrixGenerator(q);
     GridPane rResult = matrixGenerator(r);
@@ -2046,6 +2072,8 @@ public class Main extends Application {
    */
   private BorderPane resultBuilder(String string, String mathString,
       String[][] dataFromMatrix, String[][] result) {
+	  
+	// generate a border pane to contain the result
     BorderPane resultedPane = new BorderPane();
 
     resultedPane.setStyle("-fx-background-color: lightgray;");
@@ -2061,6 +2089,7 @@ public class Main extends Application {
     Label equals = new Label("=");
     equals.setStyle(labelStyle);
 
+    // add the result to the border pane
     GridPane gridSrc = matrixGenerator(dataFromMatrix);
     GridPane resultG = matrixGenerator(result);
 
@@ -2085,6 +2114,7 @@ public class Main extends Application {
   private BorderPane resultBuilder(String string, String mathString,
       String[][] src1, String[][] src2, String[][] resultMatrix) {
 
+	// generate a border pane to contain the result
     BorderPane resultedPane = new BorderPane();
 
     resultedPane.setStyle("-fx-background-color: lightgray;");
@@ -2100,6 +2130,7 @@ public class Main extends Application {
     Label equals = new Label("=");
     equals.setStyle(labelStyle);
 
+    // add matrix to the border pane
     GridPane gridSrc1 = matrixGenerator(src1);
     GridPane gridSrc2 = matrixGenerator(src2);
     GridPane resultedGrid = matrixGenerator(resultMatrix);
@@ -2122,11 +2153,14 @@ public class Main extends Application {
    */
   private GridPane matrixGenerator(String matrix[][]) {
 
+	// generate a grid pane
     GridPane resultedGrid = new GridPane();
     resultedGrid.setStyle(
         "-fx-background-color: lightgray;-fx-vgap: 1;-fx-hgap: 1;-fx-padding: 1;");
     resultedGrid.setMinHeight(207);
     List<Label> allLabels = new ArrayList<>();
+    
+    // add label to the grid pane
     for (int i = 0; i < matrix.length; i++) {
       List<Label> labels = Arrays.stream(matrix[i]).map(str -> {
         Label strLabel = new Label(str);
