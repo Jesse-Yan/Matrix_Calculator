@@ -259,7 +259,7 @@ public class Matrix implements MatrixADT {
   @Override
   public boolean equals(Object obj) {
     if (obj instanceof Matrix) {
-      try { // Check whether the two matrices have exactly the same dimenstions.
+      try { // Check whether the two matrices have exactly the same dimensions.
         sameDimensionCheck(((Matrix) obj));
       } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
         return false;
@@ -1349,7 +1349,7 @@ public class Matrix implements MatrixADT {
 
   /**
    * The float calculations may cause floating error. Therefore, in order to decide whether a number
-   * is zero, only a given number of decimal digits are used to decide whether a number is zero.
+   * is zero, only a given number of decimal digits are used to decide whether a number is zero,
    * which is the {@link Matrix#lowestDigitPlace}.
    * 
    * However, this {@link Matrix#lowestDigitPlace} cannot be the same value all the time. Sometimes

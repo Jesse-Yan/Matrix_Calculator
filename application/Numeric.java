@@ -18,9 +18,9 @@ import java.math.MathContext;
 import java.util.regex.Pattern;
 
 /**
- * The instance of this Numeric class represents a number, which can be a Integer, or a Fraction, or
- * a Double. It supports calculations like addition and subtraction, in which the number will be
- * cast into proper format automatically to do the calculation.
+ * The instance of this Numeric class represents a number, which can be a Integer, or a
+ * {@link Fraction}, or a Double. It supports calculations like addition and subtraction, in which
+ * the number will be cast into proper format automatically to do the calculation.
  * 
  * Since the main goal for this program is to help students learning linear algebra to understand
  * linear algebra better. The matrix supports calculations and outputs in Fractions, which will be
@@ -570,11 +570,21 @@ public class Numeric extends Number implements Comparable<Numeric> {
     return false;
   }
 
+  /**
+   * 
+   * Check whether this instance is equal to another Numeric instance.
+   * 
+   * The word "mathematically" means that, unlike the method {@link Numeric#equals(Object)}, this
+   * method will always return false if any of the two compared instance is in decimal state. That
+   * is, only when this matrix and the given matrix is in Fraction or Integer State, there are
+   * possibilities that the method will compare the two object and returns true if they are equal.
+   * 
+   * @param obj - a given Numeric instance that is going to be compared with this Numeric instance.
+   * @return true if this and the given Numeric instance are not in Double state and has same value.
+   */
   public boolean mathematicallyEquals(Object obj) {
     if (this.number instanceof Double)
       return false;
-    if (obj instanceof String)
-      return mathematicallyEquals(new Numeric((String) obj));
     if (obj instanceof Numeric) {
       if (((Numeric) obj).number instanceof Double)
         return false;
@@ -587,8 +597,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
   /**
    * Returns the value of the Numeric as an {@code int}.
    *
-   * @return  the numeric value represented by this object after conversion
-   *          to type {@code int}.
+   * @return the numeric value represented by this object after conversion to type {@code int}.
    */
   @Override
   public int intValue() {
@@ -601,8 +610,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
   /**
    * Returns the value of the Numeric number as a {@code long}.
    *
-   * @return  the numeric value represented by this object after conversion
-   *          to type {@code long}.
+   * @return the numeric value represented by this object after conversion to type {@code long}.
    */
   @Override
   public long longValue() {
@@ -615,8 +623,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
   /**
    * Returns the value of the Numeric number as a {@code float}.
    *
-   * @return  the numeric value represented by this object after conversion
-   *          to type {@code float}.
+   * @return the numeric value represented by this object after conversion to type {@code float}.
    */
   @Override
   public float floatValue() {
@@ -626,40 +633,80 @@ public class Numeric extends Number implements Comparable<Numeric> {
   /**
    * Returns the value of the Numeric number as a {@code double}.
    *
-   * @return  the numeric value represented by this object after conversion
-   *          to type {@code double}.
+   * @return the numeric value represented by this object after conversion to type {@code double}.
    */
   @Override
   public double doubleValue() {
     return number.doubleValue();
   }
 
+  /**
+   * Return a new Numeric instance which has a same value with this instance but is in the Double
+   * state. (float error may happens when turning fraction to double).
+   * 
+   * @return a new Numeric instance which has a same value with this instance but is in the Double
+   *         state.
+   */
   public Numeric castToDouble() {
     return new Numeric(doubleValue());
   }
 
+  /**
+   * Return a Numeric instance that the opposite number of this Numeric number.
+   * 
+   * @return a Numeric instance that the opposite number of this Numeric number.
+   */
   public Numeric opposite() {
     return Numeric.of(0).subtract(this);
   }
 
+  /**
+   * This method checks whether this Numeric is zero by only considering a given number of decimal
+   * digits.
+   * 
+   * Since float calculations may cause floating error, in order to decide whether a number is zero,
+   * only a given number of decimal digits are used to decide whether a number is zero. The number
+   * of decimal digits considered is specified by the parameter "decimalDigits".
+   * 
+   * @param decimalDigits - the number of decimal digits considered when deciding whether this
+   *                      number is zero.
+   * @return true is this number is zero considering the given amount of decimal digits.
+   */
   public boolean isZeroBy(int decimalDigits) {
     if (abs().compareTo(new Numeric(Math.pow(0.1, decimalDigits))) < 0)
       return true;
     return false;
   }
 
+  /**
+   * Return the sign of this Numeric instance.
+   * 
+   * @return -1 if this Numeric instance is negative, 1 otherwise.
+   */
   public Numeric sign() {
     if (compareTo(new Numeric(0)) < 0)
       return Numeric.of(-1);
     return Numeric.of(1);
   }
 
+  /**
+   * Return the absolute value of this Numeric instance
+   * 
+   * @return the absolute value of this Numeric instance
+   */
   public Numeric abs() {
     if (compareTo(new Numeric(0)) < 0)
       return opposite();
     return new Numeric(this);
   }
 
+  /**
+   * A private helper method that try to convert the Double state Numeric instance into Fraction
+   * state or Integer state and check whether the conversion is possible. If it is possible, returns
+   * the converted Numeric, otherwise, throws a ClassCastException with messages.
+   * 
+   * @return
+   */
   public Numeric castToNearestFraction() {
     if (number instanceof Double) {
       Numeric absThis = this.abs();
@@ -682,26 +729,15 @@ public class Numeric extends Number implements Comparable<Numeric> {
       return new Numeric(number);
   }
 
+  /**
+   * Convert this Numeric instance to a String. Only {@link Numeric#outputSignificantFigures} number
+   * of decimal digits will be reserved.
+   */
   @Override
   public String toString() {
     if (number instanceof Double)
       return "" + roundWithSignificantFigure((Double) number, outputSignificantFigures);
-    /*
-     * if (number instanceof Fraction) { int numerator = ((Fraction) number).getNumerator(); int
-     * denominator = ((Fraction) number).getDenominator(); if(("" + numerator +
-     * denominator).length() >= 8) { return "" + roundWithSignificantFigure(((Fraction)
-     * number).doubleValue(), OUTPUT_SIGNIFICANT_FIGURE); } }
-     */
     return number.toString();
   }
 
-  public static void main(String[] args) throws MatrixDimensionsMismatchException {
-
-    System.out.println(Numeric.of("-1.000000001"));
-    System.out.println(Numeric.of("-1.000000001").castToNearestFraction());
-    // System.out.println(Numeric.of("1/3").castToDouble().castToNearestFraction().mathematicallyEquals("1/3"));
-    // Matrix matrix = new Matrix(new String[][] {{"0.5", "1"}, {"1", "0.5"}});
-    // System.out.println(Arrays.toString(matrix.eigenValues()));
-    // System.out.println(Numeric.of("0.3333333332").castToNearestFraction());
-  }
 }
