@@ -913,16 +913,17 @@ public class Matrix implements MatrixADT {
       throws MatrixDimensionsMismatchException {
     if (this.getNumberOfColumn() != other.getNumberOfColumn())
       throw new MatrixDimensionsMismatchException("Must have same number of columns");
-    int N1 = this.getNumberOfRow();
-    int N2 = other.getNumberOfRow();
-    int M = getNumberOfColumn();
-    Numeric[][] augmentedMatrixEntries = new Numeric[N1 + N2][M];
-    for (int j = 0; j < M; j++) {
-      for (int i = 0; i < N1; i++) {
+    int numberOfRowOfFirstMatrix = this.getNumberOfRow();
+    int numberOfRowOfSecondMatrix = other.getNumberOfRow();
+    int numberOfColumn = getNumberOfColumn();
+    Numeric[][] augmentedMatrixEntries =
+        new Numeric[numberOfRowOfFirstMatrix + numberOfRowOfSecondMatrix][numberOfColumn];
+    for (int j = 0; j < numberOfColumn; j++) {
+      for (int i = 0; i < numberOfRowOfFirstMatrix; i++) {
         augmentedMatrixEntries[i][j] = new Numeric(entry[i][j]);
       }
-      for (int i = 0; i < N2; i++) {
-        augmentedMatrixEntries[i + N1][j] = new Numeric(other.entry[i][j]);
+      for (int i = 0; i < numberOfRowOfSecondMatrix; i++) {
+        augmentedMatrixEntries[i + numberOfRowOfFirstMatrix][j] = new Numeric(other.entry[i][j]);
       }
     }
     return new Matrix(augmentedMatrixEntries);
@@ -1036,7 +1037,8 @@ public class Matrix implements MatrixADT {
   @Override
   public Matrix[] LUPDecomposition() throws MatrixDimensionsMismatchException {
     int size = getSizeOfSquareMatrix();
-    Object[] decomposition = this.LUPDecompositionHelper(RowSwappingStrategy.USE_NEXT_NON_ZERO_PIVOT);
+    Object[] decomposition =
+        this.LUPDecompositionHelper(RowSwappingStrategy.USE_NEXT_NON_ZERO_PIVOT);
     Matrix theLMatirx = (Matrix) decomposition[0];
     Matrix theUMatirx = (Matrix) decomposition[1];
     Matrix thePMatirx = (Matrix) decomposition[2];
@@ -1060,9 +1062,9 @@ public class Matrix implements MatrixADT {
   public Numeric determinant() throws MatrixDimensionsMismatchException {
     checkSquare();
     Object[] LUPDecomposition = LUPDecompositionHelper(RowSwappingStrategy.USE_LARGEST_PIVOT);
-    Matrix U = (Matrix) LUPDecomposition[1];
+    Matrix theUMatrix = (Matrix) LUPDecomposition[1];
     boolean signChanged = (boolean) LUPDecomposition[3];
-    Numeric ansNumeric = U.productOfDiagonal();
+    Numeric ansNumeric = theUMatrix.productOfDiagonal();
     if (signChanged)
       ansNumeric = ansNumeric.opposite();
     return ansNumeric;
@@ -1095,21 +1097,21 @@ public class Matrix implements MatrixADT {
    * 
    * The algorithm used is exponentiation by squaring.
    * 
-   * @param n given n, which must be a positive integer
+   * @param exponent given n, which must be a positive integer
    * @return the matrix to the power of n
    * 
    * @see https://en.wikipedia.org/wiki/Exponentiation_by_squaring
    */
-  private Matrix helperpow(int n) {
-    if (n < 0)
+  private Matrix helperpow(int exponent) {
+    if (exponent < 0)
       throw new IllegalArgumentException("Parameter must be greater than 0.");
-    if (n == 1)
+    if (exponent == 1)
       return copy();
     try {
-      Matrix matrixPowHalfN = helperpow(n / 2);
-      if (n % 2 == 0)
+      Matrix matrixPowHalfN = helperpow(exponent / 2);
+      if (exponent % 2 == 0)
         return matrixPowHalfN.multiply(matrixPowHalfN);
-      if (n % 2 == 1)
+      if (exponent % 2 == 1)
         return this.multiply(matrixPowHalfN.multiply(matrixPowHalfN));
     } catch (MatrixDimensionsMismatchException e) {
       // Unexpected, since it must be a square matrix. Only the pow() method of this class used this
@@ -1130,7 +1132,7 @@ public class Matrix implements MatrixADT {
    * If n is a negative integer, return the result of this matrix's transpose multiplies itself by n
    * times.
    * 
-   * @param n - given n
+   * @param exponent - given n
    * @return - the matrix to the power of n
    * @throws MatrixDimensionsMismatchException - when the matrix is not a square matrix.
    * @throws MatrixArithmeticException         - when n is negative but the matrix is non-invertible
@@ -1138,14 +1140,15 @@ public class Matrix implements MatrixADT {
    * @see https://en.wikipedia.org/wiki/Matrix_multiplication#Powers_of_a_matrix
    */
   @Override
-  public Matrix pow(int n) throws MatrixDimensionsMismatchException, MatrixArithmeticException {
+  public Matrix pow(int exponent)
+      throws MatrixDimensionsMismatchException, MatrixArithmeticException {
     int N = getSizeOfSquareMatrix();
-    if (n == 0)
+    if (exponent == 0)
       return identityMatrixWithSizeOf(N);
-    else if (n > 0)
-      return helperpow(n);
-    else if (n < 0)
-      return inverse().helperpow(-n);
+    else if (exponent > 0)
+      return helperpow(exponent);
+    else if (exponent < 0)
+      return inverse().helperpow(-exponent);
     return null; // TODO handel this situation
   }
 
@@ -1201,19 +1204,21 @@ public class Matrix implements MatrixADT {
    */
   @Override
   public Matrix[] QRDecomposition() {
-    Matrix A = copy();
-    int N = getNumberOfRow();
-    Matrix R = A;
-    Matrix Q = identityMatrixWithSizeOf(N);
+    int numberOfRow = getNumberOfRow();
+    Matrix R = this.copy(); // The R matrix
+    Matrix Q = identityMatrixWithSizeOf(numberOfRow); // The Q matrix
     try {
-      for (int k = 0; k < N - 1; k++) {
-        Matrix X = new Matrix(N, 1);
-        X = X.substitueWith(R.subMatrix(k, N, k, k + 1), k, 0);
-        X.entry[k][0] = X.entry[k][0].add(X.norm());
-        X = X.dividedBy(X.norm());
-        Matrix U = R.transpose().multiply(X).multiply(Numeric.of(2));
-        R = R.subtract(X.multiply(U.transpose()));// Product HR
-        Q = Q.subtract(Q.multiply(X).multiply(X.transpose()).multiply(2));// Product QR Q=Q-2*Q*x*x'
+      for (int k = 0; k < numberOfRow - 1; k++) {
+        Matrix reflectionVector = new Matrix(numberOfRow, 1);
+        reflectionVector =
+            reflectionVector.substitueWith(R.subMatrix(k, numberOfRow, k, k + 1), k, 0);
+        reflectionVector.entry[k][0] = reflectionVector.entry[k][0].add(reflectionVector.norm());
+        reflectionVector = reflectionVector.dividedBy(reflectionVector.norm());
+        Matrix U = R.transpose().multiply(reflectionVector).multiply(Numeric.of(2));
+        R = R.subtract(reflectionVector.multiply(U.transpose()));// HR
+        // QR Q=Q-2*Q*x*x'
+        Q = Q.subtract(
+            Q.multiply(reflectionVector).multiply(reflectionVector.transpose()).multiply(2));
       }
     } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
       // Unexpected
