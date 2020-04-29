@@ -67,13 +67,14 @@ public class Numeric extends Number implements Comparable<Numeric> {
   final static int SIGNIFICANT_FIGURE_FOR_INPUT_PARSE_FRACTION = 12;
 
   /**
-   * Number of significant figures for dicimal number output.
+   * Number of significant figures for decimal number output.
    */
   public static int outputSignificantFigures = 5;
 
   /**
-   * A private Object representing the number, which can only be a Integer, or a Fraction, or a
-   * Double.
+   * The only non-static field for this class. This is a private Object representing the number,
+   * which can only be a Integer, or a Fraction, or a Double. It represents the value of this
+   * Numeric number.
    */
   private Number number;
 
@@ -159,14 +160,14 @@ public class Numeric extends Number implements Comparable<Numeric> {
   }
 
   /**
-   * A private helper method that calculates ten to the power of n.
+   * A private helper method that calculates ten to the power of the given exponent.
    * 
-   * @param n - a given number
-   * @return ten to the power of n.
+   * @param exponent - the given exponent
+   * @return ten to the power of the exponent.
    */
-  private int tenPow(int n) {
+  private int tenPow(int exponent) {
     int ans = 1;
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < exponent; i++)
       ans *= 10;
     return ans;
   }
@@ -380,7 +381,8 @@ public class Numeric extends Number implements Comparable<Numeric> {
       if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
         return new Numeric(thisNum.number.longValue() - otherNum.number.longValue());
       }
-      throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
+      throw new ClassCastException(
+          "Sorry, the Numeric cannot be casted" + " to Integer or Double or Fraction");
     }
     return this.subtract(new Numeric(other));
   }
@@ -425,7 +427,8 @@ public class Numeric extends Number implements Comparable<Numeric> {
       if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
         return new Numeric(thisNum.number.longValue() * otherNum.number.longValue());
       }
-      throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
+      throw new ClassCastException(
+          "Sorry, the Numeric cannot be casted" + " to Integer or Double or Fraction");
     }
     return this.multiply(new Numeric(other));
   }
@@ -467,7 +470,8 @@ public class Numeric extends Number implements Comparable<Numeric> {
       if (thisNum.number instanceof Integer || otherNum.number instanceof Integer) {
         return new Numeric(new Fraction(thisNum.number.intValue(), otherNum.number.intValue()));
       }
-      throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
+      throw new ClassCastException(
+          "Sorry, the Numeric cannot be casted" + " to Integer or Double or Fraction");
     }
     return this.dividedBy(new Numeric(other));
   }
@@ -509,7 +513,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
   public Numeric sqrt() {
     Numeric thisNum = new Numeric(this);
     if (thisNum.compareTo(Numeric.of(0)) < 0)
-      throw new ArithmeticException("Complex Number!");
+      throw new ArithmeticException("Sorry, the result is not all real numbers.");
     if (thisNum.number instanceof Integer && isPerfectSquare((Integer) thisNum.number)) {
       return new Numeric(perfectSquareRoot((Integer) thisNum.number));
     }
@@ -531,8 +535,13 @@ public class Numeric extends Number implements Comparable<Numeric> {
    * @return the rounded decimal number in double
    */
   private static double roundWithSignificantFigure(double value, int significantFigure) {
-    if (Double.toString(value).contains("Inf"))
-      throw new ArithmeticException("The result is too big!");
+    if (Double.isInfinite(value))
+      throw new ArithmeticException("Sorry, the absolute value of the result is too big,"
+          + " so we cannot calculate and print the result.");
+    if (Double.isNaN(value))
+      throw new ArithmeticException(
+          "Sorry, the absolute value of the result is too big or too small,"
+              + " so we cannot calculate and print the result.");
     BigDecimal bigDecimal = new BigDecimal(Double.toString(value));
     bigDecimal = bigDecimal.round(new MathContext(significantFigure));
     return bigDecimal.doubleValue();
@@ -576,7 +585,8 @@ public class Numeric extends Number implements Comparable<Numeric> {
       return Integer.valueOf(thisNum.number.intValue())
           .compareTo(Integer.valueOf(other.number.intValue()));
     }
-    throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
+    throw new ClassCastException(
+        "Sorry, the Numeric cannot be casted" + " to Integer or Double or Fraction");
   }
 
   /**
@@ -607,7 +617,8 @@ public class Numeric extends Number implements Comparable<Numeric> {
       return Integer.valueOf(thisNum.number.intValue())
           .compareTo(Integer.valueOf(other.number.intValue()));
     }
-    throw new ClassCastException("Cannot cast to Integer or Double or Fraction");
+    throw new ClassCastException(
+        "Sorry, the Numeric cannot be casted" + " to Integer or Double or Fraction");
   }
 
   /**
@@ -804,7 +815,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
           return fractionVersion;
         }
       }
-      throw new ClassCastException("Cannot cast to nearest Fraction");
+      throw new ClassCastException("Sorry, cannot cast to nearest Fraction");
     } else
       return new Numeric(number);
   }
