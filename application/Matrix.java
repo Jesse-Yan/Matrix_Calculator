@@ -123,18 +123,20 @@ public class Matrix implements MatrixADT {
   }
 
   /**
-   * A private static helper method that returns generate a n*n identity matrix. This means it has 1
-   * on every entries on its diagonal line and has 0 on other entries.
+   * A private static helper method that returns generate a n*n identity matrix, where n is
+   * specified by the parameter "size". This means it has 1 on every entries on its diagonal line
+   * and has 0 on other entries.
    * 
-   * @param - n a given integer to represent the number of rows and colomns of the identity matirx
+   * @param size - a given integer n to represent the number of rows and columns of the identity
+   *             matrix.
    * @return a n*n identity matrix.
    * 
    * @see https://en.wikipedia.org/wiki/Identity_matrix
    */
-  private static Matrix identityMatrixWithSizeOf(int n) {
-    Numeric[][] identityMatirxEntries = new Numeric[n][n];
-    for (int i = 0; i < n; i++)
-      for (int j = 0; j < n; j++)
+  private static Matrix identityMatrixWithSizeOf(int size) {
+    Numeric[][] identityMatirxEntries = new Numeric[size][size];
+    for (int i = 0; i < size; i++)
+      for (int j = 0; j < size; j++)
         if (i == j)
           identityMatirxEntries[i][j] = new Numeric(1);
         else
@@ -264,6 +266,7 @@ public class Matrix implements MatrixADT {
       } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
         return false;
       }
+      // Comparison
       for (int i = 0; i < entry.length; i++)
         for (int j = 0; j < entry[0].length; j++)
           if (!entry[i][j].equals(((Matrix) obj).entry[i][j])) // Compare Numerics
@@ -317,6 +320,7 @@ public class Matrix implements MatrixADT {
   public Matrix add(MatrixADT other) throws MatrixDimensionsMismatchException {
     sameDimensionCheck(other);
     Matrix answerMatrix = copy();
+    // Comparison
     for (int i = 0; i < answerMatrix.getNumberOfRow(); i++)
       for (int j = 0; j < answerMatrix.getNumberOfColumn(); j++)
         answerMatrix.entry[i][j] = answerMatrix.entry[i][j].add(other.getEntry(i, j));
@@ -450,22 +454,21 @@ public class Matrix implements MatrixADT {
 
   /**
    * 
-   * A private helper method that receives parameters k and l, and then it will find the row index
-   * of the largest number in absolute value on the lth column and with row index equal to or
-   * greater than k .
+   * A private helper method that receives a given row and given column, and then it will find the
+   * row index of the largest number in absolute value on the given column and with row index equal
+   * to or greater than the given row.
    * 
-   * @param k - a given k
-   * @param l - a given l
-   * @return the index of the largest number on the lth column and with row index equal to or
-   *         greater than k
+   * @param row   - the index of the given row
+   * @param given - the index of the given column
+   * @return the row index of the largest number on the given column and with row index equal to or
+   *         greater than the given row
    */
-  private int indexOfLargestPivotElement(int k, int l) {
-    int pivotRow = k;
-    Numeric pivotElement = entry[pivotRow][l];
-    for (int i = k + 1; i < getNumberOfRow(); i++) {
-
-      if (entry[i][l].abs().compareTo(pivotElement.abs()) > 0) {
-        pivotElement = entry[i][l];
+  private int indexOfLargestPivotElement(int row, int column) {
+    int pivotRow = row;
+    Numeric pivotElement = entry[pivotRow][column];
+    for (int i = row + 1; i < getNumberOfRow(); i++) {
+      if (entry[i][column].abs().compareTo(pivotElement.abs()) > 0) {
+        pivotElement = entry[i][column];
         pivotRow = i;
       }
     }
@@ -474,21 +477,22 @@ public class Matrix implements MatrixADT {
 
   /**
    * 
-   * A private helper method that receives parameters k and l, and then it will find the row index
-   * of the first number on the lth column and with row index equal to or greater than k.
+   * A private helper method that receives a given row and given column, and then it will find the
+   * row index of the first number on the given column and with row index equal to or greater than
+   * the given row.
    * 
    * The "first" means it has the smallest row index among all the possible values.
    * 
-   * @param k - a given k
-   * @param l - a given l
-   * @return the index of the first number on the lth column and with row index equal to or greater
-   *         than k
+   * @param row   - the index of the given row
+   * @param given - the index of the given column
+   * @return the index of the first number on the given column and with row index equal to or
+   *         greater than the given row
    */
-  private int indexOfNextNonZeroPivotElement(int k, int l) {
-    for (int i = k; i < getNumberOfRow(); i++)
-      if (!entry[i][l].equals(Numeric.of(0)))
+  private int indexOfNextNonZeroPivotElement(int row, int column) {
+    for (int i = row; i < getNumberOfRow(); i++)
+      if (!entry[i][column].equals(Numeric.of(0)))
         return i;
-    return k;
+    return row;
   }
 
   /**
@@ -531,33 +535,34 @@ public class Matrix implements MatrixADT {
    */
   private Matrix augmentMatirx(Matrix other) throws MatrixDimensionsMismatchException {
     if (this.getNumberOfRow() != other.getNumberOfRow())
-      throw new MatrixDimensionsMismatchException("Must have same number of rows");
-    int N = getNumberOfRow();
-    int M1 = this.getNumberOfColumn();
-    int M2 = other.getNumberOfColumn();
-    Numeric[][] augmentedMatrixEntries = new Numeric[N][M1 + M2];
-    for (int i = 0; i < N; i++) {
-      for (int j = 0; j < M1; j++) {
+      throw new MatrixDimensionsMismatchException(
+          "The augment matrix must have same number of rows");
+    int numberOfRow = getNumberOfRow();
+    int numberOfColumnOfFirstMatrix = this.getNumberOfColumn();
+    int numberOfColumnOfSecondMatrix = other.getNumberOfColumn();
+    Numeric[][] augmentedMatrixEntries =
+        new Numeric[numberOfRow][numberOfColumnOfFirstMatrix + numberOfColumnOfSecondMatrix];
+    for (int i = 0; i < numberOfRow; i++) {
+      for (int j = 0; j < numberOfColumnOfFirstMatrix; j++) {
         augmentedMatrixEntries[i][j] = new Numeric(entry[i][j]);
       }
-      for (int j = 0; j < M2; j++) {
-        augmentedMatrixEntries[i][j + M1] = new Numeric(other.entry[i][j]);
+      for (int j = 0; j < numberOfColumnOfSecondMatrix; j++) {
+        augmentedMatrixEntries[i][j + numberOfColumnOfFirstMatrix] = new Numeric(other.entry[i][j]);
       }
     }
     return new Matrix(augmentedMatrixEntries);
   }
 
   /**
-   * This is a private helper method. If the matrix is a square matrix, it returns the product of
-   * the diagonal, otherwise it throws a MatrixDimensionsMismatchException with message.
+   * This is a private helper method that calculate the product of the diagonal of the matrix, the
+   * matrix must be a square matrix.
    * 
    * @return the product of the diagonal of the matrix
-   * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix.
    */
   private Numeric productOfDiagonal() throws MatrixDimensionsMismatchException {
-    int N = getSizeOfSquareMatrix();
+    int size = getNumberOfColumn(); // already checked that it is a square matrix
     Numeric ansNumeric = new Numeric(1);
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < size; i++)
       ansNumeric = ansNumeric.multiply(entry[i][i]);
     return ansNumeric;
   }
@@ -571,9 +576,9 @@ public class Matrix implements MatrixADT {
    */
   @Override
   public Numeric trace() throws MatrixDimensionsMismatchException {
-    int N = getSizeOfSquareMatrix();
+    int size = getSizeOfSquareMatrix();
     Numeric ansNumeric = new Numeric(0);
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < size; i++)
       ansNumeric = ansNumeric.add(entry[i][i]);
     return ansNumeric;
   }
@@ -867,9 +872,9 @@ public class Matrix implements MatrixADT {
     if (!this.equals(this.transpose()))
       throw new MatrixArithmeticException(
           "The matrix should be symmetric to do Cholesky-decomposition");
-    int N = getSizeOfSquareMatrix();
-    Matrix lower = new Matrix(N, N);
-    for (int i = 0; i < N; i++) {
+    int size = getSizeOfSquareMatrix();
+    Matrix lower = new Matrix(size, size);
+    for (int i = 0; i < size; i++) {
       for (int j = 0; j <= i; j++) {
         Numeric sum = Numeric.of(0);
         if (j == i) {
@@ -1030,14 +1035,14 @@ public class Matrix implements MatrixADT {
    */
   @Override
   public Matrix[] LUPDecomposition() throws MatrixDimensionsMismatchException {
-    int N = getSizeOfSquareMatrix();
-    Object[] tmp = this.LUPDecompositionHelper(RowSwappingStrategy.USE_NEXT_NON_ZERO_PIVOT);
-    Matrix L = (Matrix) tmp[0];
-    Matrix U = (Matrix) tmp[1];
-    Matrix P = (Matrix) tmp[2];
-    if (P.mathematicallyEquals(identityMatrixWithSizeOf(N)))
-      P = null;
-    return new Matrix[] {L, U, P};
+    int size = getSizeOfSquareMatrix();
+    Object[] decomposition = this.LUPDecompositionHelper(RowSwappingStrategy.USE_NEXT_NON_ZERO_PIVOT);
+    Matrix theLMatirx = (Matrix) decomposition[0];
+    Matrix theUMatirx = (Matrix) decomposition[1];
+    Matrix thePMatirx = (Matrix) decomposition[2];
+    if (thePMatirx.mathematicallyEquals(identityMatrixWithSizeOf(size)))
+      thePMatirx = null;
+    return new Matrix[] {theLMatirx, theUMatirx, thePMatirx};
   }
 
   /**
