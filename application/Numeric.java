@@ -180,7 +180,13 @@ public class Numeric extends Number implements Comparable<Numeric> {
    */
   public Numeric(String string) {
     if (theStringIsInteger(string)) {
+      if (string.length() > 10)
+        throw new NumberFormatException("The given integer " + string
+            + " is too big! Please make sure that all the input integers are in range [-100000, 100000]");
       number = Numeric.of((Long) Long.parseLong(string)).number;
+      if (number.intValue() < -100000 || number.intValue() > 100000)
+        throw new NumberFormatException("The given integer " + string
+            + " is too big! Please make sure that all the input integers are in range [-100000, 100000]");
     } else if (theStringIsDouble(string)) {
       int index = string.indexOf(".");
       int decimalPlaces = string.length() - index - 1;
@@ -197,7 +203,7 @@ public class Numeric extends Number implements Comparable<Numeric> {
       } else
         number = Double.parseDouble(string);
     } else {
-      throw new NumberFormatException(string + ": Cannot convert the String to Numeric");
+      throw new NumberFormatException("Your input may contain invalid characters or empty");
     }
   }
 

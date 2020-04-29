@@ -690,7 +690,7 @@ public class Main extends Application {
                   + lineSeparator + " it has to be a square matrix");
         } catch (NumberFormatException e1) {
           correctness = false;
-          alert("Error", "Your input may contain invalid characters or empty");
+          alert("Error", e1.getMessage());
         } catch (Exception e2) {
           /* If caught, do nothing */
         }
@@ -724,7 +724,7 @@ public class Main extends Application {
               "Sorry, the matrix you entered is not invertible");
         } catch (NumberFormatException e1) {
           correctness = false;
-          alert("Error", "Your input may contain invalid characters or empty");
+          alert("Error", e1.getMessage());
         } catch (Exception e2) {
           /* If caught, do nothing */
         }
@@ -748,7 +748,7 @@ public class Main extends Application {
           stateModifer();         
         } catch (NumberFormatException e2) {
           correctness = false;
-          alert("Error", "Your input may contain invalid characters or empty");
+          alert("Error", e2.getMessage());
         } catch (Exception e3) {
           /* If caught, do nothing */
         }
@@ -770,7 +770,7 @@ public class Main extends Application {
           stateModifer();          
         } catch (NumberFormatException e) {
           correctness = false;
-          alert("Error", "Your input may contain invalid characters or empty");
+          alert("Error", e.getMessage());
         } catch (Exception e1) {
           /* If caught, do nothing */
         }
@@ -799,7 +799,7 @@ public class Main extends Application {
                   + "it has to be a square matrix");
         } catch (NumberFormatException e1) {
           correctness = false;
-          alert("Error", "Your input may contain invalid characters or empty");
+          alert("Error", e1.getMessage());
         } catch (Exception e2) {
           /* If caught, do nothing */
         }
@@ -835,7 +835,7 @@ public class Main extends Application {
                   + lineSeparator + "it has to be a square matrix");
         } catch (NumberFormatException e1) {
           correctness = false;
-          alert("Error", "Your input may contain invalid characters or empty");
+          alert("Error", e1.getMessage());
         } catch (Exception e1) {
           /* If caught, do nothing */
         }
@@ -860,7 +860,7 @@ public class Main extends Application {
           stateModifer();        
         } catch (NumberFormatException e) {
           correctness = false;
-          alert("Error", "Your input may contain invalid characters or empty");
+          alert("Error", e.getMessage());
         } catch (Exception e1) {
           /* If caught, do nothing */
         }
@@ -897,7 +897,7 @@ public class Main extends Application {
                   + lineSeparator + "it has to be a square symmetic matrix");
         } catch (NumberFormatException e3) {
           correctness = false;
-          alert("Error", "Your input may contain invalid characters or empty");
+          alert("Error", e3.getMessage());
         } catch (ArithmeticException e4) {
           correctness = false;
           alert("Error", "Sorry, Exception: " + e4.getMessage());
@@ -929,7 +929,7 @@ public class Main extends Application {
                   + lineSeparator + "it has to be a square matrix");
         } catch (NumberFormatException e1) {
           correctness = false;
-          alert("Error", "Your input may contain invalid characters or empty");
+          alert("Error", e1.getMessage());
         } catch (Exception e2) {
           /* If caught, do nothing */
         }
@@ -951,7 +951,7 @@ public class Main extends Application {
           stateModifer();          
         } catch (NumberFormatException e) {
           correctness = false;
-          alert("Error", "Your input may contain invalid characters or empty");
+          alert("Error", e.getMessage());
         } catch (Exception e1) {
           /* If caught, do nothing */
         }
@@ -974,7 +974,7 @@ public class Main extends Application {
           scrollPane(vBoxR, resultShower);
           stateModifer();        
         } catch (NumberFormatException e) {
-          alert("Error", "Your input may contain invalid characters or empty");
+          alert("Error", e.getMessage());
         } catch (Exception e1) {
           /* If caught, do nothing */
         }
@@ -1014,7 +1014,7 @@ public class Main extends Application {
           } catch (NumberFormatException e3) {
             correctness = false;
             alert("Error",
-                "Your input may contain invalid characters or empty");
+                e3.getMessage());
           } catch (ArithmeticException e4) {
             correctness = false;
             alert("Error", "Sorry, Exception: " + e4.getMessage());
@@ -1578,7 +1578,7 @@ public class Main extends Application {
           "The dimensions of the Matrixs you entered did not match");
     } catch (NumberFormatException e1) {
       correctness = false;
-      alert("Error", "Your input may contain invalid characters or empty");
+      alert("Error", e1.getMessage());
     } catch (Exception e2) {
       /* If caught, do nothing */
     }
