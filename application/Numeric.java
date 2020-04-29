@@ -172,6 +172,83 @@ public class Numeric extends Number implements Comparable<Numeric> {
   }
 
   /**
+   * A private helper method that checks leading zeros in the given String representing number.
+   * Throws NumberFormatException with message if the String has leading zeros.
+   * 
+   * @param string - a given String
+   */
+  private void leadingZeroCheck(String string) {
+    if (string.length() > 1 && string.charAt(0) == '0' && string.charAt(1) != '.') {
+      throw new NumberFormatException("Sorry, the given number " + string
+          + " has leading zeros! Please avoid having leading zeros in the input numbers]");
+    }
+    if (string.length() > 2 && string.charAt(0) == '-' && string.charAt(1) == '0'
+        && string.charAt(2) != '.') {
+      throw new NumberFormatException("Sorry, the given number " + string
+          + " has leading zeros! Please avoid having leading zeros in the input numbers]");
+    }
+  }
+
+  /**
+   * A private helper method that try to convert an integer formatted string to integer. Throws
+   * NumberFormatException with message if the integer is illegal in this calculator (having leading
+   * zeros or out of range [-100000, 100000]).
+   * 
+   * @param string a given integer formatted string
+   * @return a Integer instance that has value converted from the string.
+   */
+  private Integer turnStringToInteger(String string) {
+    leadingZeroCheck(string);
+    if (string.length() > 8) {
+      if (string.charAt(0) == '-')
+        throw new NumberFormatException("Sorry, the given number " + string
+            + " is too small! Please make sure that all the input numbers are in range [-100000, 100000]");
+      throw new NumberFormatException("Sorry, the given number " + string
+          + " is too big! Please make sure that all the input numbers are in range [-100000, 100000]");
+    }
+
+    Integer answerInteger = (Integer) Integer.parseInt(string);
+    if (answerInteger.intValue() > 100000)
+      throw new NumberFormatException("Sorry, the given number " + string
+          + " is too big! Please make sure that all the input numbers are in range [-100000, 100000]");
+    if (answerInteger.intValue() < -100000)
+      throw new NumberFormatException("Sorry, the given number " + string
+          + " is too small! Please make sure that all the input numbers are in range [-100000, 100000]");
+    return answerInteger;
+  }
+
+  /**
+   * A private helper method that checks whether a decimal formatted string represents a legal
+   * decimal number. (No leading zeros, in range [-100000, 100000], and has no more than 3 decimal
+   * digits.) Throws NumberFormatException with message if it is not legal.
+   * 
+   * @param string a given decimal formatted string
+   */
+  private void checkDouble(String string) {
+    leadingZeroCheck(string);
+    int decimalPointIndex = string.indexOf(".");
+    int decimalPlaces = string.length() - decimalPointIndex - 1;
+    if (decimalPointIndex > 8) {
+      if (string.charAt(0) == '-')
+        throw new NumberFormatException("Sorry, the given number " + string
+            + " is too small! Please make sure that all the input numbers are in range [-100000, 100000]");
+      throw new NumberFormatException("Sorry, the given number " + string
+          + " is too big! Please make sure that all the input numbers are in range [-100000, 100000]");
+    }
+    if (decimalPlaces > 3)
+      throw new NumberFormatException(
+          "Sorry, the given integer " + string + " has more than 3 decimal places!"
+              + " Please make sure that all the input numbers has no more than 3 decimal places.");
+    double value = Double.parseDouble(string);
+    if (value > 100000)
+      throw new NumberFormatException("Sorry, the given value " + string
+          + " is too big! Please make sure that all the input numbers are in range [-100000, 100000]");
+    if (value < -100000)
+      throw new NumberFormatException("Sorry, the given value " + string
+          + " is too small! Please make sure that all the input numbers are in range [-100000, 100000]");
+  }
+
+  /**
    * The constructor to construct this Numeric instance with an given String, the Numeric will be
    * casted into 1 of the 3 states Integer states, Fraction states, or Double states depend on the
    * format of the given String.
@@ -180,17 +257,13 @@ public class Numeric extends Number implements Comparable<Numeric> {
    */
   public Numeric(String string) {
     if (theStringIsInteger(string)) {
-      if (string.length() > 10)
-        throw new NumberFormatException("The given integer " + string
-            + " is too big! Please make sure that all the input integers are in range [-100000, 100000]");
-      number = Numeric.of((Long) Long.parseLong(string)).number;
-      if (number.intValue() < -100000 || number.intValue() > 100000)
-        throw new NumberFormatException("The given integer " + string
-            + " is too big! Please make sure that all the input integers are in range [-100000, 100000]");
+      number = turnStringToInteger(string);
     } else if (theStringIsDouble(string)) {
-      int index = string.indexOf(".");
-      int decimalPlaces = string.length() - index - 1;
+      checkDouble(string);
+      int decimalPointIndex = string.indexOf(".");
+      int decimalPlaces = string.length() - decimalPointIndex - 1;
       if (string.length() - 1 <= SIGNIFICANT_FIGURE_FOR_INPUT_PARSE_FRACTION) {
+        // try to turn to Fraciton.
         boolean negative = (string.charAt(0) == '-');
         String part[] = string.split("\\.");
         int integerPart = Integer.parseInt(part[0]);
@@ -200,8 +273,9 @@ public class Numeric extends Number implements Comparable<Numeric> {
         if (decimalPart == 0)
           number = Integer.valueOf(integerPart);
         number = new Fraction(decimalPart, tenPow(decimalPlaces)).add(Fraction.of(integerPart));
-      } else
+      } else {
         number = Double.parseDouble(string);
+      }
     } else {
       throw new NumberFormatException("Your input may contain invalid characters or empty");
     }
