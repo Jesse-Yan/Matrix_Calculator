@@ -32,3 +32,8 @@ Warning, If code in ateam.zip won't run, please check CS400_final_project.zip (f
 
 #### Warning, If code in ateam.zip won't run, please check CS400_final_project.zip
 #### Be sure to check README.md for more detailed describtion!!!
+
+Known Issue (BUG Report)
+*Cholesky will always produce wrong result(FIXED)
+*Might cause stackoverflow when giving a Huge Odd number (vary base on PC set up)
+*Grammer issue in readme.md and .txt (So Sorry about that)
