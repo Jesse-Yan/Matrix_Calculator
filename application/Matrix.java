@@ -762,24 +762,24 @@ public class Matrix implements MatrixADT {
    */
   private int gussianEliminate(RowSwappingStrategy rowSwappingStrategy) {
     int dif = 0;
-    for (int k = 0; k < getNumberOfRow(); k++) {
+    for (int row = 0; row < getNumberOfRow(); row++) {
       boolean success = false;
-      int l = k + dif;
-      if (l >= getNumberOfColumn())
+      int column = row + dif;
+      if (column >= getNumberOfColumn())
         return getNumberOfColumn() - dif;
       while (!success) {
         try {
-          partialPivotingWithStrategy(k, l, rowSwappingStrategy);
+          partialPivotingWithStrategy(row, column, rowSwappingStrategy);
           success = true;
         } catch (SingularException e) {
           dif++;
-          l = l + dif;
-          if (l >= getNumberOfColumn())
+          column = row + dif;
+          if (column >= getNumberOfColumn())
             return getNumberOfColumn() - dif;
         }
       }
-      divideTheRowByPivotElement(k, l);
-      eliminateOtherRowsBy(k, l);
+      divideTheRowByPivotElement(row, column);
+      eliminateOtherRowsBy(row, column);
     }
     return getNumberOfColumn() - dif;
   }
