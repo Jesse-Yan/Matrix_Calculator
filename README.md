@@ -127,15 +127,6 @@ Sometimes user might want to input their data in fraction format. Therefore, it 
 
 3. Support ui key board focus on power section
 Comtemporarily, the power section does not support input with ui key board. Therefore, it would be better if we could allow the user who does not have a key board to input numbers in the power section by the ui keys. We might add this feature in the future.
-
-／ イ  　　　(((ヽ      ++++++++++++++++
-(　 ﾉ　　　　  ￣Ｙ ＼   ++++Future+++
-|　(＼　(\   /)  ｜  ) / ++++++++Updates+
-ヽ　ヽ` ( ﾟ∀ﾟ ) _ノ /
-　＼ |　⌒Ｙ⌒　/  /
-　  ｜ヽ　 ｜　 ﾉ ／
-　   ＼トー仝ーイ
-　　  ｜ ミ土彡/
 =
       
 Author:Archer Li
