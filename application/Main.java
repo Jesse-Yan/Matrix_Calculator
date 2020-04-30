@@ -1803,6 +1803,8 @@ public class Main extends Application {
           saved = true;
         } catch (FileNotFoundException e1) {
           /* Should not encounter */
+        }catch (NullPointerException e2) {
+          alert("Error", "Sorry, please first load a file before saving the file!");
         } catch (Exception e) {
           alert("Error", "Fatal issues during IO processing");
         }
