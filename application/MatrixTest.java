@@ -251,8 +251,6 @@ public class MatrixTest {
    * 1). This method will check whether the result of multiplying decomposed Q matrix to the
    * decompose R matrix will become the original matrix, and whether the Q matrix is orthonormal.
    * 
-   * 
-   * @see https://en.wikipedia.org/wiki/QR_decomposition#Example
    */
   @Test
   public void test_QRDecomposition_by_random() {
@@ -330,6 +328,7 @@ public class MatrixTest {
     }
   }
 
+
   /**
    * Test the transpose of the matrix.
    */
@@ -347,17 +346,37 @@ public class MatrixTest {
     }
   }
 
+  /**
+   * 
+   * Test LUP Decomposition by random. Some matrices will be generated randomly by Random (using
+   * seed 1). This method will check whether the result is correct.
+   * 
+   */
   @Test
   public void test_LUP() {
     try {
-      @SuppressWarnings("unused")
-      Matrix matrix, expectedL, expectedU, expectedP;
-
-      matrix = new Matrix(new String[][] {{"4", "3"}, {"6", "3"}});
-
-    } catch (
-
-    Exception e) {
+      int matrixSize = 6;
+      MatrixADT matrix;
+      MatrixADT[] LUPdecomposition = new MatrixADT[3];
+      Random random = new Random(1);
+      int trialTimes = 100;
+      for (int k = 0; k < trialTimes; k++) {
+        matrix = randomMatrix(matrixSize, matrixSize, random);
+        LUPdecomposition = matrix.LUPDecomposition();
+        MatrixADT L = LUPdecomposition[0];
+        MatrixADT U = LUPdecomposition[1];
+        MatrixADT P = LUPdecomposition[2];
+        if (P != null) {
+          if (!L.multiply(U).equals(P.multiply(matrix))) {
+            fail("LU not equal to PA" + "\n Matrix: \n" + matrix);
+          }
+        } else {
+          if (!L.multiply(U).equals(matrix)) {
+            fail("LU not equal to PA" + "\n Matrix: \n" + matrix);
+          }
+        }
+      }
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
@@ -390,7 +409,7 @@ public class MatrixTest {
    * 
    */
   @Test
-  public void test_able_to_compute_Eigenbalue_using_random() {
+  public void test_able_to_compute_Eigenvalue_using_random() {
     try {
       MatrixADT matrix;
       Random random = new Random(1);
@@ -399,8 +418,8 @@ public class MatrixTest {
         matrix = randomMatrix(3, 3, random);
         try {
           matrix.eigenvalues();
-        } catch (ArithmeticException e) {
-          System.out.println(matrix);
+        } catch (Exception e) {
+          fail("Cannot compute Eigenvalue" + "\n Matrix: \n" + matrix);
         }
       }
 
