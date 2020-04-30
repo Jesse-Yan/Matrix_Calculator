@@ -2008,7 +2008,7 @@ public class Main extends Application {
         + lineSeparator + lineSeparator
         + "2. To perform analyze sequence function, click on button of 'analyze sequence' "
         + "and you should see that the space button and the '=' button have been activated. "
-        + "Now, you can click the nubmer buttons to input numbers and use the space button "
+        + "Now, you can click the number buttons to input numbers and use the space button "
         + "to separate them. After finishing inputting, you can click on '=' to see the output"
         + lineSeparator + lineSeparator
         + "3. To perform matrix calculation, you need to choose between whether you need to "
@@ -2051,7 +2051,7 @@ public class Main extends Application {
         + lineSeparator + lineSeparator
         + "8. To Exit our program, you can press 'Menu', then click on 'Exit'"
         + lineSeparator + lineSeparator
-        + "This is a extremely complicated project, and we all performed our virtuosities in this project. We hope you will enjoy it!!!");
+        + "This is an extremely complicated project, and we all performed our virtuosities in this project. We hope you will enjoy it!!!");
     area.setStyle("-fx-font-size: 16px;");
     alert.getDialogPane().setContent(area);
     alert.setResizable(true);
