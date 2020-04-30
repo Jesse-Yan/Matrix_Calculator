@@ -8,23 +8,33 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * This class tests the Matrix
+ * This class uses junit test to test the {@link Numeric}.
  * 
  * @author Houming Chen
  *
  */
 public class NumericTest {
   
+  /**
+   * Basic structure of the junit test.
+   * 
+   * @throws Exception - UNEXPECTED
+   */
   @Before
   public void setUp() throws Exception {
   }
 
+  /**
+   * Basic structure of the junit test.
+   * 
+   * @throws Exception - UNEXPECTED
+   */
   @After
   public void tearDown() throws Exception {
   }
   
   /**
-   * integer addition
+   * Test basic integer addition.
    */
   @Test
   public void test_integer_addition() {
@@ -48,7 +58,7 @@ public class NumericTest {
   }
   
   /**
-   * integer addition with int overflow
+   * Test integer addition with int overflow
    */
   @Test
   public void test_integer_addition_with_overflow() {
@@ -65,7 +75,7 @@ public class NumericTest {
   }
   
   /**
-   * integer subtraction
+   * Test integer subtraction
    */
   @Test
   public void test_integer_subtraction() {
@@ -89,7 +99,7 @@ public class NumericTest {
   }
   
   /**
-   * integer addition with random data. Random seed 1.
+   * Test integer addition with random data. Random seed 1.
    */
   @Test
   public void test_integer_addition_random_data() {
@@ -118,7 +128,7 @@ public class NumericTest {
   
   
   /**
-   * integer subtraction with overflow
+   * Test integer subtraction with overflow
    */
   @Test
   public void test_integer_subtraction_with_overflow() {
@@ -135,7 +145,7 @@ public class NumericTest {
   }
   
   /**
-   * integer subtraction with random data. Random seed 1.
+   * Test integer subtraction with random data. Random seed 1.
    */
   @Test
   public void test_integer_subtraction_random_data() {
@@ -163,7 +173,7 @@ public class NumericTest {
   }
   
   /**
-   * integer multiplication
+   * Test integer multiplication
    */
   @Test
   public void test_integer_multiplication() {
@@ -182,7 +192,7 @@ public class NumericTest {
   }
   
   /**
-   * integer multiplication with overflow
+   * Test integer multiplication with overflow
    */
   @Test
   public void test_integer_multiplication_with_overflow() {
@@ -200,7 +210,7 @@ public class NumericTest {
   }
   
   /**
-   * integer multiplication with random data. Random seed 1.
+   * Test integer multiplication with random data. Random seed 1.
    */
   @Test
   public void test_integer_multiplication_random_data() {
@@ -223,7 +233,7 @@ public class NumericTest {
   }
   
   /**
-   * basic divison
+   * Test basic division
    */
   @Test
   public void test_basic_division() {
@@ -239,7 +249,7 @@ public class NumericTest {
   }
   
   /**
-   * integer division with random data. Random seed 1.
+   * Test integer division with random data. Random seed 1.
    */
   @Test
   public void test_integer_division_random_data() {
@@ -266,7 +276,7 @@ public class NumericTest {
   }
   
   /**
-   * basic division - divided by 0
+   * Test basic division - divided by 0
    */
   @Test
   public void test_basic_division_zero_divisor() {
@@ -284,7 +294,7 @@ public class NumericTest {
   }
   
   /**
-   * fraction addition
+   * Test fraction addition
    */
   @Test
   public void test_fraction_addition() {
@@ -300,49 +310,13 @@ public class NumericTest {
   }
   
   /**
-   * fraction addition with overflow
+   * Test fraction addition with overflow
    */
   @Test
   public void test_fraction_addition_with_overflow() {
     try {
       assertEquals(Numeric.of(new Fraction(1, 2147483647)).add(new Fraction(1, 2147483646)), 9.3132257526599982E-10);
       
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-  
-  /**
-   * fraction subtraction
-   */
-  @Test
-  public void test_fraction_subtraction() {
-    try {
-      // TODO add more tests
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-  
-  /**
-   * fraction multiplication
-   */
-  @Test
-  public void test_fraction_multiplication() {
-    try {
-      // TODO add more tests
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-  
-  /**
-   * fraction division
-   */
-  @Test
-  public void test_fraction_division() {
-    try {
-      // TODO add more tests
     } catch (Exception e) {
       e.printStackTrace();
     }

@@ -24,7 +24,7 @@ import org.junit.Test;
 
 
 /**
- * This class uses junit test to test the matrix.
+ * This class uses junit test to test the {@link Matrix}.
  * 
  * @author Houming Chen
  *
