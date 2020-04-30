@@ -880,7 +880,16 @@ public class Matrix implements MatrixADT {
         if (j == i) {
           for (int k = 0; k < j; k++)
             sum = sum.add(lower.entry[j][k].multiply(lower.entry[j][k]));
-          lower.entry[j][j] = entry[j][j].subtract(sum).sqrt();
+          try {
+            lower.entry[j][j] = entry[j][j].subtract(sum).sqrt();
+          } catch (ArithmeticException arithmeticException) {
+            if (arithmeticException.getMessage()
+                .equals("Sorry, the result is not all real numbers.")) // change message.
+              throw new ArithmeticException("Sorry, for this matrix,"
+                  + " cholesky decomposition cannot be done on the real field.");
+            else
+              throw arithmeticException; // throw the original arithmeticException
+          }
         } else {
           for (int k = 0; k < j; k++)
             sum = sum.add(lower.entry[i][k].multiply(lower.entry[j][k]));
@@ -1118,8 +1127,9 @@ public class Matrix implements MatrixADT {
     } catch (MatrixDimensionsMismatchException e) {
       // Unexpected, since it must be a square matrix. Only the pow() method of this class used this
       // method, and the pow() method would make sure that the given matrix is a square matrix.
+      throw new RuntimeException("Unexpected exception in pow!");
     }
-    return null; // TODO handel this situation
+    throw new RuntimeException("Unexpected exception in pow!"); // Unexpected
   }
 
   /**
@@ -1150,7 +1160,7 @@ public class Matrix implements MatrixADT {
       return helperpow(exponent);
     else if (exponent < 0)
       return inverse().helperpow(-exponent);
-    return null; // TODO handel this situation
+    throw new RuntimeException("Unexpected exception in pow!");// Unexpected
   }
 
 
@@ -1222,8 +1232,7 @@ public class Matrix implements MatrixADT {
             Q.multiply(reflectionVector).multiply(reflectionVector.transpose()).multiply(2));
       }
     } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
-      // Unexpected
-      matrixDimensionsMismatchException.printStackTrace();
+      throw new RuntimeException("Unexpected exception in QR decomposition!");// Unexpected
     }
     return new Matrix[] {Q, R};
   }
@@ -1267,7 +1276,7 @@ public class Matrix implements MatrixADT {
 
       }
     } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
-      // Unexpected
+      throw new RuntimeException("Unexpected exception in reduction to hessenburg form!");// Unexpected
     }
     return A;
 
@@ -1338,7 +1347,7 @@ public class Matrix implements MatrixADT {
       Matrix[] QRDecomposition = this.subtract(muMatrix).QRDecomposition();
       return QRDecomposition[1].multiply(QRDecomposition[0]).add(muMatrix);
     } catch (MatrixDimensionsMismatchException e) {
-      throw new RuntimeException("?????????");
+      throw new RuntimeException("Unexpected exception in during QR iteration.");// Unexpected
     }
   }
 
@@ -1450,8 +1459,7 @@ public class Matrix implements MatrixADT {
       }
       return true;
     } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
-      // TODO: Unexpected
-      throw new RuntimeException("!!!");
+      throw new RuntimeException("Unexpected exception when comparing diagnals!");// Unexpected
     }
   }
 
@@ -1560,7 +1568,7 @@ public class Matrix implements MatrixADT {
         return castedEigenValue;
       }
     } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
-      // Unexpected;
+      throw new RuntimeException("Unexpected exception in casting to fraction.");// Unexpected
     }
     throw new ClassCastException("EigenValue Didn't match!");
   }
@@ -1587,7 +1595,7 @@ public class Matrix implements MatrixADT {
         }
       }
     } catch (MatrixDimensionsMismatchException matrixDimensionsMismatchException) {
-      // Unexpected;
+      throw new RuntimeException("Unexpected exception in checking the eigenvalue!");// Unexpected
     }
     return false;
   }
