@@ -145,22 +145,4 @@ public class Writer {
     printWriter.close();
   }
 
-  /**
-   * Test purpose
-   * 
-   * @param args
-   */
-  public static void main(String[] args) {
-    try {
-      OpeartionParser parser = new OpeartionParser(new File("SimpleData.json"));
-      List<CalSteps> curr = parser.getCalculations();
-      curr.add(new CalSteps((Object) "Just a test"));
-      Writer test = new Writer(curr);
-      test.save(new File("Result.json"));
-      System.out.println("success!!");
-    } catch (Exception e) {
-      System.out.println(e.toString());
-    }
-
-  }
 }
