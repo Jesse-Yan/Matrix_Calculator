@@ -61,7 +61,7 @@ In this program, since many calculations are operations with double, due to the 
       ) \  °   /  
      (   \  /  \
    / /  /      \ \ \
-   ( (  ).      ) ).)
+   ( (  ).       )  ).)
    (    ).       ( |  |
     |  /           \  |
   nn.  ).           (  nnm
