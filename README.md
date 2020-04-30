@@ -96,7 +96,7 @@ Attention: You may notice some buttons being disabled when you switching to the 
 5. In 'reading file mode', we have filtering function, it is located in the left of the top button bars. It is a dynamic ComboBox and its content will be adjusted based on your input and your manipulations. During the filtering mode, you can switch between operations using the back and forth button. You cannot add and remove operations and use the page input TextField. In addition, you cannot save the file or quit the 'reading file mode'. You can return back to normal state by selecting 'All' in the ComboBox.
 6. If you finished editing your operations, you can quit the 'reading file mode' by clicking on 'quit' button, and it will ask you whether you want to save the file. 'Yes' will open a fileChooser, 'No' will quit the 'reading file mode', 'Cancel' will return back. Note: If you have save your file through the 'save' in Menu, it will quit directly if during this period you do not make any change.
 7. Out calculator is friendly to the computer user who does not have a keyboard. Out input focus can be switching between TextFields to give you the best user experience.
-8.To Exit our program, you can press 'Menu', then click on 'Exit' or by pressing 'x' in the top-right.
+8. To Exit our program, you can press 'Menu', then click on 'Exit' or by pressing 'x' in the top-right.
 
 #### !Mark! To Load .json file, click Menu then click Open.
 #### !Mark! To save result of opened .json file, please click Menu-Save and enter the file name
