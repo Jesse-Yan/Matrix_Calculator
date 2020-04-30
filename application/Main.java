@@ -175,7 +175,12 @@ public class Main extends Application {
         area.setEditable(false);
         area.setText("Welcome to our Matrix Calculator!" + lineSeparator
             + "This is a sophisticated and complicated Calculator, and it "
-            + "supports the operations including normal calculation, sequence analyzing, and matrix calculation"
+            + "supports the operations including normal calculation, sequence analyzing, and matrix calculation."
+            + lineSeparator
+            + "Attention: You may notice some buttons being disabled when you switching to the Matrix Calculation "
+            + "section, to re-enable them you should click on the white area(TextArea) on the left of the "
+            + "calculator or move the mouse to the top white area(TextField). We are designing this switching "
+            + "because some buttons are not allowed during the matrix calculation."
             + lineSeparator
             + "1.To perform a normal calculation, simply click on the white "
             + "input field of the calculator to activate the function if some buttons are disabled, "
@@ -183,16 +188,16 @@ public class Main extends Application {
             + lineSeparator
             + "2.To perform analyze sequence function, click on button of 'analyze sequence' "
             + "and you should see that the space button and the '=' button have been activated. "
-            + "Now, you should you can click the nubmer buttons to input numbers and use the space button "
+            + "Now, you can click the nubmer buttons to input numbers and use the space button "
             + "to separate them. After finishing inputting, you can click on '=' to see the output"
             + lineSeparator
             + "3.To perform matrix calculation, you need to choose between whether you need to "
             + "do operations on a single matrix or two matrixes. To perform calculation on a single matrix, "
-            + "simply click on the row & col input field and type in integers to tell the calculator the "
-            + "dimension of the matrix, then you can type the value(Integer or Double) to specific entry. "
+            + "simply click on the row & col input field and type in an integer to tell the calculator the "
+            + "dimension of the matrix, then you can type the value(Integer or Double) to the specific entry. "
             + "After that, you can click on the buttons below the matrix to see the result. "
             + "If you are using the power button, you need to type in the value first. To perform "
-            + "calculation on two matrixes, you need to click on the CheckBox ? to active the second "
+            + "calculation on two matrixes, you need to click on the CheckBox '?' to active the second "
             + "matrix, at the same time, the operation buttons below will be disabled and the operation "
             + "buttons between the two matrixes will be activated. After finishing inputting, click on '+', "
             + "'-' or '*' to see the result. 'c1', 'c2' is used to clear the matrix"
@@ -201,7 +206,7 @@ public class Main extends Application {
             + "Your file must be ended with .json otherwise we will not accept it. In addition, the content of your "
             + "file input must be correct to be accepted by our calculator. If your input file contains "
             + "too many calculations, it may take a while for the calculator to show the operations you have "
-            + "plugged in. After you see your operation, you can click on the buttons on the top of the "
+            + "plugged in. After you see your operations, you can click on the buttons on the top of the "
             + "application since they have been activated. You can view back and forth, you can even "
             + "type in the input field and click on the confirm button to lead you to the operation you want. "
             + "You can edit your operation, and new changes will be recorded if you do some calculations on "
@@ -210,12 +215,18 @@ public class Main extends Application {
             + "on 'Add' button. After producing correct output, you can record it by clicking on 'Add Confirm' "
             + "button. You can delete an operation by clicking on 'Delete' button. Remember: You cannot delete the last operation."
             + lineSeparator
-            + "5.If you finished editing your operations, you can quit the 'reading file mode' by clicking on 'quit' "
+            + "5.In 'reading file mode', we have filtering function, it is located in the left of the top button bars. "
+            + "It is a dynamic ComboBox and its content will be adjusted based on your input and your manipulations. "
+            + "During the filtering mode, you can switch between operations using the back and forth button. You cannot "
+            + "add and remove operations and use the page input TextField. In addition, you cannot save the file or quit "
+            + "the 'reading file mode'. You can return back to normal state by selecting 'All' in the ComboBox."
+            + lineSeparator
+            + "6.If you finished editing your operations, you can quit the 'reading file mode' by clicking on 'quit' "
             + "button, and it will ask you whether you want to save the file. 'Yes' will open a fileChooser, 'No' "
             + "will quit the 'reading file mode', 'Cancel' will return back. Note: If you have save your file through "
             + "the 'save' in Menu, it will quit directly if during this period you do not make any change."
             + lineSeparator
-            + "6.Out calculator is friendly to the computer user who does not have a keyboard. Out input focus can be "
+            + "7.Out calculator is friendly to the computer user who does not have a keyboard. Out input focus can be "
             + "switching between TextFields to give you the best user experience(Not for the power TextField)."
             + lineSeparator
             + "This is a huge project and we all performed our virtuosities in this project. We hope you will enjoy it!!!");
