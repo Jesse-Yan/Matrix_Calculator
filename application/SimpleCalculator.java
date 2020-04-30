@@ -1,4 +1,5 @@
 package application;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -9,12 +10,19 @@ import java.util.Stack;
  *
  */
 public class SimpleCalculator {
+
+  // Data Structure that supports the calculation
   private Stack<Double> theStackI;
   private Stack<String> theStackP;
   private String[] input;
   private ArrayList<String> output;
   private double num1, num2, interAns;
 
+  /**
+   * Constructor of the SimpleCalculator
+   * 
+   * @param s the expression to read
+   */
   public SimpleCalculator(String[] s) {
     this.input = s;
     theStackP = new Stack<String>();
