@@ -333,12 +333,14 @@ public class Main extends Application {
     VBox matrix2 = matrixGenerator(matrix2Data, rowAndCol2);
 
     // Add focus function for each row and col inputField of matrixes
-    rowAndCol1.stream().forEach(t -> t.setOnMouseClicked(e -> {
-      rowAndColSetter(t);
-    }));
-    rowAndCol2.stream().forEach(t -> t.setOnMouseClicked(e -> {
-      rowAndColSetter(t);
-    }));
+    rowAndCol1.stream()
+              .forEach(textField -> textField.setOnMouseClicked(event -> {
+                focusSetter(textField);
+              }));
+    rowAndCol2.stream()
+              .forEach(textField -> textField.setOnMouseClicked(event -> {
+                focusSetter(textField);
+              }));
 
     // matrix2 will be enable when doing '+', '-', or '*'
     matrix2.setDisable(true);
@@ -533,6 +535,10 @@ public class Main extends Application {
       powerButton.setOnAction(event -> {
         powerSetter(vBoxR, matrix1Data, rowAndCol1, powerButton, powerInput);
       });
+
+      powerInput.setOnMouseClicked(event -> {
+        focusSetter(powerInput);
+      });
     } catch (RuntimeException e) {
       correctness = false;
       alert("Error", "" + e.getMessage());
@@ -639,13 +645,13 @@ public class Main extends Application {
   }
 
   /**
-   * Adjust rowAndCol to focus
+   * Adjust focus of the TextField
    * 
    * @param field the TextField
    */
-  private void rowAndColSetter(TextField field) {
+  private void focusSetter(TextField field) {
     if (field.isFocused()) {
-      caretPosition = 1;
+      caretPosition = field.getCaretPosition();
       focusedTextField = field;
     }
   }
@@ -1979,7 +1985,7 @@ public class Main extends Application {
         + "the 'save' in Menu, it will quit directly if during this period you do not make any change."
         + lineSeparator + lineSeparator
         + "7. Out calculator is friendly to the computer user who does not have a keyboard. Out input focus can be "
-        + "switching between TextFields to give you the best user experience(Not for the power TextField)."
+        + "switching between TextFields to give you the best user experience."
         + lineSeparator + lineSeparator
         + "This is a extremely complicated project, and we all performed our virtuosities in this project. We hope you will enjoy it!!!");
     area.setStyle("-fx-font-size: 16px;");
