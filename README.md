@@ -124,9 +124,6 @@ Sometimes user might need decimal outputs. Therefore, it would be better if we c
 
 2. Matrix calculator allowing Users to input in Fraction
 Sometimes user might want to input their data in fraction format. Therefore, it would be better if we could allow the user to input their data in fraction format. We might add this feature in the future.
-
-3. Support ui key board focus on power section
-Comtemporarily, the power section does not support input with ui key board. Therefore, it would be better if we could allow the user who does not have a key board to input numbers in the power section by the ui keys. We might add this feature in the future.
 =
       
 Author:Archer Li
