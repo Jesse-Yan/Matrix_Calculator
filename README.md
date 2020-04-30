@@ -65,6 +65,24 @@ Rank|		Rank|			Get the Rank of the matrix
 Transpose|		Transpose|			Get the Transpose of the matrix
 Power|		Power|			Get Return matrix to the power of a given number
 
+##### Arithmetic Operators
+Once you press the '=' button or press 'Enter', the expression is evaluated according to normal algebraic operator precedence. That is, parentheses first, followed by exponentiation, multiply, divide, add and subtract.
+
+|Function|	Button |
+|  ----  | ----  |
+|Add|		+|
+|Subtract|	-|
+|Multiply|	×|
+|Divide|	÷|
+|Exponent|	exp|
+
+##### Constants
+These two constants enter the value at high precision.
+π	Pi – approximately 3.142…
+e	e  - approximately 2.718…
+
+
+
 ## Instuctions to User
 
 Attention: You may notice some buttons being disabled when you switching to the Matrix Calculation section, to re-enable them you should click on the white area(TextArea) on the left of the calculator or move the mouse to the top white area(TextField). We are designing this switching because some buttons are not allowed during the matrix calculation.
