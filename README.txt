@@ -95,6 +95,5 @@ Sometimes user might want to input their data in fraction format. Therefore, it 
   （Future updates）
   
   1. More Accurate calculation
-  2. Support ui key board focus on power section
-  3. Support fraction input
-  4. Alert when user try to save when there is no input file.
+  2. Support fraction input
+  3. Alert when user try to save when there is no input file.
