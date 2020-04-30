@@ -1,8 +1,11 @@
 README
 
 Course: cs400
+
 Semester: Spring 2020
+
 Project name: Matrix calculator
+
 Team Members:
 Chengpo Yan, LEC001, cyan46@wisc.edu
 Jinming Zhang, LEC001, jzhang2279@wisc.edu
@@ -18,6 +21,7 @@ Which team members were on same xteam together?
 Other notes or comments to the grader:
 
 Program can simply running by using command line to run the executable.jar file. Running in Java code required JavaFx and JDK11 pre-installed.
+
 Running demo
 PLEASE USING FOLLOWING COMMAND FOR RUNNING .JAR FILE
 REMEMBER TO CHANGE "Path-to-javafx-lib" TO YOUR OWN PATH
@@ -25,13 +29,19 @@ java --module-path "Path-to-javafx-lib" --add-modules javafx.controls,javafx.fxm
 
 Program Description
 program functions as a calculator that support max 9*9 Matrix calculations supports pirorty calculation. Matrixs and calculation can be read from json files for computing result.
-!Mark! to open .json file, click Menu then click Open.
+
+!Mark! To open .json file, click Menu then click Open.
+       To save result of opened .json file, please click Menu-Save and enter the file name
+
 Please see SimpleData.json for the sample format. (other json file is design for testing purpose, each is built base on its name. Result.json is sample result output.) 
+
 You can click '<' '>' or '√' to change from different operations that been read from the correct .json files.
+
 Warning, If code in ateam.zip won't run, please check CS400_final_project.zip (for original directory path)
 
-#### Warning, If code in ateam.zip won't run, please check CS400_final_project.zip
-#### Be sure to check README.md for more detailed describtion!!!
+# Please check Calculator Instructions.docx
+
+# Be sure to check README.md for more detailed describtion for the program.
 
 Known Issue (BUG Report)
 1. Cannot always find all the real eigenvalues of a Matrix.
@@ -39,6 +49,3 @@ Theoretically, a QR algorithm with Wilkinon-Shift will always converge for hesse
 
 2. Floating-point error might cause inaccuracies
 In this program, since many calculations are operations with double, due to the floating-point error, the result might not be accurate. Sometimes, the floating-point error might be enlarged significantly by the Butterfly Effect in the complicated calculation processes. To deal with this, in order to decrease the impact of floating-point error, we now require the input matrix to be no larger than 9*9, and the input numbers must be in the range [-100000, 100000] with no more than 3 decimal digits. This issue might be fixed in the future by changing some double type to java.math.BigDecimal to decrease the floating-point error.
-
-Future Work Section
-1. 
