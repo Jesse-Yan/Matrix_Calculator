@@ -476,62 +476,62 @@ public class Main extends Application {
             operators);
       });
 
-      // Add EventHandler to matrix operations get determinant
+      // Add EventHandler to matrix operations determinant
       singleMatrixOperations.get(0).setOnAction(event -> {
         detSetter(vBoxR, matrix1Data, rowAndCol1, singleMatrixOperations);
       });
 
-      // Add EventHandler to matrix operations get inverse matrix
+      // Add EventHandler to matrix operations inverse matrix
       singleMatrixOperations.get(1).setOnAction(event -> {
         inverseSetter(vBoxR, matrix1Data, rowAndCol1, singleMatrixOperations);
       });
 
-      // Add EventHandler to matrix operations get QR decomposition
+      // Add EventHandler to matrix operations QR decomposition
       singleMatrixOperations.get(2).setOnAction(event -> {
         qRSetter(vBoxR, matrix1Data, rowAndCol1, singleMatrixOperations);
       });
 
-      // Add EventHandler to matrix operations get nullity
+      // Add EventHandler to matrix operations nullity
       singleMatrixOperations.get(3).setOnAction(event -> {
         nullitySetter(vBoxR, matrix1Data, rowAndCol1, singleMatrixOperations);
       });
 
-      // Add EventHandler to matrix operations get the trace
+      // Add EventHandler to matrix operations the trace
       singleMatrixOperations.get(4).setOnAction(event -> {
         traceSetter(vBoxR, matrix1Data, rowAndCol1, singleMatrixOperations);
       });
 
-      // Add EventHandler to matrix operations get LUP decomposition
+      // Add EventHandler to matrix operations LUP decomposition
       singleMatrixOperations.get(5).setOnAction(event -> {
         lUPSetter(vBoxR, matrix1Data, rowAndCol1, singleMatrixOperations);
       });
 
-      // Add EventHandler to matrix operations get gaussian elimination
+      // Add EventHandler to matrix operations gaussian elimination
       singleMatrixOperations.get(6).setOnAction(event -> {
         geSetter(vBoxR, matrix1Data, rowAndCol1, singleMatrixOperations);
       });
 
-      // Add EventHandler to matrix operations get Cholesky decomposition
+      // Add EventHandler to matrix operations Cholesky decomposition
       singleMatrixOperations.get(7).setOnAction(event -> {
         choleskySetter(vBoxR, matrix1Data, rowAndCol1, singleMatrixOperations);
       });
 
-      // Add EventHandler to matrix operations get eigenvalue
+      // Add EventHandler to matrix operations eigenvalue
       singleMatrixOperations.get(8).setOnAction(event -> {
         eivSetter(vBoxR, matrix1Data, rowAndCol1, singleMatrixOperations);
       });
 
-      // Add EventHandler to matrix operations get the rank
+      // Add EventHandler to matrix operations rank
       singleMatrixOperations.get(9).setOnAction(event -> {
         rankSetter(vBoxR, matrix1Data, rowAndCol1, singleMatrixOperations);
       });
 
-      // Add EventHandler to matrix operations get transpose matrix
+      // Add EventHandler to matrix operations transpose 
       singleMatrixOperations.get(10).setOnAction(event -> {
         transposeSetter(vBoxR, matrix1Data, rowAndCol1, singleMatrixOperations);
       });
 
-      // Add EventHandler to matrix operations get the power matrix
+      // Add EventHandler to matrix operations power
       powerButton.setOnAction(event -> {
         powerSetter(vBoxR, matrix1Data, rowAndCol1, powerButton, powerInput);
       });
