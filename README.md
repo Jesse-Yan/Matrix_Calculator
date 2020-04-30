@@ -76,7 +76,6 @@ Once you press the '=' button or press 'Enter', the expression is evaluated acco
 |Subtract|	-|
 |Multiply|	×|
 |Divide|	÷|
-|Exponent|	exp|
 
 ##### Constants
 These two constants enter the value at high precision.
