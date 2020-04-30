@@ -65,8 +65,6 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-
-
 /**
  * This class tests the Calculator
  * 
@@ -103,6 +101,4 @@ public class CalculatorTest {
       e.printStackTrace();
     }
   }
-
-
 }
