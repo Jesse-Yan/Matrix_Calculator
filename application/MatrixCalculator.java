@@ -39,6 +39,11 @@ public class MatrixCalculator {
    * 
    * In DECIMAL mode, all outputs are in decimal format. (No integers! 0 will be printed as 0.0)
    * 
+   * 
+   * However, this is not actually used in our program. In our program, the PrintMode of every
+   * MatrixCalculator instance are always FRACTION. The DECIMAL mode might be useful for the future
+   * development.
+   * 
    * @author Houming Chen
    *
    */
@@ -253,11 +258,12 @@ public class MatrixCalculator {
    * Get the Cholesky Decomposition of the matrix. The result will be represented by a List of
    * length 2 of String[][].
    * 
-   * @return a List of  length 2 of String[][] representing the result
+   * @return a List of length 2 of String[][] representing the result
    * @throws MatrixDimensionsMismatchException - if the matrix is not a square matrix.
-   * @throws MatrixArithmeticException - if the matrix is not symmetric.
+   * @throws MatrixArithmeticException         - if the matrix is not symmetric.
    */
-  public List<String[][]> getCholeskyDecomposition() throws MatrixDimensionsMismatchException, MatrixArithmeticException {
+  public List<String[][]> getCholeskyDecomposition()
+      throws MatrixDimensionsMismatchException, MatrixArithmeticException {
     Matrix firstMatrix = new Matrix(matrix1);
     Matrix[] choleskyDecomposition = firstMatrix.choleskyDecomposition();
     ArrayList<String[][]> answer = new ArrayList<String[][]>();
@@ -314,6 +320,13 @@ public class MatrixCalculator {
     return properFormatted(firstMatrix.pow(n));
   }
 
+  /**
+   * A helper method that convert a Matrix instance in to a String[][]. The conversion will be done
+   * in the right format according to the {@link MatrixCalculator#printMode}.
+   * 
+   * @param matrix a given Matrix Instance
+   * @return a String[][] converted from this Matrix Instance for output.
+   */
   private String[][] properFormatted(Matrix matrix) {
     if (printMode == PrintMode.DECIMAL)
       return matrix.toDecimalStringMatrix();
@@ -321,6 +334,13 @@ public class MatrixCalculator {
       return matrix.toStringMatrix();
   }
 
+  /**
+   * A helper method that convert a Numeric instance in to a String. The conversion will be done in
+   * the right format according to the {@link MatrixCalculator#printMode}.
+   * 
+   * @param number a given Numeric Instance
+   * @return a String converted from this Numeric Instance for output.
+   */
   private String properFormatted(Numeric number) {
     if (printMode == PrintMode.DECIMAL)
       return number.castToDouble().toString();
@@ -328,6 +348,13 @@ public class MatrixCalculator {
       return number.toString();
   }
 
+  /**
+   * A helper method that convert an array of Numeric instance in to a String[]. The conversion will
+   * be done in the right format according to the {@link MatrixCalculator#printMode}.
+   * 
+   * @param number an array of Numeric instance
+   * @return a String[] converted from this array of Numeric instance for output.
+   */
   private String[] properFormatted(Numeric[] number) {
     String[] ansStrings = new String[number.length];
     for (int i = 0; i < number.length; i++) {
@@ -340,15 +367,15 @@ public class MatrixCalculator {
   }
 
   /**
-   * Demo
+   * A demo to help understand the functions of this class
    * 
-   * @param args
-   * @throws MatrixDimensionsMismatchException
-   * @throws MatrixArithmeticException
-   * @throws SingularException
+   * @param args main -args
+   * @throws MatrixDimensionsMismatchException - if MatrixDimensionsMismatchException is thrown by
+   *                                           methods.
+   * @throws MatrixArithmeticException         - if MatrixArithmeticException is thrown by methods.
    */
   public static void main(String[] args)
-      throws MatrixDimensionsMismatchException, MatrixArithmeticException, SingularException {
+      throws MatrixDimensionsMismatchException, MatrixArithmeticException {
 
     String[][] matrixA, matrixB, matrixC;
     MatrixCalculator matrixCalculator;
