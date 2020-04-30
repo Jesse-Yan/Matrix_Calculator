@@ -229,7 +229,7 @@ public class Main extends Application {
             + "7.Out calculator is friendly to the computer user who does not have a keyboard. Out input focus can be "
             + "switching between TextFields to give you the best user experience(Not for the power TextField)."
             + lineSeparator
-            + "This is a huge project and we all performed our virtuosities in this project. We hope you will enjoy it!!!");
+            + "This is a extremely complicated project, and we all performed our virtuosities in this project. We hope you will enjoy it!!!");
         area.setStyle("-fx-font-size: 16px;");
         alert.getDialogPane().setContent(area);
         alert.setResizable(true);
