@@ -1,4 +1,4 @@
-README
+﻿README
 
 Course: cs400
 
@@ -50,6 +50,15 @@ Warning, If code in ateam.zip won't run, please check CS400_final_project.zip (f
 # Please check Calculator Instructions.docx
 
 # Be sure to check README.md for more detailed describtion for the program.
+
+.Json Format Rule
+
+calculations(Json Array)
+->operations(String element)
+->datas(Stores Matrix)
+->->Matrix[es](Matrix in form of 2d Json string array, each element should maped exactly as the order in matrix)
+
+remember Only "+","*","-" will accept 2 matrix element, else operations will only accept one.
 
 Known Issue (BUG Report)
 1. Cannot always find all the real eigenvalues of a Matrix.
