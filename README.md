@@ -25,7 +25,8 @@ using command line to run executable.jar for demo(see file: running_command.txt)
 ## Program Description
 program functions as a calculator that support max 9*9 Matrix calculations supports pirorty calculation. Matrixs and calculation can be read from json files for computing result.
 
-!Mark! to open .json file, click Menu then click Open.
+!Mark! To open .json file, click Menu then click Open.
+       To save result of opened .json file, please click Menu-Save and enter the file name
 
 Please see SimpleData.json for the sample format. (other json file is design for testing purpose, each is built base on its name. Result.json is sample result output.) 
 
