@@ -536,8 +536,9 @@ public class Numeric extends Number implements Comparable<Numeric> {
    */
   private static double roundWithSignificantFigure(double value, int significantFigure) {
     if (Double.isInfinite(value))
-      throw new ArithmeticException("Sorry, the absolute value of the result is too big,"
-          + " so we cannot calculate and print the result.");
+      throw new ArithmeticException(
+          "Sorry, the absolute value of the result is too big or too small,"
+              + " so we cannot calculate and print the result.");
     if (Double.isNaN(value))
       throw new ArithmeticException(
           "Sorry, the absolute value of the result is too big or too small,"
