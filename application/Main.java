@@ -23,7 +23,7 @@
 //
 ///////////////////////////////// DESCRIPTION /////////////////////////////////
 //
-// This project ��Matrix calculator�� by CS400 Ateam 2 aims to help students
+// This project Matrix calculator�� by CS400 Ateam 2 aims to help students
 // studying linear algebra to understand the calculations of linear algebra
 // better. This ��Matrix calculator�� can not only do many matrix calculations
 // like matrix multiplication, finding eigenvalues, and LUP, QR, or Cholesky
