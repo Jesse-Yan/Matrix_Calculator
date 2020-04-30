@@ -70,7 +70,7 @@ public class OpeartionParser {
           }
           String [][] realMatrix = new String[sumMatrix.length][];
           for (int a=0; a<sumMatrix.length;a++) {
-            realMatrix[a] = sumMatrix[wtf].clone();
+            realMatrix[a] = sumMatrix[a].clone();
           }
           matrixList.add(realMatrix.clone());  
         }
@@ -89,19 +89,4 @@ public class OpeartionParser {
         return calSteps;
     }
 
-    /**
-     * Test purpose
-     * 
-     * @param args
-     */
-    @SuppressWarnings("unused")
-    public static void main(String[] args) {
-        try {
-          OpeartionParser parser = new OpeartionParser(new File("SimpleData.json"));
-            System.out.println("success!!");
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-
-    }
 }
