@@ -30,7 +30,6 @@
 				]
 			]
 	    },
-<<<<<<< HEAD
 	   {
 	    	"operations": "Cholesky",
 	    	"datas": [
@@ -13226,7 +13225,6 @@
 					["9","9","9"],
 					["9","9","9"],
 					["9","9","9"]
->>>>>>> branch 'master' of https://github.com/ChengpoYan/CS400_final_project.git
 				]
 			]
 	    }
