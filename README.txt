@@ -49,7 +49,6 @@ Please see SimpleData.json for the sample format. (other json file is design for
 You can click '<' '>' or '√' to change from different operations that been read from the correct .json files.
 Warning, If code in ateam.zip won't run, please check CS400_final_project.zip (for original directory path)
 
-# Also, you can check Calculator Instructions.docx for more instructions!
 # Be sure to check README.md for more detailed describtion for the program!
 
 .Json Format Rule
