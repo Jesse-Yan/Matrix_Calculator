@@ -169,16 +169,56 @@ public class Main extends Application {
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.setTitle("Instruction to use");
         alert.setHeaderText("Please Read");
-        
+
         TextArea area = new TextArea();
         area.setWrapText(true);
         area.setEditable(false);
-        area.setText("1.Determin your matrix size"+lineSeparator
-            +"2.Enter numbers"+lineSeparator
-            +"3.Change matrix by click func buttons like 'inverse'"
-            +"4.Choose oprations"+lineSeparator
-            +"5.Enjoy your result!"+lineSeparator
-                  +"Tips: C1 and C2 are used to clear matrix 1 and 2");
+        area.setText("Welcome to our Matrix Calculator!" + lineSeparator
+            + "This is a sophisticated and complicated Calculator, and it "
+            + "supports the operations including normal calculation, sequence analyzing, and matrix calculation"
+            + lineSeparator
+            + "1.To perform a normal calculation, simply click on the white "
+            + "input field of the calculator to activate the function if some buttons are disabled, "
+            + "when you finish inputting, you can click on the '=' button to see the result."
+            + lineSeparator
+            + "2.To perform analyze sequence function, click on button of 'analyze sequence' "
+            + "and you should see that the space button and the '=' button have been activated. "
+            + "Now, you should you can click the nubmer buttons to input numbers and use the space button "
+            + "to separate them. After finishing inputting, you can click on '=' to see the output"
+            + lineSeparator
+            + "3.To perform matrix calculation, you need to choose between whether you need to "
+            + "do operations on a single matrix or two matrixes. To perform calculation on a single matrix, "
+            + "simply click on the row & col input field and type in integers to tell the calculator the "
+            + "dimension of the matrix, then you can type the value(Integer or Double) to specific entry. "
+            + "After that, you can click on the buttons below the matrix to see the result. "
+            + "If you are using the power button, you need to type in the value first. To perform "
+            + "calculation on two matrixes, you need to click on the CheckBox ? to active the second "
+            + "matrix, at the same time, the operation buttons below will be disabled and the operation "
+            + "buttons between the two matrixes will be activated. After finishing inputting, click on '+', "
+            + "'-' or '*' to see the result. 'c1', 'c2' is used to clear the matrix"
+            + lineSeparator
+            + "4.Our Matrix calculator supports file input/output. To open a file, click on Menu and select open to choose your file. "
+            + "Your file must be ended with .json otherwise we will not accept it. In addition, the content of your "
+            + "file input must be correct to be accepted by our calculator. If your input file contains "
+            + "too many calculations, it may take a while for the calculator to show the operations you have "
+            + "plugged in. After you see your operation, you can click on the buttons on the top of the "
+            + "application since they have been activated. You can view back and forth, you can even "
+            + "type in the input field and click on the confirm button to lead you to the operation you want. "
+            + "You can edit your operation, and new changes will be recorded if you do some calculations on "
+            + "those matrixes and they are correct, otherwise we will not record it. Our calculator "
+            + "also supports add new operation and delete operation. You can add a new operation by clicking "
+            + "on 'Add' button. After producing correct output, you can record it by clicking on 'Add Confirm' "
+            + "button. You can delete an operation by clicking on 'Delete' button. Remember: You cannot delete the last operation."
+            + lineSeparator
+            + "5.If you finished editing your operations, you can quit the 'reading file mode' by clicking on 'quit' "
+            + "button, and it will ask you whether you want to save the file. 'Yes' will open a fileChooser, 'No' "
+            + "will quit the 'reading file mode', 'Cancel' will return back. Note: If you have save your file through "
+            + "the 'save' in Menu, it will quit directly if during this period you do not make any change."
+            + lineSeparator
+            + "6.Out calculator is friendly to the computer user who does not have a keyboard. Out input focus can be "
+            + "switching between TextField to give you the best user experience(Not for the power TextField)."
+            + lineSeparator
+            + "This is a huge project and we all performed our virtuosities in this project. We hope you will enjoy it!!!");
         alert.getDialogPane().setContent(area);
         alert.setResizable(true);
         alert.showAndWait();
@@ -671,13 +711,13 @@ public class Main extends Application {
       });
 
       // Add EventHandler to matrix operations get determinant
-      singleMatrixOperations.get(0).setOnAction(event -> { 
+      singleMatrixOperations.get(0).setOnAction(event -> {
         try {
           latestMOpera = singleMatrixOperations.get(0);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
-          
+
           // get the determinant of the matrix and change to border pane
           String resultDeterminant = matrixCalculator.getDeterminant();
           resultNum = resultDeterminant;
@@ -685,7 +725,7 @@ public class Main extends Application {
               dataFromMatrix, resultDeterminant);
           scrollPane(vBoxR, resultShower);
           stateModifer();
-          
+
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -701,13 +741,13 @@ public class Main extends Application {
       });
 
       // Add EventHandler to matrix operations get inverse matrix
-      singleMatrixOperations.get(1).setOnAction(event -> { 
+      singleMatrixOperations.get(1).setOnAction(event -> {
         try {
           latestMOpera = singleMatrixOperations.get(1);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
-          
+
           // get the inverse matrix and change to boreder pane
           String[][] resultInverse = matrixCalculator.getInverse();
           results.clear();
@@ -715,7 +755,7 @@ public class Main extends Application {
           resultShower = resultBuilder("Operation: Inverse", "Inverse",
               dataFromMatrix, resultInverse);
           scrollPane(vBoxR, resultShower);
-          stateModifer();      
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -734,14 +774,14 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to matrix operations get QR decomposition 
-      singleMatrixOperations.get(2).setOnAction(event -> { 
+      // Add EventHandler to matrix operations get QR decomposition
+      singleMatrixOperations.get(2).setOnAction(event -> {
         try {
           latestMOpera = singleMatrixOperations.get(2);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
-          
+
           // get the QR decomposition of the matrix and change to border pane
           List<String[][]> resultQR = matrixCalculator.getQRDecomposition();
           results.clear();
@@ -749,7 +789,7 @@ public class Main extends Application {
           resultShower = resultBuilderQR("Operation: QR", "QR", dataFromMatrix,
               resultQR.get(0), resultQR.get(1));
           scrollPane(vBoxR, resultShower);
-          stateModifer();         
+          stateModifer();
         } catch (NumberFormatException e2) {
           correctness = false;
           alert("Error", e2.getMessage());
@@ -758,20 +798,20 @@ public class Main extends Application {
         }
       });
 
-      // Add EventHandler to matrix operations get nullity 
-      singleMatrixOperations.get(3).setOnAction(event -> { 
+      // Add EventHandler to matrix operations get nullity
+      singleMatrixOperations.get(3).setOnAction(event -> {
         try {
           latestMOpera = singleMatrixOperations.get(3);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
-          
+
           // get the nullity of the matrix and change to border pane
           resultNum = matrixCalculator.getNullity();
           resultShower = resultBuilder("Operation: Nullity", "Nullity",
               dataFromMatrix, resultNum);
           scrollPane(vBoxR, resultShower);
-          stateModifer();          
+          stateModifer();
         } catch (NumberFormatException e) {
           correctness = false;
           alert("Error", e.getMessage());
@@ -781,20 +821,20 @@ public class Main extends Application {
       });
 
       // Add EventHandler to matrix operations get the trace
-      singleMatrixOperations.get(4).setOnAction(event -> { 
+      singleMatrixOperations.get(4).setOnAction(event -> {
         try {
           latestMOpera = singleMatrixOperations.get(4);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
-          
+
           // get the trace of the matrix and change to border pane
           String resultTrace = matrixCalculator.getTrace();
           resultNum = resultTrace;
           resultShower = resultBuilder("Operation: Trace", "Trace",
               dataFromMatrix, resultTrace);
           scrollPane(vBoxR, resultShower);
-          stateModifer();         
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -810,13 +850,13 @@ public class Main extends Application {
       });
 
       // Add EventHandler to matrix operations get LUP decomposition
-      singleMatrixOperations.get(5).setOnAction(event -> { 
+      singleMatrixOperations.get(5).setOnAction(event -> {
         try {
           latestMOpera = singleMatrixOperations.get(5);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
-          
+
           // get the LUP decomposition of the matrix and change to border pane
           List<String[][]> resultLUP = matrixCalculator.getLUPDecomposition();
           results.clear();
@@ -830,7 +870,7 @@ public class Main extends Application {
                 dataFromMatrix, resultLUP.get(0), resultLUP.get(1));
           }
           scrollPane(vBoxR, resultShower);
-          stateModifer();     
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -846,13 +886,13 @@ public class Main extends Application {
       });
 
       // Add EventHandler to matrix operations get gaussian elimination
-      singleMatrixOperations.get(6).setOnAction(event -> {                                                          
+      singleMatrixOperations.get(6).setOnAction(event -> {
         try {
           latestMOpera = singleMatrixOperations.get(6);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
-          
+
           // get the guassianelimination of the matrix
           String[][] resultGE = matrixCalculator.getGuassianElimination();
           results.clear();
@@ -860,7 +900,7 @@ public class Main extends Application {
           resultShower =
               resultBuilder("Operation: GE", "GE", dataFromMatrix, resultGE);
           scrollPane(vBoxR, resultShower);
-          stateModifer();        
+          stateModifer();
         } catch (NumberFormatException e) {
           correctness = false;
           alert("Error", e.getMessage());
@@ -876,7 +916,7 @@ public class Main extends Application {
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
-          
+
           // get the cholesky decomposition of the matrix
           List<String[][]> resultCholesky =
               matrixCalculator.getCholeskyDecomposition();
@@ -885,7 +925,7 @@ public class Main extends Application {
           resultShower = resultBuilderQR("Operation: Cholesky", "Cholesky",
               dataFromMatrix, resultCholesky.get(0), resultCholesky.get(1));
           scrollPane(vBoxR, resultShower);
-          stateModifer();       
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e1) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -910,20 +950,20 @@ public class Main extends Application {
       });
 
       // Add EventHandler to matrix operations get eigenvalue
-      singleMatrixOperations.get(8).setOnAction(event -> { 
+      singleMatrixOperations.get(8).setOnAction(event -> {
         try {
           latestMOpera = singleMatrixOperations.get(8);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
-          
+
           // get the eigenvalue of the matrix
           String resultEIV = matrixCalculator.getEigenValues();
           resultNum = resultEIV;
           resultShower =
               resultBuilder("Operation: EIV", "EIV", dataFromMatrix, resultEIV);
           scrollPane(vBoxR, resultShower);
-          stateModifer();          
+          stateModifer();
         } catch (MatrixDimensionsMismatchException e) {
           correctness = false;
           alert("MatrixDimensionError",
@@ -939,19 +979,19 @@ public class Main extends Application {
       });
 
       // Add EventHandler to matrix operations get the rank
-      singleMatrixOperations.get(9).setOnAction(event -> { 
+      singleMatrixOperations.get(9).setOnAction(event -> {
         try {
           latestMOpera = singleMatrixOperations.get(9);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
-          
+
           // get the rank of the matrix
           resultNum = matrixCalculator.getRank();
           resultShower = resultBuilder("Operation: Rank", "Rank",
               dataFromMatrix, resultNum);
           scrollPane(vBoxR, resultShower);
-          stateModifer();          
+          stateModifer();
         } catch (NumberFormatException e) {
           correctness = false;
           alert("Error", e.getMessage());
@@ -961,13 +1001,13 @@ public class Main extends Application {
       });
 
       // Add EventHandler to matrix operations get transpose matrix
-      singleMatrixOperations.get(10).setOnAction(event -> { 
+      singleMatrixOperations.get(10).setOnAction(event -> {
         try {
           latestMOpera = singleMatrixOperations.get(10);
           String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
           MatrixCalculator matrixCalculator =
               new MatrixCalculator(dataFromMatrix);
-          
+
           // get the transpose matrix
           String[][] resultTS = matrixCalculator.getTranspose();
           results.clear();
@@ -975,7 +1015,7 @@ public class Main extends Application {
           resultShower =
               resultBuilder("Operation: TS", "TS", dataFromMatrix, resultTS);
           scrollPane(vBoxR, resultShower);
-          stateModifer();        
+          stateModifer();
         } catch (NumberFormatException e) {
           alert("Error", e.getMessage());
         } catch (Exception e1) {
@@ -984,7 +1024,7 @@ public class Main extends Application {
       });
 
       // Add EventHandler to matrix operations get the power matrix
-      powerButton.setOnAction(event -> { 
+      powerButton.setOnAction(event -> {
         try {
           latestMOpera = powerButton;
           int n = Integer.parseInt(powerInput.getText());
@@ -993,7 +1033,7 @@ public class Main extends Application {
             String[][] dataFromMatrix = reader(matrix1Data, rowAndCol1);
             MatrixCalculator matrixCalculator =
                 new MatrixCalculator(dataFromMatrix);
-            
+
             // get the matrix of n power
             String[][] resultPw = matrixCalculator.getPow(n);
             results.clear();
@@ -1002,7 +1042,7 @@ public class Main extends Application {
                 dataFromMatrix, resultPw);
             scrollPane(vBoxR, resultShower);
             stateModifer();
-            
+
           } catch (MatrixDimensionsMismatchException e1) {
             correctness = false;
             alert("MatrixDimensionError",
@@ -1016,8 +1056,7 @@ public class Main extends Application {
                     + lineSeparator + " so it does not have negative exponent");
           } catch (NumberFormatException e3) {
             correctness = false;
-            alert("Error",
-                e3.getMessage());
+            alert("Error", e3.getMessage());
           } catch (ArithmeticException e4) {
             correctness = false;
             alert("Error", "Sorry, Exception: " + e4.getMessage());
@@ -1083,7 +1122,7 @@ public class Main extends Application {
                     filter);
                 return;
               }
-              
+
               // get the clone result the and update
               ArrayList<String[][]> cloneResult = new ArrayList<>();
               cloneResult.addAll(results);
@@ -1241,7 +1280,7 @@ public class Main extends Application {
         addVisualModifer(filter, forward, pages, backward, confirm, add,
             addConfirm, delete, quit, true);
       } catch (Exception e1) {
-        
+
       }
     });
 
@@ -1250,7 +1289,7 @@ public class Main extends Application {
       try {
         int page = Integer.parseInt(pages.getText()) - 1;
         if (correctness) {
-        	
+
           // update the calstep
           updater(page, matrix1Data, rowAndCol1, matrix2Data, rowAndCol2,
               enableSecond, isNum, true, true);
@@ -1286,7 +1325,8 @@ public class Main extends Application {
           // If the user chose yes
           if (diagResult.get() == yes) {
             pages.setText(String.valueOf(page));
-            total.setText(String.valueOf(Integer.parseInt(total.getText()) - 1));
+            total.setText(
+                String.valueOf(Integer.parseInt(total.getText()) - 1));
             addVisualModifer(filter, forward, pages, backward, confirm, add,
                 addConfirm, delete, quit, false);
             confirm.fire();
@@ -1331,14 +1371,14 @@ public class Main extends Application {
       }
     });
 
-    // add Eventlistener to the filter button 
+    // add Eventlistener to the filter button
     filter.valueProperty().addListener(event -> {
       try {
         String opr = filter.getSelectionModel().getSelectedItem();
         if (opr != null) {
           if (filtering && opr.equals("All")) {
-        	  
-        	// modify the button and update
+
+            // modify the button and update
             buttonsModifers(matrix1, matrix2, matrixOperators,
                 singleOperationPanel, open, save, confirm, add, delete, quit,
                 pages, false);
@@ -1459,6 +1499,9 @@ public class Main extends Application {
 
     }
     primaryStage.show();
+
+    // Show the instruction page
+    instruction.fire();
   }
 
   /**
@@ -1619,7 +1662,7 @@ public class Main extends Application {
     rowAndCol1.get(1).setText("3");
     rowAndCol2.get(0).setText("3");
     rowAndCol2.get(1).setText("3");
-    
+
     // clear the result
     resultShower.getChildren().clear();
     pages.clear();
@@ -1653,7 +1696,7 @@ public class Main extends Application {
       List<Button> singleMatrixOperations, Button powerButton,
       TextField powerInput, CalSteps step, String operationOperator) {
     boolean isNum = false;
-    
+
     // choose different matrix operation
     switch (operationOperator) {
       case "+":
@@ -1756,17 +1799,17 @@ public class Main extends Application {
       boolean isAdd, boolean update) {
     if (update) {
       if (prevPage != 0 && state && correctness) {
-    	  
-    	// clone the result and update
+
+        // clone the result and update
         List<String[][]> cloneResult = new ArrayList<>();
         cloneResult.addAll(results);
         String[][] wMatrix1 = reader(matrix1Data, rowAndCol1);
         String operation = latestMOpera.getText();
-        
+
         // if check box checked, basic calstep
         if (enableSecond.isSelected()) {
           String[][] wMatrix2 = reader(matrix2Data, rowAndCol2);
-          
+
           // check if new operation added
           if (!isAdd) {
             lists.set(page - 1,
@@ -1787,7 +1830,7 @@ public class Main extends Application {
                   }
                 }, isNum ? "" + resultNum : cloneResult));
           }
-          
+
           // if check box not selected, matrix calstep
         } else {
           if (operation.equals("Gauss-Elim")) {
@@ -1859,8 +1902,8 @@ public class Main extends Application {
    */
   private void setterOfSingleMatrix(CalSteps step, List<TextField> rowAndCol1,
       List<TextField> matrix1Data) {
-	 
-	// perform calstep and generate matrix
+
+    // perform calstep and generate matrix
     String[][] matrix1 = step.getDatas().get(0);
     rowAndCol1.get(0).setText(String.valueOf(matrix1.length));
     rowAndCol1.get(1).setText(String.valueOf(matrix1[0].length));
@@ -1884,15 +1927,15 @@ public class Main extends Application {
   private void setterOfTwoMatrixes(CalSteps step, List<TextField> rowAndCol1,
       List<TextField> rowAndCol2, List<TextField> matrix1Data,
       List<TextField> matrix2Data) {
-	  
-	// perform different calstep
+
+    // perform different calstep
     String[][] matrix1 = step.getDatas().get(0);
     String[][] matrix2 = step.getDatas().get(1);
     rowAndCol1.get(0).setText(String.valueOf(matrix1.length));
     rowAndCol1.get(1).setText(String.valueOf(matrix1[0].length));
     rowAndCol2.get(0).setText(String.valueOf(matrix2.length));
     rowAndCol2.get(1).setText(String.valueOf(matrix2[0].length));
-    
+
     // generate two matrix setting
     int count = 0;
     for (int i = 0; i < matrix1.length; i++) {
@@ -2072,8 +2115,8 @@ public class Main extends Application {
    */
   private BorderPane resultBuilder(String string, String mathString,
       String[][] dataFromMatrix, String[][] result) {
-	  
-	// generate a border pane to contain the result
+
+    // generate a border pane to contain the result
     BorderPane resultedPane = new BorderPane();
 
     resultedPane.setStyle("-fx-background-color: lightgray;");
@@ -2114,7 +2157,7 @@ public class Main extends Application {
   private BorderPane resultBuilder(String string, String mathString,
       String[][] src1, String[][] src2, String[][] resultMatrix) {
 
-	// generate a border pane to contain the result
+    // generate a border pane to contain the result
     BorderPane resultedPane = new BorderPane();
 
     resultedPane.setStyle("-fx-background-color: lightgray;");
@@ -2153,13 +2196,13 @@ public class Main extends Application {
    */
   private GridPane matrixGenerator(String matrix[][]) {
 
-	// generate a grid pane
+    // generate a grid pane
     GridPane resultedGrid = new GridPane();
     resultedGrid.setStyle(
         "-fx-background-color: lightgray;-fx-vgap: 1;-fx-hgap: 1;-fx-padding: 1;");
     resultedGrid.setMinHeight(207);
     List<Label> allLabels = new ArrayList<>();
-    
+
     // add label to the grid pane
     for (int i = 0; i < matrix.length; i++) {
       List<Label> labels = Arrays.stream(matrix[i]).map(str -> {
