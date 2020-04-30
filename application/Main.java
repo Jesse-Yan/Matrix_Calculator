@@ -107,7 +107,8 @@ public class Main extends Application {
   List<String[][]> results = new ArrayList<>();
 
   /**
-   * This is the start method of the Main class
+   * This is the start method of the Main class. It constructs many components
+   * and adds many EventHandlers to components.
    * 
    * @param primaryStage the main Stage
    */
