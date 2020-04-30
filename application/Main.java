@@ -15,30 +15,30 @@
 ///////////////////////////////// SOURCE FILES ////////////////////////////////
 //
 // Calculator.java, CalculatorTest.java, CalSteps.java, Fraction.java
-// Main.java, Matrix.java, MatrixADT.java, MatrixArithmeticException.java, 
+// Main.java, Matrix.java, MatrixADT.java, MatrixArithmeticException.java,
 // MatrixCalculator.java, MatrixDimensionsMismatchException.java,
-// MatrixTest.java, Numeric.java, NumericTest.java, OpeartionParser.java, 
-// SequenceSummary.java, SimpleCalculator.java, SingularException.java, 
+// MatrixTest.java, Numeric.java, NumericTest.java, OpeartionParser.java,
+// SequenceSummary.java, SimpleCalculator.java, SingularException.java,
 // Writer.java, styleSheet.css
 //
 ///////////////////////////////// DESCRIPTION /////////////////////////////////
 //
 // This project "Matrix calculator" by CS400 Ateam 2 aims to help students
-// studying linear algebra to understand the calculations of linear algebra 
-// better. This "Matrix calculator" can not only do many matrix calculations 
-// like matrix multiplication, finding eigenvalues, and LUP, QR, or Cholesky 
-// decompositions, but it can also support basic algebra calculations like a 
+// studying linear algebra to understand the calculations of linear algebra
+// better. This "Matrix calculator" can not only do many matrix calculations
+// like matrix multiplication, finding eigenvalues, and LUP, QR, or Cholesky
+// decompositions, but it can also support basic algebra calculations like a
 // normal calculator and analyzing sequence.
-// 
-// This "Matrix calculator" consists of two parts, a math calculator on the 
+//
+// This "Matrix calculator" consists of two parts, a math calculator on the
 // left side, which supports basic algebra calculations and analyzing sequence,
-// and a matrix calculator on the right side, which supports calculations of 
+// and a matrix calculator on the right side, which supports calculations of
 // matrices.
 //
-// For matrix calculations, this "Matrix calculator" also supports file inputs 
-// and outputs. The input files should be json files in a specific format, and 
-// the output files will also be json files. "Matrix calculator" is also 
-// friendly to the computer user who does not have a keyboard. Users can input 
+// For matrix calculations, this "Matrix calculator" also supports file inputs
+// and outputs. The input files should be json files in a specific format, and
+// the output files will also be json files. "Matrix calculator" is also
+// friendly to the computer user who does not have a keyboard. Users can input
 // their data by clicking buttons provided on the user interface.
 //
 //////////////////////////////////// CREDITS //////////////////////////////////
@@ -330,9 +330,9 @@ public class Main extends Application {
     // Special List of Non-number buttons for analyze sequence
     List<Button> notNumber =
         buttons.stream()
-               .filter(b -> !(b.getText().trim().matches("\\d")
-                   || b.getText().trim().matches("\\.")
-                   || b.getText().trim().matches("\\+\\/\\-")))
+               .filter(button -> !(button.getText().trim().matches("\\d")
+                   || button.getText().trim().matches("\\.")
+                   || button.getText().trim().matches("\\+\\/\\-")))
                .collect(toList());
 
     // Set the caretPosition
@@ -431,7 +431,7 @@ public class Main extends Application {
 
     // Adjustor for the visual and arrangement of the pane
     matrixOperators.setVgap(19);
-    operators.stream().forEach(b -> b.setDisable(true));
+    operators.stream().forEach(button -> button.setDisable(true));
     matrix1.setMinWidth(400);
     matrix2.setMinWidth(400);
     matrix1.setMinHeight(233);
@@ -788,7 +788,7 @@ public class Main extends Application {
    */
   private void vBoxRSetter(List<Button> buttons, List<Button> notNumber) {
     try {
-      notNumber.stream().forEach(b -> b.setDisable(true));
+      notNumber.stream().forEach(button -> button.setDisable(true));
       buttons.get(3).setDisable(false);
       if (analyze) {
         buttons.get(23).setDisable(false);
@@ -811,11 +811,11 @@ public class Main extends Application {
     try {
       if (enableSecond.isSelected()) {
         singleOperationPanel.setDisable(true);
-        operators.stream().forEach(b -> b.setDisable(false));
+        operators.stream().forEach(button -> button.setDisable(false));
         matrix2.setDisable(false);
       } else {
         singleOperationPanel.setDisable(false);
-        operators.stream().forEach(b -> b.setDisable(true));
+        operators.stream().forEach(button -> button.setDisable(true));
         matrix2.setDisable(true);
       }
     } catch (Exception e1) {
@@ -1751,7 +1751,7 @@ public class Main extends Application {
           update = true;
         }
         if (!lists.stream()
-                  .anyMatch(i -> i.getOperation().contains(operation))) {
+                  .anyMatch(step -> step.getOperation().contains(operation))) {
           existingOperations.remove(operation);
           filter.getItems().removeIf(i -> !i.equals("All"));
           filter.getItems().addAll(existingOperations);
@@ -2072,7 +2072,7 @@ public class Main extends Application {
     space.setDisable(false);
 
     // Disabling related buttons
-    notNumber.stream().forEach(b -> b.setDisable(true));
+    notNumber.stream().forEach(button -> button.setDisable(true));
     buttons.get(buttons.size() - 1).setDisable(false);
     input.setOnMouseEntered(event -> {
       buttons.get(buttons.size() - 1).setDisable(false);
@@ -2086,13 +2086,13 @@ public class Main extends Application {
    * @param result    TextArea result
    * @param space     Button space
    * @param notNumber List<Button> notNumber
-   * @param btn       Button btn
+   * @param button    Button button
    */
   private void buttonActionSetter(TextField input, TextArea result,
-      Button space, List<Button> notNumber, Button btn) {
+      Button space, List<Button> notNumber, Button button) {
     try {
       // Set the related operation according to their inside text
-      String temp = btn.getText().trim();
+      String temp = button.getText().trim();
 
       // Case of Clear
       if (temp.equals("C")) {
@@ -2138,9 +2138,11 @@ public class Main extends Application {
             result.appendText(SequenceSummary.summary(input.getText()));
             analyze = false;
             space.setDisable(true);
-            notNumber.stream().forEach(b -> b.setDisable(false));
+            notNumber.stream()
+                     .forEach(singleButton -> singleButton.setDisable(false));
             input.setOnMouseEntered(e -> {
-              notNumber.stream().forEach(b -> b.setDisable(false));
+              notNumber.stream()
+                       .forEach(singleButton -> singleButton.setDisable(false));
             });
           }
 
