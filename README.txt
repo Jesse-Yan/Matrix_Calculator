@@ -28,7 +28,15 @@ REMEMBER TO CHANGE "Path-to-javafx-lib" TO YOUR OWN PATH
 java --module-path "Path-to-javafx-lib" --add-modules javafx.controls,javafx.fxml -jar executable.jar
 
 Program Description
-program functions as a calculator that support max 9*9 Matrix calculations supports pirorty calculation. Matrixs and calculation can be read from json files for computing result.
+
+This project "Matrix calculator" by CS400 Ateam 2 aims to help students studying linear algebra to understand the calculations linear algebra better. This "Matrix calculator" can not only do many matrix calculations like matrix multiplication, finding eigenvalues, and do LUP, QR, or Cholesky decompositions, but it can also support basic algebra calculations like a normal calculator and analyzing sequence. 
+
+This "Matrix calculator" consists of two parts, a math calculator on the left side, which supports basic algebra calculations and analyzing sequence, and a matrix calculator on the right side, which supports calculations of matrices.
+
+For matrix calculations, this "Matrix calculator" also supports file inputs and outputs. The input files should be json files in a specific format, and the output files will also be json files.
+
+"Matrix calculator" is also friendly to the computer user who does not have a keyboard. Users can input their data by clicking buttons provided on the user interface. 
+
 
 !Mark! To open .json file, click Menu then click Open.
        To save result of opened .json file, please click Menu-Save and enter the file name
@@ -49,6 +57,13 @@ Theoretically, a QR algorithm with Wilkinon-Shift will always converge for hesse
 
 2. Floating-point error might cause inaccuracies
 In this program, since many calculations are operations with double, due to the floating-point error, the result might not be accurate. Sometimes, the floating-point error might be enlarged significantly by the Butterfly Effect in the complicated calculation processes. To deal with this, in order to decrease the impact of floating-point error, we now require the input matrix to be no larger than 9*9, and the input numbers must be in the range [-100000, 100000] with no more than 3 decimal digits. This issue might be fixed in the future by changing some double type to java.math.BigDecimal to decrease the floating-point error.
+
+Other Future Work
+1. Matrix calculator allowing Users to choose Fraction output or Decimal output.
+Sometimes user might need decimal outputs. Therefore, it would be better if we could allow the user to choose the output format. This function is already realized in the back-end, see MatrixCalculator.java, but we haven't used it in the program. We might add this feature in the future.
+
+2. Matrix calculator allowing Users to input in Fraction
+Sometimes user might want to input their data in fraction format. Therefore, it would be better if we could allow the user to input their data in fraction format. We might add this feature in the future.
 
 ／ イ  　　　(((ヽ        +++++++++++++++
 (　 ﾉ　　　　  ￣Ｙ ＼   （Future updates）
