@@ -71,5 +71,6 @@ In this program, since many calculations are operations with double, due to the 
   （Future updates）
   
   1. More Accurate calculation
-  2. support ui key board focus on power section
-  3. support fraction input
+  2. Support ui key board focus on power section
+  3. Support fraction input
+  4. Alert when user try to save when there is no input file.
