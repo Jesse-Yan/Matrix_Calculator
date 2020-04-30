@@ -83,7 +83,7 @@ e	e  - approximately 2.718…
 
 
 
-## Instuctions to User
+### Instuctions to User
 
 Attention: You may notice some buttons being disabled when you switching to the Matrix Calculation section, to re-enable them you should click on the white area(TextArea) on the left of the calculator or move the mouse to the top white area(TextField). We are designing this switching because some buttons are not allowed during the matrix calculation.
 
@@ -97,7 +97,7 @@ Attention: You may notice some buttons being disabled when you switching to the 
 
 #### !Mark! To Load .json file, click Menu then click Open.
 #### !Mark! To save result of opened .json file, please click Menu-Save and enter the file name
-
+#### !Mark! Please first load files before you save!
 #### Warning, If code in ateam.zip won't run, please check CS400_final_project.zip
 
 ## Code Organization
@@ -105,18 +105,10 @@ UW-madison default setup.
 program are base on stack, 2D array, Arraylist, and other combination of data structure. 
 Check design.pdf to learn more.
 
-## Functions
-functions can be entered by press the button
 
-The matrix must first set the row and column then press the button to do the calculate
+## Future works
 
-The user must choose if the matrix calculates with one or two matrixes
-
-The people can analyze an input sequence and return the max, min, and average value.
-
-
-
-## Known Issue (BUG Report)
+### Known Issues
 
 1. Cannot always find all the real eigenvalues of a Matrix.
 
@@ -126,4 +118,24 @@ Theoretically, a QR algorithm with Wilkinson-Shift will always converge for hess
 
 In this program, since many calculations are operations with double, due to the floating-point error, the result might not be accurate. Sometimes, the floating-point error might be enlarged significantly by the Butterfly Effect in the complicated calculation processes. To deal with this, in order to decrease the impact of floating-point error, we now require the input matrix to be no larger than 9*9, and the input numbers must be in the range [-100000, 100000] with no more than 3 decimal digits. This issue might be fixed in the future by changing some double type to java.math.BigDecimal to decrease the floating-point error.
 
+### Other Future Work
+1. Matrix calculator allowing Users to choose Fraction output or Decimal output.
+Sometimes user might need decimal outputs. Therefore, it would be better if we could allow the user to choose the output format. This function is already realized in the back-end, see MatrixCalculator.java, but we haven't used it in the program. We might add this feature in the future.
+
+2. Matrix calculator allowing Users to input in Fraction
+Sometimes user might want to input their data in fraction format. Therefore, it would be better if we could allow the user to input their data in fraction format. We might add this feature in the future.
+
+3. Support ui key board focus on power section
+Comtemporarily, the power section does not support input with ui key board. Therefore, it would be better if we could allow the user who does not have a key board to input numbers in the power section by the ui keys. We might add this feature in the future.
+
+／ イ  　　　(((ヽ      ++++++++++++++++
+(　 ﾉ　　　　  ￣Ｙ ＼   ++++Future+++
+|　(＼　(\   /)  ｜  ) / ++++++++Updates+
+ヽ　ヽ` ( ﾟ∀ﾟ ) _ノ /
+　＼ |　⌒Ｙ⌒　/  /
+　  ｜ヽ　 ｜　 ﾉ ／
+　   ＼トー仝ーイ
+　　  ｜ ミ土彡/
+=
+      
 Author:Archer Li
