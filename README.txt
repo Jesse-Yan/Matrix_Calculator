@@ -49,3 +49,28 @@ Theoretically, a QR algorithm with Wilkinon-Shift will always converge for hesse
 
 2. Floating-point error might cause inaccuracies
 In this program, since many calculations are operations with double, due to the floating-point error, the result might not be accurate. Sometimes, the floating-point error might be enlarged significantly by the Butterfly Effect in the complicated calculation processes. To deal with this, in order to decrease the impact of floating-point error, we now require the input matrix to be no larger than 9*9, and the input numbers must be in the range [-100000, 100000] with no more than 3 decimal digits. This issue might be fixed in the future by changing some double type to java.math.BigDecimal to decrease the floating-point error.
+
+／ イ  　　　(((ヽ        +++++++++++++++
+(　 ﾉ　　　　  ￣Ｙ ＼   （Future updates）
+|　(＼　(\   /)  ｜  ) / +++++++++++++++++
+ヽ　ヽ` ( ﾟ∀ﾟ ) _ノ /
+　＼ |　⌒Ｙ⌒　/  /
+　  ｜ヽ　 ｜　 ﾉ ／
+　   ＼トー仝ーイ
+　　  ｜ ミ土彡/
+      ) \  °   /  
+     (   \  /  \
+   / /  /      \ \ \
+   ( (  ).       )  ).)
+   (    ).       ( |  |
+    |  /           \  |
+  nn.  ).           (  nnm
+  
+  @arthor - Archer
+  
+  （Future updates）
+  
+  1. More Accurate calculation
+  2. Support ui key board focus on power section
+  3. Support fraction input
+  4. Alert when user try to save when there is no input file.
