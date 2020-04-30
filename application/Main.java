@@ -2372,6 +2372,7 @@ public class Main extends Application {
       case "+":
         setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
             matrix2Data);
+        powerInput.clear();
         if (!enableSecond.isSelected()) {
           enableSecond.fire();
         }
@@ -2380,6 +2381,7 @@ public class Main extends Application {
       case "-":
         setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
             matrix2Data);
+        powerInput.clear();
         if (!enableSecond.isSelected()) {
           enableSecond.fire();
         }
@@ -2388,6 +2390,7 @@ public class Main extends Application {
       case "*":
         setterOfTwoMatrixes(step, rowAndCol1, rowAndCol2, matrix1Data,
             matrix2Data);
+        powerInput.clear();
         if (!enableSecond.isSelected()) {
           enableSecond.fire();
         }
@@ -2395,50 +2398,61 @@ public class Main extends Application {
         break;
       case "Det":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        powerInput.clear();
         singleMatrixOperations.get(0).fire();
         isNum = true;
         break;
       case "Inverse":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        powerInput.clear();
         singleMatrixOperations.get(1).fire();
         break;
       case "QR":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        powerInput.clear();
         singleMatrixOperations.get(2).fire();
         break;
       case "Nullity":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        powerInput.clear();
         singleMatrixOperations.get(3).fire();
         break;
       case "Trace":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        powerInput.clear();
         singleMatrixOperations.get(4).fire();
         isNum = true;
         break;
       case "LUP":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        powerInput.clear();
         singleMatrixOperations.get(5).fire();
         break;
       case "GE":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        powerInput.clear();
         singleMatrixOperations.get(6).fire();
         break;
       case "Cholesky":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        powerInput.clear();
         singleMatrixOperations.get(7).fire();
         break;
       case "EIV":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        powerInput.clear();
         singleMatrixOperations.get(8).fire();
         isNum = true;
         break;
       case "Rank":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        powerInput.clear();
         singleMatrixOperations.get(9).fire();
         isNum = true;
         break;
       case "Trans":
         cleanAndSet(matrix1Data, rowAndCol1, rowAndCol2, enableSecond, step);
+        powerInput.clear();
         singleMatrixOperations.get(10).fire();
         break;
       default:
