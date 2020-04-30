@@ -34,7 +34,7 @@ For matrix calculations, this “Matrix calculator” also supports file inputs 
 “Matrix calculator” is also friendly to the computer user who does not have a keyboard. Users can input their data by clicking buttons provided on the user interface. 
 This is a extremely complicated project, and we all performed our virtuosities in this project. We hope you will enjoy it!!! [\^_\^]
 
-#Instuctions to User
+#Instructions to User
 1. To perform a normal calculation, simply click on the white input field of the calculator to activate the function if some buttons are disabled, when you finish inputting, you can click on the '=' button to see the result.
 2. To perform analyze sequence function, click on button of 'analyze sequence' and you should see that the space button and the '=' button have been activated. Now, you can click the nubmer buttons to input numbers and use the space button to separate them. After finishing inputting, you can click on '=' to see the output
 3. To perform matrix calculation, you need to choose between whether you need to do operations on a single matrix or two matrixes. To perform calculation on a single matrix, simply click on the row & col input field and type in an integer to tell the calculator the dimension of the matrix, then you can type the value(Integer or Double) to the specific entry. After that, you can click on the buttons below the matrix to see the result. If you are using the power button, you need to type in the value first. To perform calculation on two matrixes, you need to click on the CheckBox '?' to active the second matrix, at the same time, the operation buttons below will be disabled and the operation buttons between the two matrixes will be activated. After finishing inputting, click on '+', '-' or '*' to see the result. 'c1', 'c2' is used to clear the matrix
@@ -49,13 +49,13 @@ Please see SimpleData.json for the sample format. (other json file is design for
 You can click '<' '>' or '√' to change from different operations that been read from the correct .json files.
 Warning, If code in ateam.zip won't run, please check CS400_final_project.zip (for original directory path)
 
-# Be sure to check README.md for more detailed describtion for the program!
+# Be sure to check README.md for more detailed description for the program!
 
 .Json Format Rule
 calculations(Json Array)
 ->operations(String element)
-->datas(Stores Matrix)
-->->Matrix[es](Matrix in form of 2d Json string array, each element should maped exactly as the order in matrix)
+->data(Stores Matrix)
+->->Matrix[es](Matrix in form of 2d Json string array, each element should mapped exactly as the order in matrix)
 
 remember Only "+","*","-" will accept 2 matrix element, else operations will only accept one.
 
@@ -89,4 +89,4 @@ Sometimes user might want to input their data in fraction format. Therefore, it 
     |  /           \  |
   nn.  ).           (  nnm
   
-  @arthor - Archer
+  @Author - Archer
