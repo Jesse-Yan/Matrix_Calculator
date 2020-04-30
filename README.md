@@ -34,7 +34,8 @@ You can click '<' '>' or '√' to change from different operations that been rea
 
 Warning, If code in ateam.zip won't run, please check CS400_final_project.zip (for original directory path)
 
-#### !Mark! to open .json file, click menu then click open.Please see SimpleData.json for the sample format.
+#### !Mark! To open .json file, click Menu then click Open.
+#### !Mark! To save result of opened .json file, please click Menu-Save and enter the file name
 
 #### Warning, If code in ateam.zip won't run, please check CS400_final_project.zip
 
