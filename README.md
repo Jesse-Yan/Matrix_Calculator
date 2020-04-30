@@ -26,6 +26,8 @@ REMEMBER TO CHANGE "Path-to-javafx-lib" TO YOUR OWN PATH
 
 java --module-path "Path-to-javafx-lib" --add-modules javafx.controls,javafx.fxml -jar executable.jar
 
+⚠For **Linux** , please use sudo java
+
 ## Program Description
 
 ### General Description
@@ -37,7 +39,7 @@ For matrix calculations, this “Matrix calculator” also supports file inputs 
 
 “Matrix calculator” is also friendly to the computer user who does not have a keyboard. Users can input their data by clicking buttons provided on the user interface. 
 
-This is a extremely complicated project, and we all performed our virtuosities in this project. We hope you will enjoy it!!! [\^_\^]
+This is a extremely complicated project, and we all performed our virtuosities in this project. We hope you will enjoy it!!! 😀
 
 ### Supported Features
 |  Function  | Button  | Description |

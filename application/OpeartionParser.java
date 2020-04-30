@@ -94,7 +94,6 @@ public class OpeartionParser {
       calSteps = new ArrayList<CalSteps>();
       
       if (file == null) throw new FileNotFoundException();
-      
       ArrayList <String[][]> matrixList = new ArrayList<String[][]>();
       String operations = null;
       int rowSize = -1;
