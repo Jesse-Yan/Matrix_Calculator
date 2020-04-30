@@ -60,8 +60,10 @@ public class Main extends Application {
   BorderPane resultShower = new BorderPane();
 
   // CSS style for label
-  String labelStyle =
-      "-fx-font-size: 16px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;";
+  String labelStyle = "-fx-font-size: 16px;-fx-text-fill: #333333;"
+      + "-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );"
+      + "-fx-border-style: solid inside;-fx-border-width: 2;"
+      + "-fx-border-insets: 5;-fx-border-color: black;";
 
   // lists storing steps
   List<CalSteps> lists = null;
@@ -182,8 +184,10 @@ public class Main extends Application {
     TextField pages = new TextField();
     pages.setMaxWidth(40);
     Label slash = new Label("/");
-    slash.setStyle(
-        "-fx-font-size: 8px;-fx-text-fill: #333333;-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );-fx-border-style: solid inside;-fx-border-width: 2;-fx-border-insets: 5;-fx-border-color: black;");
+    slash.setStyle("-fx-font-size: 8px;-fx-text-fill: #333333;"
+        + "-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );"
+        + "-fx-border-style: solid inside;-fx-border-width: 2;"
+        + "-fx-border-insets: 5;-fx-border-color: black;");
     TextField total = new TextField();
     total.setMaxWidth(40);
     total.setEditable(false);
