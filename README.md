@@ -23,8 +23,15 @@ Running in Java code required JavaFx and JDK11 pre-installed.
 using command line to run executable.jar for demo(see file: running_command.txt)
 
 ## Program Description
-program functions as a calculator that support Matrix calculations supports pirorty calculation.
-Matrixs and calculation can be read from json files for computing result.
+program functions as a calculator that support max 9*9 Matrix calculations supports pirorty calculation. Matrixs and calculation can be read from json files for computing result.
+
+!Mark! to open .json file, click Menu then click Open.
+
+Please see SimpleData.json for the sample format. (other json file is design for testing purpose, each is built base on its name. Result.json is sample result output.) 
+
+You can click '<' '>' or '√' to change from different operations that been read from the correct .json files.
+
+Warning, If code in ateam.zip won't run, please check CS400_final_project.zip (for original directory path)
 
 #### !Mark! to open .json file, click menu then click open.Please see SimpleData.json for the sample format.
 
