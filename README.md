@@ -8,7 +8,11 @@
 #### Houming Chen - hchen634@wisc.edu
 #### Chengxu Bian - cbian7@wisc.edu
 
-![Image text](https://raw.githubusercontent.com/JIangZeMingKuangTu/Matrix_Calculator/master/screenshots/screenshot_1.png)
+![Image text](https://raw.githubusercontent.com/JIangZeMingKuangTu/Matrix_Calculator/master/screenshots/screenshot_3.png)
+
+![Image text](https://raw.githubusercontent.com/JIangZeMingKuangTu/Matrix_Calculator/master/screenshots/screenshot_4.png)
+
+![Image text](https://raw.githubusercontent.com/JIangZeMingKuangTu/Matrix_Calculator/master/screenshots/screenshot_5.png)
 
 ## Installation
 Program can simply running by using command line to run the executable.jar file.
