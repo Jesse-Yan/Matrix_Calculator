@@ -1,18 +1,12 @@
-# CS400_final_project
-This is the final project of ateam2 of CS 400 Spring 2020
+# Matrix Calculator
 
-##### *Course: cs400
-
-##### *Semester: Spring 2020
-
-##### *Project name: Matrix calculator
 
 ## contributer/Team member
-#### Chengpo Yan LEC001 xteam186 - cyan46@wisc.edu
-#### Jinming Zhang, LEC001, x-team132 - jzhang2279@wisc.edu
-#### Archer Li LEC001 x-team145 - zli885@wisc.edu
-#### Houming Chen, LEC001, xteam149 - hchen634@wisc.edu
-#### Chengxu Bian, LEC001, xteam102 - cbian7@wisc.edu
+#### Chengpo Yan - cyan46@wisc.edu
+#### Jinming Zhang - jzhang2279@wisc.edu
+#### Archer Li - zli885@wisc.edu
+#### Houming Chen - hchen634@wisc.edu
+#### Chengxu Bian - cbian7@wisc.edu
 
 
 ## Installation
@@ -31,7 +25,7 @@ java --module-path "Path-to-javafx-lib" --add-modules javafx.controls,javafx.fxm
 ## Program Description
 
 ### General Description
-This project “Matrix calculator” by CS400 Ateam 2 aims to help students studying linear algebra to understand the calculations of linear algebra better. This “Matrix calculator" can not only do many matrix calculations like matrix multiplication, finding eigenvalues, and do LUP, QR, or Cholesky decompositions, but it can also support basic algebra calculations like a normal calculator and analyzing sequence. 
+This project “Matrix calculator” aims to help students studying linear algebra to understand the calculations of linear algebra better. This “Matrix calculator" can not only do many matrix calculations like matrix multiplication, finding eigenvalues, and do LUP, QR, or Cholesky decompositions, but it can also support basic algebra calculations like a normal calculator and analyzing sequence. 
 
 This “Matrix calculator” consists of two parts, a math calculator on the left side, which supports basic algebra calculations and analyzing sequence, and a matrix calculator on the right side, which supports calculations of matrices.
 
