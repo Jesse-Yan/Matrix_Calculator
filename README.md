@@ -1,5 +1,5 @@
 # Matrix Calculator
-
+A wonderful application for performing simple & complex matrix calculations.
 
 ## contributer/Team member
 #### Chengpo Yan - cyan46@wisc.edu
